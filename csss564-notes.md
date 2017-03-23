@@ -6,12 +6,11 @@
 
 
 
-Bayesian Philosophy
+## Bayesian Philosophy
 
-Philosophy and the practice of Bayesian statistics in the social sciences1 http://www.stat.columbia.edu/~gelman/research/published/philosophy_chapter.pdf
+- Philosophy and the practice of Bayesian statistics in the social sciences1. tp://www.stat.columbia.edu/~gelman/research/published/philosophy_chapter.pdf
 
-Kruschke, J.K. & Liddell, T.M. Psychon Bull Rev (2017). doi:10.3758/s13423-016-1221-4
-Cumming, G. (2014). The new statistics why and how. Psychological Science, 25(1), 7–29.
+- Kruschke, J.K. & Liddell, T.M. Psychon Bull Rev (2017). doi:10.3758/s13423-016-1221-4 - Cumming, G. (2014). The new statistics why and how. Psychological Science, 25(1), 7–29.
 Aris Spanos Revisiting data mining: ‘hunting’ with or without a license
 Rubin (1984) Rubin, Donald B. Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician. Ann. Statist. 12 (1984), no. 4, 1151--1172. doi:10.1214/aos/1176346785. http://projecteuclid.org/euclid.aos/1176346785.
 Andrew Gelman Induction and Deduction in Bayesian Data Analysis*
@@ -57,7 +56,7 @@ Political Science
 - Kari Lock, Andrew Gelman; Bayesian Combination of State Polls and Election Forecasts. Polit Anal 2010; 18 (3): 337-348. doi: 10.1093/pan/mpq002
 - Jacob M. Montgomery, Brendan Nyhan; Bayesian Model Averaging: Theoretical Developments and Practical Applications. Polit Anal 2010; 18 (2): 245-270. doi: 10.1093/pan/mpq001
 - Kevin M. Quinn; Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses. Polit Anal 2004; 12 (4): 338-353. doi: 10.1093/pan/mph022
-- David K. Park, Andrew Gelman, Joseph Bafumi; Bayesian Multilevel Estimation with Poststratification: State-Level Estimates from National Polls. Polit Anal 2004; 12 (4): 375-385. doi: 10.1093/pan/mph024
+
 - Ryan Bakker, Keith T. Poole; Bayesian Metric Multidimensional Scaling. Polit Anal 2013; 21 (1): 125-140. doi: 10.1093/pan/mps039
 - Clinton Joshua D,  Jackman Simon D,  Rivers Douglas. The statistical analysis of roll call data: A unified approach, American Political Science Review , 2004, vol. 98 (pg. 355-70)
 - Pope Jeremy C,  Treier Shawn A. Reconsidering the great compromise at the federal convention of 1787: Deliberation and agenda effects on the senate and slavery, American Journal of Political Science , 2011, vol. 55 (pg. 289-306)
@@ -72,11 +71,14 @@ Political Science
 - 10.1111/j.1540-5907.2012.00590.x
 - Park2012a: Park, J. H. (2012), A Unified Method for Dynamic and Cross-Sectional Heterogeneity: Introducing Hidden Markov Panel Models. American Journal of Political Science, 56: 1040–1054. doi:10.1111/j.1540-
 - WawroKatznelson2013a: Wawro, G. J. and Katznelson, I. (2014), Designing Historical Social Scientific Inquiry: How Parameter Heterogeneity Can Bridge the Methodological Divide between Quantitative and Qualitative Approaches. American Journal of Political Science, 58: 526–546. doi:10.1111/ajps.12041
-- Pope, J. C. and Treier, S. (2011), Reconsidering the Great Compromise at the Federal Convention of 1787: Deliberation and Agenda Effects on the Senate and Slavery. American Journal of Political Science, 55: 289–306. doi:10.1111/j.1540-5907.2010.00490.x
-- Western, B., & Jackman, S. (1994). Bayesian Inference for Comparative Research. <i>American Political Science Review,</i> <i>88</i>(2), 412-423. doi:10.2307/2944713
-- CLINTON, J., JACKMAN, S., & RIVERS, D. (2004). The Statistical Analysis of Roll Call Data. <i>American Political Science Review,</i> <i>98</i>(2), 355-370. doi:10.1017/S0003055404001194
-- SHIH, V., ADOLPH, C., & LIU, M. (2012). Getting Ahead in the Communist Party: Explaining the Advancement of Central Committee Members in China. <i>American Political Science Review,</i> <i>106</i>(1), 166-187. doi:10.1017/S0003055411000566
 
+- Western, B., & Jackman, S. (1994). Bayesian Inference for Comparative Research. <i>American Political Science Review,</i> <i>88</i>(2), 412-423. doi:10.2307/2944713
+
+
+
+
+
+## Texts
 
 Gelman, Andrew, and Jennifer Hill. 2006. Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge University Press.
 
@@ -98,16 +100,15 @@ Lynch, Scott M. 2007. Introduction to Applied Bayesian Statistics and Estimation
 
 McElreath, Richard. 2016. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Vol. 122. CRC Press.
 
-McGrayne, Sharon Bertsch. 2012. The Theory That Would Not Die: How Bayes’ Rule Cracked the Enigma Code, Hunted down Russian Submarines, and Emerged Triumphant from Two Centuries of Controversy. Reprint. New Haven Conn.: Yale University Press.
-
 Vehtari, Aki, and Andrew Gelman. 2014. “WAIC and Cross-Validation in Stan.”
 
 Lunn, David, Chris Jackson, Nicky Best, Andrew Thomas, and David Spiegelhalter. 2012. The BUGS Book: A Practical Introduction to Bayesian Analysis. Boca Raton, FL: Chapman; Hall/CRC.
 
+# Good Introductions
 
 - Micahel Clarke [Bayesian Basics](https://m-clark.github.io/docs/IntroBayes.html)
 
-Bayesian Frequentist Debates
+# Bayesian Frequentist Debates
 
 - Kasss Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
 - Noah Smith [Bayesian vs. Frequentist: Is there any "there" there?](http://noahpinionblog.blogspot.com/2013/01/bayesian-vs-frequentist-is-there-any.html)
@@ -146,6 +147,12 @@ WAID.
 - Vehtari and Ojanen. 2012. A survey of Bayesian predictive methods for model assessment, selection and comparison. doi:10.1214/12-SS102
 - Cook, Gelman, and Rubin. 2006. Validation of Software for Bayesian Models Using Posterior Quantiles. *J of Comp. and Graphical Stat* DOI:10.1198/106186006X136976
 
+
+## Hierarchical Modeling
+
+- David K. Park, Andrew Gelman, Joseph Bafumi; Bayesian Multilevel Estimation with Poststratification: State-Level Estimates from National Polls. Polit Anal 2004; 12 (4): 375-385. doi: 10.1093/pan/mph024
+
+
 ## Expectation Propogation
 
 - Gelman et. al. 2016. Expectation propagation as a way of life: A framework for Bayesian inference on partitioned data.
@@ -153,11 +160,25 @@ WAID.
 
 ## Shrinkage
 
+### Theory
+
 - Piironen and Vehtari. 2016. On the Hyperprior Choice for the Global Shrinkage Parameter in the Horseshoe Prior. https://arxiv.org/abs/1610.05559
+
+
+
+### Examples
+
+- Beauchamp. 2016. Predicting and Interpolating State-Level Polls Using Twitter Textual Data: Juho Piironen, Aki Vehtari. Projection predictive model selection for Gaussian processes. https://arxiv.org/abs/1510.04813
+- forecasting and predictiing civil war (Fearon / Laitin)
+    Goldstone et al. 2009. "A Global Model for Forecasting Political Instability" *AJPS* 10.1111/j.1540-5907.2009.00426.x
+- Ward et al. 2017/ Lessons from near real-time forecasting of irregular leadership changes.
+    *JPR* http://dx.doi.org/10.1177%2F0022343316680858
+- Andy Berger. Coup forecasts for 2017. http://andybeger.com/2017/02/10/coup-forecasts-2017/    
+- http://imai.princeton.edu/research/files/afghan.pdf
 
 ## Gaussian Processes
 
-- Juho Piironen, Aki Vehtari. Projection predictive model selection for Gaussian processes. https://arxiv.org/abs/1510.04813
+
 
 ## Overviews
 
@@ -166,7 +187,17 @@ WAID.
 ## Software
 
 
+## Simple Applications of Bayes Rule
 
+- Tank Problem
+- Aircraft
+- Laver et al. 2003. Extracting Policy Positions from Political Texts Using Words as Data. Laver, Michael, Kenneth Benoit, and John Garry. "Extracting Policy Positions from Political Texts Using Words as Data." The American Political Science Review. http://www.jstor.org/stable/3118211.
+
+## Latent Variable Models
+
+- CLINTON, J., JACKMAN, S., & RIVERS, D. (2004). The Statistical Analysis of Roll Call Data. <i>American Political Science Review,</i> <i>98</i>(2), 355-370. doi:10.1017/S0003055404001194
+- Pope, J. C. and Treier, S. (2011), Reconsidering the Great Compromise at the Federal Convention of 1787: Deliberation and Agenda Effects on the Senate and Slavery. American Journal of Political Science, 55: 289–306. doi:10.1111/j.1540-5907.2010.00490.x
+- Cai et al. 2016. Item Response Theory. *Ann rev of Stat and Its Application* DOI: 10.1146/annurev-statistics-041715-033702
 
 
 Notes
@@ -182,3 +213,27 @@ Notes
 
 - Monty Hall Problem: http://marilynvossavant.com/game-show-problem/
 - Oldford and W.H. Cherry. 2006. "Picturing Probability: the poverty of Venn diagrams, the richness of Eikosograms"
+- Fenton, Neil, and Berger. 2016. "Bayes and the Law" *Ann Rev of Stat and Its Application* DOI: 10.1146/annurev-statistics-041715-033428
+- Taddy. 2013. Multinomial Inverse Regression for Text Analysis. *JASA* http://dx.doi.org/10.1080/01621459.2012.734168
+- Taddy. 2015. Document Classification by Inversion of Distributed Language Representations.
+
+
+## Others
+
+- SHIH, V., ADOLPH, C., & LIU, M. (2012). Getting Ahead in the Communist Party: Explaining the Advancement of Central Committee Members in China. <i>American Political Science Review,</i> <i>106</i>(1), 166-187. doi:10.1017/S0003055411000566.  Uses partial rank model
+
+### German Tank Problem
+
+- https://en.wikipedia.org/wiki/German_tank_problem
+- Goodman 1954. Some Practical Techniques in Serial Number Analysis. *JASA* doi:10.1080/01621459.1954.10501218
+- Johnson. 1994. Estimating the Size of a Population. *Teaching Stats* DOI:10.1111/j.1467-9639.1994.tb00688.x
+- Ruggles and Brodie. 1947. An Empirical Approach to Economic Intelligence in World War II. doi:10.1080/01621459.1947.10501915
+
+Other applications
+
+- Gill and Spirling. 2015. Estimating the Severity of the WikiLeaks U.S. Diplomatic Cables Disclosure.  https://doi.org/10.1093/pan/mpv005. *Political Analysis* doi:10.1093/pan/mpv005
+
+
+# Author attribution
+
+- Mosteller. 1964. Inference in an Authorship Problem. *JASA*
