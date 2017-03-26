@@ -284,6 +284,26 @@ Sofware for general purpose Bayesian computation is called [probablistic program
 
     - [Mamba](https://mambajl.readthedocs.io/en/latest/) MCMC supporting multiple methods including Gibbs, MH, HMC, slice
 
+
+### Stan
+
+Some R packages.
+
+Official `stan-dev` packages:
+
+- [rstan](https://cran.r-project.org/web/packages/rstan/index.html)
+- [rstanarm](https://cran.r-project.org/web/packages/rstanarm/index.html)
+- [bayesplot](https://cran.r-project.org/web/packages/bayesplot/index.html)
+- [ShinyStan](https://cran.r-project.org/web/packages/shinystan/index.html)
+- [loo](https://github.com/stan-dev/loo)
+
+Others:
+
+- [brms](https://github.com/paul-buerkner/brms) Bayesian generalized non-linear multilevel models using Stan
+- [ggmcmc](https://cran.r-project.org/web/packages/ggmcmc/index.html)
+
+
+
 ### Diagrams
 
 #### DAGs and Plate Notation
