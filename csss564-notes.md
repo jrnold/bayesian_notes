@@ -111,6 +111,8 @@ Gibbs Sampling with R. New York: Springer.
 
 ### Bayesian Frequentist Debates
 
+- Casella and Berger. 1987. Reconciling Bayesian and Frequentist Evidence in the One-Sided Testing Problem. *JASA*. doi:10.1080/01621459.1987.10478396
+- [Bayesians and Frequentists : Models, Assumptions, and Inference]( http://www.stat.ufl.edu/archived/casella/Talks/BayesRefresher.pdf)  slides
 - Kasss Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
 - Noah Smith [Bayesian vs. Frequentist: Is there any "there" there?](http://noahpinionblog.blogspot.com/2013/01/bayesian-vs-frequentist-is-there-any.html)
 - Kass Kinds of Bayesians http://www.stat.cmu.edu/~kass/papers/kinds.pdf
@@ -433,7 +435,6 @@ Other applications
 
 ## Good-Turing Estimator
 
-<<<<<<< HEAD
 - Mosteller. 1964. Inference in an Authorship Problem. *JASA*
 
 
@@ -463,3 +464,12 @@ Other applications
 
 
 - Travelling Politician Example: https://github.com/ctufts/metropolis_hastings_example/tree/master/claydavis
+
+## Empirical Bayes
+
+- Efron. 2015. Frequentist accuracy of Bayesian estimates. *JRSS B* https://dx.doi.org/10.1111%2Frssb.12080
+
+
+## Things to cover
+
+- Lindley's paradox
