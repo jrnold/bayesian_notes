@@ -237,3 +237,15 @@ Other applications
 # Author attribution
 
 - Mosteller. 1964. Inference in an Authorship Problem. *JASA*
+
+
+## Reproducibility
+
+- Jon Zelner: [Docker package of an R and Stan project](http://www.jonzelner.net/statistics/make/docker/reproducibility/2016/05/31/reproducibility-pt-1/)
+- https://github.com/kjhealy/lintscreen
+- https://msalganik.wordpress.com/2015/06/09/rapid-feedback-on-code-with-lintr/
+- https://msalganik.wordpress.com/2015/06/07/git-and-github-in-a-data-analysis-class/
+- http://astrofrog.github.io/blog/2013/04/10/how-to-conduct-a-full-code-review-on-github/
+- http://www.princeton.edu/~mjs3/soc504_s2015/submitting_homework.shtml
+- https://education.github.com/guide
+- https://msalganik.wordpress.com/2015/05/04/replication-and-extension-projects-making-class-more-interesting-and-useful/
