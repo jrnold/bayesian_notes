@@ -111,6 +111,8 @@ Gibbs Sampling with R. New York: Springer.
 
 ### Bayesian Frequentist Debates
 
+- Casella and Berger. 1987. Reconciling Bayesian and Frequentist Evidence in the One-Sided Testing Problem. *JASA*. doi:10.1080/01621459.1987.10478396
+- [Bayesians and Frequentists : Models, Assumptions, and Inference]( http://www.stat.ufl.edu/archived/casella/Talks/BayesRefresher.pdf)  slides
 - Kasss Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
 - Noah Smith [Bayesian vs. Frequentist: Is there any "there" there?](http://noahpinionblog.blogspot.com/2013/01/bayesian-vs-frequentist-is-there-any.html)
 - Kass Kinds of Bayesians http://www.stat.cmu.edu/~kass/papers/kinds.pdf
@@ -453,6 +455,19 @@ Other applications
 
 ## Good-Turing Estimator
 
+- Mosteller. 1964. Inference in an Authorship Problem. *JASA*
+
+
+## Reproducibility
+
+- Jon Zelner: [Docker package of an R and Stan project](http://www.jonzelner.net/statistics/make/docker/reproducibility/2016/05/31/reproducibility-pt-1/)
+- https://github.com/kjhealy/lintscreen
+- https://msalganik.wordpress.com/2015/06/09/rapid-feedback-on-code-with-lintr/
+- https://msalganik.wordpress.com/2015/06/07/git-and-github-in-a-data-analysis-class/
+- http://astrofrog.github.io/blog/2013/04/10/how-to-conduct-a-full-code-review-on-github/
+- http://www.princeton.edu/~mjs3/soc504_s2015/submitting_homework.shtml
+- https://education.github.com/guide
+- https://msalganik.wordpress.com/2015/05/04/replication-and-extension-projects-making-class-more-interesting-and-useful/
 - https://en.wikipedia.org/wiki/Good%E2%80%93Turing_frequency_estimation
 - https://dx.doi.org/10.1093%2Fbiomet%2F40.3-4.237
 - http://rstudio-pubs-static.s3.amazonaws.com/165358_78fd356d6e124331bd66981c51f7ad7c.html
@@ -469,4 +484,12 @@ Other applications
 
 
 - Travelling Politician Example: https://github.com/ctufts/metropolis_hastings_example/tree/master/claydavis
--
+
+## Empirical Bayes
+
+- Efron. 2015. Frequentist accuracy of Bayesian estimates. *JRSS B* https://dx.doi.org/10.1111%2Frssb.12080
+
+
+## Things to cover
+
+- Lindley's paradox
