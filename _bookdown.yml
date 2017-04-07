@@ -1,0 +1,10 @@
+new_session: yes
+output_dir: docs
+rmd_subdir: false
+rmd_files: [
+  "index.rmd"
+]
+edit:
+  link: https://github.com/jrnold/bayesian_notes/edit/gh-pages/%s
+
+before_chapter_script: "_common.R"

@@ -1,0 +1,13 @@
+bookdown::gitbook:
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><strong><a href="./">Bayesian Notes</a></strong></li>
+    edit:
+      link: https://github.com/jrnold/bayesian_notes/edit/master/%s
+      text: "Edit"
+    sharing: no
+
+bookdown::pdf_book:
+  latex_engine: "xelatex"
