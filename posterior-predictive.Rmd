@@ -1,0 +1,48 @@
+# Model Fit 
+
+## Posterior Predictive Checks
+
+Let $y = (y_1, \dots, y_n)$ be the observed data.
+Suppose the model has been fit and there is a set of simulation $\theta^(s)$, $s = 1, \dots, n_sims$.
+For each draw a replicated dataset, $y^{rep(s)$, has been generated from the predictive distribution
+of the data, $p(y^{(rep)} | \theta = \theta^{(s)}$.
+Then the ensemble of simulated datasets, $(y^{rep(s)}, \dots, y^{rep(nsims)})$, is a sample from the posterior predictive
+distribution, $p(y^{(rep)} | y)$
+
+The model can be tested by means of discrepency statistics, which are some function of the data and parameters, $T(y, \theta)$.
+If $\theta$ was known, then compare discrepency by $T(y^{(rep)}, \theta)$.
+The statistical significance is $p = \Pr(T(y^{(rep)}, \theta) > T(y, \theta) | y, \theta)$.
+If $\theta$ is unknown, then average over the posterior distribution of $\theta$,
+$$
+p = \Pr(T(y^{(rep)}, \theta) > T(y, \theta) | y) = \int Pr(T(y^{(rep)}, \theta) > T(y, \theta) | y, \theta) p(\theta | y) d\,\theta ,
+$$
+which is easily estimated from the MCMC samples as,
+$$
+p = \frac{1}{nsims}\sum_{s = 1}^{nsims} 1( T(y^{rep(s)}, \theta(s)) > T(y, \theta(s)))
+$$
+
+These can include
+
+- visual checks of simulated data vs. original data
+- residuals
+
+## Average Predictive Comparisons
+
+From @GelmanHill [Ch 21.4]
+Let $u$ be the input of interest, and $v$ be all other inputs, so that $x = (u, v)$.
+$$
+b_u(u^{(lo)}, u^{(hi)}, v, \theta) = \frac{E(y | u^{(hi)}, v, \theta) - E(y | u^{(lo)}, v, \theta)}{u^{(hi)} - u^{(lo)}}
+$$
+the the averge predictive difference per unit change in $u$ is,
+$$
+B_{u}(u^{(lo)}, u^{(hi)}) = \frac{1}{n} \sum_{i = 1}^n b_u(u^{(lo)}, u^{(hi)}, v_i, \theta) .
+$$
+This can be adjusted to use observed (weighted) differences of $u$ for each point.
+See the Gelman paper on it.
+
+Rerefences
+
+- Gelman and Hill. Ch 8, 24.
+- See Geweke 2004, Cook, Gelman, and Rubin (2006) for fake-data simulations
+- Gelman, Meng and Stern
+- Gelman 2004 for graphical model checks
