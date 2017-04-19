@@ -62,7 +62,6 @@ Additionally, although $\hat\sigma^2 = \sum_{i = 1}^n \epsilon_i / (n - k - 1)$ 
 In Bayesian inference, our target is the posterior distribution of the parameters, $\beta$ and $\sigma$:  $p(\beta, \sigma^2 | y, X)$.
 Since all uncertainty in Bayesian inference is provided via probability, we will need to explicitly provide parametric distributions for the likelihood and parameters.
 
-The 
 $$
 p(\beta, \sigma | y, X) \propto p(y | \beta, \sigma) p(\beta, \sigma)
 $$
@@ -105,9 +104,36 @@ $$
 The targets of inference in this model are the two parameters: $\beta$ (regression coefficients), and  $\sigma$ (standard deviation of the regression).
 This is conditional on the observed or assumed quantities, which including both the data $y$ (response) and $X$ (predictors), as well the values defining the prior distributions: $b$, $s$, and $w$.
 
+
 Now that we've defined a statistical model, we can write it as a Stan model.
 
 Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.
+
+A Stan model consists of *blocks* which contain declarations of variables and/or statments.
+Each block has a specific purpose in the model.
+```stan
+functions {
+    // OPTIONAL: user-defined functions
+}
+data {
+    // read in data ...
+}
+transformed data {
+    // Create new variables/auxiliary variables from the data
+}
+parameters {
+    // Declare parameters that will be estimated
+}
+transformed parameters {
+    // Create new variables/auxiliary variables from the parameters
+}
+model {
+    // Declare your probability model: priors, hyperpriors & likelihood
+}
+generated quantities {
+    // Declare any quantities other than simulated parameters to be generated
+}
+```
 
 The file `lm.stan` is a Stan model for the linear regression model previously defined.
 
@@ -160,7 +186,6 @@ generated quantities {
 mod1 <- stan_model("stan/lm.stan")
 ```
 
-
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.
 
 
@@ -180,6 +205,8 @@ See
 [c-warnings]: The extended installation instructions for [MacOS/Linux](https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux) and [Windows](https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows) have instructions for adding compiler options to the R [Makevars](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars) file.
 
 
+### Sampling
+
 In order to sample from the model, we need to at least give it the values for the data to use: `n`, `k`, `y`, `X`, and the data associated with the priors.
 
 
@@ -189,14 +216,20 @@ mod1_data <- list(
   n = nrow(Duncan)
 )
 ```
+The data types in Stan are all numeric (either integers or reals), but they include matrices and vectors. 
+However, there is nothing like a data frame in Stan. 
+Whereas in the R function `lm` we can provide a formula and a data set for where to look for objects, and the function will create the appropriate $X$ matrix for the regression, we will need to create that matrix ourselves---expanding categorical variables to indicator variables, and expanding interactions and other functions of the predictors.
+However, we need to do that all manually.
+The function [stats](https://www.rdocumentation.org/packages/stats/topics/model.matrix) is the workhorse function used in `lm` and many other R functions to convert a formula into the matrix used in estimation.
 
 ```r
-X <- model.matrix(prestige ~ type + income + education - 1, data = Duncan)
+X <- model.matrix(prestige ~ type + income + education, data = Duncan)
 mod1_data$X <- X
 mod1_data$k <- ncol(X)
 ```
 
-For specific values of the prior distributions, assume uninformative priors for `beta`:
+We still need to provide the values for the prior distributions.
+For specific values of the prior distributions, assume uninformative priors for `beta` by setting the mean to zero and the variances to large numbers.
 $$
 \beta_k \sim N(0, 1000)
 $$
@@ -226,9 +259,7 @@ mod1_fit <- sampling(mod1, data = mod1_data)
 ```
 
 
-**TODO**
-
-## Convergence Diagnostics and Model Fit
+### Convergence Diagnostics and Model Fit
 
 - **Convergence Diagnostics:** Is this the posterior distribution that you were looking for? These don't directly say anything about how "good" the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.
 

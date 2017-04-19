@@ -133,9 +133,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>1</b> Introduction to Stan and Linear Regression</a><ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>1.1</b> Prerequites</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>1.2</b> The Statistical Model</a></li>
-<li class="chapter" data-level="1.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>1.3</b> Convergence Diagnostics and Model Fit</a></li>
-<li class="chapter" data-level="1.4" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>1.4</b> Maximum A Posteriori estimation</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>1.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>1.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>1.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>1.3</b> Maximum A Posteriori estimation</a></li>
 </ul></li>
 </ul>
 
@@ -190,7 +192,7 @@ X = \begin{bmatrix}
 \hat{\beta}_{OLS} = \argmin_{\beta} \sum_{i = 1}^n (y_i - \beta&#39; x_i)^2 = \argmin \sum_{i = 1}^n \hat{\epsilon}_i
 \]</span> For valid inference we need to make assumptions about <span class="math inline">\(\epsilon_i\)</span>, namely that they are uncorrelated with <span class="math inline">\(X\)</span>, <span class="math inline">\(\Cov(\epsilon, X) = 0\)</span>, and that they are i.i.d, <span class="math inline">\(\Cov(\epsilon_i, \epsilon_j) = 0\)</span>, <span class="math inline">\(\Var(\epsilon_i) = \sigma^2\)</span> for all <span class="math inline">\(i\)</span>. However, no specific distributional form is or needs to be assumed for <span class="math inline">\(\epsilon\)</span> since CLT results show that, asymptotically, the sampling distribution of <span class="math inline">\(\beta\)</span> is distributed normal. Additionally, although <span class="math inline">\(\hat\sigma^2 = \sum_{i = 1}^n \epsilon_i / (n - k - 1)\)</span> is a estimator of <span class="math inline">\(\sigma^2\)</span>, standard errors of the standard error of the regression are not directly provided.</p>
 <p>In Bayesian inference, our target is the posterior distribution of the parameters, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>: <span class="math inline">\(p(\beta, \sigma^2 | y, X)\)</span>. Since all uncertainty in Bayesian inference is provided via probability, we will need to explicitly provide parametric distributions for the likelihood and parameters.</p>
-<p>The <span class="math display">\[
+<p><span class="math display">\[
 p(\beta, \sigma | y, X) \propto p(y | \beta, \sigma) p(\beta, \sigma)
 \]</span></p>
 <p>For a Bayesian linear regression model, we’ll need to specify distributions for <span class="math inline">\(p(y | \beta, \sigma)\)</span> and <span class="math inline">\(p(\beta, \sigma)\)</span>.</p>
@@ -214,6 +216,28 @@ p(\beta, \sigma | y, X, b, s, w) \propto p(y | X, \beta) p(\beta | b, s) p(\sigm
 \]</span> The targets of inference in this model are the two parameters: <span class="math inline">\(\beta\)</span> (regression coefficients), and <span class="math inline">\(\sigma\)</span> (standard deviation of the regression). This is conditional on the observed or assumed quantities, which including both the data <span class="math inline">\(y\)</span> (response) and <span class="math inline">\(X\)</span> (predictors), as well the values defining the prior distributions: <span class="math inline">\(b\)</span>, <span class="math inline">\(s\)</span>, and <span class="math inline">\(w\)</span>.</p>
 <p>Now that we’ve defined a statistical model, we can write it as a Stan model.</p>
 <p>Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.</p>
+<p>A Stan model consists of <em>blocks</em> which contain declarations of variables and/or statments. Each block has a specific purpose in the model.</p>
+<pre class="stan"><code>functions {
+    // OPTIONAL: user-defined functions
+}
+data {
+    // read in data ...
+}
+transformed data {
+    // Create new variables/auxiliary variables from the data
+}
+parameters {
+    // Declare parameters that will be estimated
+}
+transformed parameters {
+    // Create new variables/auxiliary variables from the parameters
+}
+model {
+    // Declare your probability model: priors, hyperpriors &amp; likelihood
+}
+generated quantities {
+    // Declare any quantities other than simulated parameters to be generated
+}</code></pre>
 <p>The file <code>lm.stan</code> is a Stan model for the linear regression model previously defined.</p>
 <pre><code>data {
   // number of observations
@@ -266,15 +290,18 @@ In file included from file1d4a4d50faa.cpp:8:
 In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</code></pre>
 <p>As long as your model compiles, you can ignore these compiler warnings (On the other hard, warnings that occur during sampling should not be ignored). If the Stan model does not give you a syntax error when parsing the model, it should compile to valid C++.[^bugs][^c-warnings] See</p>
 <p>[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the <a href="http://mc-stan.org/issues/">instructions</a> on how to inform the Stan developers about bugs. [c-warnings]: The extended installation instructions for <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux">MacOS/Linux</a> and <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">Windows</a> have instructions for adding compiler options to the R <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">Makevars</a> file.</p>
+<div id="sampling" class="section level3">
+<h3><span class="header-section-number">1.2.1</span> Sampling</h3>
 <p>In order to sample from the model, we need to at least give it the values for the data to use: <code>n</code>, <code>k</code>, <code>y</code>, <code>X</code>, and the data associated with the priors.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data &lt;-<span class="st"> </span><span class="kw">list</span>(
   <span class="dt">y =</span> Duncan<span class="op">$</span>prestige,
   <span class="dt">n =</span> <span class="kw">nrow</span>(Duncan)
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(prestige <span class="op">~</span><span class="st"> </span>type <span class="op">+</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> Duncan)
+<p>The data types in Stan are all numeric (either integers or reals), but they include matrices and vectors. However, there is nothing like a data frame in Stan. Whereas in the R function <code>lm</code> we can provide a formula and a data set for where to look for objects, and the function will create the appropriate <span class="math inline">\(X\)</span> matrix for the regression, we will need to create that matrix ourselves—expanding categorical variables to indicator variables, and expanding interactions and other functions of the predictors. However, we need to do that all manually. The function <a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">stats</a> is the workhorse function used in <code>lm</code> and many other R functions to convert a formula into the matrix used in estimation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(prestige <span class="op">~</span><span class="st"> </span>type <span class="op">+</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education, <span class="dt">data =</span> Duncan)
 mod1_data<span class="op">$</span>X &lt;-<span class="st"> </span>X
 mod1_data<span class="op">$</span>k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)</code></pre></div>
-<p>For specific values of the prior distributions, assume uninformative priors for <code>beta</code>: <span class="math display">\[
+<p>We still need to provide the values for the prior distributions. For specific values of the prior distributions, assume uninformative priors for <code>beta</code> by setting the mean to zero and the variances to large numbers. <span class="math display">\[
 \beta_k \sim N(0, 1000)
 \]</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data<span class="op">$</span>b_loc &lt;-<span class="st"> </span><span class="dv">0</span>
@@ -288,10 +315,9 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data<span class="op">$</span>sigma_scale &lt;-<span class="st"> </span><span class="dv">50</span></code></pre></div>
 <p>Now, sample from the posterior, using the function <code>sampling</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod1, <span class="dt">data =</span> mod1_data)</code></pre></div>
-<p><strong>TODO</strong></p>
 </div>
-<div id="convergence-diagnostics-and-model-fit" class="section level2">
-<h2><span class="header-section-number">1.3</span> Convergence Diagnostics and Model Fit</h2>
+<div id="convergence-diagnostics-and-model-fit" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> Convergence Diagnostics and Model Fit</h3>
 <ul>
 <li><p><strong>Convergence Diagnostics:</strong> Is this the posterior distribution that you were looking for? These don’t directly say anything about how “good” the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.</p>
 <ul>
@@ -312,8 +338,9 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 </ul></li>
 </ul>
 </div>
+</div>
 <div id="maximum-a-posteriori-estimation" class="section level2">
-<h2><span class="header-section-number">1.4</span> Maximum A Posteriori estimation</h2>
+<h2><span class="header-section-number">1.3</span> Maximum A Posteriori estimation</h2>
 <p>The <em>Statistical Rethinking</em> text focuses on maximum a posteriori (MAP) estimation. In addition to sampling from the posterior distribution using HMC, the same Stan model can be used to estimate the MAP estimate of the parameters. Use the <code>optimizing</code> function to find the MAP estimates of the model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-<span class="st"> </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data)
 <span class="co">#&gt; STAN OPTIMIZATION COMMAND (LBFGS)</span>
