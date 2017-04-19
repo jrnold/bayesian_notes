@@ -168,6 +168,9 @@ Now, sample from the posterior, using the function `sampling`:
 mod1_fit <- sampling(mod1, data = mod1_data)
 ```
 
+
+**TODO**
+
 ## Convergence Diagnostics and Model Fit
 
 - **Convergence Diagnostics:** Is this the posterior distribution that you were looking for? These don't directly say anything about how "good" the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.
