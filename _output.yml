@@ -8,6 +8,10 @@ bookdown::gitbook:
       link: https://github.com/jrnold/bayesian_notes/edit/master/%s
       text: "Edit"
     sharing: no
+  includes:
+    in_header: includes/in_header.html
+    before_body: includes/before_body.html
+    after_body: includes/after_body.html
 
 bookdown::pdf_book:
   latex_engine: "xelatex"

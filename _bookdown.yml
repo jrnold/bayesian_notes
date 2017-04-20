@@ -2,7 +2,8 @@ new_session: yes
 output_dir: docs
 rmd_subdir: false
 rmd_files: [
-  "index.rmd"
+  "index.Rmd",
+  "intro-regression.Rmd"
 ]
 edit:
   link: https://github.com/jrnold/bayesian_notes/edit/gh-pages/%s
