@@ -2,3 +2,5 @@ _main.rds
 *.sav
 .Rproj.user
 /_bookdown_files/
+*.Rhistory
+*.RData
