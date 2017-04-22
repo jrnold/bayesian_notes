@@ -1585,69 +1585,12 @@
   timestamp = {2017-04-06},
 }
 
-@Article{,
-  author       = {Carpenter, Bob},
-  title        = {Typical Sets and the Curse of Dimensionality},
-  journaltitle = {Stan Case Studies},
-  date         = {2017},
-  timestamp    = {2017-04-15},
-}
-
-@Article{,
-  author       = {Carpenter, Bob and Gabry, Jonah and Goodrich, Ben},
-  title        = {Hierarchical Partial Pooling for Repeated Binary Trials},
-  journaltitle = {Stan Case Studies},
-  date         = {2017-01-19},
-  url          = {http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html},
-  urldate      = {2017-04-15},
-  timestamp    = {2017-04-15},
-}
-
-@Article{Betancourt2017a,
-  author       = {Betancourt, Michael},
-  title        = {How the Shape of a Weakly Informative Prior Affects Inferences},
-  journaltitle = {Stan Case Studies},
-  date         = {2017-01},
-  url          = {http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html},
-  urldate      = {2017-04-15},
-  timestamp    = {2017-04-15},
-}
-
-@Article{,
-  author       = {Diagnosing Biased Inference with Divergences},
-  title        = {Michael Betancourt},
-  journaltitle = {Stan Case Studies},
-  date         = {2017-01},
-  url          = {http://mc-stan.org/documentation/case-studies/divergences_and_bias.html},
-  urldate      = {2017-04-15},
-  timestamp    = {2017-04-15},
-}
-
-@Article{,
+@Article{Betancourt2017b,
   author       = {Betancourt, Michael},
   title        = {Identifying Bayesian Mixture Models},
   journaltitle = {Stan Case Studies},
   year         = {2017},
   date         = {2017-02},
-  timestamp    = {2017-04-15},
-}
-
-@Article{,
-  title        = {A primer on {Bayesian} multilevel modeling using {PyStan}},
-  journaltitle = {Stan Case Studies},
-  date         = {2016},
-  url          = {http://mc-stan.org/documentation/case-studies/radon.html},
-  urldate      = {2017-04-15},
-  timestamp    = {2017-04-15},
-}
-
-@Article{,
-  author       = {Carpenter, Bob},
-  title        = {The Impact of Reparameterization on Point Estimates},
-  journaltitle = {Stan Case Studies},
-  date         = {2016-04-25},
-  url          = {http://mc-stan.org/documentation/case-studies/mle-params.html},
-  urldate      = {2017-04-15},
   timestamp    = {2017-04-15},
 }
 
@@ -1666,20 +1609,23 @@
   timestamp = {2017-04-20},
 }
 
+@Article{VehtariGelmanGabry2015b,
+  author      = {Aki Vehtari and Andrew Gelman and Jonah Gabry},
+  title       = {Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC},
+  date        = {2015-07-16},
+  doi         = {10.1007/s11222-016-9696-4},
+  eprint      = {1507.04544v5},
+  eprintclass = {stat.CO},
+  eprinttype  = {arXiv},
+  abstract    = {Leave-one-out cross-validation (LOO) and the widely applicable information criterion (WAIC) are methods for estimating pointwise out-of-sample prediction accuracy from a fitted Bayesian model using the log-likelihood evaluated at the posterior simulations of the parameter values. LOO and WAIC have various advantages over simpler estimates of predictive error such as AIC and DIC but are less used in practice because they involve additional computational steps. Here we lay out fast and stable computations for LOO and WAIC that can be performed using existing simulation draws. We introduce an efficient computation of LOO using Pareto-smoothed importance sampling (PSIS), a new procedure for regularizing importance weights. Although WAIC is asymptotically equal to LOO, we demonstrate that PSIS-LOO is more robust in the finite case with weak priors or influential observations. As a byproduct of our calculations, we also obtain approximate standard errors for estimated predictive errors and for comparing of predictive errors between two models. We implement the computations in an R package called 'loo' and demonstrate using models fit with the Bayesian inference package Stan.},
+  file        = {online:http\://arxiv.org/pdf/1507.04544v5:PDF},
+  keywords    = {stat.CO, stat.ME},
+}
+
 @Article{Hallnd,
   author    = {{Statisticat, LLC}},
   title     = {Bayesian Inference},
   url       = {Bayesian Inference},
-  urldate   = {2017-04-20},
-  timestamp = {2017-04-20},
-}
-
-@WWW{Gelman2009a,
-  author    = {Andrew Gelman},
-  title     = {Confusions about posterior predictive checks},
-  date      = {2009-02-07},
-  url       = {http://andrewgelman.com/2009/02/07/confusions_abou/},
-  note      = {Statistical Modeling, Causal Inference, and Social Science},
   urldate   = {2017-04-20},
   timestamp = {2017-04-20},
 }
@@ -1694,17 +1640,90 @@
   timestamp = {2017-04-20},
 }
 
-@Article{,
-  author      = {Aki Vehtari and Andrew Gelman and Jonah Gabry},
-  title       = {Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC},
-  date        = {2015-07-16},
-  doi         = {10.1007/s11222-016-9696-4},
-  eprint      = {1507.04544v5},
-  eprintclass = {stat.CO},
-  eprinttype  = {arXiv},
-  abstract    = {Leave-one-out cross-validation (LOO) and the widely applicable information criterion (WAIC) are methods for estimating pointwise out-of-sample prediction accuracy from a fitted Bayesian model using the log-likelihood evaluated at the posterior simulations of the parameter values. LOO and WAIC have various advantages over simpler estimates of predictive error such as AIC and DIC but are less used in practice because they involve additional computational steps. Here we lay out fast and stable computations for LOO and WAIC that can be performed using existing simulation draws. We introduce an efficient computation of LOO using Pareto-smoothed importance sampling (PSIS), a new procedure for regularizing importance weights. Although WAIC is asymptotically equal to LOO, we demonstrate that PSIS-LOO is more robust in the finite case with weak priors or influential observations. As a byproduct of our calculations, we also obtain approximate standard errors for estimated predictive errors and for comparing of predictive errors between two models. We implement the computations in an R package called 'loo' and demonstrate using models fit with the Bayesian inference package Stan.},
-  file        = {online:http\://arxiv.org/pdf/1507.04544v5:PDF},
-  keywords    = {stat.CO, stat.ME},
+@WWW{Gelman2009a,
+  author    = {Andrew Gelman},
+  title     = {Confusions about posterior predictive checks},
+  date      = {2009-02-07},
+  url       = {http://andrewgelman.com/2009/02/07/confusions_abou/},
+  note      = {Statistical Modeling, Causal Inference, and Social Science},
+  urldate   = {2017-04-20},
+  timestamp = {2017-04-20},
+}
+
+@Article{Divergences2017a,
+  author       = {Diagnosing Biased Inference with Divergences},
+  title        = {Michael Betancourt},
+  journaltitle = {Stan Case Studies},
+  date         = {2017-01},
+  url          = {http://mc-stan.org/documentation/case-studies/divergences_and_bias.html},
+  urldate      = {2017-04-15},
+  timestamp    = {2017-04-15},
+}
+
+@Article{CarpenterGabryGoodrich2017a,
+  author       = {Carpenter, Bob and Gabry, Jonah and Goodrich, Ben},
+  title        = {Hierarchical Partial Pooling for Repeated Binary Trials},
+  journaltitle = {Stan Case Studies},
+  date         = {2017-01-19},
+  url          = {http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html},
+  urldate      = {2017-04-15},
+  timestamp    = {2017-04-15},
+}
+
+@Article{Carpenter2017a,
+  author       = {Carpenter, Bob},
+  title        = {Typical Sets and the Curse of Dimensionality},
+  journaltitle = {Stan Case Studies},
+  date         = {2017},
+  timestamp    = {2017-04-15},
+}
+
+@Article{Carpenter2016a,
+  author       = {Carpenter, Bob},
+  title        = {The Impact of Reparameterization on Point Estimates},
+  journaltitle = {Stan Case Studies},
+  date         = {2016-04-25},
+  url          = {http://mc-stan.org/documentation/case-studies/mle-params.html},
+  urldate      = {2017-04-15},
+  timestamp    = {2017-04-15},
+}
+
+@Article{Betancourt2017a,
+  author       = {Betancourt, Michael},
+  title        = {How the Shape of a Weakly Informative Prior Affects Inferences},
+  journaltitle = {Stan Case Studies},
+  date         = {2017-01},
+  url          = {http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html},
+  urldate      = {2017-04-15},
+  timestamp    = {2017-04-15},
+}
+
+@Article{2016a,
+  title        = {A primer on {Bayesian} multilevel modeling using {PyStan}},
+  journaltitle = {Stan Case Studies},
+  date         = {2016},
+  url          = {http://mc-stan.org/documentation/case-studies/radon.html},
+  urldate      = {2017-04-15},
+  timestamp    = {2017-04-15},
+}
+
+@Book{Stan2016a,
+  author    = {{Stan Development Team}},
+  title     = {Stan Modeling Language Users Guide and Reference Manual, Version 2.14.0},
+  year      = {2016},
+  url       = {https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf},
+  urldate   = {2017-04-20},
+  timestamp = {2017.04.20},
+}
+
+@InCollection{Geyer2011a,
+  author    = {Geyer, C. J.},
+  title     = {Introduction to Markov chain Monte Carlo},
+  booktitle = {Handbook of Markov Chain Monte Carlo},
+  year      = {2011},
+  editor    = {Brooks, S. and Gelman and A., Jones, G. L. and Meng, X.-L},
+  publisher = {Chapman and Hall/CRC},
+  timestamp = {2017.04.20},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

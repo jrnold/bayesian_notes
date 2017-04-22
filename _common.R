@@ -50,3 +50,22 @@ standoc <- function(x = NULL) {
     paste("[", x, "](", STAN_MAN_URL, ")")
   }
 }
+
+preprocess_lm <- function(formula., data = NULL, weights = NULL,
+                          contrasts = NULL, na.action = options("na.action"),
+                          offset = NULL, ...) {
+  mf <- lm(formula., data = data, method = "model.frame",
+           weights = weights, offset = offset, ...)
+  mt <- attr(mf, "terms")
+  out <- list(
+    y = model.response(mf, "numeric"),
+    w =  as.vector(model.weights(mf)),
+    offset = as.vector(model.offset(mf)),
+    X = model.matrix(mt, mf, contrasts),
+    terms = mt,
+    xlevels = stats::.getXlevels(mt, mf)
+  )
+  out$n <- nrow(out$X)
+  out$k <- ncol(out$X)
+  out
+}

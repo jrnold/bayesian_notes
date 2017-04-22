@@ -1,0 +1,121 @@
+# MCMC Diagnostics
+
+There are two parts of checking a Bayesian model:
+
+1. diagnostics: Is the sampler working? Is it adequately approximating the specified posterior distribution: $p(\theta | D)$.
+2. model fit: Does the model adequately represent the data? 
+
+## Convergence Diagnostics
+
+Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilbrium.
+However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.
+
+In general there is no way to prove that the sampler has converged [^converge].
+However, there are several statistics that indicate that a sampler has not converged.
+
+[^converge]: This is also the case in optimization with non-convex objective functions.
+
+### Potential Scale Reduction ($\hat{R}$)
+
+In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting 
+values of the chains [@Stan2016a, Sec 28.2].
+
+One way to check this is to compare the distributions of multiple chains---in equilibrium they should all have the same mean.
+Additionally, the split $\hat{R}$ tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.
+
+See @Stan2016a [Sec 28.2] for the equation and 
+
+The rule of thumb is that R-hat values for all less than 1.1 [source](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html).
+Note that **all** parameters must show convergence.
+This is a necessary but not sufficient condition for convergence.
+
+## Autocorrelation, Effective Sample Size, and MCSE
+
+The samples within a Markov chain are not independent. 
+Highly correlated samples do not effect the validity of inference on the posterior if 
+the samplers has time to explore the posterior distribution, but it does affect the 
+efficiency of the sampler.
+
+### Autocorrelation 
+
+The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample.
+Suppose that the $\rho^2_t$ is the ACF function of a sample of size $N$, the effective sample size, $N_eff$, is
+$$
+N_{eff} = \frac{N}{\sum_{t = -\infty}^\infty \rho_t} = \frac{N}{1 + 2 \sum_{t = -\infty}^\infty \rho_t}.
+$$
+**TODO** show that if $\rho_t = 1$ for all $t$ then $N_eff = 1$, and if $\rho_t = 0$ for all $t$ then $N_eff = N$.
+
+See also @Stan2016a [Sec 28.4], @Geyer2011a, and @GelmanCarlinSternEtAl2013a.
+
+**Thinning** Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved.
+Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.
+
+Both of these will produce 1,000 samples from the poserior, but effective sample size of $B$ will be greater than the effective sample size of $A$, since after thinnin g the autocorrelation in $B$ will be lower.
+
+- *A* Generating 1,000 samples after convergence and save all of them
+- *B* Generating 10,000 samples after convergence and save every 10th sample
+
+In this case, A produces 10,000 samples, and B produces 1,000.
+The effective sample size of A will be higher than B.
+However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: $N_{eff}(A) / N_{eff}(B) < 10$.
+
+- *A* Generating 10,000 samples after convergence and save all of them
+- *B* Generating 10,000 samples after convergence and save every 10th sample
+
+Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.
+
+### Monte Carlo Standard Error (MCSE)
+
+The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error.
+With a independent sample of size $N$, the MCSE for the sample mean is
+$$
+MCSE(\bar{\theta}) = \frac{s}{\sqrt{N}}
+$$
+where $s$ is the sample standard deviation.
+
+However, MCMC are generally not independent, and the MCSE will be higher than that
+of an independent sample. One way to calculate the MCSE with autocorrelated samples
+is to use the effective sample size instead of the sample size,
+$$
+MCSE(\bar{\theta}) = \frac{s}{\sqrt{N_{eff}}}
+$$
+
+
+
+## HMC Specific Diagnostics
+
+HMC produces several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution. 
+This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods like $\hat{R}$.
+
+The two diagnostics that HMC provides are
+
+1. divergent transitions
+2. maximum treedepth
+
+The HMC sampler has two tuning parameters
+
+1. Stepsize: Length of the steps to take
+2. Treedepth: Number of steps to take
+
+Stan chooses intelligent defaults for these values. However, this does not always work, and the divergent transitions and maximum treedepth tuning parameters indicate that these parameters should be adjusted.
+
+### Divergent transitions
+
+**The problem:** The details of the HMC are technical and can be found **TODO**. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating. 
+If the step sizes are too large, the discrete approximation does not work. 
+Helpfully, when the approximation is poor it does not fail without any indication but will produce "divergent transitions".
+
+*If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased*
+
+**The solution:** Reduce the step size. This can be done by increasing the the `adapt_delta` parameter.
+This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup.
+A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.
+
+### Maximum Treedepth
+
+**The problem:** NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
+If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum. 
+While divergent transitions bias inference, a too-small maximum treedepth only affects efficiency.
+The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum treedepth were set higher.
+
+**The solution:** Increase the maximum treedepth.
