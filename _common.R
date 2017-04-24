@@ -69,3 +69,8 @@ preprocess_lm <- function(formula., data = NULL, weights = NULL,
   out$k <- ncol(out$X)
   out
 }
+
+# placeholder for maybe linking directly to docs
+stanfunc <- function(x) {
+  paste0("`", x, "`")
+}

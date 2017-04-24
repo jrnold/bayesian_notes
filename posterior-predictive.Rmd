@@ -1,11 +1,23 @@
-# Posterior Predictive Checks
+# Model Checking
 
-One way to evaluate the fit of a model is posterior predictive checks. 
+
+Why check models? 
+
+- In theory---Bayesian model should include all relevant substantive knowledge and possible theories?
+- In practice---It won't. Need to check the model 
+
+The question is not whehter a model is "true"; it isn't [@Box1976a].
+But is it good enough for the purposes of the analysis.
+
+See @GelmanCarlinSternEtAl2013a [Ch. 6]
+
+## Posterior Predictive Checks
+
+One way to evaluate the fit of a model is **posterior predictive checks**
 
 - Fit the model to the data to get the posterior distribution of the parameters: $p(\theta | D)$
 - Simulate data from the fitted model: $p(\tilde{D} | \theta, D)$
 - Compare the simulated data (or a statistic thereof) to the observed data and a statistic thereof. This comparison can be formal or visual.
-
 
 See  @Gelman2007a,@Gelman2009a,@GelmanCarlinSternEtAl2013a,@Gelman2014 for discussions of this.
 
@@ -16,9 +28,9 @@ of the data, $p(y^{(rep)} | \theta = \theta^{(s)}$.
 Then the ensemble of simulated datasets, $(y^{rep(s)}, \dots, y^{rep(nsims)})$, is a sample from the posterior predictive
 distribution, $p(y^{(rep)} | y)$
 
-This gives a *Bayeisan p-value*.
-The model can be tested by means of discrepency statistics, which are some function of the data and parameters, $T(y, \theta)$.
-If $\theta$ was known, then compare discrepency by $T(y^{(rep)}, \theta)$.
+This gives a *Bayesian p-value*.
+The model can be tested by means of discrepancy statistics, which are some function of the data and parameters, $T(y, \theta)$.
+If $\theta$ was known, then compare discrepancy by $T(y^{(rep)}, \theta)$.
 The statistical significance is $p = \Pr(T(y^{(rep)}, \theta) > T(y, \theta) | y, \theta)$.
 If $\theta$ is unknown, then average over the posterior distribution of $\theta$,
 $$
@@ -37,14 +49,14 @@ Other ways of characterizing the discrepancy between $y$ and $y_rep$ include (La
 - *L-criterion*: Distance between $y$ and $y^{rep}$ (Laud Ibrahim 1995)
 
 *Condiational Predictive Ordinate*
-The CPO (Gelfant 1996) is the leave-on-out cross-validation predictive density:
+The CPO (Gelfand 1996) is the leave-on-out cross-validation predictive density:
 $$
 p(y_i | y_{-i}) = \int p(y_i | \theta) p(\theta | y_{-i}) d\,\theta
 $$
-The pointwise predicted LOO probabilitiescan be calculted
-using the LOO implemented in the **loo** packae.
+The pointwise predicted LOO probabilities can be calculated
+using the LOO implemented in the **loo** package.
 
-**Outliers** inverse-CPOs (ICPOs) larger than 40 are possible outliers, and those higher than 70 are extreme values (Ntzoufras 2009, p. 376). Congdon (2005) scales CPOs by dividing each by its individual max and considers observations with scaled CPOs under 0.01 as outliers.
+**Outliers** inverse-CPO (ICPOs) larger than 40 are possible outliers, and those higher than 70 are extreme values (Ntzoufras 2009, p. 376). Congdon (2005) scales CPO by dividing each by its individual max and considers observations with scaled CPO under 0.01 as outliers.
 
 <!-- The sum of the logged CPOs can be an estimator of the log marginal likelihood and is called the log pseudo marginal likelihood. The ratio of PsMLs can be used as a surrogate for a Bayes Factor (pseudo Bayes Factor) (LaplaceDemon p. 20) -->
 
@@ -53,7 +65,7 @@ Let the *predictive quantile* ($PQ_i$) be
 $$
 PQ_i = p(y_i^{(rep)} > y_i) .
 $$
-Then the *predictive concordance* be the proportion of $y_i$ that are not outliers. Gelfand (1996) argues that the predictive concordance should match 95% - in other words that the posterior preditctive distribution should have the correct coverage. (Laplace Demon p. 20)
+Then the *predictive concordance* be the proportion of $y_i$ that are not outliers. Gelfand (1996) argues that the predictive concordance should match 95% - in other words that the posterior predictive distribution should have the correct coverage. (Laplace Demon p. 20)
 
 ## Average Predictive Comparisons
 
@@ -62,9 +74,14 @@ Let $u$ be the input of interest, and $v$ be all other inputs, so that $x = (u, 
 $$
 b_u(u^{(lo)}, u^{(hi)}, v, \theta) = \frac{E(y | u^{(hi)}, v, \theta) - E(y | u^{(lo)}, v, \theta)}{u^{(hi)} - u^{(lo)}}
 $$
-the the averge predictive difference per unit change in $u$ is,
+the the average predictive difference per unit change in $u$ is,
 $$
 B_{u}(u^{(lo)}, u^{(hi)}) = \frac{1}{n} \sum_{i = 1}^n b_u(u^{(lo)}, u^{(hi)}, v_i, \theta) .
 $$
 This can be adjusted to use observed (weighted) differences of $u$ for each point.
 See the Gelman paper on it.
+
+
+## Sources
+
+- See @GelmanShalizi2012a, @GelmanShalizi2012b, @Kruschke2013b

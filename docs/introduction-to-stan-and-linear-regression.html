@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -93,33 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
-\[
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\Cor}{Cor}
-\DeclareMathOperator{\Bias}{Bias}
-\DeclareMathOperator{\MSE}{MSE}
-\DeclareMathOperator{\RMSE}{RMSE}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
 
-\newcommand{\mat}[1]{\boldsymbol{#1}}
-\newcommand{\vec}[1]{\boldsymbol{#1}}
-\newcommand{\T}{'}
-
-\newcommand{\distr}[1]{\mathcal{#1}}
-\newcommand{\dnorm}{\distr{N}}
-\newcommand{\dmvnorm}[1]{\distr{N}_{#1}}
-\newcommand{\dt}[1]{\distr{T}_{#1}}
-
-\newcommand{\cia}{\perp\!\!\!\perp}
-\DeclareMathOperator*{\plim}{plim}
-\]
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
@@ -156,6 +130,59 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dunif}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpoisson}{\mathrm{Poisson}}
+\newcommand{\dbinomial}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnegbin}{\mathrm{Neg-bin}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{\Logistic}
+
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
 <div id="introduction-to-stan-and-linear-regression" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction to Stan and Linear Regression</h1>
 <p>This chapter is an introduction to writing and running a Stan model in R. Also see the <strong>rstan</strong> <a href="https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html">vignette</a> for similar content.</p>
@@ -264,7 +291,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = a + X * b;
+  mu = X * b;
 }
 model {
   // priors
@@ -343,72 +370,55 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 <h2><span class="header-section-number">1.3</span> Maximum A Posteriori estimation</h2>
 <p>The <em>Statistical Rethinking</em> text focuses on maximum a posteriori (MAP) estimation. In addition to sampling from the posterior distribution using HMC, the same Stan model can be used to estimate the MAP estimate of the parameters. Use the <code>optimizing</code> function to find the MAP estimates of the model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-<span class="st"> </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data)
-<span class="co">#&gt; STAN OPTIMIZATION COMMAND (LBFGS)</span>
-<span class="co">#&gt; init = random</span>
-<span class="co">#&gt; save_iterations = 1</span>
-<span class="co">#&gt; init_alpha = 0.001</span>
-<span class="co">#&gt; tol_obj = 1e-12</span>
-<span class="co">#&gt; tol_grad = 1e-08</span>
-<span class="co">#&gt; tol_param = 1e-08</span>
-<span class="co">#&gt; tol_rel_obj = 10000</span>
-<span class="co">#&gt; tol_rel_grad = 1e+07</span>
-<span class="co">#&gt; history_size = 5</span>
-<span class="co">#&gt; seed = 1425311915</span>
-<span class="co">#&gt; initial log joint probability = -546666</span>
+<span class="co">#&gt; Initial log joint probability = -562878</span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite function evaluation.</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; Optimization terminated normally: </span>
 <span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span>
 mod1_fit_opt
 <span class="co">#&gt; $par</span>
 <span class="co">#&gt;      b[1]      b[2]      b[3]      b[4]      b[5]     sigma     mu[1] </span>
-<span class="co">#&gt;    -0.181    16.480   -14.841     0.597     0.345     9.180    83.218 </span>
+<span class="co">#&gt;    -0.198    16.644   -14.679     0.598     0.346     9.180    83.221 </span>
 <span class="co">#&gt;     mu[2]     mu[3]     mu[4]     mu[5]     mu[6]     mu[7]     mu[8] </span>
-<span class="co">#&gt;    85.740    93.057    80.416    84.413    58.030    86.830    98.806 </span>
+<span class="co">#&gt;    85.742    93.064    80.419    84.416    58.025    86.835    98.817 </span>
 <span class="co">#&gt;     mu[9]    mu[10]    mu[11]    mu[12]    mu[13]    mu[14]    mu[15] </span>
-<span class="co">#&gt;    55.230    89.193    67.125    95.726    95.381    69.980    76.579 </span>
+<span class="co">#&gt;    55.232    89.198    67.121    95.735    95.390    69.979    76.581 </span>
 <span class="co">#&gt;    mu[16]    mu[17]    mu[18]    mu[19]    mu[20]    mu[21]    mu[22] </span>
-<span class="co">#&gt;    42.308    63.684    71.665    56.767    91.397    27.346    32.829 </span>
+<span class="co">#&gt;    42.297    63.674    71.659    56.754    91.402    27.337    32.818 </span>
 <span class="co">#&gt;    mu[23]    mu[24]    mu[25]    mu[26]    mu[27]    mu[28]    mu[29] </span>
-<span class="co">#&gt;    42.535    19.750    20.307    41.367    57.883    32.377    20.560 </span>
+<span class="co">#&gt;    42.531    19.734    20.301    41.370    57.890    32.377    20.553 </span>
 <span class="co">#&gt;    mu[30]    mu[31]    mu[32]    mu[33]    mu[34]    mu[35]    mu[36] </span>
-<span class="co">#&gt;    34.740    18.794     6.418    33.891    11.756    17.545    19.272 </span>
+<span class="co">#&gt;    34.739    18.789     6.405    33.889    11.747    17.537    19.265 </span>
 <span class="co">#&gt;    mu[37]    mu[38]    mu[39]    mu[40]    mu[41]    mu[42]    mu[43] </span>
-<span class="co">#&gt;    18.356    19.046    11.066    15.780    17.347    18.608    10.907 </span>
+<span class="co">#&gt;    18.350    19.041    11.056    15.772    17.341    18.602    10.897 </span>
 <span class="co">#&gt;    mu[44]    mu[45]  y_rep[1]  y_rep[2]  y_rep[3]  y_rep[4]  y_rep[5] </span>
-<span class="co">#&gt;    36.361    15.647    94.076    89.496    95.805    82.105    74.688 </span>
+<span class="co">#&gt;    36.365    15.642    83.699    86.726    94.091    85.121    76.229 </span>
 <span class="co">#&gt;  y_rep[6]  y_rep[7]  y_rep[8]  y_rep[9] y_rep[10] y_rep[11] y_rep[12] </span>
-<span class="co">#&gt;    52.630    77.017   115.110    46.107    91.437    70.361   103.725 </span>
+<span class="co">#&gt;    67.198    94.040   107.471    55.463    87.214    81.968   100.999 </span>
 <span class="co">#&gt; y_rep[13] y_rep[14] y_rep[15] y_rep[16] y_rep[17] y_rep[18] y_rep[19] </span>
-<span class="co">#&gt;    95.808    56.171    73.826    49.434    63.228    58.018    36.331 </span>
+<span class="co">#&gt;    94.443    61.613    73.923    35.785    72.805    69.508    51.738 </span>
 <span class="co">#&gt; y_rep[20] y_rep[21] y_rep[22] y_rep[23] y_rep[24] y_rep[25] y_rep[26] </span>
-<span class="co">#&gt;    82.678    32.345    47.514    46.091    20.639    14.317    32.379 </span>
+<span class="co">#&gt;    86.781    18.800    37.047    49.372    22.102    22.935    46.992 </span>
 <span class="co">#&gt; y_rep[27] y_rep[28] y_rep[29] y_rep[30] y_rep[31] y_rep[32] y_rep[33] </span>
-<span class="co">#&gt;    47.882    28.828    41.644    31.181    14.286    -6.776    37.436 </span>
+<span class="co">#&gt;    54.856    48.034    14.845    51.714    23.681    -1.549    18.705 </span>
 <span class="co">#&gt; y_rep[34] y_rep[35] y_rep[36] y_rep[37] y_rep[38] y_rep[39] y_rep[40] </span>
-<span class="co">#&gt;     8.027     7.335    21.752    15.772     9.419     4.057    21.350 </span>
+<span class="co">#&gt;    14.650    27.235     7.695    26.999     6.659    11.935    -2.765 </span>
 <span class="co">#&gt; y_rep[41] y_rep[42] y_rep[43] y_rep[44] y_rep[45] </span>
-<span class="co">#&gt;    29.336    15.381     4.734    45.092    20.127 </span>
+<span class="co">#&gt;    16.126     6.159    23.402    38.479     9.517 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] -122</span></code></pre></div>
+<span class="co">#&gt; [1] -122</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $return_code</span>
+<span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>It can also return samples from the multivariate normal (Laplace) approximation to the posterior distribution.</p>
 <p>Adding the option <code>hessian = TRUE</code> returns the hessian, which is defined on the unconstrained parameter space (all parameters are defined over <span class="math inline">\((-\infty, \infty)\)</span>). To get a sample of values from that multivariate normal distribution set <code>draws = TRUE</code>. These draws will be from the unconstrained parameter space, unless <code>constrained = TRUE</code>, in which case they will be on the scales of the original parameters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-
 <span class="st">  </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">constrained =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; STAN OPTIMIZATION COMMAND (LBFGS)</span>
-<span class="co">#&gt; init = random</span>
-<span class="co">#&gt; save_iterations = 1</span>
-<span class="co">#&gt; init_alpha = 0.001</span>
-<span class="co">#&gt; tol_obj = 1e-12</span>
-<span class="co">#&gt; tol_grad = 1e-08</span>
-<span class="co">#&gt; tol_param = 1e-08</span>
-<span class="co">#&gt; tol_rel_obj = 10000</span>
-<span class="co">#&gt; tol_rel_grad = 1e+07</span>
-<span class="co">#&gt; history_size = 5</span>
-<span class="co">#&gt; seed = 764155989</span>
-<span class="co">#&gt; initial log joint probability = -41463.6</span>
+<span class="co">#&gt; Initial log joint probability = -40591.1</span>
 <span class="co">#&gt; Optimization terminated normally: </span>
 <span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span></code></pre></div>
 

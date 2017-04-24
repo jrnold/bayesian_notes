@@ -1,0 +1,290 @@
+# Posterior Prediction Criteria
+
+Most of these notes summarize the more complete treatment in @GelmanHwangVehtari2013a and @VehtariGelmanGabry2015a.
+
+## Summary and Advice 
+
+Models can be compared using its *expected predictive accuracy* on new data. Ways to evaluate predictive accuracy:
+
+- log posterior predictive density: $\log p_post(\tilde{y})$. The log probability of observing new 
+- scoring rules or loss functions specific to the problem/research question
+
+Several methods to estimate expected log posterior predictive density (elpd)
+
+- within-sample log-posterior density (biased, too optimistic)
+- information criteria: WAIC, DIC, AIC with correct the bias within-sample log-posterior density with a penalty (number of parameters)
+- cross-validation: estimate it using heldout data
+
+What should you use? 
+
+- Use the Pareto Smoothed Importance Sampling LOO [@VehtariGelmanGabry2015a] implemented in the `r rpkg("loo")` package:
+
+    - It is computationally efficient as it doesn't require completely re-fitting the model, unlike actual cross-validation
+    - it is fully Bayesian, unlike AIC and DIC
+    - it seems to perform better than WAIC
+    - it provides indicators for when it is a poor approximation (unlike AIC, DIC, and WAIC)
+    - next best approximation would be the WAIC. No reason to use AIC or DIC ever.
+    
+- For observations which the PSIS-LOO has $\hat{k} > 0.7$ (the estimator has infinite variance) and there aren't too many, use LOO-CV.
+- If PSIS-LOO has many observations with with $k > 0.7$, then use LOO-CV or k-fold CV
+- If the likelihood doesn't easily partition into observations or LOO is not an appropriate prediction task, use the appropriate CV method (block k-fold, partitioned k-fold, time-series k-fold, rolling forecasts, etc.)
+
+
+### Expected Log Predictive Density
+
+Let $f$ be the true model, $y$ be the observed data, and $\tilde{y}$ be future data or alternative data not used in fitting the model.
+The out-of-sample predictive fit for new data is
+$$
+\log p_{post}(\tilde{y}_i) = -\log \E_{post}(p(\tilde{y}_i)) = \log \int p(\tilde{y}_i | \theta) p_{post}(\theta) d\,\theta
+$$
+where $p_{post}(\tilde{y}_i)$ is the predictive density for $\tilde{y}_i$ from $p_{post}(\theta)$. $\E_{post}$ is an expectation that averages over the values posterior distribution of $\theta$.
+
+Since the future data $\tilde{y}_i$ are unknown, the **expected out-of- sample log predictive density** (elpd) is,
+$$
+\begin{aligned}[t]
+\mathrm{elpd} &= \text{expected log predictive density for a new data point} \\
+&= E_f(\log p_{post}(\tilde{y}_i)) \\
+&= \int (\log p_{post}(\tilde{y}_i)) f(\tilde{y}_i) \,d\tilde{y}_i
+\end{aligned}
+$$
+Also called the mean log predictive density. The problem is that we
+don't know the data distribution $f$.
+
+Define a measure of predictive accuracy for the $n$ data points taken one at a time,
+$$
+\begin{aligned}[t]
+\mathrm{elppd} &= \text{epxected log pointwise predictive density for a new dataset} \\
+&= \sum_{i = 1}^n \E_f(\log p_{post}(\tilde{y}_i))
+\end{aligned}
+$$
+However, this requires a division of the data into individual data points.
+
+Predictive accuracy given a point estimate $\hat{\theta}(y)$,
+$$
+\text{expected log predictive density | $\hat{\theta}$} = \E_f(log p(\tilde{y} | \hat{\theta})
+$$
+
+If a model has independent data parameters, elppd = elpd,
+$$
+p(\tilde{y} | \hat{\theta}) = \prod_{i = 1}^n p(\tilde{y}_i | \hat{\theta})
+$$
+
+In general, $\theta$ is unknown, so $\log p(y | \theta)$ is unknown.
+We will average over the posterior distribution, $p_{post}(\theta) = p(\theta | y)$,
+$$
+\begin{aligned}[t]
+\mathrm{lppd} &= \text{log pointwise predictive density} \\
+&= \log \prod_{i = 1}^n p_{post}(y_i) \\
+&= \sum_{i = 1}^n \log \int p(y_i | \theta) p_{post}(\theta)\,d\theta
+\end{aligned}
+$$
+Suppose that we have a sample of $S$ draws from $p_{post}(\theata)$, which are labelled, $\theta^s$, $s = 1, \dots, S$:
+$$
+\begin{aligned}[t]
+\text{computed lppd} &= \text{computed log pointwise predictive density} \\
+&= \sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{i = 1}^S p(y_i | \theta ^s) \right) .
+\end{aligned}
+$$
+
+For historical reasons, *information criteria* are defined on the deviance scale,
+$$
+-2 \log p(y | \hat{\theta}) .
+$$
+
+Out-of-sample prediction will typically be less than within-sample predictive accuracy
+
+Other notes:
+
+- In some models, with data dependent parameters, the pointwise predictive density cannot be calculated since the data cannot be split into $n$ observations
+- In hierarchical models, the difference between prior and posterior is unknown. The prediction problem is different if we are predicting new data in existing groups, or new data in new groups [@GelmanHwangVehtari2013a].
+
+Methods of estimating measures of predictive accuracy [@GelmanHwangVehtari2013a]
+
+1. **Within-sample predictive accuracy**: biased, overly optimistic
+2. **Adjusted within-sample predictive accuracy**: correct within-sample predictive accuracy for the bias. Examples include AIC, DIC, and WAIC. These are start with lppd and subtract a correction for the number of parameters. These are approximations, work in many situations, but best in expectation, not any particular case.
+3. **Cross-validation**: Non-parametric method to estimate out-of-sample predictive accuracy using holdout sets. Computationally expensive; requires many partitions.
+
+
+### Akaike Information Criterion (AIC)
+
+$$
+\widehat{\mathrm{elpd}}_{AIC} = \log p(y | \hat{\theta}_{MLE}) - k
+$$
+where $k$ is the number of parameters,
+$$
+AIC = - \log p(y | \hat{\theta}_{MLE}) + 2 k
+$$
+Problems with AIC
+
+- doesn't make sense outside linear models with flat priors
+- hard to define the number of parameters, $k$, in Bayesian models
+- uses a point estimate of $\theta$, does not average over uncertainty in $\theta$
+
+### Deviance Information Criterion (DIC)
+
+Introduced in @SpiegelhalterBestCarlinEtAl2002a. Also see @Plummer2008a. The DIC is widely used by BUGS and JAGS software.
+$$
+\widehat{\mathrm{elpd}}_{DIC} = \log p(y | \hat{\theta}_{Bayes}) - p_{DIC}
+$$
+where $\hat{\theta}_{Bayes} = \E(\theta|y)$ and  $p_{DIC$ is the effective number of parameters, defined as,
+$$
+p_{DIC} = 2 \left( \log p(y | \hat{\theta}_{Bayes}) - \E(\log(p(y | \theta))) \right) .
+$$
+The effective number of parameters can be calculated from $S$ samples from the posterior distribution, $\theta^1, \dots, \theta^S$,
+$$
+p_{DIC} = 2 \left( \log p(y | \hat{\theta}_{Bayes})  - \frac{1}{S} \sum_{s = 1}^S \log p(y | \theta^s) \right) .
+$$
+An alternative effective sample size is defined as,
+$$
+p_{DIC-alt} = 2 \var_{post}(\log p(y | \theta)) .
+$$
+
+- gives correct answer in limit of fixed model and large $n$
+- $p_{DIC}$ is more numerically stable than $p_{DIC-alt}$
+- $p_{DIC-alt}$ is always positive
+- $p_{DIC}$ can be negative if posterior mean is far from the posterior mode
+
+The DIC is on the deviance scale,
+$$
+DIC = -2 \log p(y | \hat{\theta}_{Bayes}) + 2 p_{DIC} .
+$$
+
+### Watanabe-Akaike Information Criterion (WAIC) 
+
+Proposed in @Watanabe2010a. Originally called the widely applicable information criterion (WAIC). 
+
+- similar to DIC, but fully Bayesian and doesn't rely on a point estimate $\hat{\theta}$.
+- unlike AIC and DIC it works for singular models where MLE doesn't exist
+
+There are two derivations of the effective parameter size for WAIC.
+$$
+p_{WAIC1} = 2 \sum_{i = 1}^n \left( \log (\E_{post} p(y_i | \theta)) - \E_{post}(\log p(y_i | \theta)) \right) ,
+$$
+and computed with a sample from a posterior sample,
+$$
+\text{computed $p_{WAIC1}$} = 2 \sum_{i = 1}^n \left( \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_i | \theta^s) \right) - \frac{1}{S} \sum_{s = 1}^S \log p(y_i | \theta^s) \right) .
+$$
+
+$$
+p_{WAIC2} = \sum_{i = 1}^n \Var_{post} \log (p(y_i | \theta)) .
+$$
+and computed with a sample from a posterior sample,
+$$
+p_{WAIC2} = \sum_{i = 1}^n \Var_{s = 1}^S \log (p(y_i | \theta)) .
+$$
+This calculates the variance separately for each point and sums over them.
+
+Use either $p_{WAIC1}$ or $p_{WAIC2}$ for the bias correction,
+$$
+\widehat{\mathrm{elppd}}_{WAIC} = \mathrm{lppd} - p_{WAIC}
+$$
+The WAIC is defined on the deviance scale,
+$$
+WAIC = -2 \mathrm{lppd} + 2 p_{WAIC} .
+$$
+
+The effective number of parameters is a random variable.
+It depends on both the prior and the observed data (p. 10).
+
+### Bayesian Information Criterion (BIC) 
+
+These information criteria (AIC, DIC, WAIC) are fundamentally different than the Bayesian Information Criteria (BIC). 
+
+- AIC, DIC, WAIC are approximations of the expected posterior predictive accuracy, $p(\tilde{y} | \theta)$.
+- BIC is an approximation of the marginal likelihood: $p(y)$.
+
+See @KassRaftery1995a for more discussion of BIC and Bayes Factors.
+
+### Leave-one-out cross validation (LOO-CV)
+
+Data are repeatedly partitioned into a training set $y_{train}$ and a holdout set $y_{holdout}$.
+The model is fit with $y_{train}$ to give posterior distribution $p_{train}(\theta) = p(\theta | y_{train})$.
+The fit is evaluated using an estimate of the log posterior density of the holdout data,
+$$
+\begin{aligned}[t]
+\log p_{train} (y_{holdout}) &= \log \int p_{pred} (y_{holdout} |\theta) p_{train}(\theta) \, d\theta \\
+&= \frac{1}{S} \sum_{s = 1}^S p(y_{holdout} | \theta^s)
+$$
+
+For Bayesian LOO-CV the estimate of out-of-sample predictive fits is,
+$$
+\begin{aligned}[t]
+lppd_{loo-cv} &= \sum_{i = 1}^n \log p_{post(-i)}(y_i) \\
+&= \sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_i | \theta^{is}) \right)
+\end{aligned}
+$$
+
+The prediction is conditioned on $n - 1$ data points which underestimates the predictive fit.
+An approximation of the bias is,
+$$
+b = \mathrm{lppd} - \overline{\mathrm{lppd}}_{-i},
+$$
+where,
+$$
+\begin{aligned}[t]
+\overline{\mathrm{lppd}}_{-i} &= \frac{1}{n} \sum_{i = 1}^n \sum_{j = 1}^n \log p_{post(-i)}(y_j) \\
+&= \frac{1}{n} \sum_{i = 1}^n \sum_{j = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_j | \theta^{is}) \right) .
+\end{aligned}
+$$
+The bias corrected LOO-CV is,
+$$
+\mathrm{lppd}_{cloo-cv} = \mathrm{lppd}_{loo-cv} + b
+$$
+The bias is usually small and often ignored.
+
+The effective number of parameters is,
+$$
+p_{loo-cv} = \mathrm{lppd} - \mathrm{lpp}_{loo-cv} ,
+$$
+or, using the bias corrected LOO-CV is,
+$$
+\begin{aligned}[t]
+p_{cloo-cv} &= \mathrm{lppd}  - \mathrm{lppd}_{cloo} \\
+&= \overline{\mathrm{lppd}}_{-i} - \mathrm{lppd}_i
+\end{aligned}
+$$
+
+- under some conditions AIC and WAIC can be show to be asymptotically equivalent to Bayesian LOO-CV
+- this calculates an expectation over $y^{rep}$ in its unknown distribution $f$; thus this is an estimation of the frequency properties of a Bayesian estimator
+
+### Pareto Smoothed Importance Sampling Leave-one-Out Cross Validation (PSIS-LOO)
+
+@VehtariGelmanGabry2015a approximates LOO-CV through importance sampling directly re-estimating the model with cross-validation. 
+Since the importance weights can have infinite variance, they improve this naive method by a method of smoothing the importance weights that fits a Pareto model to the tail.
+They call it Pareto Smoothed Importance Sampling Leave-one-Out cross-validation (PSIS-LOO).
+
+The estimated shape parameter the Pareto distribution fit to the raw importance sampling weights of the observations, $\hat{k}_i$, provides a diagnostic for when this is an appropriate approximation. When $\hat{k} > 0.7$, the importance weights have infinite variance, and the LOO approximation does not work. In those cases
+
+- use LOO-CV for the problematic observations
+- use k-fold CV instead
+- use a robust model - since it suggests that certain observations are poorly fit and have too much influence over the model fit
+
+
+### Evaluating Predictive Error Comparisons
+
+The standard error of an elpd can be calculated by computing the standard deviation of the $n$ components and multiplying by $\sqrt{n}$ [@VehtariGelmanGabry2015a]:
+$$
+\se(\widehat{\mathrm{elpd}}) = \sqrt{n V_{i = 1}^n \widehat{elpd}_{i}}
+$$
+
+Standard errors for the effective numbers of parameters, $\hat{p}$, can similarly be calculated,
+$$
+\se\hat{p} = \sqrt{n V_{i = 1}^n \hat{p}_i}
+$$
+
+@VehtariLampinen2002a also suggest that sampling uncertainty in IC can be calculated by bootstrapping.
+
+@Ripley1996a asymptotic theory suggests sampling variance of avg. predictive error is of order 1. This means that differences in IC less than 1 can be ignored. However, this approx doesn't work well in finite samples or non-nested criteria (p. 26)
+
+- For practical significance
+
+    - compare model to a baseline/reference model.
+    - better to compare predictive criteria directly related to the substantive problem
+    
+- if predictive criteria are used for model selection, then the *selected* model is *biased*. This bias increases with the number of models compared or variables selected among when the doing variable selection.
+- @VehtariOjanen2012 consider many different scenarios for future data, i.e. when $p(\tilde{x}) \neq p(x)$.
+
+
+## More Information
+
+See @VehtariOjanen2012a for an extensive review, as well as @VehtariGelmanGabry2015a and @GelmanHwangVehtari2013a.

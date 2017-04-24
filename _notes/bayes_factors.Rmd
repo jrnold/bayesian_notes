@@ -1,0 +1,83 @@
+# Bayes Factors
+
+We observe data $D$, which could have arisen under hypotheses $H_1$ or $H_2$ according to probability densities
+$\Pr(D | H_1)$ and $\Pr(D | H_2)$. The prior probabilities of hypotheses are $\Pr(H_1)$ and $\Pr(H_2) = 1 - \Pr(H_1))$.[^bf-sources]
+
+[^bf-sources]: Most of these notes summarize content in @KassRaftery1995a and @Kruschke2016a [Ch 10].
+
+$$
+\Pr(H_k | D) = \frac{\Pr(D | H_k) \Pr(H_k)}{\Pr(D | H_1) \Pr(H_1) + \Pr(D | H_2) \Pr(H_2)}
+$$
+so,
+$$
+\underbrace{\frac{\Pr(H_1 | D)}{\Pr(H_2 | D)}}_{\text{posterior odds}} = \underbrace{\frac{\Pr(D | H_1)}{\Pr(D | H_2)}}_{\text{Bayes Factor}} \times \underbrace{\frac{\Pr(H_1)}{\Pr(H_2)}}_{\text{prior odds}}
+$$
+
+With unknown parameters, evidence (marginal likelihood) terms in the Bayes factor must integrate over the parameters.
+$$
+\Pr(D | H_k) = \int \Pr(D | \theta_k, H_k) \pi(\theta_k | H_k) \, d\theta_k
+$$
+
+In the general case, with $k \in 1, \dots, K$ models,
+$$
+\Pr(H_k | D) = \frac{\Pr(D | H_k) \Pr(H_k)}{\sum_{i = 1}^K \Pr(D | H_i) \Pr(H_i)}
+$$
+where the *evidence* of each model is,
+$$
+\Pr(D | H_k) = \int \Pr(D | \theta, H_k) p(\theta | H_k) \,d\theta .
+$$
+Calculating the evidence for each model is extremely challenging.
+
+
+In simple cases (univariate, no free parameters): Bayes factor equals the likelihood ratio.
+Difference between likelihood ratio (LR) and Bayes Factor (BF):
+
+- LR: parameters eliminated by maximization
+- BF: parameters eliminated by integration
+
+Bayes factor is the **evidence in factor** of a hypothesis.
+
+
+Jeffreys (1961) suggestd interpreting Bayes scores [@KassRaftery1995a, p. 777]
+
+$\log_{10}(B_{10})$ $B_{10}$          Evidence against $H_0$
+------------------- ----------------- ----------------------------------
+$0$ to $1/2$        $1$ to $3.2$      not worth more than a bare mention
+$1/2$ to $1$        $3.2$ to $10$     substantial
+$1$ to $2$          $10$ to $100$     strong
+$ > 2$              $> 100$           decisive
+
+
+@KassRaftery1995a [p. 777] variant scale. It uses twice the natural logarithm of the Bayes factor (deviance scale), and changes a few values.
+
+$2 \ln(B_{10})$     $B_{10}$          Evidence against $H_0$
+------------------- ----------------- ----------------------------------
+$0$ to $2$          $1$ to $3$        not worth more than a bare mention
+$2$ to $6$          $3$ to $20$       substantial
+$6$ to $10$         $10$ to $100$     strong
+$ > 10$             $> 150$           very strong
+
+Since the probabilty scale of Bayes factors is itself meaningful, these categories are rough statements about standards of scientific evidence.
+
+@KassRaftery1995a [p. 777] notes that the log of the marginal probability of the data may be viewed as a predictive score.
+This doesn't require that any of the models be "true".
+They suggest using the log predictive scores $p(\tilde{y} | H_1) - p(\tilde{y} | H_2)$, the difference in predictive scores, as type of log Bayes factor.
+
+Calculating Bayes Factors and Choosing Priors
+
+- See @KassRaftery1995a. 
+- See @FrielWyse2012a for a recent review of methods for calculating marginal likelihoods
+
+Problems with Bayes Factors
+
+- The BF is **highly sensitive** to priors
+- Marginal likelihood $\Pr(D | H)$ is **extremely hard to calculate**
+- Implicit assumption of a "True" model when in applied setties this is almost never the case.
+
+
+## More Sources
+
+- @Kruschke2013a uses BF with a $t$ Test
+- @Kruschke2011a discusses testing null hypotheses with BF and with credible intervals
+- See @FrielWyse2012a for a recent review of methods for calculating marginal likelihoods
+- `r rpkg("loo")` [vignette](https://cran.r-project.org/web/packages/loo/vignettes/loo-example.html)

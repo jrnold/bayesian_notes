@@ -1,0 +1,8 @@
+- name: "Normal"
+  support: >
+    real: $(-\infty, +\infty)$
+  link_name: >
+    identity
+  link_function: >
+    gamma
+

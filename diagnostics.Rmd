@@ -23,18 +23,21 @@ values of the chains [@Stan2016a, Sec 28.2].
 One way to check this is to compare the distributions of multiple chains---in equilibrium they should all have the same mean.
 Additionally, the split $\hat{R}$ tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.
 
-See @Stan2016a [Sec 28.2] for the equation and 
+See @Stan2016a [Sec 28.2] for the equations to calculate these.
 
-The rule of thumb is that R-hat values for all less than 1.1 [source](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html).
+**TODO:** Examples of passing and non-passing Rhat chains using fake data generated from known functions with a given autocorrelation.
+
+
+**Rule of Thumb:** The rule of thumb is that R-hat values for all less than 1.1 [source](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html).
 Note that **all** parameters must show convergence.
 This is a necessary but not sufficient condition for convergence.
 
 ## Autocorrelation, Effective Sample Size, and MCSE
 
-The samples within a Markov chain are not independent. 
-Highly correlated samples do not effect the validity of inference on the posterior if 
-the samplers has time to explore the posterior distribution, but it does affect the 
-efficiency of the sampler.
+MCMC samples are dependent.  This does not effect the validity of inference on the posterior if the samplers has time to explore the posterior distribution, but it does affect the efficiency of the sampler.
+
+In other words, highly correlated MCMC samplers requires more samples to produce the same level of Monte Carlo error for an estimate.
+
 
 ### Autocorrelation 
 
@@ -64,6 +67,29 @@ However, due to autocorrelation, the proportional reduction in the effective sam
 
 Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.
 
+
+**Example:** Comparison of the effective sample sizes for data generated with various levels of autocorrelation. 
+The package `rstan` does not directly expose the function it uses to calculate ESS, so this `ess` function does so (for a single chain).
+```{r}
+ess <- function(x) {
+  N <- length(x)
+  V <- map_dbl(seq_len(N - 1),
+          function(t) {
+             mean(diff(x, lag = t) ^ 2, na.rm = TRUE)
+          })
+  rho <- head_while(1 - V / var(x), `>`, y = 0)
+  N / (1 + sum(rho))
+}
+n <- 1024
+ess(rnorm(n))
+ess(arima.sim(list(ar = 0.5), n))
+ess(arima.sim(list(ar = 0.75), n))
+ess(arima.sim(list(ar = 0.875), n))
+ess(arima.sim(list(ar = 0.99), n))
+```
+
+
+
 ### Monte Carlo Standard Error (MCSE)
 
 The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error.
@@ -81,6 +107,18 @@ MCSE(\bar{\theta}) = \frac{s}{\sqrt{N_{eff}}}
 $$
 
 
+MCSE for common values: the mean, and any posterior probabilities:
+
+-------------- -----------------------
+mean           $s_\theta / \sqrt{S}$
+probability    $\sqrt{p (1 - p) / S}$
+-------------- -----------------------
+
+The estimation of standard errors for quantiles, as would be used in is more complicated. See the package `r rpkg("mcmcse")` for Monte Carlo standard errors of quantiles (though calculated in a different method than rstan).
+
+
+
+See @BDA3 [Sec. 10.5].
 
 ## HMC Specific Diagnostics
 
@@ -111,6 +149,8 @@ Helpfully, when the approximation is poor it does not fail without any indicatio
 This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup.
 A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.
 
+See @Stan2016a [p. 380]
+
 ### Maximum Treedepth
 
 **The problem:** NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
@@ -119,3 +159,13 @@ While divergent transitions bias inference, a too-small maximum treedepth only a
 The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum treedepth were set higher.
 
 **The solution:** Increase the maximum treedepth.
+
+
+## References
+
+see 
+
+- @BDA3 [ p. 267]
+- Stan2016a [Ch 28.] for how Stan calculates Rhat, autocorrelations, and ESS.
+- See @FlegalHaranJones2008a and the `r rpkg("mcmcse")` for methods to calculate MCMC standard errors and an argument for using ESS as a stopping rule for Bayesian inference.
+- [Talk by Geyer on MCSE ](http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf)
