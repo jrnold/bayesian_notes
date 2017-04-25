@@ -1,0 +1,24 @@
+Package: jrnold.bayesian.notes
+Type: Package
+Title: Miscellaneous functions
+Version: 0.1.0.9000
+Authors@R: c(person("Jeffrey", "Arnold",
+                     email = "jeffrey.arnold@gmail.com",
+                     role  = c("aut", "cre")))
+Description: Metapackage for installing prerequisites for jrnold/bayesian_notes.
+Copyright: file COPYRIGHTS
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (> 3.0.0)
+Imports:
+    bayesplot,
+    ggmcmc,
+    loo,
+    rstan,
+    rubbish,
+    tidyverse,
+Remotes:
+    jrnold/rubbish
+RoxygenNote: 6.0.1
