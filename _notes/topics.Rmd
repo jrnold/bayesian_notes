@@ -1,0 +1,60 @@
+- Robust Regression and Heteroskedasticity
+
+    - Western 1995
+
+- GLMs
+    - Example for HW - Poisson, Neg Binomial?
+- Interactions
+
+    - Golder paper
+    - Hanmer paper
+    - marginal effects
+
+- Transformation Induced Bias
+
+    - Mode is not invariant
+    - Rainey paper
+
+- Hierarchical models
+
+    - Shor, Bafumi, Keele, Park. A Bayesian Multilevel Modeling Approach to Time-Series Cross-Sectional Data. https://doi.org/10.1093/pan/mpm006
+    - Gilardi. 2010. Who Learns from What in Policy Diffusion Processes? *AJPS* http://www.jstor.org/stable/27821944.
+    - Lebo and Weber. 2015. An Effective Approach to the Repeated Cross-Sectional Design. *AJPS* http://www.jstor.org/stable/24363607
+    - Fitting Multilevel Models When Predictors and Group
+Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafumi_Gelman_Midwest06.pdf
+    - Fixed and Random Effects in Classical and Bayesian Regression. 10.1111/j.1468-0084.2012.00700.x [@Rendon2012a]
+    - Clark, T. S. & Linzer, D. A. Should I Use Fixed or Random Effects? Political Science Research and Methods [@ClarkLinzer2014a]
+    - http://theincidentaleconomist.com/wordpress/fixed-vs-random-effects-or-how-to-have-fun-at-a-party/
+    - Random-Effects, Fixed-Effects and the within-between Specification for Clustered Data in Observational Health Studies: A Simulation Study. http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0110257
+    - Bell and Jones. 2015. Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data. PSRM. doi:10.1017/psrm.2014.7
+    - MR P (poststratification)
+
+- Ridge Regression, Lasso, Horseshoe prior
+
+    - Ex: Ridge regression and Lasso Examples
+    - Ex: American Politics paper with word scores - Monroe
+    - Ex: Posterior distribution for a treatment effect
+
+- Model Comparison
+
+    - WAIC/LOO
+    - Bayes Factors
+    - Clarke non-nested model comparison
+
+- Model Comparison and Averaging vs. Continuous Expansion
+
+    - Example: Montgomery, Nyhan, et. al.
+
+- Dynamic Models
+
+    - Modeling Dynamic Preferences: A Bayesian Robust Dynamic Latent Ordered Probit Model.https://doi.org/10.1093/pan/mpt001
+
+- Perfect Separation
+
+- Posterior Predictive Inference
+
+- Latent Variable Models
+
+    - Democracy
+
+- Missing Data
