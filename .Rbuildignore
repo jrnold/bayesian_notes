@@ -1,0 +1,13 @@
+_notes
+^docs$
+^includes$
+^stan$
+^_bookdown_files$
+^_main\.rds$
+^.*\.R$
+^.*\.Rmd$
+^data$
+^.*\.bib*
+^.*\.sav*
+^.*.md*
+^.*.yml*

@@ -2,6 +2,7 @@ suppressPackageStartupMessages({
   library("knitr")
   library("rstan")
   library("tidyverse")
+  library("rubbish")
 })
 
 set.seed(92508117 )
