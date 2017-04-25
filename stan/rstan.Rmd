@@ -16,7 +16,6 @@
   - `sampling`: MCMC
   - `optimizing`: optimization
   - `vb`: variational algorithm
-  
 
 - `lookup`: find Stan function associated with an R function
 

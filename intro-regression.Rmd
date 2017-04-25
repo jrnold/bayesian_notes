@@ -99,9 +99,10 @@ Now that we've defined a statistical model, we can write it as a Stan model.
 
 Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.
 
-A Stan model consists of *blocks* which contain declarations of variables and/or statments.
+A Stan model consists of *blocks* which contain declarations of variables and/or statements.
 Each block has a specific purpose in the model.
-```stan
+
+```
 functions {
     // OPTIONAL: user-defined functions
 }
@@ -179,6 +180,7 @@ For specific values of the prior distributions, assume uninformative priors for 
 $$
 \beta_k \sim N(0, 1000)
 $$
+
 ```{r}
 mod1_data$b_loc <- 0
 mod1_data$b_scale <- 1000

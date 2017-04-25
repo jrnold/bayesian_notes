@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Updating: A Set of Bayesian Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
+  
+  
+  <meta name="github-repo" content="jrnold/bayesian_notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:site" content="@jrnld" />
+  
+  
+
+<meta name="author" content="Jeffrey B. Arnold">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introduction-to-stan-and-linear-regression.html">
+<link rel="next" href="model-checking.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dunif}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpoisson}{\mathrm{Poisson}}
+\newcommand{\dbinomial}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnegbin}{\mathrm{Neg-bin}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{\Logistic}
+
+\newcommand{\R}{\mathfrak{R}}
+\newcommand{\N}{\mathfrak{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>1</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>1.1</b> Prerequites</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>1.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>1.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>1.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>1.3</b> Maximum A Posteriori estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>2</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="2.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>2.1</b> Prerequisites</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>2.1.2</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="2.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>2.1.3</b> Marginal Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>3</b> Model Checking</a><ul>
+<li class="chapter" data-level="3.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>3.1</b> Why check models?</a></li>
+<li class="chapter" data-level="3.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>3.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="3.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>3.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="3.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>3.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="3.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>3.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="3.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>3.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="3.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>3.3</b> Sources</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="posterior-inference" class="section level1">
+<h1><span class="header-section-number">2</span> Posterior Inference</h1>
+<div id="prerequisites" class="section level2">
+<h2><span class="header-section-number">2.1</span> Prerequisites</h2>
+<p>The <strong><a href="https://cran.r-project.org/package=haven">haven</a></strong> package is used to read Stata <code>.dta</code> files.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rubbish&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;haven&quot;</span>)</code></pre></div>
+<div id="introduction" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Introduction</h3>
+<p>The posterior distribution is the probability distribution <span class="math inline">\(\Pr(\theta | y)\)</span>.</p>
+<p>One we have the posterior distribution, or more often a sample from the posterior distribution, it is relatively easy to perform inference on any function of the posterior.</p>
+<p>Common means to summarize the post</p>
+<ul>
+<li>mean: <span class="math inline">\(\E(p(\theta | y)) \approx \frac{1}{S} \sum_{i = 1}^S \theta^{(s)}\)</span></li>
+<li>median: <span class="math inline">\(\median(p(\theta | y)) \approx \median \theta^{(s)}\)</span></li>
+<li>quantiles: 2.5%, 5%, 25%, 50%, 75%, 95%, 97.5%</li>
+<li><p>credible interval:</p>
+<ul>
+<li>central credible interval: the interval between the p/2% and 1 - p/2% quantiles</li>
+<li>highest posterior density interval: the narrowest interval containing p% of distribution</li>
+</ul></li>
+</ul>
+</div>
+<div id="functions-of-the-posterior-distribution" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Functions of the Posterior Distribution</h3>
+<p>It is also easy to conduct inference on functions of the posterior distribution.</p>
+<p>Suppose <span class="math inline">\(\theta^{(1)}, \dots, \theta^{(S)}\)</span> are a sample from <span class="math inline">\(p(\theta | y)\)</span>, the <span class="math inline">\(f(\theta^{(1)}), \dots, f(\theta^{(S)})\)</span> are a sample from <span class="math inline">\(p(f(\theta) | y)\)</span>.</p>
+<p>This is not easy for methods like MLE that produce point estimates. Even with MLE</p>
+<ul>
+<li>Even in OLS, non-linear functions coefficients generally require either the Delta method or bootstrapping to calculate confidence intervals.</li>
+<li><span class="citation">@BerryGolderMilton2012a</span>, <span class="citation">@Goldera</span>,<span class="citation">@BramborClarkGolder2006a</span> discuss calculating confidence intervals</li>
+<li>See <span class="citation">@Rainey2016b</span> on “transformation induced bias”</li>
+<li>See <span class="citation">@Carpenter2016a</span> on how reparameterization affects point estimates; this is a Stan Case study with working code</li>
+</ul>
+</div>
+<div id="marginal-effects" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Marginal Effects</h3>
+<div id="exmample-marginal-effect-plot-for-x" class="section level4">
+<h4><span class="header-section-number">2.1.3.1</span> Exmample: Marginal Effect Plot for X</h4>
+<p>This example from Matt Golder’s <a href="http://mattgolder.com/interactions">Interactions</a> page constructs a marginal effect plot for <span class="math inline">\(X\)</span>, where there is an interaction between <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>. <span class="math display">\[
+Y = \beta_0 + \beta_x + \beta_z + \beta_{xz} X Z + \epsilon
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alexseev &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="st">&quot;data/alexseev.dta&quot;</span>)</code></pre></div>
+<p>The regression that is run</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_f &lt;-<span class="st"> </span>xenovote <span class="op">~</span><span class="st"> </span>slavicshare <span class="op">*</span><span class="st"> </span>changenonslav <span class="op">+</span><span class="st"> </span>inc9903 <span class="op">+</span><span class="st"> </span>eduhi02 <span class="op">+</span><span class="st"> </span>unemp02 <span class="op">+</span><span class="st"> </span>apt9200 <span class="op">+</span><span class="st"> </span>vsall03 <span class="op">+</span><span class="st"> </span>brdcont
+<span class="kw">lm</span>(mod_f, <span class="dt">data =</span> alexseev)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = mod_f, data = alexseev)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;               (Intercept)                slavicshare  </span>
+<span class="co">#&gt;                  8.942878                   0.031486  </span>
+<span class="co">#&gt;             changenonslav                    inc9903  </span>
+<span class="co">#&gt;                 -0.851108                   0.000234  </span>
+<span class="co">#&gt;                   eduhi02                    unemp02  </span>
+<span class="co">#&gt;                 -0.039512                   1.432013  </span>
+<span class="co">#&gt;                   apt9200                    vsall03  </span>
+<span class="co">#&gt;                  0.030125                   0.661163  </span>
+<span class="co">#&gt;                   brdcont  slavicshare:changenonslav  </span>
+<span class="co">#&gt;                  2.103688                   0.008226</span></code></pre></div>
+<p>Use the <code>lm_preprocess</code> function in the <a href="https://jrnold.github.com/rubbish">rubbish</a> package to turn the model formula into a list with relevant data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_data &lt;-<span class="st"> </span><span class="kw">lm_preprocess</span>(mod_f, <span class="dt">data =</span> alexseev)[<span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;y&quot;</span>)]
+mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, {
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># indices of relevant coefficients</span>
+  M &lt;-<span class="st"> </span><span class="dv">100</span>
+  changenonslav &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(X[ , <span class="st">&quot;changenonslav&quot;</span>]),                               <span class="kw">max</span>(X[ , <span class="st">&quot;changenonslav&quot;</span>]),
+                       <span class="dt">length.out =</span> M)
+  idx_b_slavicshare &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">colnames</span>(X) <span class="op">==</span><span class="st"> &quot;slavicshare&quot;</span>)
+  idx_b_slavicshare_changenonslav &lt;-
+<span class="st">    </span><span class="kw">which</span>(<span class="kw">colnames</span>(X) <span class="op">==</span><span class="st"> &quot;slavicshare:changenonslav&quot;</span>)
+  b_loc &lt;-<span class="st"> </span><span class="dv">0</span>
+  <span class="co"># data appropriate prior</span>
+  b_scale &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, sd)) <span class="op">*</span><span class="st"> </span><span class="dv">3</span>
+  sigma_scale &lt;-<span class="st"> </span><span class="kw">sd</span>(y)
+})</code></pre></div>
+<p>Get the mean of dydx</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dydx &lt;-<span class="st"> </span><span class="kw">get_posterior_mean</span>(mod_fit, <span class="dt">pars =</span> <span class="st">&quot;dydx&quot;</span>)
+<span class="kw">ggplot</span>(<span class="kw">tibble</span>(<span class="dt">changenonslav =</span> mod_data<span class="op">$</span>changenonslav,
+              <span class="dt">dydx =</span> dydx[ , <span class="st">&quot;mean-all chains&quot;</span>]),
+       <span class="kw">aes</span>(<span class="dt">x =</span> changenonslav, <span class="dt">y =</span> dydx)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Marginal effect of slavic share&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">paste</span>(<span class="kw">expression</span>(Delta, <span class="st">&quot;non-Slavic Share&quot;</span>)))
+       </code></pre></div>
+<p><img src="posterior-inference_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Plotting each iteration as a line:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dydx_all &lt;-
+<span class="st">  </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod_fit, <span class="dt">pars =</span> <span class="st">&quot;dydx&quot;</span>)<span class="op">$</span>dydx <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as.tibble</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">.iter =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># keep only a few iter</span>
+<span class="st">  </span><span class="kw">gather</span>(param, value, <span class="op">-</span>.iter) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">left_join</span>(<span class="kw">tibble</span>(<span class="dt">param =</span> <span class="kw">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="kw">seq_along</span>(mod_data<span class="op">$</span>changenonslav)),                      <span class="dt">changenonslav =</span> mod_data<span class="op">$</span>changenonslav),
+            <span class="dt">by =</span> <span class="st">&quot;param&quot;</span>)
+  
+dydx_all <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(.iter <span class="op">%in%</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">unique</span>(.iter), <span class="dv">2</span> <span class="op">^</span><span class="st"> </span><span class="dv">8</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> changenonslav, <span class="dt">y =</span> value, <span class="dt">group =</span> .iter)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Marginal effect of slavic share&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">paste</span>(<span class="kw">expression</span>(Delta, <span class="st">&quot;non-Slavic Share&quot;</span>)))</code></pre></div>
+<p><img src="posterior-inference_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Summarize the marginal effects with mean, 50% central credible interval, and 90% central credible intervals:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dydx_all <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(changenonslav) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(value),
+            <span class="dt">q5 =</span> <span class="kw">quantile</span>(value, <span class="fl">0.05</span>),
+            <span class="dt">q25 =</span> <span class="kw">quantile</span>(value, <span class="fl">0.25</span>),
+            <span class="dt">q75 =</span> <span class="kw">quantile</span>(value, <span class="fl">0.75</span>),            
+            <span class="dt">q95 =</span> <span class="kw">quantile</span>(value, <span class="fl">0.95</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> changenonslav,
+             <span class="dt">y =</span> mean)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> q5, <span class="dt">ymax =</span> q95),
+              <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> q25, <span class="dt">ymax =</span> q75), 
+              <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Marginal effect of slavic share&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(Delta, <span class="st">&quot;non-Slavic Share&quot;</span>)))</code></pre></div>
+<p><img src="posterior-inference_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="model-checking.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/posterior-inference.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

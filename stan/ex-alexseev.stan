@@ -7,6 +7,12 @@ data {
   int k;
   // design matrix X
   matrix [n, k] X;
+  // marfx
+  // indexes of main and interaction coef
+  int idx_b_slavicshare;
+  int idx_b_slavicshare_changenonslav;
+  int M;
+  vector[M] changenonslav;
   // beta prior
   real b_loc;
   real<lower = 0.0> b_scale;
@@ -33,12 +39,8 @@ model {
   y ~ normal(mu, sigma);
 }
 generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood posterior
-  vector[n] loglik;
-  for (i in 1:n) {
-    y_rep[i] = normal_rng(mu[i], sigma);
-    loglik[i] = normal_lpdf(y[i] | mu[i], sigma);
-  }
+  # hardcoded marginal effectx
+  vector[M] dydx;
+  dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;
+
 }

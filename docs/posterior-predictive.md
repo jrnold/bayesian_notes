@@ -1,3 +1,4 @@
+
 # Model Checking
 
 ## Why check models? 
@@ -29,7 +30,7 @@ generated quantities {
   }
 }
 ```
-The package `r rpkg("bayesplot")` includes multiple functions for posterior predictive checks; see the help for [PPC-overview](https://www.rdocumentation.org/packages/bayesplot//topics/PPC-overview) for a summary of these functions.
+The package **[bayesplot](https://cran.r-project.org/package=bayesplot)** includes multiple functions for posterior predictive checks; see the help for [PPC-overview](https://www.rdocumentation.org/packages/bayesplot//topics/PPC-overview) for a summary of these functions.
 
 ### Bayesian p-values
 

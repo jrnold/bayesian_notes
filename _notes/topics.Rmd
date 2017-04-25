@@ -7,7 +7,12 @@
 - Interactions
 
     - Golder paper
-    - Hanmer paper
+        - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10477
+        - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10478
+        - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10483
+        
+    - Hanmer paper:
+        - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/18542
     - marginal effects
 
 - Transformation Induced Bias

@@ -47,7 +47,7 @@ sd(x) / sqrt(length(x))
 
 **Problem:** Monte Carlo sampling requires the samples to be **independent**. But what if you cannot draw independent samples? 
 
-**Solution:** Markov Chain Monte Carlo are a class of algorithms to sample from a distribution when independent samples cannot be drawan.
+**Solution:** Markov Chain Monte Carlo are a class of algorithms to sample from a distribution when independent samples cannot be drawn.
 However, the samples in MCMC will be **dependent**.
 
 
