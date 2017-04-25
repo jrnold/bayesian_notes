@@ -1,8 +1,15 @@
 - Robust Regression and Heteroskedasticity
+
+    - Western 1995
+
 - GLMs
     - Example for HW - Poisson, Neg Binomial?
 - Interactions
+
     - Golder paper
+    - Hanmer paper
+    - marginal effects
+
 - Transformation Induced Bias
 
     - Mode is not invariant
@@ -20,6 +27,7 @@ Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafu
     - http://theincidentaleconomist.com/wordpress/fixed-vs-random-effects-or-how-to-have-fun-at-a-party/
     - Random-Effects, Fixed-Effects and the within-between Specification for Clustered Data in Observational Health Studies: A Simulation Study. http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0110257
     - Bell and Jones. 2015. Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data. PSRM. doi:10.1017/psrm.2014.7
+    - MR P (poststratification)
 
 - Ridge Regression, Lasso, Horseshoe prior
 
@@ -31,6 +39,7 @@ Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafu
 
     - WAIC/LOO
     - Bayes Factors
+    - Clarke non-nested model comparison
 
 - Model Comparison and Averaging vs. Continuous Expansion
 
@@ -39,3 +48,13 @@ Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafu
 - Dynamic Models
 
     - Modeling Dynamic Preferences: A Bayesian Robust Dynamic Latent Ordered Probit Model.https://doi.org/10.1093/pan/mpt001
+
+- Perfect Separation
+
+- Posterior Predictive Inference
+
+- Latent Variable Models
+
+    - Democracy
+
+- Missing Data
