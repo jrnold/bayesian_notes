@@ -1,0 +1,5 @@
+# Distributions
+
+The parameterizations and notations for distributions largely follow @BDA2013 and @Stan2016a.
+
+**TODO**
