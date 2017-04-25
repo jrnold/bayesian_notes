@@ -1,7 +1,50 @@
 # Heteroskedasticity and Robust Regression
 
+
+`r rpkg("VGAM")` is needed for the Laplace distribution.
+```{r message=FALSE}
+library("rubbish")
+library("VGAM")
+```
+
+
 ## Linear Regression with Student t distributed errors
 
+
+Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
+The normal distribution has narrow tail probabilities.
+
+
+This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
+Higher surprise is a lower log-likelihood.
+Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).[^tailareas]
+This means that outliers impose less of a penalty on the log-posterio models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
+
+[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
+
+```{r}
+z <- seq(-6, 6, length.out = 100)
+bind_rows(
+  tibble(z = z,
+         p = dnorm(z, 0, 1),
+         distr = "Normal"),
+  tibble(z = z,
+         p = dt(z, 4),
+         distr = "Student-t (df = 4)"),
+  tibble(z = z,
+         p = VGAM::dlaplace(z, 0, 1),
+         distr = "Double Exponential")) %>%
+  mutate(`-log(p)` = -log(p)) %>%
+  ggplot(aes(x = z, y = `-log(p)`, colour = distr)) + 
+  geom_line()
+       
+
+```
+
+
+```{r include=FALSe}
+mod_t <- stan_model("stan/rlm.stan")
+```
 ```{r}
 unionization <- read_tsv("data/western1995/unionization.tsv",
          col_types = cols(
@@ -11,13 +54,52 @@ unionization <- read_tsv("data/western1995/unionization.tsv",
               labor_force_size = col_number(),
               econ_conc = col_double()
             ))
-
-data <- preprocess_lm(union_density ~ left_government + labor_force_size + econ_conc,
-                      data = unionization)
-
-
+mod_t_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
+                                   
+mod_data <- within(mod_data, {
+  b_loc <- 0
+  b_scale <- 100
+  sigma_scale <- sd(y)
+})
 
 ```
+
+```{r}
+mod_data$X
+```
+
+
+The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum treedepth.
+This is likely due to the wide tails of the Student t distribution.
+```{r}
+mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11))
+```
+
+```{r output=FALSE}
+summary(mod_t_fit, pars = c("nu", "sigma", "b"))$summary
+```
+
+Compare those results when using a model with 
+```{r include=FALSE}
+mod_normal <- stan_model("stan/lm.stan")
+mod_normal_fit <- sampling(mod_normal, data = mod_data)
+```
+
+```{r}
+summary(mod_normal_fit, pars = c("b", "sigma"))$summary
+```
+
+Alternatively, the Double Exponential (Laplace) distribution can be used for the errors.
+This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)
+```{r}
+mod_dbl_exp <- stan_model("stan/lms.stan")
+mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
+```
+```{r}
+summary(mod_dbl_exp_fit, par = c("b", "sigma"))$summary
+```
+
+
 
 ## Heteroskedasticity
 
@@ -26,31 +108,69 @@ In applied regression, heteroskedasticity consistent (HC) or robust standard err
 However, there is straighforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. 
 Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.
 
-Let's derivive a linear normal model, but with heteroskedasticity:
+In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, $\sigma_i$,
 $$
 \begin{aligned}[t]
-y_i &\sim N(X \beta, \sigma_i)
+y_i &\sim \dnorm(X \beta, \sigma_i) .
 \end{aligned}
 $$
-This model has a separate scale parameter, $\sigma_i$, for each observation.
-It should be clear that without proper priors this model is not identified (the posterior distribution is improper).
+It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper.
+To estimate this model we have to apply some model to the scale terms, $\sigma_i$.
+In fact, you can think of homoskedasticity as the simplest such model; assuming that all $\sigma_i = \sigma$.
+A more general model of $\sigma_i$ should encode any information the analyst has about the scale terms.
+This can be a distribution or functions of covariates for how we think observations may have different values.
 
-But it should also clear how we can proceed with heteroskedasticity---by modeling $\sigma_i$.
-The model of $\sigma_i$ should encode any information we have about the heteroskedasticity.
-This can be priors on how different the $\sigma_i$ are, or even covariates for how we think observations may have different values.
+### Covariates
 
-It is useful to rewrite the scale parameter of the above equation as a combination of a global scale parameter ($\sigma$) and local scale parameters, $\lambda_i$.
+A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into $k = 1, \dots, K$ groups, and $k[i]$ is the group of observation $i$,
 $$
-y_i \sim \dnorm(X\beta, \lambda_i \sigma)
-$$
-If the $\lambda_i$ paramter is distributed ... then the model above is equivalent to 
-$$
-y_i \sim \dt(\nu, X \beta, \sigma)
+\sigma_i = \sigma_{k[i]}
 $$
 
+Another choice would be to model the scale term with a regression model, for example,
+$$
+\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
+$$
 
 
+### Student-t
 
-## Notes
+It turns out that the Student-t distribution of error terms from the [Robust Regression] chapter can also be derived as a model of heteroskedasticity.
 
-See @GelmanHill2008a [sec 6.6], @BDA2013 [ch 17]
+A reparameterization that will be used quite often is to rewrite a normal distributions with unequal
+scale parameters as a continous mixture of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+$$
+y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
+$$
+
+If the local scale paramters are distributed as,
+$$
+\lamba^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+$$
+then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
+$$
+y_i \sim \dt{\nu}(X \beta, \sigma) .
+$$
+
+[^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normals. This scale mixture of normals representation will also be used with shrinkage priors on the regression coefficients.
+
+
+**Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normals. For *s in 1:S$,
+
+1. Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
+2. $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
+
+When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
+
+
+## References
+
+### Robust regression 
+
+- See @GelmanHill2008a [sec 6.6], @BDA2013 [ch 17]
+- @Stan2016a [Sec 8.4] for the Stan example using a Student-t distribution
+
+### Heteroskedasticity
+
+- @BDA201 [Sec. 14.7] for models with unequal variances and correlations.
+- @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.

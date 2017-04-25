@@ -18,30 +18,29 @@ parameters {
   vector[k] b;
   // scale of the regression errors
   real<lower = 0.0> sigma;
-  real<lower = 1.0> nu;
 }
 transformed parameters {
   // mu is the observation fitted/predicted value
-  // also called yhat
   vector[n] mu;
+  // tau are obs-level scale params
   mu = X * b;
 }
 model {
   // priors
   b ~ normal(b_loc, b_scale);
   sigma ~ cauchy(0, sigma_scale);
-  nu ~ gamma(2, 0.1);
   // likelihood
-  y ~ student_t(nu, mu, sigma);
+  y ~ double_exponential(mu, sigma);
 }
 generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
   // log-likelihood values
   vector[n] log_lik;
+  // use a single loop since both y_rep and log_lik are elementwise
   for (i in 1:n) {
-    y_rep[i] = student_t_rng(nu, mu[i], sigma);
-    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
+    y_rep[i] = double_exponential_rng(mu[i], sigma);
+    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);
   }
 
 }

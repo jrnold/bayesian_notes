@@ -116,8 +116,6 @@ probability    $\sqrt{p (1 - p) / S}$
 
 The estimation of standard errors for quantiles, as would be used in is more complicated. See the package `r rpkg("mcmcse")` for Monte Carlo standard errors of quantiles (though calculated in a different method than rstan).
 
-
-
 See @BDA3 [Sec. 10.5].
 
 ## HMC Specific Diagnostics

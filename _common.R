@@ -51,14 +51,20 @@ standoc <- function(x = NULL) {
   }
 }
 
-preprocess_lm <- function(formula., data = NULL, weights = NULL,
+preprocess_lm <- function(formula, data = NULL, weights = NULL,
                           contrasts = NULL, na.action = options("na.action"),
                           offset = NULL, ...) {
-  mf <- lm(formula., data = data, method = "model.frame",
-           weights = weights, offset = offset, ...)
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data", "subset", "weights", "na.action",
+               "offset"), names(mf), 0L)
+  mf <- mf[c(1L, m)]
+  mf$drop.unused.levels <- TRUE
+  mf[[1L]] <- quote(stats::model.frame)
+  mf <- eval(mf, parent.frame())
+  mt <- attr(mf, "terms")
   mt <- attr(mf, "terms")
   out <- list(
-    y = model.response(mf, "numeric"),
+    y = model.response(mf),
     w =  as.vector(model.weights(mf)),
     offset = as.vector(model.offset(mf)),
     X = model.matrix(mt, mf, contrasts),
