@@ -1,3 +1,4 @@
+
 # Generalized Linear Models
 
 
@@ -18,12 +19,12 @@ $$
 
     - The link function ($g$) and its inverse ($g^{-1}) translate $\eta$ from $(\-infty, +\infty)$ to the proper range for the probability distribution and back again.
 
-These models are often estimated with MLE, as with the function `r rdoc("stats", "glm")`. 
+These models are often estimated with MLE, as with the function [stats](https://www.rdocumentation.org/packages/stats/topics/glm). 
 However, these are also easily estimated in a Bayesian setting:
 
-See the help for `r rdoc("stats", "family")` for common probaiblity distributions, `r rdoc("stats", "make.link")` for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
+See the help for [stats](https://www.rdocumentation.org/packages/stats/topics/family) for common probaiblity distributions, [stats](https://www.rdocumentation.org/packages/stats/topics/make.link) for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
 
-See the function `r rpkg("VGAM")` for even more examples of link functions and probability distributions.
+See the function **[VGAM](https://cran.r-project.org/package=VGAM)** for even more examples of link functions and probability distributions.
 
 
 The **link function**, $g$, maps the mean or parameter to the linear predictor,
@@ -57,27 +58,29 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
     $$
     \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
     $$
-    Stan function `r stanfunc("softmax")`.
+    Stan function `softmax`.
 - **Probit:** The CDF of the normal distribution.
     $$
     \pi_i = \Phi(x_i\T \beta)
     $$
-    Stan function `r stanfunc("normal_cdf")`.
+    Stan function `normal_cdf`.
 
-- **cauchit**: The CDF of the Cauchy distribution. Stan function `r stanfunc("cauchy_cdf")`.
+- **cauchit**: The CDF of the Cauchy distribution. Stan function `cauchy_cdf`.
 - **cloglog**: The inverse of the conditional log-log function (cloglog) is
     $$
     \pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
     $$
-    Stan function `r stanfunc("inv_cloglog")`.
+    Stan function `inv_cloglog`.
 
 [^binomialcdf]: Since a CDF maps reals to $(0, 1)$, any CDF can be used as a link function.
-
 
 ## Poisson
 
 TODO
 
+## Negative Binomial
+
+TODO
 
 ## References
 
@@ -85,4 +88,6 @@ Texts:
 
 - @BDA3 [Ch 16]
 - @McElreath2016a [Ch 9]
-- @King1998a discusses many common GLM models in an MLE context.
+- @King1998a discusses MLE estimation of many common GLM models
+- Many econometrics/statisics textbooks, e.g. @Fox2016a, discuss GLMs. Though
+    they are not derived from a Bayesian context, they can easily be

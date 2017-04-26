@@ -1,34 +1,37 @@
+There is a deep connection between Bayesian statistics and information theory. See @Jaynes2003a and @MacKay2003a.
 
+# Information Entropy
 
-Information Entropy $H$
+For discrete random variable $X$ with support $x_1, \dots, x_n$, and pmf $p(X)$, the information entropy, $H(X)$, is defined as
+$$
+H(X) = \E[I(X)] = \E[-\ln(P(X))] .
+$$
+This can also be written as
+$$
+H(X) = \sum_{i = 1}^n P(x_i) I(x_i) = -\sum_{i=1}^n P(x_i) \log_b P(x_i) .
+$$
+Entropy can be expressed in various base units, $b$.
+If $b = 2$, then the information is expressed in bits.
 
-For discrete random variable $X$ with support $x_1, \dots, x_n$, and pmf $p(X)$,
-$$
-H(X) = \E[I(X)] = \E[-\ln(P(X))]
-$$
-or
-$$
-H(X) = \sum_{i = 1}^n P(x_i) I(x_i) = -\sum_{i=1}^n P(x_i) \log_b P(x_i)
-$$
-Entropy can be expressed in various base units $b$. If $b = 2$, then the information is expressed in bits.
+## Conditional entropy
 
-Conditional entropy
+The *conditional entropy*, of a random variable, $X$, conditional on another random variable, $Y$, is
 $$
-H(X | Y)= \sum_{i,j} p(x_i, y_i) \log \frac{p(y_j)}{p(x_i, y_j)}
+H(X | Y)= \sum_{i,j} p(x_i, y_i) \log \frac{p(y_j)}{p(x_i, y_j)} .
 $$
 
-Shannon's fundamental properties of information:
+*Shannon's fundamental properties* of information, $I(p)$:
 
 1. $I(p)$ is anti-monotonic in $p$. Increases (decreases) in probability of an event decreases (increases) information.
 2. $I(p) \geq 0$
 3. $I(1) = 0$ certain events have no information
 4. If $p_1$ and $p_2$ are independent, $I(p_1, p_2) = I(p_1) + I(p_2)$.
 
-Characterization of Shannon entropy (see [this](https://en.wikipedia.org/wiki/Entropy_(information_theory)#Characterization))
+*Shannon entropy* can be characterized as the function of the form (see [this](https://en.wikipedia.org/wiki/Entropy_(information_theory)#Characterization)),
 $$
-- K \sum_{i = 1}^n p_i \log(p_i)
+- K \sum_{i = 1}^n p_i \log(p_i) ,
 $$
-with properties
+that has the following properties:
 
 1. **continuity:** the measure is continuous (derivatives with respect to all $p_i$ exist)
 2. **symmetry:** $H_n(p_1, p_2, \dots) = H_n(p_2, p_1, \dots)$. Invariant to ordering of outcomes.
@@ -40,45 +43,44 @@ with properties
 
 The logarithmic function encodes information,
 $$
-I(p) = \log(1 / p) = - \log(p)
+I(p) = \log(1 / p) = - \log(p) .
 $$
 Suppose event $i$ happens with probability $p_i$. In a sample of $N$, each event $i$ is observed $n_i$ times. The total information is,
 $$
-\sum_i n_i I(p_i) = - \sum_i N p_i \log p_i
+\sum_i n_i I(p_i) = - \sum_i N p_i \log p_i ,
 $$
 and the average information per event is
 $$
-- \sum_i p_i \log p_i
+- \sum_i p_i \log p_i .
 $$
 
-Continuous or differential entropy is defined for a continuous probability function:
+Continuous or differential entropy is defined for a continuous probability function as
 $$
-h(f) = \E[-\ln(f(x))] = - \int_X f(x) ln(f(x))\,dx
-$$
-
-Mutual Information (discrete)
-$$
-I(X, Y) = \sum_{y \in Y} \sum_{x \in X} p(x, y) \log \left( \frac{p(x, y)}{p(x)p(y)} \right)
+h(f) = \E[-\ln(f(x))] = - \int_X f(x) ln(f(x))\,dx .
 $$
 
-Mutual Information (discrete)
+The Mutual Information for a discrete distribution is
 $$
-I(X, Y) = \int_{\mathcal{Y}} \sum_{\mathcal{X}} p(x, y) \log \left( \frac{p(x, y)}{p(x)p(y)} \right)\,dx\,dy
+I(X, Y) = \sum_{y \in Y} \sum_{x \in X} p(x, y) \log \left( \frac{p(x, y)}{p(x)p(y)} \right) .
 $$
 
+Mutual Information for a discrete distribution,
+$$
+I(X, Y) = \int_{\mathcal{Y}} \sum_{\mathcal{X}} p(x, y) \log \left( \frac{p(x, y)}{p(x)p(y)} \right)\,dx\,dy .
+$$
 If $X$ and $Y$ are independent then $I(X, Y) = 0$, 
 $$
 \log \left(\frac{p(x,y)}{p(x)p(y)} \right) =
-\log \left(\frac{p(x)p(y)}{p(x)p(y)} \right) = \log 1 = 0
+\log \left(\frac{p(x)p(y)}{p(x)p(y)} \right) = \log 1 = 0 .
 $$
 
-Mutual information as a function of entropy,
+Mutual information can be written as a function of entropy,
 $$
 \begin{aligned}[t]
 I(X, Y) &= H(X) - H(Y | X)\\
 &= H(Y) - H(X | Y) \\
 &= H(X) + H(Y) - H(X, Y) \\
-&= H(X, Y) - H(Y | X) - H(X | Y)
+&= H(X, Y) - H(Y | X) - H(X | Y) ,
 \end{aligned}
 $$
 where $H(X)$ and $H(Y)$ are the marginal entropies, $H(X | Y)$ and $H(Y | X)$ are the conditional entropies, and $H(X, Y)$ are the joint entropy.
@@ -111,12 +113,9 @@ $$
 
 [^mutual-info]: https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
 
-
-
-KL and Bayesian updating 
-Kullback-Leibler divergence is a measure of information gain of moving from a prior distribution $p(x | I)$ to a posterior distribution $p(x | y, I)$.
+**KL and Bayesian updating:** Kullback-Leibler divergence is a measure of information gain of moving from a prior distribution $p(x | I)$ to a posterior distribution $p(x | y, I)$, 
 $$
-p(x | y, I) = \frac{p(y | x, I) p(x | I)}{p(y | I)}
+p(x | y, I) = \frac{p(y | x, I) p(x | I)}{p(y | I)} .
 $$
 The new entropy is,
 $$

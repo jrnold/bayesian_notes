@@ -13,6 +13,7 @@ rmd_files:
   - "models.Rmd"
   - "intro-regression.Rmd"
   - "robust.Rmd"
+  - "generalized-linear-models.Rmd"
   - "appendix.Rmd"
   - "annotated.Rmd"
   - "references.Rmd"

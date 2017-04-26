@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="bayesian-inference.html">
+<link rel="prev" href="heteroskedasticity-and-robust-regression.html">
+<link rel="next" href="notes.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -292,30 +292,95 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Updating: A Set of Bayesian Notes</h1>
-<h4 class="author"><em>Jeffrey B. Arnold</em></h4>
+<div id="generalized-linear-models" class="section level1">
+<h1><span class="header-section-number">8</span> Generalized Linear Models</h1>
+<div id="generalized-linear-models-1" class="section level2">
+<h2><span class="header-section-number">8.1</span> Generalized Linear Models</h2>
+<p>Generalized linear models (GLMs) are a class of commonly used models in social science.[^glm-r]</p>
+<p>A GLM consists of three components</p>
+<p>In GLMs the mean is specified as a function as a function of a linear model of predictors (e.g. <span class="math inline">\(\mat{X} \beta)\)</span>), <span class="math display">\[
+E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta})
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>A <strong>probability distribution</strong> (<strong>family</strong>) for the outcome. This is usually in the exponential family: common examples include: normal, Binomial, Poisson, Categorical, Multinomial, Poison.</li>
+<li>A <strong>linear predictor</strong>: <span class="math inline">\(\eta = \mat{X} \beta\)</span></li>
+<li><p>A <strong>link function</strong> <span class="math inline">\(g\)</span>, such that <span class="math inline">\(\E(Y)= \mu = g^{-1}(\eta)\)</span>.</p>
+<ul>
+<li>The link function (<span class="math inline">\(g\)</span>) and its inverse ($g^{-1}) translate <span class="math inline">\(\eta\)</span> from <span class="math inline">\((\-infty, +\infty)\)</span> to the proper range for the probability distribution and back again.</li>
+</ul></li>
+</ol>
+<p>These models are often estimated with MLE, as with the function <a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats</a>. However, these are also easily estimated in a Bayesian setting:</p>
+<p>See the help for <a href="https://www.rdocumentation.org/packages/stats/topics/family">stats</a> for common probaiblity distributions, <a href="https://www.rdocumentation.org/packages/stats/topics/make.link">stats</a> for common links, and the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia</a> page for a table of common GLMs.</p>
+<p>See the function <strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> for even more examples of link functions and probability distributions.</p>
+<p>The <strong>link function</strong>, <span class="math inline">\(g\)</span>, maps the mean or parameter to the linear predictor, <span class="math display">\[
+g(\mu) = \eta
+\]</span> and the <strong>inverse link function</strong> maps the linear predictor to the mean, <span class="math display">\[
+\mu = g^{-1}(\eta)
+\]</span></p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>Notes on Bayesian methods - written to supplement CS&amp;SS/STAT 564: Bayesian Statistics for the Social Sciences.</p>
-<p>These notes largely focus on the application and theory necessary for quantitative social scientists to successfully apply Bayesian statistical methods.</p>
-<p>I also don’t hesitate to link to those who have already explained things well, and focus my efforts on places where I haven’t found good explanations (or explanations I understand), or places where I need to write notes to deepen my own understanding.</p>
-<p>All these chapters will use the <strong><a href="https://cran.r-project.org/package=rstan">rstan</a></strong> package</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</code></pre></div>
+<div id="binomial" class="section level2">
+<h2><span class="header-section-number">8.2</span> Binomial</h2>
+<ul>
+<li>The outcomes <span class="math inline">\(Y\)</span> are non-negative integers: <span class="math inline">\(0, 1, 2, \dots, n_i\)</span>.</li>
+<li>The total number, <span class="math inline">\(n_i\)</span>, can vary by observation.</li>
+<li>Special case: <span class="math inline">\(n_i = 1\)</span> for all <span class="math inline">\(i \in (1, 0)\)</span>: logit, probit models.</li>
+</ul>
+<p>The outcome is distributed Binomial: <span class="math display">\[
+\begin{aligned}[t]
+y_i \sim \dbinom\left(n_i, \pi \right)
+\end{aligned}
+\]</span></p>
+<p>The parameter <span class="math inline">\(\pi \in [0, 1]\)</span> is modeled with a link funcction and a linear predictor.</p>
+<p>There are several common link functions, but they all have to map <span class="math inline">\(R \to (0, 1)\)</span>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p><strong>Logit:</strong> The logistic function, <span class="math display">\[
+    \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
+    \]</span> Stan function <code>softmax</code>. - <strong>Probit:</strong> The CDF of the normal distribution. <span class="math display">\[
+    \pi_i = \Phi(x_i\T \beta)
+    \]</span> Stan function <code>normal_cdf</code>.</p>
+<ul>
+<li><strong>cauchit</strong>: The CDF of the Cauchy distribution. Stan function <code>cauchy_cdf</code>.</li>
+<li><strong>cloglog</strong>: The inverse of the conditional log-log function (cloglog) is <span class="math display">\[
+\pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
+\]</span> Stan function <code>inv_cloglog</code>.</li>
+</ul>
+</div>
+<div id="poisson" class="section level2">
+<h2><span class="header-section-number">8.3</span> Poisson</h2>
+<p>TODO</p>
+</div>
+<div id="negative-binomial" class="section level2">
+<h2><span class="header-section-number">8.4</span> Negative Binomial</h2>
+<p>TODO</p>
+</div>
+<div id="references-3" class="section level2">
+<h2><span class="header-section-number">8.5</span> References</h2>
+<p>Texts:</p>
+<ul>
+<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
+<li><span class="citation">McElreath (2016 Ch 9)</span></li>
+<li><span class="citation">King (1998)</span> discusses MLE estimation of many common GLM models</li>
+<li>Many econometrics/statisics textbooks, e.g. <span class="citation">Fox (2016)</span>, discuss GLMs. Though they are not derived from a Bayesian context, they can easily be</li>
+</ul>
 
+</div>
 </div>
 
 
 
+</div>
+<div class="footnotes">
+<hr />
+<ol start="4">
+<li id="fn4"><p>Since a CDF maps reals to <span class="math inline">\((0, 1)\)</span>, any CDF can be used as a link function.<a href="generalized-linear-models.html#fnref4">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="bayesian-inference.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="heteroskedasticity-and-robust-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="notes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -334,7 +399,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/index.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/generalized-linear-models.Rmd",
 "text": "Edit"
 },
 "download": null,

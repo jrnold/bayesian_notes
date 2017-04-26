@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -93,7 +93,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dunif}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpoisson}{\mathrm{Poisson}}
+\newcommand{\dbinomial}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnegbin}{\mathrm{Neg-bin}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{\Logistic}
+
+\newcommand{\R}{\mathfrak{R}}
+\newcommand{\N}{\mathfrak{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
@@ -128,10 +183,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
-<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="4.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.1.2</b> Functions of the Posterior Distribution</a></li>
-<li class="chapter" data-level="4.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.1.3</b> Marginal Effects</a></li>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="4.2" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
+<li class="chapter" data-level="4.3" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.3</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.4</b> Marginal Effects</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#example-marginal-effect-plot-for-x"><i class="fa fa-check"></i><b>4.4.1</b> Example: Marginal Effect Plot for X</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
@@ -229,66 +285,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-\[
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\Cor}{Cor}
-\DeclareMathOperator{\Bias}{Bias}
-\DeclareMathOperator{\MSE}{MSE}
-\DeclareMathOperator{\RMSE}{RMSE}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\median}{median}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
-
-\newcommand{\mat}[1]{\boldsymbol{#1}}
-\newcommand{\vec}[1]{\boldsymbol{#1}}
-\newcommand{\T}{'}
-
-% This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dunif}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}[1]{t_{#1}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpoisson}{\mathrm{Poisson}}
-\newcommand{\dbinomial}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnegbin}{\mathrm{Neg-bin}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-
-\DeclareMathOperator{\logistic}{\Logistic}
-
-\newcommand{\R}{\mathfrak{R}}
-\newcommand{\N}{\mathfrak{N}}
-
-\newcommand{\cia}{\perp\!\!\!\perp}
-\DeclareMathOperator*{\plim}{plim}
-\]
 <div id="references-3" class="section level1 unnumbered">
 <h1>References</h1>
 
 <div id="refs" class="references">
+<div>
+<p>Alexseev, Mikhail A. 2006. “Ballot-Box Vigilantism? Ethnic Population Shifts and Xenophobic Voting in Post-Soviet Russia.” <em>Political Behavior</em> 28 (3). Springer Nature: 211–40. doi:<a href="https://doi.org/10.1007/s11109-006-9009-2">10.1007/s11109-006-9009-2</a>.</p>
+</div>
 <div>
 <p>Berry, William D., Matt Golder, and Daniel Milton. 2012. “Improving Tests of Theories Positing Interaction.” <em>The Journal of Politics</em> 74 (3). University of Chicago Press: 653–71. doi:<a href="https://doi.org/10.1017/s0022381612000199">10.1017/s0022381612000199</a>.</p>
 </div>
@@ -354,6 +357,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 </div>
 </div>
+
 
 
 

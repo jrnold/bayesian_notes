@@ -74,8 +74,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+#> Gradient evaluation took 3.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -92,9 +92,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.846309 seconds (Warm-up)
-#>                0.720782 seconds (Sampling)
-#>                1.56709 seconds (Total)
+#>  Elapsed Time: 0.823236 seconds (Warm-up)
+#>                0.690373 seconds (Sampling)
+#>                1.51361 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -104,8 +104,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Gradient evaluation took 7.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.73 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -122,9 +122,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.798868 seconds (Warm-up)
-#>                0.802543 seconds (Sampling)
-#>                1.60141 seconds (Total)
+#>  Elapsed Time: 0.767871 seconds (Warm-up)
+#>                0.762221 seconds (Sampling)
+#>                1.53009 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 2
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -133,36 +133,6 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.753821 seconds (Warm-up)
-#>                0.679116 seconds (Sampling)
-#>                1.43294 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 3
-#>                                                                                     count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 1.3e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
@@ -182,9 +152,39 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.897422 seconds (Warm-up)
-#>                0.785585 seconds (Sampling)
-#>                1.68301 seconds (Total)
+#>  Elapsed Time: 0.726757 seconds (Warm-up)
+#>                0.644725 seconds (Sampling)
+#>                1.37148 seconds (Total)
+#> The following numerical problems occurred the indicated number of times on chain 3
+#>                                                                                     count
+#> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
+#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
+#> 
+#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.846514 seconds (Warm-up)
+#>                0.75485 seconds (Sampling)
+#>                1.60136 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -237,13 +237,13 @@ This is the equivalent to least quantile regression, where the regression line i
 
 ```r
 mod_dbl_exp <- stan_model("stan/lms.stan")
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:12:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:
+#> In file included from fileccc7793fb246.cpp:8:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:12:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:
 #> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/math/tools/config.hpp:13:
 #> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config.hpp:39:
 #> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config/compiler/clang.hpp:196:11: warning: 'BOOST_NO_CXX11_RVALUE_REFERENCES' macro redefined [-Wmacro-redefined]
@@ -252,37 +252,37 @@ mod_dbl_exp <- stan_model("stan/lms.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:42:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
+#> In file included from fileccc7793fb246.cpp:8:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:42:
+#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:43:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
+#> In file included from fileccc7793fb246.cpp:8:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:43:
+#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:59:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+#> In file included from fileccc7793fb246.cpp:8:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:59:
+#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:298:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr.hpp:39:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:
+#> In file included from fileccc7793fb246.cpp:8:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:298:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/arr.hpp:39:
+#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:
 #> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint.hpp:61:
 #> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint/util/multi_array_adaption.hpp:29:
 #> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array.hpp:21:
@@ -322,9 +322,9 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.11096 seconds (Warm-up)
-#>                0.875358 seconds (Sampling)
-#>                1.98632 seconds (Total)
+#>  Elapsed Time: 0.987327 seconds (Warm-up)
+#>                0.769289 seconds (Sampling)
+#>                1.75662 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                                   count
 #> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     5
@@ -334,8 +334,8 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> 
 #> SAMPLING FOR MODEL 'lms' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -352,9 +352,9 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.01465 seconds (Warm-up)
-#>                1.02955 seconds (Sampling)
-#>                2.0442 seconds (Total)
+#>  Elapsed Time: 0.876012 seconds (Warm-up)
+#>                0.906962 seconds (Sampling)
+#>                1.78297 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 2
 #>                                                                                                   count
 #> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     3
@@ -364,8 +364,8 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> 
 #> SAMPLING FOR MODEL 'lms' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -382,9 +382,9 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.2061 seconds (Warm-up)
-#>                1.24753 seconds (Sampling)
-#>                2.45363 seconds (Total)
+#>  Elapsed Time: 1.08135 seconds (Warm-up)
+#>                1.11122 seconds (Sampling)
+#>                2.19257 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 3
 #>                                                                                                   count
 #> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1
@@ -412,9 +412,9 @@ mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.14636 seconds (Warm-up)
-#>                0.981335 seconds (Sampling)
-#>                2.12769 seconds (Total)
+#>  Elapsed Time: 1.01907 seconds (Warm-up)
+#>                0.84409 seconds (Sampling)
+#>                1.86316 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                                   count
 #> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1

@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="introduction-to-stan-and-linear-regression.html">
-<link rel="next" href="notes.html">
+<link rel="next" href="generalized-linear-models.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -93,142 +93,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><strong><a href="./">Bayesian Notes</a></strong></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="part"><span><b>I Theory</b></span></li>
-<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
-<li class="part"><span><b>II Computation</b></span></li>
-<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
-<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
-<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
-<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
-<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
-</ul></li>
-<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
-<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
-<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
-</ul></li>
-<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
-<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="4.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.1.2</b> Functions of the Posterior Distribution</a></li>
-<li class="chapter" data-level="4.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.1.3</b> Marginal Effects</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
-<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
-<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
-<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
-<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
-<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
-<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
-</ul></li>
-<li class="part"><span><b>III Models</b></span></li>
-<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
-<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
-<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
-<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
-<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
-<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
-<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
-<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
-<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
-</ul></li>
-</ul></li>
-<li class="part"><span><b>IV Appendix</b></span></li>
-<li class="chapter" data-level="8" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>8</b> Notes</a><ul>
-<li class="chapter" data-level="8.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>8.1</b> Syllabi</a></li>
-<li class="chapter" data-level="8.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>8.2</b> Textbooks</a></li>
-<li class="chapter" data-level="8.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>8.3</b> Topics</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>8.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="8.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>8.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="8.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>8.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="8.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>8.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="8.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>8.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="8.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>8.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="8.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>8.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="8.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>8.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="8.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>8.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="8.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>8.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="8.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>8.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="8.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>8.3.12</b> Applied Bayes Rule</a></li>
-</ul></li>
-<li class="chapter" data-level="8.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>8.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>8.4.1</b> Software</a></li>
-<li class="chapter" data-level="8.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>8.4.2</b> Stan</a></li>
-<li class="chapter" data-level="8.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>8.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="8.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>8.4.4</b> Political Science Bayesian Works</a></li>
-</ul></li>
-<li class="chapter" data-level="8.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>8.5</b> Model Checking</a></li>
-<li class="chapter" data-level="8.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>8.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="8.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>8.6.1</b> Mixed Methods and Qualitative Research</a></li>
-</ul></li>
-<li class="chapter" data-level="8.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>8.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="8.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>8.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="8.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
-<li class="chapter" data-level="8.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>8.8.2</b> Latent Variable Models</a></li>
-</ul></li>
-<li class="chapter" data-level="8.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>8.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="8.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>8.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="8.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>8.9.2</b> German Tank Problem</a></li>
-</ul></li>
-<li class="chapter" data-level="8.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>8.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="8.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>8.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="8.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>8.11.1</b> Uncategorized</a></li>
-</ul></li>
-<li class="chapter" data-level="8.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>8.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="8.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>8.13</b> Things to cover</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references-3.html"><a href="references-3.html"><i class="fa fa-check"></i>References</a></li>
-</ul>
-
-      </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
 \[
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\mean}{mean}
@@ -285,6 +149,149 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
+<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="4.2" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
+<li class="chapter" data-level="4.3" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.3</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.4</b> Marginal Effects</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#example-marginal-effect-plot-for-x"><i class="fa fa-check"></i><b>4.4.1</b> Example: Marginal Effect Plot for X</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
+<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>8</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="8.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>8.1</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#binomial"><i class="fa fa-check"></i><b>8.2</b> Binomial</a></li>
+<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.3</b> Poisson</a></li>
+<li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a></li>
+<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.5</b> References</a></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="9" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>9</b> Notes</a><ul>
+<li class="chapter" data-level="9.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>9.1</b> Syllabi</a></li>
+<li class="chapter" data-level="9.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>9.2</b> Textbooks</a></li>
+<li class="chapter" data-level="9.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>9.3</b> Topics</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>9.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="9.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>9.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="9.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>9.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="9.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>9.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="9.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>9.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="9.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>9.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="9.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>9.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="9.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>9.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="9.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>9.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="9.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>9.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="9.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>9.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>9.3.12</b> Applied Bayes Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>9.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>9.4.1</b> Software</a></li>
+<li class="chapter" data-level="9.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>9.4.2</b> Stan</a></li>
+<li class="chapter" data-level="9.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>9.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="9.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>9.4.4</b> Political Science Bayesian Works</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>9.5</b> Model Checking</a></li>
+<li class="chapter" data-level="9.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>9.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>9.6.1</b> Mixed Methods and Qualitative Research</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>9.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="9.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>9.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="9.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>9.8.1</b> Examples</a></li>
+<li class="chapter" data-level="9.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>9.8.2</b> Latent Variable Models</a></li>
+</ul></li>
+<li class="chapter" data-level="9.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>9.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="9.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>9.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="9.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>9.9.2</b> German Tank Problem</a></li>
+</ul></li>
+<li class="chapter" data-level="9.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>9.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="9.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>9.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="9.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>9.11.1</b> Uncategorized</a></li>
+</ul></li>
+<li class="chapter" data-level="9.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>9.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="9.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>9.13</b> Things to cover</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-4.html"><a href="references-4.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 <div id="heteroskedasticity-and-robust-regression" class="section level1">
 <h1><span class="header-section-number">7</span> Heteroskedasticity and Robust Regression</h1>
 <div id="prerequisites-1" class="section level2">
@@ -295,7 +302,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="linear-regression-with-student-t-distributed-errors" class="section level2">
 <h2><span class="header-section-number">7.2</span> Linear Regression with Student t distributed errors</h2>
 <p>Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers. The normal distribution has narrow tail probabilities.</p>
-<p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point. Higher surprise is a lower log-likelihood. Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> This means that outliers impose less of a penalty on the log-posterio models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
+<p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point. Higher surprise is a lower log-likelihood. Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> This means that outliers impose less of a penalty on the log-posterio models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)
 <span class="kw">bind_rows</span>(
   <span class="kw">tibble</span>(<span class="dt">z =</span> z,
@@ -332,8 +339,8 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 1).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 3.3e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 3.1e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -350,9 +357,9 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.846309 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.720782 seconds (Sampling)</span>
-<span class="co">#&gt;                1.56709 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.823236 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.690373 seconds (Sampling)</span>
+<span class="co">#&gt;                1.51361 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
 <span class="co">#&gt;                                                                                          count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -362,8 +369,8 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 2).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.5e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 7.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.73 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -380,9 +387,9 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.798868 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.802543 seconds (Sampling)</span>
-<span class="co">#&gt;                1.60141 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.767871 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.762221 seconds (Sampling)</span>
+<span class="co">#&gt;                1.53009 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
 <span class="co">#&gt;                                                                                          count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -391,36 +398,6 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 3).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.753821 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.679116 seconds (Sampling)</span>
-<span class="co">#&gt;                1.43294 seconds (Total)</span>
-<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
-<span class="co">#&gt;                                                                                     count</span>
-<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
-<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
-<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
-<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 4).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Gradient evaluation took 1.3e-05 seconds</span>
 <span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span>
@@ -440,9 +417,39 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.897422 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.785585 seconds (Sampling)</span>
-<span class="co">#&gt;                1.68301 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.726757 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.644725 seconds (Sampling)</span>
+<span class="co">#&gt;                1.37148 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
+<span class="co">#&gt;                                                                                     count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 4).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.2e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.846514 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.75485 seconds (Sampling)</span>
+<span class="co">#&gt;                1.60136 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span>
 <span class="co">#&gt;                                                                                          count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -480,13 +487,13 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; sigma    1</span></code></pre></div>
 <p>Alternatively, the Double Exponential (Laplace) distribution can be used for the errors. This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_dbl_exp &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/lms.stan&quot;</span>)
-<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:12:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:</span>
+<span class="co">#&gt; In file included from fileccc7793fb246.cpp:8:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:12:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:</span>
 <span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/math/tools/config.hpp:13:</span>
 <span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config.hpp:39:</span>
 <span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config/compiler/clang.hpp:196:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]</span>
@@ -495,37 +502,37 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; &lt;command line&gt;:6:9: note: previous definition is here</span>
 <span class="co">#&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1</span>
 <span class="co">#&gt;         ^</span>
-<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:42:</span>
-<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]</span>
+<span class="co">#&gt; In file included from fileccc7793fb246.cpp:8:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:42:</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]</span>
 <span class="co">#&gt;     static void set_zero_all_adjoints() {</span>
 <span class="co">#&gt;                 ^</span>
-<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:43:</span>
-<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: &#39;static&#39; function &#39;set_zero_all_adjoints_nested&#39; declared in header file should be declared &#39;static inline&#39; [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt; In file included from fileccc7793fb246.cpp:8:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:43:</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: &#39;static&#39; function &#39;set_zero_all_adjoints_nested&#39; declared in header file should be declared &#39;static inline&#39; [-Wunneeded-internal-declaration]</span>
 <span class="co">#&gt;     static void set_zero_all_adjoints_nested() {</span>
 <span class="co">#&gt;                 ^</span>
-<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:59:</span>
-<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt; In file included from fileccc7793fb246.cpp:8:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:59:</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]</span>
 <span class="co">#&gt;       size_t fft_next_good_size(size_t N) {</span>
 <span class="co">#&gt;              ^</span>
-<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:298:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr.hpp:39:</span>
-<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:</span>
+<span class="co">#&gt; In file included from fileccc7793fb246.cpp:8:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:298:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/arr.hpp:39:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:</span>
 <span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint.hpp:61:</span>
 <span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint/util/multi_array_adaption.hpp:29:</span>
 <span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array.hpp:21:</span>
@@ -565,9 +572,9 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.11096 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.875358 seconds (Sampling)</span>
-<span class="co">#&gt;                1.98632 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.987327 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.769289 seconds (Sampling)</span>
+<span class="co">#&gt;                1.75662 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
 <span class="co">#&gt;                                                                                                   count</span>
 <span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     5</span>
@@ -577,8 +584,8 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 2).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 1.2e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -595,9 +602,9 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.01465 seconds (Warm-up)</span>
-<span class="co">#&gt;                1.02955 seconds (Sampling)</span>
-<span class="co">#&gt;                2.0442 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.876012 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.906962 seconds (Sampling)</span>
+<span class="co">#&gt;                1.78297 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
 <span class="co">#&gt;                                                                                                   count</span>
 <span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     3</span>
@@ -607,8 +614,8 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 3).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -625,9 +632,9 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.2061 seconds (Warm-up)</span>
-<span class="co">#&gt;                1.24753 seconds (Sampling)</span>
-<span class="co">#&gt;                2.45363 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 1.08135 seconds (Warm-up)</span>
+<span class="co">#&gt;                1.11122 seconds (Sampling)</span>
+<span class="co">#&gt;                2.19257 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
 <span class="co">#&gt;                                                                                                   count</span>
 <span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -655,9 +662,9 @@ mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(m
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.14636 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.981335 seconds (Sampling)</span>
-<span class="co">#&gt;                2.12769 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 1.01907 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.84409 seconds (Sampling)</span>
+<span class="co">#&gt;                1.86316 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span>
 <span class="co">#&gt;                                                                                                   count</span>
 <span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -735,14 +742,10 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 </div>
 </div>
 </div>
-
-
-
-</div>
 <div class="footnotes">
 <hr />
-<ol start="2">
-<li id="fn2"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref2">↩</a></p></li>
+<ol start="3">
+<li id="fn3"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref3">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -751,7 +754,7 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
         </div>
       </div>
 <a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="notes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="generalized-linear-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

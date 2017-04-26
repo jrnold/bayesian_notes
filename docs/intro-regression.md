@@ -164,7 +164,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors
@@ -287,50 +287,56 @@ Use the `optimizing` function to find the MAP estimates of the model:
 
 ```r
 mod1_fit_opt <- optimizing(mod1, data = mod1_data)
-#> Initial log joint probability = -562878
+#> STAN OPTIMIZATION COMMAND (LBFGS)
+#> init = random
+#> save_iterations = 1
+#> init_alpha = 0.001
+#> tol_obj = 1e-12
+#> tol_grad = 1e-08
+#> tol_param = 1e-08
+#> tol_rel_obj = 10000
+#> tol_rel_grad = 1e+07
+#> history_size = 5
+#> seed = 1425311915
+#> initial log joint probability = -546666
 #> Error evaluating model log probability: Non-finite gradient.
 #> Error evaluating model log probability: Non-finite function evaluation.
-#> 
 #> Error evaluating model log probability: Non-finite gradient.
-#> 
 #> Optimization terminated normally: 
 #>   Convergence detected: relative gradient magnitude is below tolerance
 mod1_fit_opt
 #> $par
 #>      b[1]      b[2]      b[3]      b[4]      b[5]     sigma     mu[1] 
-#>    -0.198    16.644   -14.679     0.598     0.346     9.180    83.221 
+#>    -0.181    16.480   -14.841     0.597     0.345     9.180    83.218 
 #>     mu[2]     mu[3]     mu[4]     mu[5]     mu[6]     mu[7]     mu[8] 
-#>    85.742    93.064    80.419    84.416    58.025    86.835    98.817 
+#>    85.740    93.057    80.416    84.413    58.030    86.830    98.806 
 #>     mu[9]    mu[10]    mu[11]    mu[12]    mu[13]    mu[14]    mu[15] 
-#>    55.232    89.198    67.121    95.735    95.390    69.979    76.581 
+#>    55.230    89.193    67.125    95.726    95.381    69.980    76.579 
 #>    mu[16]    mu[17]    mu[18]    mu[19]    mu[20]    mu[21]    mu[22] 
-#>    42.297    63.674    71.659    56.754    91.402    27.337    32.818 
+#>    42.308    63.684    71.665    56.767    91.397    27.346    32.829 
 #>    mu[23]    mu[24]    mu[25]    mu[26]    mu[27]    mu[28]    mu[29] 
-#>    42.531    19.734    20.301    41.370    57.890    32.377    20.553 
+#>    42.535    19.750    20.307    41.367    57.883    32.377    20.560 
 #>    mu[30]    mu[31]    mu[32]    mu[33]    mu[34]    mu[35]    mu[36] 
-#>    34.739    18.789     6.405    33.889    11.747    17.537    19.265 
+#>    34.740    18.794     6.418    33.891    11.756    17.545    19.272 
 #>    mu[37]    mu[38]    mu[39]    mu[40]    mu[41]    mu[42]    mu[43] 
-#>    18.350    19.041    11.056    15.772    17.341    18.602    10.897 
+#>    18.356    19.046    11.066    15.780    17.347    18.608    10.907 
 #>    mu[44]    mu[45]  y_rep[1]  y_rep[2]  y_rep[3]  y_rep[4]  y_rep[5] 
-#>    36.365    15.642    83.699    86.726    94.091    85.121    76.229 
+#>    36.361    15.647    94.076    89.496    95.805    82.105    74.688 
 #>  y_rep[6]  y_rep[7]  y_rep[8]  y_rep[9] y_rep[10] y_rep[11] y_rep[12] 
-#>    67.198    94.040   107.471    55.463    87.214    81.968   100.999 
+#>    52.630    77.017   115.110    46.107    91.437    70.361   103.725 
 #> y_rep[13] y_rep[14] y_rep[15] y_rep[16] y_rep[17] y_rep[18] y_rep[19] 
-#>    94.443    61.613    73.923    35.785    72.805    69.508    51.738 
+#>    95.808    56.171    73.826    49.434    63.228    58.018    36.331 
 #> y_rep[20] y_rep[21] y_rep[22] y_rep[23] y_rep[24] y_rep[25] y_rep[26] 
-#>    86.781    18.800    37.047    49.372    22.102    22.935    46.992 
+#>    82.678    32.345    47.514    46.091    20.639    14.317    32.379 
 #> y_rep[27] y_rep[28] y_rep[29] y_rep[30] y_rep[31] y_rep[32] y_rep[33] 
-#>    54.856    48.034    14.845    51.714    23.681    -1.549    18.705 
+#>    47.882    28.828    41.644    31.181    14.286    -6.776    37.436 
 #> y_rep[34] y_rep[35] y_rep[36] y_rep[37] y_rep[38] y_rep[39] y_rep[40] 
-#>    14.650    27.235     7.695    26.999     6.659    11.935    -2.765 
+#>     8.027     7.335    21.752    15.772     9.419     4.057    21.350 
 #> y_rep[41] y_rep[42] y_rep[43] y_rep[44] y_rep[45] 
-#>    16.126     6.159    23.402    38.479     9.517 
+#>    29.336    15.381     4.734    45.092    20.127 
 #> 
 #> $value
 #> [1] -122
-#> 
-#> $return_code
-#> [1] 0
 ```
 
 It can also return samples from the multivariate normal (Laplace) approximation to the posterior distribution. 
@@ -343,7 +349,18 @@ These draws will be from the unconstrained parameter space, unless `constrained 
 ```r
 mod1_fit_opt <-
   optimizing(mod1, data = mod1_data, hessian = TRUE, constrained = TRUE)
-#> Initial log joint probability = -40591.1
+#> STAN OPTIMIZATION COMMAND (LBFGS)
+#> init = random
+#> save_iterations = 1
+#> init_alpha = 0.001
+#> tol_obj = 1e-12
+#> tol_grad = 1e-08
+#> tol_param = 1e-08
+#> tol_rel_obj = 10000
+#> tol_rel_grad = 1e+07
+#> history_size = 5
+#> seed = 764155989
+#> initial log joint probability = -41463.6
 #> Optimization terminated normally: 
 #>   Convergence detected: relative gradient magnitude is below tolerance
 ```
