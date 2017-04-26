@@ -60,6 +60,7 @@ lm(mod_f, data = alexseev)
 Use the `lm_preprocess` function in the [rubbish](https://jrnold.github.com/rubbish) package to turn the model formula into a list with relevant data.
 ```{r}
 mod_data <- lm_preprocess(mod_f, data = alexseev)[c("X", "y")]
+
 mod_data <- within(mod_data, {
   n <- nrow(X)
   k <- ncol(X)
