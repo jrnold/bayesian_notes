@@ -1,0 +1,92 @@
+# Generalized Linear Models
+
+
+## Generalized Linear Models 
+
+Generalized linear models (GLMs) are a class of commonly used models in  social science.[^glm-r]
+
+A GLM consists of three components
+
+In GLMs the mean is specified as a function as a function of a linear model of predictors (e.g. $\mat{X} \beta)$),
+$$
+E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta})
+$$
+
+1. A **probability distribution** (**family**) for the outcome. This is usually in the exponential family: common examples include: normal, Binomial, Poisson, Categorical, Multinomial, Poison.
+2. A **linear predictor**: $\eta = \mat{X} \beta$
+3. A **link function** $g$, such that $\E(Y)= \mu = g^{-1}(\eta)$. 
+
+    - The link function ($g$) and its inverse ($g^{-1}) translate $\eta$ from $(\-infty, +\infty)$ to the proper range for the probability distribution and back again.
+
+These models are often estimated with MLE, as with the function `r rdoc("stats", "glm")`. 
+However, these are also easily estimated in a Bayesian setting:
+
+See the help for `r rdoc("stats", "family")` for common probaiblity distributions, `r rdoc("stats", "make.link")` for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
+
+See the function `r rpkg("VGAM")` for even more examples of link functions and probability distributions.
+
+
+The **link function**, $g$, maps the mean or parameter to the linear predictor,
+$$
+g(\mu) = \eta
+$$
+and the **inverse link function** maps the linear predictor to the mean,
+$$
+\mu = g^{-1}(\eta)
+$$
+
+## Binomial
+
+- The outcomes $Y$ are non-negative integers: $0, 1, 2, \dots, n_i$.
+- The total number, $n_i$, can vary by observation.
+- Special case: $n_i = 1$ for all $i \in (1, 0)$: logit, probit models.
+
+The outcome is distributed Binomial:
+$$
+\begin{aligned}[t]
+y_i \sim \dbinom\left(n_i, \pi \right)
+\end{aligned}
+$$
+
+The parameter $\pi \in [0, 1]$ is modeled with a link funcction and a linear predictor.
+
+There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
+
+
+**Logit:** The logistic function,
+    $$
+    \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
+    $$
+    Stan function `r stanfunc("softmax")`.
+- **Probit:** The CDF of the normal distribution.
+    $$
+    \pi_i = \Phi(x_i\T \beta)
+    $$
+    Stan function `r stanfunc("normal_cdf")`.
+
+- **cauchit**: The CDF of the Cauchy distribution. Stan function `r stanfunc("cauchy_cdf")`.
+- **cloglog**: The inverse of the conditional log-log function (cloglog) is
+    $$
+    \pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
+    $$
+    Stan function `r stanfunc("inv_cloglog")`.
+
+[^binomialcdf]: Since a CDF maps reals to $(0, 1)$, any CDF can be used as a link function.
+
+## Poisson
+
+TODO
+
+## Negative Binomial
+
+TODO
+
+## References
+
+Texts:
+
+- @BDA3 [Ch 16]
+- @McElreath2016a [Ch 9]
+- @King1998a discusses MLE estimation of many common GLM models
+- Many econometrics/statisics textbooks, e.g. @Fox2016a, discuss GLMs. Though
+    they are not derived from a Bayesian context, they can easily be

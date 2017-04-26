@@ -49,56 +49,10 @@ bind_rows(
 
 
 ```r
-print(mod_t)
-#> S4 class stanmodel 'rlm' coded as follows:
-#> data {
-#>   // number of observations
-#>   int n;
-#>   // response vector
-#>   vector[n] y;
-#>   // number of columns in the design matrix X
-#>   int k;
-#>   // design matrix X
-#>   matrix [n, k] X;
-#>   // beta prior
-#>   real b_loc;
-#>   real<lower = 0.0> b_scale;
-#>   // sigma prior
-#>   real sigma_scale;
-#> }
-#> parameters {
-#>   // regression coefficient vector
-#>   vector[k] b;
-#>   // scale of the regression errors
-#>   real<lower = 0.0> sigma;
-#>   real<lower = 1.0> nu;
-#> }
-#> transformed parameters {
-#>   // mu is the observation fitted/predicted value
-#>   // also called yhat
-#>   vector[n] mu;
-#>   mu = X * b;
-#> }
-#> model {
-#>   // priors
-#>   b ~ normal(b_loc, b_scale);
-#>   sigma ~ cauchy(0, sigma_scale);
-#>   nu ~ gamma(2, 0.1);
-#>   // likelihood
-#>   y ~ student_t(nu, mu, sigma);
-#> }
-#> generated quantities {
-#>   // simulate data from the posterior
-#>   vector[n] y_rep;
-#>   // log-likelihood values
-#>   vector[n] log_lik;
-#>   for (i in 1:n) {
-#>     y_rep[i] = student_t_rng(nu, mu[i], sigma);
-#>     log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
-#>   }
-#> 
-#> }
+mod_t
 ```
+
+prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n  real<lower = 1.0> nu;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  nu ~ gamma(2, 0.1);\n  // likelihood\n  y ~ student_t(nu, mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood values\n  vector[n] log_lik;\n  for (i in 1:n) {\n    y_rep[i] = student_t_rng(nu, mu[i], sigma);\n    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);\n  }\n\n}")))
 
 
 ```r
@@ -272,6 +226,8 @@ Compare those results when using a model with
 mod_normal
 ```
 
+prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood posterior\n  vector[n] loglik;\n  for (i in 1:n) {\n    y_rep[i] = normal_rng(mu[i], sigma);\n    loglik[i] = normal_lpdf(y[i] | mu[i], sigma);\n  }\n}")))
+
 
 ```r
 mod_normal_fit <- sampling(mod_normal, data = mod_data)
@@ -400,6 +356,8 @@ This is the equivalent to least quantile regression, where the regression line i
 ```r
 mod_dbl_exp
 ```
+
+prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  vector[n] mu;\n  // tau are obs-level scale params\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ double_exponential(mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood values\n  vector[n] log_lik;\n  // use a single loop since both y_rep and log_lik are elementwise\n  for (i in 1:n) {\n    y_rep[i] = double_exponential_rng(mu[i], sigma);\n    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);\n  }\n\n}")))
 
 
 

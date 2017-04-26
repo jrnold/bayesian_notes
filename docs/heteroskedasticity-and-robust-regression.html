@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="introduction-to-stan-and-linear-regression.html">
-<link rel="next" href="placeholder-3.html">
+<link rel="next" href="generalized-linear-models.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -106,33 +106,120 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="part"><span><b>I Theory</b></span></li>
-<li class="chapter" data-level="1" data-path="placeholder.html"><a href="placeholder.html"><i class="fa fa-check"></i><b>1</b> Placeholder</a></li>
-<li class="chapter" data-level="2" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>2</b> Bayesian Inference</a></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
 <li class="part"><span><b>II Computation</b></span></li>
-<li class="chapter" data-level="3" data-path="placeholder-1.html"><a href="placeholder-1.html"><i class="fa fa-check"></i><b>3</b> Placeholder</a></li>
-<li class="chapter" data-level="4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>4</b> Markov Chain Monte Carlo</a></li>
-<li class="chapter" data-level="5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>5</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="6" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>6</b> Posterior Inference</a></li>
-<li class="chapter" data-level="7" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>7</b> Model Checking</a></li>
+<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
+<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="4.2" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
+<li class="chapter" data-level="4.3" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.3</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.4</b> Marginal Effects</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#example-marginal-effect-plot-for-x"><i class="fa fa-check"></i><b>4.4.1</b> Example: Marginal Effect Plot for X</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
+<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+</ul></li>
 <li class="part"><span><b>III Models</b></span></li>
-<li class="chapter" data-level="8" data-path="placeholder-2.html"><a href="placeholder-2.html"><i class="fa fa-check"></i><b>8</b> Placeholder</a></li>
-<li class="chapter" data-level="9" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>9</b> Introduction to Stan and Linear Regression</a></li>
-<li class="chapter" data-level="10" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>10</b> Heteroskedasticity and Robust Regression</a><ul>
-<li class="chapter" data-level="10.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites"><i class="fa fa-check"></i><b>10.1</b> Prerequisites</a></li>
-<li class="chapter" data-level="10.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>10.2</b> Linear Regression with Student t distributed errors</a></li>
-<li class="chapter" data-level="10.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>10.3</b> Heteroskedasticity</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>10.3.1</b> Covariates</a></li>
-<li class="chapter" data-level="10.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>10.3.2</b> Student-t</a></li>
+<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references"><i class="fa fa-check"></i><b>10.4</b> References</a><ul>
-<li class="chapter" data-level="10.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>10.4.1</b> Robust regression</a></li>
-<li class="chapter" data-level="10.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>10.4.2</b> Heteroskedasticity</a></li>
+<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>8</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="8.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>8.1</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#binomial"><i class="fa fa-check"></i><b>8.2</b> Binomial</a></li>
+<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.3</b> Poisson</a></li>
+<li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a></li>
+<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.5</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span></li>
-<li class="chapter" data-level="11" data-path="placeholder-3.html"><a href="placeholder-3.html"><i class="fa fa-check"></i><b>11</b> Placeholder</a></li>
-<li class="chapter" data-level="12" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>12</b> Notes</a></li>
-<li class="chapter" data-level="" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="9" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>9</b> Notes</a><ul>
+<li class="chapter" data-level="9.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>9.1</b> Syllabi</a></li>
+<li class="chapter" data-level="9.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>9.2</b> Textbooks</a></li>
+<li class="chapter" data-level="9.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>9.3</b> Topics</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>9.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="9.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>9.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="9.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>9.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="9.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>9.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="9.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>9.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="9.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>9.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="9.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>9.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="9.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>9.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="9.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>9.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="9.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>9.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="9.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>9.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>9.3.12</b> Applied Bayes Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>9.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>9.4.1</b> Software</a></li>
+<li class="chapter" data-level="9.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>9.4.2</b> Stan</a></li>
+<li class="chapter" data-level="9.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>9.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="9.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>9.4.4</b> Political Science Bayesian Works</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>9.5</b> Model Checking</a></li>
+<li class="chapter" data-level="9.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>9.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>9.6.1</b> Mixed Methods and Qualitative Research</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>9.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="9.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>9.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="9.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>9.8.1</b> Examples</a></li>
+<li class="chapter" data-level="9.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>9.8.2</b> Latent Variable Models</a></li>
+</ul></li>
+<li class="chapter" data-level="9.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>9.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="9.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>9.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="9.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>9.9.2</b> German Tank Problem</a></li>
+</ul></li>
+<li class="chapter" data-level="9.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>9.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="9.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>9.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="9.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>9.11.1</b> Uncategorized</a></li>
+</ul></li>
+<li class="chapter" data-level="9.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>9.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="9.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>9.13</b> Things to cover</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-4.html"><a href="references-4.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -207,16 +294,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \DeclareMathOperator*{\plim}{plim}
 \]
 <div id="heteroskedasticity-and-robust-regression" class="section level1">
-<h1><span class="header-section-number">10</span> Heteroskedasticity and Robust Regression</h1>
-<div id="prerequisites" class="section level2">
-<h2><span class="header-section-number">10.1</span> Prerequisites</h2>
+<h1><span class="header-section-number">7</span> Heteroskedasticity and Robust Regression</h1>
+<div id="prerequisites-1" class="section level2">
+<h2><span class="header-section-number">7.1</span> Prerequisites</h2>
 <p><strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> is needed for the Laplace distribution.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;VGAM&quot;</span>)</code></pre></div>
 </div>
 <div id="linear-regression-with-student-t-distributed-errors" class="section level2">
-<h2><span class="header-section-number">10.2</span> Linear Regression with Student t distributed errors</h2>
+<h2><span class="header-section-number">7.2</span> Linear Regression with Student t distributed errors</h2>
 <p>Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers. The normal distribution has narrow tail probabilities.</p>
-<p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point. Higher surprise is a lower log-likelihood. Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
+<p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point. Higher surprise is a lower log-likelihood. Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)
 <span class="kw">bind_rows</span>(
   <span class="kw">tibble</span>(<span class="dt">z =</span> z,
@@ -233,55 +320,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="st">  </span><span class="kw">geom_line</span>()
       </code></pre></div>
 <p><img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(mod_t)
-<span class="co">#&gt; S4 class stanmodel &#39;rlm&#39; coded as follows:</span>
-<span class="co">#&gt; data {</span>
-<span class="co">#&gt;   // number of observations</span>
-<span class="co">#&gt;   int n;</span>
-<span class="co">#&gt;   // response vector</span>
-<span class="co">#&gt;   vector[n] y;</span>
-<span class="co">#&gt;   // number of columns in the design matrix X</span>
-<span class="co">#&gt;   int k;</span>
-<span class="co">#&gt;   // design matrix X</span>
-<span class="co">#&gt;   matrix [n, k] X;</span>
-<span class="co">#&gt;   // beta prior</span>
-<span class="co">#&gt;   real b_loc;</span>
-<span class="co">#&gt;   real&lt;lower = 0.0&gt; b_scale;</span>
-<span class="co">#&gt;   // sigma prior</span>
-<span class="co">#&gt;   real sigma_scale;</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; parameters {</span>
-<span class="co">#&gt;   // regression coefficient vector</span>
-<span class="co">#&gt;   vector[k] b;</span>
-<span class="co">#&gt;   // scale of the regression errors</span>
-<span class="co">#&gt;   real&lt;lower = 0.0&gt; sigma;</span>
-<span class="co">#&gt;   real&lt;lower = 1.0&gt; nu;</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; transformed parameters {</span>
-<span class="co">#&gt;   // mu is the observation fitted/predicted value</span>
-<span class="co">#&gt;   // also called yhat</span>
-<span class="co">#&gt;   vector[n] mu;</span>
-<span class="co">#&gt;   mu = X * b;</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; model {</span>
-<span class="co">#&gt;   // priors</span>
-<span class="co">#&gt;   b ~ normal(b_loc, b_scale);</span>
-<span class="co">#&gt;   sigma ~ cauchy(0, sigma_scale);</span>
-<span class="co">#&gt;   nu ~ gamma(2, 0.1);</span>
-<span class="co">#&gt;   // likelihood</span>
-<span class="co">#&gt;   y ~ student_t(nu, mu, sigma);</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; generated quantities {</span>
-<span class="co">#&gt;   // simulate data from the posterior</span>
-<span class="co">#&gt;   vector[n] y_rep;</span>
-<span class="co">#&gt;   // log-likelihood values</span>
-<span class="co">#&gt;   vector[n] log_lik;</span>
-<span class="co">#&gt;   for (i in 1:n) {</span>
-<span class="co">#&gt;     y_rep[i] = student_t_rng(nu, mu[i], sigma);</span>
-<span class="co">#&gt;     log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);</span>
-<span class="co">#&gt;   }</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; }</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_t</code></pre></div>
+<p>prelist()list(list(name = “code”, attribs = list(class = “stan”), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// beta priorreal b_loc;real<lower = 0.0> b_scale;// sigma priorreal sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// simulate data from the posteriorvector[n] y_rep;// log-likelihood valuesvector[n] log_lik;for (i in 1:n) {y_rep[i] = student_t_rng(nu, mu[i], sigma);log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);}}”)))</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unionization &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/western1995/unionization.tsv&quot;</span>,
          <span class="dt">col_types =</span> <span class="kw">cols</span>(
               <span class="dt">country =</span> <span class="kw">col_character</span>(),
@@ -436,6 +476,7 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; b[4]  1.002</span></code></pre></div>
 <p>Compare those results when using a model with</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_normal</code></pre></div>
+<p>prelist()list(list(name = “code”, attribs = list(class = “stan”), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// beta priorreal b_loc;real<lower = 0.0> b_scale;// sigma priorreal sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// simulate data from the posteriorvector[n] y_rep;// log-likelihood posteriorvector[n] loglik;for (i in 1:n) {y_rep[i] = normal_rng(mu[i], sigma);loglik[i] = normal_lpdf(y[i] | mu[i], sigma);}}”)))</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_normal_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_normal, <span class="dt">data =</span> mod_data)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 1).</span>
@@ -551,6 +592,7 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; sigma    1</span></code></pre></div>
 <p>Alternatively, the Double Exponential (Laplace) distribution can be used for the errors. This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_dbl_exp</code></pre></div>
+<p>prelist()list(list(name = “code”, attribs = list(class = “stan”), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// beta priorreal b_loc;real<lower = 0.0> b_scale;// sigma priorreal sigma_scale;}parameters {// mu is the observation fitted/predicted valuevector[n] mu;// tau are obs-level scale paramsmu = X * b;}quantities {// simulate data from the posteriorvector[n] y_rep;// log-likelihood valuesvector[n] log_lik;// use a single loop since both y_rep and log_lik are elementwisefor (i in 1:n) {y_rep[i] = double_exponential_rng(mu[i], sigma);log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);}}”)))</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_dbl_exp_fit, <span class="dt">par =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))<span class="op">$</span>summary
 <span class="co">#&gt;         mean se_mean      sd    2.5%    25%   50%    75%   97.5% n_eff</span>
 <span class="co">#&gt; b[1]  38.693 1.90247 51.2313 -60.417  5.004 37.97 71.661 140.290   725</span>
@@ -566,7 +608,7 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; sigma    1</span></code></pre></div>
 </div>
 <div id="heteroskedasticity" class="section level2">
-<h2><span class="header-section-number">10.3</span> Heteroskedasticity</h2>
+<h2><span class="header-section-number">7.3</span> Heteroskedasticity</h2>
 <p>In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.</p>
 <p>However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.</p>
 <p>In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, <span class="math inline">\(\sigma_i\)</span>, <span class="math display">\[
@@ -575,7 +617,7 @@ y_i &amp;\sim \dnorm(X \beta, \sigma_i) .
 \end{aligned}
 \]</span> It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper. To estimate this model we have to apply some model to the scale terms, <span class="math inline">\(\sigma_i\)</span>. In fact, you can think of homoskedasticity as the simplest such model; assuming that all <span class="math inline">\(\sigma_i = \sigma\)</span>. A more general model of <span class="math inline">\(\sigma_i\)</span> should encode any information the analyst has about the scale terms. This can be a distribution or functions of covariates for how we think observations may have different values.</p>
 <div id="covariates" class="section level3">
-<h3><span class="header-section-number">10.3.1</span> Covariates</h3>
+<h3><span class="header-section-number">7.3.1</span> Covariates</h3>
 <p>A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into <span class="math inline">\(k = 1, \dots, K\)</span> groups, and <span class="math inline">\(k[i]\)</span> is the group of observation <span class="math inline">\(i\)</span>, <span class="math display">\[
 \sigma_i = \sigma_{k[i]}
 \]</span></p>
@@ -584,7 +626,7 @@ y_i &amp;\sim \dnorm(X \beta, \sigma_i) .
 \]</span></p>
 </div>
 <div id="student-t" class="section level3">
-<h3><span class="header-section-number">10.3.2</span> Student-t</h3>
+<h3><span class="header-section-number">7.3.2</span> Student-t</h3>
 <p>It turns out that the Student-t distribution of error terms from the <a href="heteroskedasticity-and-robust-regression.html#robust-regression">Robust Regression</a> chapter can also be derived as a model of heteroskedasticity.</p>
 <p>A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as a continuous mixture of a common global scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters, <span class="math inline">\(\lambda_i\)</span>,[^globalmixture] <span class="math display">\[
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
@@ -603,17 +645,17 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 <p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
 </div>
 </div>
-<div id="references" class="section level2">
-<h2><span class="header-section-number">10.4</span> References</h2>
+<div id="references-2" class="section level2">
+<h2><span class="header-section-number">7.4</span> References</h2>
 <div id="robust-regression" class="section level3">
-<h3><span class="header-section-number">10.4.1</span> Robust regression</h3>
+<h3><span class="header-section-number">7.4.1</span> Robust regression</h3>
 <ul>
 <li>See <span class="citation">Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span></li>
 <li><span class="citation">Stan Development Team (2016 Sec 8.4)</span> for the Stan example using a Student-t distribution</li>
 </ul>
 </div>
 <div id="heteroskedasticity-1" class="section level3">
-<h3><span class="header-section-number">10.4.2</span> Heteroskedasticity</h3>
+<h3><span class="header-section-number">7.4.2</span> Heteroskedasticity</h3>
 <ul>
 <li><span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.</li>
 <li><span class="citation">Stan Development Team (2016)</span> reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.</li>
@@ -622,13 +664,10 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 </div>
 </div>
 </div>
-
-
-
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref1">↩</a></p></li>
+<ol start="3">
+<li id="fn3"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref3">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -637,7 +676,7 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
         </div>
       </div>
 <a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="placeholder-3.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="generalized-linear-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

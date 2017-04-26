@@ -188,50 +188,10 @@ mod1 <- stan_model("stan/lm.stan")
 ```
 
 ```r
-print(mod1)
-#> S4 class stanmodel 'lm' coded as follows:
-#> data {
-#>   // number of observations
-#>   int n;
-#>   // response vector
-#>   vector[n] y;
-#>   // number of columns in the design matrix X
-#>   int k;
-#>   // design matrix X
-#>   matrix [n, k] X;
-#>   // beta prior
-#>   real b_loc;
-#>   real<lower = 0.0> b_scale;
-#>   // sigma prior
-#>   real sigma_scale;
-#> }
-#> parameters {
-#>   // regression coefficient vector
-#>   vector[k] b;
-#>   // scale of the regression errors
-#>   real<lower = 0.0> sigma;
-#> }
-#> transformed parameters {
-#>   // mu is the observation fitted/predicted value
-#>   // also called yhat
-#>   vector[n] mu;
-#>   mu = X * b;
-#> }
-#> model {
-#>   // priors
-#>   b ~ normal(b_loc, b_scale);
-#>   sigma ~ cauchy(0, sigma_scale);
-#>   // likelihood
-#>   y ~ normal(mu, sigma);
-#> }
-#> generated quantities {
-#>   // simulate data from the posterior
-#>   vector[n] y_rep;
-#>   for (i in 1:n) {
-#>     y_rep[i] = normal_rng(mu[i], sigma);
-#>   }
-#> }
+mod1
 ```
+
+prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  for (i in 1:n) {\n    y_rep[i] = normal_rng(mu[i], sigma);\n  }\n}")))
 
 
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.

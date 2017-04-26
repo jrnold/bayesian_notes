@@ -84,5 +84,5 @@ stanfunc <- function(x) {
 
 knit_print.stanmodel <- function(x, options) {
   code_str <- x@model_code
-  knitr::results_asis(htmltools::tags$pre(htmltools::tags$code(htmltools::HTML(code_str), class = "stan")))
+  knitr::asis_output(htmltools::tags$pre(htmltools::tags$code(htmltools::HTML(code_str), class = "stan")))
 }
