@@ -9,7 +9,7 @@
 The question is not whether a model is "true"; it isn't [@Box1976a].
 But is it good enough for the purposes of the analysis.
 
-See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @GelmanCarlinSternEtAl2013a [Ch. 6], @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014
+See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6], @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a
 for more discussion of the motivation and use of posterior predictive checks.
 
 

@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="posterior-inference.html">
-
+<link rel="next" href="introduction-to-stan-and-linear-regression.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -93,6 +93,142 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
+<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.1.2</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.1.3</b> Marginal Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
+<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="8" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>8</b> Notes</a><ul>
+<li class="chapter" data-level="8.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>8.1</b> Syllabi</a></li>
+<li class="chapter" data-level="8.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>8.2</b> Textbooks</a></li>
+<li class="chapter" data-level="8.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>8.3</b> Topics</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>8.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="8.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>8.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="8.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>8.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="8.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>8.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="8.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>8.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="8.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>8.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="8.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>8.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="8.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>8.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="8.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>8.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="8.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>8.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="8.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>8.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="8.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>8.3.12</b> Applied Bayes Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>8.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>8.4.1</b> Software</a></li>
+<li class="chapter" data-level="8.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>8.4.2</b> Stan</a></li>
+<li class="chapter" data-level="8.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>8.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="8.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>8.4.4</b> Political Science Bayesian Works</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>8.5</b> Model Checking</a></li>
+<li class="chapter" data-level="8.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>8.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>8.6.1</b> Mixed Methods and Qualitative Research</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>8.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="8.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>8.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>8.8.2</b> Latent Variable Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>8.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="8.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>8.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="8.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>8.9.2</b> German Tank Problem</a></li>
+</ul></li>
+<li class="chapter" data-level="8.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>8.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="8.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>8.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="8.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>8.11.1</b> Uncategorized</a></li>
+</ul></li>
+<li class="chapter" data-level="8.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>8.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="8.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>8.13</b> Things to cover</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-3.html"><a href="references-3.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 \[
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\mean}{mean}
@@ -149,74 +285,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><strong><a href="./">Bayesian Notes</a></strong></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>1</b> Introduction to Stan and Linear Regression</a><ul>
-<li class="chapter" data-level="1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>1.1</b> Prerequites</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>1.2</b> The Statistical Model</a><ul>
-<li class="chapter" data-level="1.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>1.2.1</b> Sampling</a></li>
-<li class="chapter" data-level="1.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>1.2.2</b> Convergence Diagnostics and Model Fit</a></li>
-</ul></li>
-<li class="chapter" data-level="1.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>1.3</b> Maximum A Posteriori estimation</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>2</b> Posterior Inference</a><ul>
-<li class="chapter" data-level="2.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>2.1</b> Prerequisites</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="2.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>2.1.2</b> Functions of the Posterior Distribution</a></li>
-<li class="chapter" data-level="2.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>2.1.3</b> Marginal Effects</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>3</b> Model Checking</a><ul>
-<li class="chapter" data-level="3.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>3.1</b> Why check models?</a></li>
-<li class="chapter" data-level="3.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2</b> Posterior Predictive Checks</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>3.2.1</b> Bayesian p-values</a></li>
-<li class="chapter" data-level="3.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>3.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="3.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>3.2.3</b> p-values vs. u-values</a></li>
-<li class="chapter" data-level="3.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>3.2.4</b> Marginal predictive checks</a></li>
-<li class="chapter" data-level="3.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>3.2.5</b> Outliers</a></li>
-<li class="chapter" data-level="3.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2.6</b> Grapical Posterior Predictive Checks</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>3.3</b> Sources</a></li>
-</ul></li>
-</ul>
-
-      </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
 <div id="model-checking" class="section level1">
-<h1><span class="header-section-number">3</span> Model Checking</h1>
+<h1><span class="header-section-number">5</span> Model Checking</h1>
 <div id="why-check-models" class="section level2">
-<h2><span class="header-section-number">3.1</span> Why check models?</h2>
+<h2><span class="header-section-number">5.1</span> Why check models?</h2>
 <ul>
 <li>In theory—Bayesian model should include all relevant substantive knowledge and subsume all possible theories.</li>
 <li>In practice—It won’t. Need to check how the model fits data.</li>
 </ul>
-<p>The question is not whether a model is “true”; it isn’t <span class="citation">[@Box1976a]</span>. But is it good enough for the purposes of the analysis.</p>
-<p>See <span class="citation">@GelmanMengStern1996a</span>, <span class="citation">@Gelman2007a</span>, <span class="citation">@Gelman2009a</span>, <span class="citation">@GelmanCarlinSternEtAl2013a [Ch. 6]</span>, <span class="citation">@GelmanShalizi2012a</span>, <span class="citation">@Kruschke2013b</span>, <span class="citation">@GelmanShalizi2012b</span>, <span class="citation">@Gelman2014</span> for more discussion of the motivation and use of posterior predictive checks.</p>
+<p>The question is not whether a model is “true”; it isn’t <span class="citation">(Box 1976)</span>. But is it good enough for the purposes of the analysis.</p>
+<p>See <span class="citation">Gelman, Meng, and Stern (1996)</span>, <span class="citation">Gelman (2007)</span>, <span class="citation">Gelman (2009)</span>, <span class="citation">Gelman et al. (2013 Ch. 6)</span>, <span class="citation">Gelman and Shalizi (2012b)</span>, <span class="citation">Kruschke (2013)</span>, <span class="citation">Gelman and Shalizi (2012a)</span>, <span class="citation">Gelman (2014)</span> for more discussion of the motivation and use of posterior predictive checks.</p>
 </div>
 <div id="posterior-predictive-checks" class="section level2">
-<h2><span class="header-section-number">3.2</span> Posterior Predictive Checks</h2>
+<h2><span class="header-section-number">5.2</span> Posterior Predictive Checks</h2>
 <p>One way to evaluate the fit of a model is <strong>posterior predictive checks</strong></p>
 <ul>
 <li>Fit the model to the data to get the posterior distribution of the parameters: <span class="math inline">\(p(\theta | D)\)</span></li>
@@ -232,7 +313,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 }</code></pre>
 <p>The package <strong><a href="https://cran.r-project.org/package=bayesplot">bayesplot</a></strong> includes multiple functions for posterior predictive checks; see the help for <a href="https://www.rdocumentation.org/packages/bayesplot//topics/PPC-overview">PPC-overview</a> for a summary of these functions.</p>
 <div id="bayesian-p-values" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Bayesian p-values</h3>
+<h3><span class="header-section-number">5.2.1</span> Bayesian p-values</h3>
 <p>A <strong>posterior predictive p-value</strong> is a the tail posterior probability for a statistic generated from the model compared to the statistic observed in the data. Let <span class="math inline">\(y = (y_1, \dots, y_n)\)</span> be the observed data. Suppose the model has been fit and there is a set of simulation <span class="math inline">\(\theta^(s)\)</span>, <span class="math inline">\(s = 1, \dots, n_sims\)</span>. In replicated dataset, <span class="math inline">\(y^{rep(s)\)</span>, has been generated from the predictive distribution of the data, <span class="math inline">\(p(y^{(rep)} | \theta = \theta^{(s)}\)</span>. Then the ensemble of simulated datasets, <span class="math inline">\((y^{rep(s)}, \dots, y^{rep(nsims)})\)</span>, is a sample from the posterior predictive distribution, <span class="math inline">\(p(y^{(rep)} | y)\)</span></p>
 <p>The model can be tested by means of discrepancy statistics, which are some function of the data and parameters, <span class="math inline">\(T(y, \theta)\)</span>. If <span class="math inline">\(\theta\)</span> was known, then compare discrepancy by <span class="math inline">\(T(y^{(rep)}, \theta)\)</span>. The statistical significance is <span class="math inline">\(p = \Pr(T(y^{(rep)}, \theta) &gt; T(y, \theta) | y, \theta)\)</span>. If <span class="math inline">\(\theta\)</span> is unknown, then average over the posterior distribution of <span class="math inline">\(\theta\)</span>, <span class="math display">\[
 \begin{aligned}[t]
@@ -244,13 +325,13 @@ p = \frac{1}{n_{sims}}\sum_{s = 1}^{n_{sims}} 1( T(y^{rep(s)}, \theta(s)) &gt; T
 \]</span></p>
 </div>
 <div id="test-quantities" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Test quantities</h3>
+<h3><span class="header-section-number">5.2.2</span> Test quantities</h3>
 <p>The definition of a posterior p-value does not specify a particular test-statistic, <span class="math inline">\(T\)</span>, to use.</p>
 <p>The best advice is that <span class="math inline">\(T\)</span> depends on the application.</p>
 <ul>
-<li><span class="citation">@BDA3 [p. 146]</span> Speed of light example uses the 90% interval (61st and 6th order statistics).</li>
-<li><span class="citation">@BDA3 [p. 147]</span> binomial trial example uses the number of swicthes (0 to 1, or 1 to 0) in order to test independence.</li>
-<li><p><span class="citation">@BDA3 [p. 148]</span> hierarchical model for adolesce smoking uses</p>
+<li><span class="citation">Gelman et al. (2013, 146)</span> Speed of light example uses the 90% interval (61st and 6th order statistics).</li>
+<li><span class="citation">Gelman et al. (2013, 147)</span> binomial trial example uses the number of swicthes (0 to 1, or 1 to 0) in order to test independence.</li>
+<li><p><span class="citation">Gelman et al. (2013, 148)</span> hierarchical model for adolesce smoking uses</p>
 <ul>
 <li>percent of adolescents in the sample who never smoked</li>
 <li>percentage in the sample who smoked in all waves</li>
@@ -259,7 +340,7 @@ p = \frac{1}{n_{sims}}\sum_{s = 1}^{n_{sims}} 1( T(y^{rep(s)}, \theta(s)) &gt; T
 </ul>
 </div>
 <div id="p-values-vs.u-values" class="section level3">
-<h3><span class="header-section-number">3.2.3</span> p-values vs. u-values</h3>
+<h3><span class="header-section-number">5.2.3</span> p-values vs. u-values</h3>
 <p>A posterior predictive p-value is different than a classical p-value.</p>
 <ul>
 <li><p>Posterior predictive p-value</p>
@@ -271,14 +352,14 @@ p = \frac{1}{n_{sims}}\sum_{s = 1}^{n_{sims}} 1( T(y^{rep(s)}, \theta(s)) &gt; T
 <li>distributed uniform if the <strong>null hypothesis</strong> (<span class="math inline">\(H_0\)</span>) is true</li>
 </ul></li>
 </ul>
-<p>A <em>u-value</em> is any function of the data that has a <span class="math inline">\(U(0, 1)\)</span> sampling distribution <span class="citation">[@BDA3, p. 151]</span></p>
+<p>A <em>u-value</em> is any function of the data that has a <span class="math inline">\(U(0, 1)\)</span> sampling distribution <span class="citation">(Gelman et al. 2013, 151)</span></p>
 <ul>
 <li>a u-value can be averaged over <span class="math inline">\(\theta\)</span>, but it is not Bayesian, and is not a probability distribution</li>
 <li>posterior p-value: probability statement, conditional on model and data, about future observations</li>
 </ul>
 </div>
 <div id="marginal-predictive-checks" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> Marginal predictive checks</h3>
+<h3><span class="header-section-number">5.2.4</span> Marginal predictive checks</h3>
 <p>Compare statistics for each observation.</p>
 <p><em>Conditional Predictive Ordinate (CPO)</em>: The CPO (Gelfand 1996) is the leave-on-out cross-validation predictive density: <span class="math display">\[
 p(y_i | y_{-i}) = \int p(y_i | \theta) p(\theta | y_{-i}) d\,\theta
@@ -289,7 +370,7 @@ PQ_i = p(y_i^{(rep)} &gt; y_i) .
 \]</span> Then the <em>predictive concordance</em> be the proportion of <span class="math inline">\(y_i\)</span> that are not outliers. Gelfand (1996) argues that the predictive concordance should match 95% - in other words that the posterior predictive distribution should have the correct coverage. (Laplace Demon p. 20)</p>
 </div>
 <div id="outliers" class="section level3">
-<h3><span class="header-section-number">3.2.5</span> Outliers</h3>
+<h3><span class="header-section-number">5.2.5</span> Outliers</h3>
 <p>Can be identified by the inverse-CPO.</p>
 <ul>
 <li>larger than 40 are possible outliers, and those higher than 70 are extreme values (Ntzoufras 2009, p. 376).</li>
@@ -297,19 +378,19 @@ PQ_i = p(y_i^{(rep)} &gt; y_i) .
 </ul>
 </div>
 <div id="grapical-posterior-predictive-checks" class="section level3">
-<h3><span class="header-section-number">3.2.6</span> Grapical Posterior Predictive Checks</h3>
+<h3><span class="header-section-number">5.2.6</span> Grapical Posterior Predictive Checks</h3>
 <blockquote>
 <p>Visualization can surprise you, but it doesn’t scale well. Modeling scales well, but it can’t surprise you. – <a href="https://www.johndcook.com/blog/2013/02/07/visualization-modeling-and-surprises/">paraphrase of Hadley Hickham</a></p>
 </blockquote>
-<p>Instead of calculating posterior probabilities, plot simulated data and observed data and visually compare them. See <span class="citation">@BDA3 [p. 154]</span>.</p>
+<p>Instead of calculating posterior probabilities, plot simulated data and observed data and visually compare them. See <span class="citation">Gelman et al. (2013, 154)</span>.</p>
 <ul>
-<li>plot simulated data and real data <span class="citation">[@BDA3, p. 154]</span>. This is similar to ideas in <span class="citation">@WickhamCookHofmannEtAl2010a</span>.</li>
+<li>plot simulated data and real data <span class="citation">(Gelman et al. 2013, 154)</span>. This is similar to ideas in <span class="citation">Wickham et al. (2010)</span>.</li>
 <li>plot summary statistics or inferences</li>
 <li><p>residual plots</p>
 <ul>
 <li>Bayesian residuals have a distribution <span class="math inline">\(r_i^{(s)} = y_i - \E(y_i | \theta^{s})\)</span></li>
 <li>Bayesian resdiual graph plots single realization of the residuals, or a summary of their posterior distributions</li>
-<li>binned plots are best for discrete data <span class="citation">[@BDA3, p. 157]</span></li>
+<li>binned plots are best for discrete data <span class="citation">(Gelman et al. 2013, 157)</span></li>
 <li></li>
 </ul></li>
 </ul>
@@ -331,20 +412,24 @@ See the Gelman paper on it.
 </div>
 </div>
 <div id="sources" class="section level2">
-<h2><span class="header-section-number">3.3</span> Sources</h2>
+<h2><span class="header-section-number">5.3</span> Sources</h2>
 <ul>
-<li>See <span class="citation">@GelmanShalizi2012a</span>, <span class="citation">@GelmanShalizi2012b</span>, <span class="citation">@Kruschke2013b</span></li>
+<li>See <span class="citation">Gelman and Shalizi (2012b)</span>, <span class="citation">Gelman and Shalizi (2012a)</span>, <span class="citation">Kruschke (2013)</span></li>
 </ul>
 
 </div>
+</div>
+
+
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="posterior-inference.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="posterior-inference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

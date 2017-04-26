@@ -1,3 +1,4 @@
+
 # MCMC Diagnostics
 
 There are two parts of checking a Bayesian model:
@@ -70,7 +71,8 @@ Thinning trades off sample size for memory, and due to autocorrelation in sample
 
 **Example:** Comparison of the effective sample sizes for data generated with various levels of autocorrelation. 
 The package `rstan` does not directly expose the function it uses to calculate ESS, so this `ess` function does so (for a single chain).
-```{r}
+
+```r
 ess <- function(x) {
   N <- length(x)
   V <- map_dbl(seq_len(N - 1),
@@ -82,10 +84,15 @@ ess <- function(x) {
 }
 n <- 1024
 ess(rnorm(n))
+#> [1] 1024
 ess(arima.sim(list(ar = 0.5), n))
+#> [1] 1024
 ess(arima.sim(list(ar = 0.75), n))
+#> [1] 653
 ess(arima.sim(list(ar = 0.875), n))
+#> [1] 328
 ess(arima.sim(list(ar = 0.99), n))
+#> [1] 67
 ```
 
 
@@ -114,7 +121,7 @@ mean           $s_\theta / \sqrt{S}$
 probability    $\sqrt{p (1 - p) / S}$
 -------------- -----------------------
 
-The estimation of standard errors for quantiles, as would be used in is more complicated. See the package `r rpkg("mcmcse")` for Monte Carlo standard errors of quantiles (though calculated in a different method than rstan).
+The estimation of standard errors for quantiles, as would be used in is more complicated. See the package **[mcmcse](https://cran.r-project.org/package=mcmcse)** for Monte Carlo standard errors of quantiles (though calculated in a different method than rstan).
 
 See @BDA3 [Sec. 10.5].
 
@@ -165,5 +172,5 @@ see
 
 - @BDA3 [ p. 267]
 - Stan2016a [Ch 28.] for how Stan calculates Rhat, autocorrelations, and ESS.
-- See @FlegalHaranJones2008a and the `r rpkg("mcmcse")` for methods to calculate MCMC standard errors and an argument for using ESS as a stopping rule for Bayesian inference.
+- See @FlegalHaranJones2008a and the **[mcmcse](https://cran.r-project.org/package=mcmcse)** for methods to calculate MCMC standard errors and an argument for using ESS as a stopping rule for Bayesian inference.
 - [Talk by Geyer on MCSE ](http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf)

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Updating: A Set of Bayesian Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
+  
+  
+  <meta name="github-repo" content="jrnold/bayesian_notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:site" content="@jrnld" />
+  
+  
+
+<meta name="author" content="Jeffrey B. Arnold">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introduction-to-stan-and-linear-regression.html">
+<link rel="next" href="notes.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
+<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.1.2</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.1.3</b> Marginal Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
+<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="8" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>8</b> Notes</a><ul>
+<li class="chapter" data-level="8.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>8.1</b> Syllabi</a></li>
+<li class="chapter" data-level="8.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>8.2</b> Textbooks</a></li>
+<li class="chapter" data-level="8.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>8.3</b> Topics</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>8.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="8.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>8.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="8.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>8.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="8.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>8.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="8.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>8.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="8.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>8.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="8.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>8.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="8.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>8.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="8.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>8.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="8.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>8.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="8.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>8.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="8.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>8.3.12</b> Applied Bayes Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>8.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>8.4.1</b> Software</a></li>
+<li class="chapter" data-level="8.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>8.4.2</b> Stan</a></li>
+<li class="chapter" data-level="8.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>8.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="8.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>8.4.4</b> Political Science Bayesian Works</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>8.5</b> Model Checking</a></li>
+<li class="chapter" data-level="8.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>8.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>8.6.1</b> Mixed Methods and Qualitative Research</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>8.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="8.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>8.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>8.8.2</b> Latent Variable Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>8.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="8.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>8.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="8.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>8.9.2</b> German Tank Problem</a></li>
+</ul></li>
+<li class="chapter" data-level="8.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>8.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="8.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>8.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="8.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>8.11.1</b> Uncategorized</a></li>
+</ul></li>
+<li class="chapter" data-level="8.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>8.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="8.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>8.13</b> Things to cover</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-3.html"><a href="references-3.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dunif}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpoisson}{\mathrm{Poisson}}
+\newcommand{\dbinomial}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnegbin}{\mathrm{Neg-bin}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{\Logistic}
+
+\newcommand{\R}{\mathfrak{R}}
+\newcommand{\N}{\mathfrak{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
+<div id="heteroskedasticity-and-robust-regression" class="section level1">
+<h1><span class="header-section-number">7</span> Heteroskedasticity and Robust Regression</h1>
+<div id="prerequisites-1" class="section level2">
+<h2><span class="header-section-number">7.1</span> Prerequisites</h2>
+<p><strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> is needed for the Laplace distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;VGAM&quot;</span>)</code></pre></div>
+</div>
+<div id="linear-regression-with-student-t-distributed-errors" class="section level2">
+<h2><span class="header-section-number">7.2</span> Linear Regression with Student t distributed errors</h2>
+<p>Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers. The normal distribution has narrow tail probabilities.</p>
+<p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point. Higher surprise is a lower log-likelihood. Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> This means that outliers impose less of a penalty on the log-posterio models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)
+<span class="kw">bind_rows</span>(
+  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
+         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
+         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),
+  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
+         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),
+         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),
+  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
+         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
+         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> <span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span>, <span class="dt">colour =</span> distr)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>()
+       </code></pre></div>
+<p><img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unionization &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/western1995/unionization.tsv&quot;</span>,
+         <span class="dt">col_types =</span> <span class="kw">cols</span>(
+              <span class="dt">country =</span> <span class="kw">col_character</span>(),
+              <span class="dt">union_density =</span> <span class="kw">col_double</span>(),
+              <span class="dt">left_government =</span> <span class="kw">col_double</span>(),
+              <span class="dt">labor_force_size =</span> <span class="kw">col_number</span>(),
+              <span class="dt">econ_conc =</span> <span class="kw">col_double</span>()
+            ))
+mod_data &lt;-<span class="st"> </span><span class="kw">preprocess_lm</span>(union_density <span class="op">~</span><span class="st"> </span>left_government <span class="op">+</span><span class="st"> </span><span class="kw">log</span>(labor_force_size) <span class="op">+</span><span class="st"> </span>econ_conc, <span class="dt">data =</span> unionization)
+                                   
+mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, {
+  b_loc &lt;-<span class="st"> </span><span class="dv">0</span>
+  b_scale &lt;-<span class="st"> </span><span class="dv">100</span>
+  sigma_scale &lt;-<span class="st"> </span><span class="kw">sd</span>(y)
+})</code></pre></div>
+<p>The <code>max_treedepth</code> parameter needed to be increased because in some runs it was hitting the maximum treedepth. This is likely due to the wide tails of the Student t distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_t_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_t, <span class="dt">data =</span> mod_data, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">max_treedepth =</span> <span class="dv">11</span>))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 1).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 3.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.846309 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.720782 seconds (Sampling)</span>
+<span class="co">#&gt;                1.56709 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
+<span class="co">#&gt;                                                                                          count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.5e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.798868 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.802543 seconds (Sampling)</span>
+<span class="co">#&gt;                1.60141 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
+<span class="co">#&gt;                                                                                          count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 3).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.753821 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.679116 seconds (Sampling)</span>
+<span class="co">#&gt;                1.43294 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
+<span class="co">#&gt;                                                                                     count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;rlm&#39; NOW (CHAIN 4).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.897422 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.785585 seconds (Sampling)</span>
+<span class="co">#&gt;                1.68301 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span>
+<span class="co">#&gt;                                                                                          count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_t_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;nu&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary
+<span class="co">#&gt;         mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff</span>
+<span class="co">#&gt; nu    21.699 0.24416 14.3626   3.599 11.279 18.431  28.918  57.369  3460</span>
+<span class="co">#&gt; sigma 10.441 0.04339  2.0681   7.059  9.015 10.166  11.610  15.230  2272</span>
+<span class="co">#&gt; b[1]  66.279 1.47339 53.0047 -43.640 32.578 67.960 102.590 166.056  1294</span>
+<span class="co">#&gt; b[2]   0.274 0.00149  0.0806   0.114  0.223  0.275   0.326   0.432  2914</span>
+<span class="co">#&gt; b[3]  -4.494 0.09324  3.4316 -11.013 -6.858 -4.598  -2.252   2.676  1354</span>
+<span class="co">#&gt; b[4]  10.789 0.50310 18.3043 -23.366 -2.307 10.319  22.500  48.544  1324</span>
+<span class="co">#&gt;        Rhat</span>
+<span class="co">#&gt; nu    1.000</span>
+<span class="co">#&gt; sigma 1.001</span>
+<span class="co">#&gt; b[1]  1.002</span>
+<span class="co">#&gt; b[2]  0.999</span>
+<span class="co">#&gt; b[3]  1.002</span>
+<span class="co">#&gt; b[4]  1.002</span></code></pre></div>
+<p>Compare those results when using a model with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_normal_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))<span class="op">$</span>summary
+<span class="co">#&gt;         mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff</span>
+<span class="co">#&gt; b[1]  72.930  1.5774 52.9423 -32.488 38.804 72.844 108.590 175.722  1127</span>
+<span class="co">#&gt; b[2]   0.269  0.0019  0.0813   0.105  0.217  0.268   0.321   0.431  1835</span>
+<span class="co">#&gt; b[3]  -4.859  0.1048  3.5445 -11.707 -7.235 -4.898  -2.621   2.184  1143</span>
+<span class="co">#&gt; b[4]   8.368  0.5112 17.6960 -25.508 -3.307  8.001  20.290  43.378  1198</span>
+<span class="co">#&gt; sigma 11.070  0.0621  2.1395   7.879  9.582 10.739  12.195  16.245  1188</span>
+<span class="co">#&gt;       Rhat</span>
+<span class="co">#&gt; b[1]     1</span>
+<span class="co">#&gt; b[2]     1</span>
+<span class="co">#&gt; b[3]     1</span>
+<span class="co">#&gt; b[4]     1</span>
+<span class="co">#&gt; sigma    1</span></code></pre></div>
+<p>Alternatively, the Double Exponential (Laplace) distribution can be used for the errors. This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_dbl_exp &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/lms.stan&quot;</span>)
+<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/math/tools/config.hpp:13:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config.hpp:39:</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config/compiler/clang.hpp:196:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]</span>
+<span class="co">#&gt; #  define BOOST_NO_CXX11_RVALUE_REFERENCES</span>
+<span class="co">#&gt;           ^</span>
+<span class="co">#&gt; &lt;command line&gt;:6:9: note: previous definition is here</span>
+<span class="co">#&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1</span>
+<span class="co">#&gt;         ^</span>
+<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:42:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:43:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: &#39;static&#39; function &#39;set_zero_all_adjoints_nested&#39; declared in header file should be declared &#39;static inline&#39; [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints_nested() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:59:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;       size_t fft_next_good_size(size_t N) {</span>
+<span class="co">#&gt;              ^</span>
+<span class="co">#&gt; In file included from filebc3d4e835a7a.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:298:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr.hpp:39:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint.hpp:61:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint/util/multi_array_adaption.hpp:29:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array.hpp:21:</span>
+<span class="co">#&gt; In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/base.hpp:28:</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:42:43: warning: unused typedef &#39;index_range&#39; [-Wunused-local-typedef]</span>
+<span class="co">#&gt;       typedef typename Array::index_range index_range;</span>
+<span class="co">#&gt;                                           ^</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:43:37: warning: unused typedef &#39;index&#39; [-Wunused-local-typedef]</span>
+<span class="co">#&gt;       typedef typename Array::index index;</span>
+<span class="co">#&gt;                                     ^</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:53:43: warning: unused typedef &#39;index_range&#39; [-Wunused-local-typedef]</span>
+<span class="co">#&gt;       typedef typename Array::index_range index_range;</span>
+<span class="co">#&gt;                                           ^</span>
+<span class="co">#&gt; /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:54:37: warning: unused typedef &#39;index&#39; [-Wunused-local-typedef]</span>
+<span class="co">#&gt;       typedef typename Array::index index;</span>
+<span class="co">#&gt;                                     ^</span>
+<span class="co">#&gt; 8 warnings generated.</span>
+mod_dbl_exp_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_dbl_exp, <span class="dt">data =</span> mod_data)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 1).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 2.9e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.11096 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.875358 seconds (Sampling)</span>
+<span class="co">#&gt;                1.98632 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
+<span class="co">#&gt;                                                                                                   count</span>
+<span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     5</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.01465 seconds (Warm-up)</span>
+<span class="co">#&gt;                1.02955 seconds (Sampling)</span>
+<span class="co">#&gt;                2.0442 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
+<span class="co">#&gt;                                                                                                   count</span>
+<span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     3</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 3).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.2061 seconds (Warm-up)</span>
+<span class="co">#&gt;                1.24753 seconds (Sampling)</span>
+<span class="co">#&gt;                2.45363 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
+<span class="co">#&gt;                                                                                                   count</span>
+<span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;lms&#39; NOW (CHAIN 4).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.1e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.14636 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.981335 seconds (Sampling)</span>
+<span class="co">#&gt;                2.12769 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span>
+<span class="co">#&gt;                                                                                                   count</span>
+<span class="co">#&gt; Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_dbl_exp_fit, <span class="dt">par =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))<span class="op">$</span>summary
+<span class="co">#&gt;         mean se_mean      sd    2.5%    25%   50%    75%   97.5% n_eff</span>
+<span class="co">#&gt; b[1]  38.693 1.90247 51.2313 -60.417  5.004 37.97 71.661 140.290   725</span>
+<span class="co">#&gt; b[2]   0.298 0.00225  0.0837   0.131  0.245  0.30  0.352   0.458  1387</span>
+<span class="co">#&gt; b[3]  -2.971 0.11773  3.2419  -9.408 -5.073 -3.01 -0.842   3.242   758</span>
+<span class="co">#&gt; b[4]  20.981 0.67250 18.2690 -15.589  9.157 21.53 33.057  56.774   738</span>
+<span class="co">#&gt; sigma  9.050 0.06676  2.2260   5.585  7.533  8.75 10.209  14.423  1112</span>
+<span class="co">#&gt;       Rhat</span>
+<span class="co">#&gt; b[1]     1</span>
+<span class="co">#&gt; b[2]     1</span>
+<span class="co">#&gt; b[3]     1</span>
+<span class="co">#&gt; b[4]     1</span>
+<span class="co">#&gt; sigma    1</span></code></pre></div>
+</div>
+<div id="heteroskedasticity" class="section level2">
+<h2><span class="header-section-number">7.3</span> Heteroskedasticity</h2>
+<p>In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.</p>
+<p>However, there is straighforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.</p>
+<p>In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, <span class="math inline">\(\sigma_i\)</span>, <span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dnorm(X \beta, \sigma_i) .
+\end{aligned}
+\]</span> It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper. To estimate this model we have to apply some model to the scale terms, <span class="math inline">\(\sigma_i\)</span>. In fact, you can think of homoskedasticity as the simplest such model; assuming that all <span class="math inline">\(\sigma_i = \sigma\)</span>. A more general model of <span class="math inline">\(\sigma_i\)</span> should encode any information the analyst has about the scale terms. This can be a distribution or functions of covariates for how we think observations may have different values.</p>
+<div id="covariates" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Covariates</h3>
+<p>A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into <span class="math inline">\(k = 1, \dots, K\)</span> groups, and <span class="math inline">\(k[i]\)</span> is the group of observation <span class="math inline">\(i\)</span>, <span class="math display">\[
+\sigma_i = \sigma_{k[i]}
+\]</span></p>
+<p>Another choice would be to model the scale term with a regression model, for example, <span class="math display">\[
+\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
+\]</span></p>
+</div>
+<div id="student-t" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Student-t</h3>
+<p>It turns out that the Student-t distribution of error terms from the <a href="heteroskedasticity-and-robust-regression.html#robust-regression">Robust Regression</a> chapter can also be derived as a model of heteroskedasticity.</p>
+<p>A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as a continous mixture of a common global scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters, <span class="math inline">\(\lambda_i\)</span>,[^globalmixture] <span class="math display">\[
+y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
+\]</span></p>
+<p>If the local scale paramters are distributed as, <span class="math display">\[
+\lamba^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+\]</span> then the above is equivalent to a regression with errors distributed Student-t errors with <span class="math inline">\(\nu\)</span> degrees of freedom, <span class="math display">\[
+y_i \sim \dt{\nu}(X \beta, \sigma) .
+\]</span></p>
+<p>[^globalmixture] See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a> for a visualization of a Student-t distribution a mixture of Normal distributions, and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation of the Student t distribution as a mixture of normals. This scale mixture of normals representation will also be used with shrinkage priors on the regression coefficients.</p>
+<p><strong>Example:</strong> Simulate Student-t distribution with <span class="math inline">\(\nu\)</span> degrees of freedom as a scale mixture of normals. For *s in 1:S$,</p>
+<ol style="list-style-type: decimal">
+<li>Simulate <span class="math inline">\(z_s \sim \dgamma(\nu / 2, \nu / 2)\)</span></li>
+<li><span class="math inline">\(x_s = 1 / \sqrt{z_s}2\)</span> is draw from <span class="math inline">\(\dt{\nu}(0, 1)\)</span>.</li>
+</ol>
+<p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
+</div>
+</div>
+<div id="references-2" class="section level2">
+<h2><span class="header-section-number">7.4</span> References</h2>
+<div id="robust-regression" class="section level3">
+<h3><span class="header-section-number">7.4.1</span> Robust regression</h3>
+<ul>
+<li>See <span class="citation">Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span></li>
+<li><span class="citation">Stan Development Team (2016 Sec 8.4)</span> for the Stan example using a Student-t distribution</li>
+</ul>
+</div>
+<div id="heteroskedasticity-1" class="section level3">
+<h3><span class="header-section-number">7.4.2</span> Heteroskedasticity</h3>
+<ul>
+<li><span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.</li>
+<li><span class="citation">Stan Development Team (2016)</span> reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref2">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="notes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/robust.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

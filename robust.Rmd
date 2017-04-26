@@ -1,9 +1,9 @@
 # Heteroskedasticity and Robust Regression
 
+## Prerequisites
 
 `r rpkg("VGAM")` is needed for the Laplace distribution.
 ```{r message=FALSE}
-library("rubbish")
 library("VGAM")
 ```
 
@@ -42,7 +42,7 @@ bind_rows(
 ```
 
 
-```{r include=FALSe}
+```{r include=FALSE}
 mod_t <- stan_model("stan/rlm.stan")
 ```
 ```{r}
@@ -54,7 +54,7 @@ unionization <- read_tsv("data/western1995/unionization.tsv",
               labor_force_size = col_number(),
               econ_conc = col_double()
             ))
-mod_t_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
+mod_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
                                    
 mod_data <- within(mod_data, {
   b_loc <- 0
@@ -63,11 +63,6 @@ mod_data <- within(mod_data, {
 })
 
 ```
-
-```{r}
-mod_data$X
-```
-
 
 The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum treedepth.
 This is likely due to the wide tails of the Student t distribution.
@@ -167,10 +162,10 @@ When using R, ensure that you are using the correct parameterization of the gamm
 
 ### Robust regression 
 
-- See @GelmanHill2008a [sec 6.6], @BDA2013 [ch 17]
+- See @GelmanHill2007a [sec 6.6], @BDA3 [ch 17]
 - @Stan2016a [Sec 8.4] for the Stan example using a Student-t distribution
 
 ### Heteroskedasticity
 
-- @BDA201 [Sec. 14.7] for models with unequal variances and correlations.
+- @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
 - @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
