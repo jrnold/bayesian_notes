@@ -79,6 +79,10 @@ mod_data <- within(mod_data, {
 ```{r include = FALSE}
 mod <- stan_model("stan/ex-alexseev.stan")
 ```
+```{r cache=FALSE}
+mod
+```
+
 ```{r include=FALSE}
 mod_fit <- sampling(mod, data = mod_data)
 ```

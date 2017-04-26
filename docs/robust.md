@@ -16,13 +16,11 @@ library("VGAM")
 Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
 The normal distribution has narrow tail probabilities.
 
-
 This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
 Higher surprise is a lower log-likelihood.
-Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).[^tailareas]
-This means that outliers impose less of a penalty on the log-posterio models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
+Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
+This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
 
-[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
 
 
 ```r
@@ -40,12 +38,67 @@ bind_rows(
   mutate(`-log(p)` = -log(p)) %>%
   ggplot(aes(x = z, y = `-log(p)`, colour = distr)) + 
   geom_line()
-       
+      
 ```
 
 <img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
 
 
+[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
+
+
+
+```r
+print(mod_t)
+#> S4 class stanmodel 'rlm' coded as follows:
+#> data {
+#>   // number of observations
+#>   int n;
+#>   // response vector
+#>   vector[n] y;
+#>   // number of columns in the design matrix X
+#>   int k;
+#>   // design matrix X
+#>   matrix [n, k] X;
+#>   // beta prior
+#>   real b_loc;
+#>   real<lower = 0.0> b_scale;
+#>   // sigma prior
+#>   real sigma_scale;
+#> }
+#> parameters {
+#>   // regression coefficient vector
+#>   vector[k] b;
+#>   // scale of the regression errors
+#>   real<lower = 0.0> sigma;
+#>   real<lower = 1.0> nu;
+#> }
+#> transformed parameters {
+#>   // mu is the observation fitted/predicted value
+#>   // also called yhat
+#>   vector[n] mu;
+#>   mu = X * b;
+#> }
+#> model {
+#>   // priors
+#>   b ~ normal(b_loc, b_scale);
+#>   sigma ~ cauchy(0, sigma_scale);
+#>   nu ~ gamma(2, 0.1);
+#>   // likelihood
+#>   y ~ student_t(nu, mu, sigma);
+#> }
+#> generated quantities {
+#>   // simulate data from the posterior
+#>   vector[n] y_rep;
+#>   // log-likelihood values
+#>   vector[n] log_lik;
+#>   for (i in 1:n) {
+#>     y_rep[i] = student_t_rng(nu, mu[i], sigma);
+#>     log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
+#>   }
+#> 
+#> }
+```
 
 
 ```r
@@ -66,7 +119,7 @@ mod_data <- within(mod_data, {
 })
 ```
 
-The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum treedepth.
+The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum tree depth.
 This is likely due to the wide tails of the Student t distribution.
 
 ```r
@@ -74,8 +127,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+#> Gradient evaluation took 3.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.35 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -92,9 +145,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.846309 seconds (Warm-up)
-#>                0.720782 seconds (Sampling)
-#>                1.56709 seconds (Total)
+#>  Elapsed Time: 0.811644 seconds (Warm-up)
+#>                0.646364 seconds (Sampling)
+#>                1.45801 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -104,8 +157,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -122,9 +175,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.798868 seconds (Warm-up)
-#>                0.802543 seconds (Sampling)
-#>                1.60141 seconds (Total)
+#>  Elapsed Time: 0.829618 seconds (Warm-up)
+#>                0.838252 seconds (Sampling)
+#>                1.66787 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 2
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -152,9 +205,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.753821 seconds (Warm-up)
-#>                0.679116 seconds (Sampling)
-#>                1.43294 seconds (Total)
+#>  Elapsed Time: 0.755767 seconds (Warm-up)
+#>                0.710474 seconds (Sampling)
+#>                1.46624 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 3
 #>                                                                                     count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
@@ -164,8 +217,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -182,9 +235,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.897422 seconds (Warm-up)
-#>                0.785585 seconds (Sampling)
-#>                1.68301 seconds (Total)
+#>  Elapsed Time: 0.897055 seconds (Warm-up)
+#>                0.758835 seconds (Sampling)
+#>                1.65589 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -215,6 +268,114 @@ summary(mod_t_fit, pars = c("nu", "sigma", "b"))$summary
 Compare those results when using a model with 
 
 
+```r
+mod_normal
+```
+
+
+```r
+mod_normal_fit <- sampling(mod_normal, data = mod_data)
+#> 
+#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.483015 seconds (Warm-up)
+#>                0.435345 seconds (Sampling)
+#>                0.91836 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 9e-06 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.458847 seconds (Warm-up)
+#>                0.349973 seconds (Sampling)
+#>                0.80882 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.465702 seconds (Warm-up)
+#>                0.335748 seconds (Sampling)
+#>                0.80145 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.54117 seconds (Warm-up)
+#>                0.407283 seconds (Sampling)
+#>                0.948453 seconds (Total)
+```
+
 
 ```r
 summary(mod_normal_fit, pars = c("b", "sigma"))$summary
@@ -235,193 +396,12 @@ summary(mod_normal_fit, pars = c("b", "sigma"))$summary
 Alternatively, the Double Exponential (Laplace) distribution can be used for the errors.
 This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)
 
+
 ```r
-mod_dbl_exp <- stan_model("stan/lms.stan")
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:12:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/math/tools/config.hpp:13:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config.hpp:39:
-#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/config/compiler/clang.hpp:196:11: warning: 'BOOST_NO_CXX11_RVALUE_REFERENCES' macro redefined [-Wmacro-redefined]
-#> #  define BOOST_NO_CXX11_RVALUE_REFERENCES
-#>           ^
-#> <command line>:6:9: note: previous definition is here
-#> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
-#>         ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:42:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
-#>     static void set_zero_all_adjoints() {
-#>                 ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core.hpp:43:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
-#>     static void set_zero_all_adjoints_nested() {
-#>                 ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:59:
-#> /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-#>       size_t fft_next_good_size(size_t N) {
-#>              ^
-#> In file included from filebc3d4e835a7a.cpp:8:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math.hpp:4:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/mat.hpp:298:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr.hpp:39:
-#> In file included from /Users/jrnold/Library/R/3.3/library/StanHeaders/include/stan/math/prim/arr/functor/integrate_ode_rk45.hpp:13:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint.hpp:61:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/numeric/odeint/util/multi_array_adaption.hpp:29:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array.hpp:21:
-#> In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/base.hpp:28:
-#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:42:43: warning: unused typedef 'index_range' [-Wunused-local-typedef]
-#>       typedef typename Array::index_range index_range;
-#>                                           ^
-#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:43:37: warning: unused typedef 'index' [-Wunused-local-typedef]
-#>       typedef typename Array::index index;
-#>                                     ^
-#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:53:43: warning: unused typedef 'index_range' [-Wunused-local-typedef]
-#>       typedef typename Array::index_range index_range;
-#>                                           ^
-#> /Library/Frameworks/R.framework/Versions/3.3/Resources/library/BH/include/boost/multi_array/concept_checks.hpp:54:37: warning: unused typedef 'index' [-Wunused-local-typedef]
-#>       typedef typename Array::index index;
-#>                                     ^
-#> 8 warnings generated.
-mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
-#> 
-#> SAMPLING FOR MODEL 'lms' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.11096 seconds (Warm-up)
-#>                0.875358 seconds (Sampling)
-#>                1.98632 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 1
-#>                                                                                                   count
-#> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     5
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lms' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.01465 seconds (Warm-up)
-#>                1.02955 seconds (Sampling)
-#>                2.0442 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 2
-#>                                                                                                   count
-#> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     3
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lms' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.2061 seconds (Warm-up)
-#>                1.24753 seconds (Sampling)
-#>                2.45363 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 3
-#>                                                                                                   count
-#> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lms' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.14636 seconds (Warm-up)
-#>                0.981335 seconds (Sampling)
-#>                2.12769 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 4
-#>                                                                                                   count
-#> Exception thrown at line 33: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
+mod_dbl_exp
 ```
+
+
 
 ```r
 summary(mod_dbl_exp_fit, par = c("b", "sigma"))$summary
@@ -445,7 +425,7 @@ summary(mod_dbl_exp_fit, par = c("b", "sigma"))$summary
 
 In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.
 
-However, there is straighforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. 
+However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. 
 Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.
 
 In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, $\sigma_i$,
@@ -478,24 +458,24 @@ $$
 It turns out that the Student-t distribution of error terms from the [Robust Regression] chapter can also be derived as a model of heteroskedasticity.
 
 A reparameterization that will be used quite often is to rewrite a normal distributions with unequal
-scale parameters as a continous mixture of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+scale parameters as a continuous mixture of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
 $$
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
 $$
 
-If the local scale paramters are distributed as,
+If the local scale parameters are distributed as,
 $$
-\lamba^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
 $$
 then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
 $$
 y_i \sim \dt{\nu}(X \beta, \sigma) .
 $$
 
-[^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normals. This scale mixture of normals representation will also be used with shrinkage priors on the regression coefficients.
+[^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
 
 
-**Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normals. For *s in 1:S$,
+**Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
 
 1. Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
 2. $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.

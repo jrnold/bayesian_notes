@@ -134,6 +134,10 @@ cat(readLines("stan/lm.stan"), sep = "\n")
 ```{r message=FALSE,results='hide'}
 mod1 <- stan_model("stan/lm.stan")
 ```
+```{r cache=FALSE}
+mod1
+```
+
 
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.
 

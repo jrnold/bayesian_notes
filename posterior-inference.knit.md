@@ -98,117 +98,12 @@ mod_data <- within(mod_data, {
 ```
 
 
-```r
-print(mod)
-#> S4 class stanmodel 'ex-alexseev' coded as follows:
-#> data {
-#>   // number of observations
-#>   int n;
-#>   // response vector
-#>   vector[n] y;
-#>   // number of columns in the design matrix X
-#>   int k;
-#>   // design matrix X
-#>   matrix [n, k] X;
-#>   // marfx
-#>   // indexes of main and interaction coef
-#>   int idx_b_slavicshare;
-#>   int idx_b_slavicshare_changenonslav;
-#>   int M;
-#>   vector[M] changenonslav;
-#>   // beta prior
-#>   real b_loc;
-#>   real<lower = 0.0> b_scale;
-#>   // sigma prior
-#>   real sigma_scale;
-#> }
-#> parameters {
-#>   // regression coefficient vector
-#>   vector[k] b;
-#>   // scale of the regression errors
-#>   real<lower = 0.0> sigma;
-#> }
-#> transformed parameters {
-#>   // mu is the observation fitted/predicted value
-#>   // also called yhat
-#>   vector[n] mu;
-#>   mu = X * b;
-#> }
-#> model {
-#>   // priors
-#>   b ~ normal(b_loc, b_scale);
-#>   sigma ~ cauchy(0, sigma_scale);
-#>   // likelihood
-#>   y ~ normal(mu, sigma);
-#> }
-#> generated quantities {
-#>   # hardcoded marginal effectx
-#>   vector[M] dydx;
-#>   dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;
-#> 
-#> }
-```
 
 
 
-Get the mean of dydx
 
-```r
-dydx <- get_posterior_mean(mod_fit, pars = "dydx")
-ggplot(tibble(changenonslav = mod_data$changenonslav,
-              dydx = dydx[ , "mean-all chains"]),
-       aes(x = changenonslav, y = dydx)) +
-  geom_line() +
-  ylab("Marginal effect of slavic share") +
-  xlab(paste(expression(Delta, "non-Slavic Share")))
-       
-```
 
-<img src="posterior-inference_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
 
-Plotting each iteration as a line:
 
-```r
-dydx_all <-
-  rstan::extract(mod_fit, pars = "dydx")$dydx %>% 
-  as.tibble() %>%
-  mutate(.iter = row_number()) %>%
-  # keep only a few iter
-  gather(param, value, -.iter) %>%
-  left_join(tibble(param = paste0("V", seq_along(mod_data$changenonslav)),                      changenonslav = mod_data$changenonslav),
-            by = "param")
-  
-dydx_all %>%
-  filter(.iter %in% sample(unique(.iter), 2 ^ 8)) %>%
-  ggplot(aes(x = changenonslav, y = value, group = .iter)) +
-  geom_line(alpha = 0.3) +
-  ylab("Marginal effect of slavic share") +
-  xlab(paste(expression(Delta, "non-Slavic Share")))
-```
-
-<img src="posterior-inference_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
-
-Summarize the marginal effects with mean, 50% central credible interval, and 90% central credible intervals:
-
-```r
-dydx_all %>%
-  group_by(changenonslav) %>%
-  summarise(mean = mean(value),
-            q5 = quantile(value, 0.05),
-            q25 = quantile(value, 0.25),
-            q75 = quantile(value, 0.75),            
-            q95 = quantile(value, 0.95)) %>%
-  ggplot(aes(x = changenonslav,
-             y = mean)) +
-  geom_ribbon(aes(ymin = q5, ymax = q95),
-              alpha = 0.2) +  
-  geom_ribbon(aes(ymin = q25, ymax = q75), 
-              alpha = 0.2) +
-  geom_line(colour = "blue") +
-  ylab("Marginal effect of slavic share") +
-  xlab(expression(paste(Delta, "non-Slavic Share")))
-```
-
-<img src="posterior-inference_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" />
 
 
