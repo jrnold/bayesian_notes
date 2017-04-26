@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="posterior-inference.html">
+<link rel="prev" href="model-checking.html">
+<link rel="next" href="heteroskedasticity-and-robust-regression.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -93,6 +93,99 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.1</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.1.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.2</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation"><i class="fa fa-check"></i><b>3.2.1</b> Autocorrelation</a></li>
+<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.2.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-specific-diagnostics"><i class="fa fa-check"></i><b>3.3</b> HMC Specific Diagnostics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.3.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.3.2</b> Maximum Treedepth</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
+<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.1.2</b> Functions of the Posterior Distribution</a></li>
+<li class="chapter" data-level="4.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.1.3</b> Marginal Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
+<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
+<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="" data-path="references-3.html"><a href="references-3.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 \[
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\mean}{mean}
@@ -149,71 +242,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><strong><a href="./">Bayesian Notes</a></strong></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>1</b> Introduction to Stan and Linear Regression</a><ul>
-<li class="chapter" data-level="1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>1.1</b> Prerequites</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>1.2</b> The Statistical Model</a><ul>
-<li class="chapter" data-level="1.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>1.2.1</b> Sampling</a></li>
-<li class="chapter" data-level="1.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>1.2.2</b> Convergence Diagnostics and Model Fit</a></li>
-</ul></li>
-<li class="chapter" data-level="1.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>1.3</b> Maximum A Posteriori estimation</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>2</b> Posterior Inference</a><ul>
-<li class="chapter" data-level="2.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>2.1</b> Prerequisites</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="2.1.2" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>2.1.2</b> Functions of the Posterior Distribution</a></li>
-<li class="chapter" data-level="2.1.3" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>2.1.3</b> Marginal Effects</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>3</b> Model Checking</a><ul>
-<li class="chapter" data-level="3.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>3.1</b> Why check models?</a></li>
-<li class="chapter" data-level="3.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2</b> Posterior Predictive Checks</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>3.2.1</b> Bayesian p-values</a></li>
-<li class="chapter" data-level="3.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>3.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="3.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>3.2.3</b> p-values vs. u-values</a></li>
-<li class="chapter" data-level="3.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>3.2.4</b> Marginal predictive checks</a></li>
-<li class="chapter" data-level="3.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>3.2.5</b> Outliers</a></li>
-<li class="chapter" data-level="3.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2.6</b> Grapical Posterior Predictive Checks</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>3.3</b> Sources</a></li>
-</ul></li>
-</ul>
-
-      </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
 <div id="introduction-to-stan-and-linear-regression" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction to Stan and Linear Regression</h1>
+<h1><span class="header-section-number">6</span> Introduction to Stan and Linear Regression</h1>
 <p>This chapter is an introduction to writing and running a Stan model in R. Also see the <strong>rstan</strong> <a href="https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html">vignette</a> for similar content.</p>
 <div id="prerequites" class="section level2">
-<h2><span class="header-section-number">1.1</span> Prerequites</h2>
-<p>For this section we will use the <code>duncan</code> dataset included in the <strong>car</strong> package. Duncan’s occupational prestige data is an example dataset used throughout the popular Fox regression text, <em>Applied Regression Analysis and Generalized Linear Models</em> <span class="citation">[@Fox2016a]</span>. It is originally from <span class="citation">@Duncan1961a</span> consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that</p>
+<h2><span class="header-section-number">6.1</span> Prerequites</h2>
+<p>For this section we will use the <code>duncan</code> dataset included in the <strong>car</strong> package. Duncan’s occupational prestige data is an example dataset used throughout the popular Fox regression text, <em>Applied Regression Analysis and Generalized Linear Models</em> <span class="citation">(Fox 2016)</span>. It is originally from <span class="citation">Duncan (1961)</span> consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;Duncan&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;car&quot;</span>)</code></pre></div>
 </div>
 <div id="the-statistical-model" class="section level2">
-<h2><span class="header-section-number">1.2</span> The Statistical Model</h2>
+<h2><span class="header-section-number">6.2</span> The Statistical Model</h2>
 <p>The first step in running a Stan model is defining the Bayesian statistical model that will be used for inference.</p>
 <p>Let’s run the regression of occupational prestige on the type of occupation, income, and education: <span class="math display">\[
 \begin{multline}
@@ -312,7 +350,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = a + X * b;
+  mu = X * b;
 }
 model {
   // priors
@@ -339,7 +377,7 @@ In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/lib
 <p>As long as your model compiles, you can ignore these compiler warnings (On the other hard, warnings that occur during sampling should not be ignored). If the Stan model does not give you a syntax error when parsing the model, it should compile to valid C++.[^bugs][^c-warnings] See</p>
 <p>[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the <a href="http://mc-stan.org/issues/">instructions</a> on how to inform the Stan developers about bugs. [c-warnings]: The extended installation instructions for <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux">MacOS/Linux</a> and <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">Windows</a> have instructions for adding compiler options to the R <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">Makevars</a> file.</p>
 <div id="sampling" class="section level3">
-<h3><span class="header-section-number">1.2.1</span> Sampling</h3>
+<h3><span class="header-section-number">6.2.1</span> Sampling</h3>
 <p>In order to sample from the model, we need to at least give it the values for the data to use: <code>n</code>, <code>k</code>, <code>y</code>, <code>X</code>, and the data associated with the priors.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data &lt;-<span class="st"> </span><span class="kw">list</span>(
   <span class="dt">y =</span> Duncan<span class="op">$</span>prestige,
@@ -365,7 +403,7 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod1, <span class="dt">data =</span> mod1_data)</code></pre></div>
 </div>
 <div id="convergence-diagnostics-and-model-fit" class="section level3">
-<h3><span class="header-section-number">1.2.2</span> Convergence Diagnostics and Model Fit</h3>
+<h3><span class="header-section-number">6.2.2</span> Convergence Diagnostics and Model Fit</h3>
 <ul>
 <li><p><strong>Convergence Diagnostics:</strong> Is this the posterior distribution that you were looking for? These don’t directly say anything about how “good” the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.</p>
 <ul>
@@ -388,75 +426,58 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 </div>
 </div>
 <div id="maximum-a-posteriori-estimation" class="section level2">
-<h2><span class="header-section-number">1.3</span> Maximum A Posteriori estimation</h2>
+<h2><span class="header-section-number">6.3</span> Maximum A Posteriori estimation</h2>
 <p>The <em>Statistical Rethinking</em> text focuses on maximum a posteriori (MAP) estimation. In addition to sampling from the posterior distribution using HMC, the same Stan model can be used to estimate the MAP estimate of the parameters. Use the <code>optimizing</code> function to find the MAP estimates of the model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-<span class="st"> </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data)
-<span class="co">#&gt; STAN OPTIMIZATION COMMAND (LBFGS)</span>
-<span class="co">#&gt; init = random</span>
-<span class="co">#&gt; save_iterations = 1</span>
-<span class="co">#&gt; init_alpha = 0.001</span>
-<span class="co">#&gt; tol_obj = 1e-12</span>
-<span class="co">#&gt; tol_grad = 1e-08</span>
-<span class="co">#&gt; tol_param = 1e-08</span>
-<span class="co">#&gt; tol_rel_obj = 10000</span>
-<span class="co">#&gt; tol_rel_grad = 1e+07</span>
-<span class="co">#&gt; history_size = 5</span>
-<span class="co">#&gt; seed = 1425311915</span>
-<span class="co">#&gt; initial log joint probability = -546666</span>
+<span class="co">#&gt; Initial log joint probability = -562878</span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite function evaluation.</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; Optimization terminated normally: </span>
 <span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span>
 mod1_fit_opt
 <span class="co">#&gt; $par</span>
 <span class="co">#&gt;      b[1]      b[2]      b[3]      b[4]      b[5]     sigma     mu[1] </span>
-<span class="co">#&gt;    -0.181    16.480   -14.841     0.597     0.345     9.180    83.218 </span>
+<span class="co">#&gt;    -0.198    16.644   -14.679     0.598     0.346     9.180    83.221 </span>
 <span class="co">#&gt;     mu[2]     mu[3]     mu[4]     mu[5]     mu[6]     mu[7]     mu[8] </span>
-<span class="co">#&gt;    85.740    93.057    80.416    84.413    58.030    86.830    98.806 </span>
+<span class="co">#&gt;    85.742    93.064    80.419    84.416    58.025    86.835    98.817 </span>
 <span class="co">#&gt;     mu[9]    mu[10]    mu[11]    mu[12]    mu[13]    mu[14]    mu[15] </span>
-<span class="co">#&gt;    55.230    89.193    67.125    95.726    95.381    69.980    76.579 </span>
+<span class="co">#&gt;    55.232    89.198    67.121    95.735    95.390    69.979    76.581 </span>
 <span class="co">#&gt;    mu[16]    mu[17]    mu[18]    mu[19]    mu[20]    mu[21]    mu[22] </span>
-<span class="co">#&gt;    42.308    63.684    71.665    56.767    91.397    27.346    32.829 </span>
+<span class="co">#&gt;    42.297    63.674    71.659    56.754    91.402    27.337    32.818 </span>
 <span class="co">#&gt;    mu[23]    mu[24]    mu[25]    mu[26]    mu[27]    mu[28]    mu[29] </span>
-<span class="co">#&gt;    42.535    19.750    20.307    41.367    57.883    32.377    20.560 </span>
+<span class="co">#&gt;    42.531    19.734    20.301    41.370    57.890    32.377    20.553 </span>
 <span class="co">#&gt;    mu[30]    mu[31]    mu[32]    mu[33]    mu[34]    mu[35]    mu[36] </span>
-<span class="co">#&gt;    34.740    18.794     6.418    33.891    11.756    17.545    19.272 </span>
+<span class="co">#&gt;    34.739    18.789     6.405    33.889    11.747    17.537    19.265 </span>
 <span class="co">#&gt;    mu[37]    mu[38]    mu[39]    mu[40]    mu[41]    mu[42]    mu[43] </span>
-<span class="co">#&gt;    18.356    19.046    11.066    15.780    17.347    18.608    10.907 </span>
+<span class="co">#&gt;    18.350    19.041    11.056    15.772    17.341    18.602    10.897 </span>
 <span class="co">#&gt;    mu[44]    mu[45]  y_rep[1]  y_rep[2]  y_rep[3]  y_rep[4]  y_rep[5] </span>
-<span class="co">#&gt;    36.361    15.647    94.076    89.496    95.805    82.105    74.688 </span>
+<span class="co">#&gt;    36.365    15.642    83.699    86.726    94.091    85.121    76.229 </span>
 <span class="co">#&gt;  y_rep[6]  y_rep[7]  y_rep[8]  y_rep[9] y_rep[10] y_rep[11] y_rep[12] </span>
-<span class="co">#&gt;    52.630    77.017   115.110    46.107    91.437    70.361   103.725 </span>
+<span class="co">#&gt;    67.198    94.040   107.471    55.463    87.214    81.968   100.999 </span>
 <span class="co">#&gt; y_rep[13] y_rep[14] y_rep[15] y_rep[16] y_rep[17] y_rep[18] y_rep[19] </span>
-<span class="co">#&gt;    95.808    56.171    73.826    49.434    63.228    58.018    36.331 </span>
+<span class="co">#&gt;    94.443    61.613    73.923    35.785    72.805    69.508    51.738 </span>
 <span class="co">#&gt; y_rep[20] y_rep[21] y_rep[22] y_rep[23] y_rep[24] y_rep[25] y_rep[26] </span>
-<span class="co">#&gt;    82.678    32.345    47.514    46.091    20.639    14.317    32.379 </span>
+<span class="co">#&gt;    86.781    18.800    37.047    49.372    22.102    22.935    46.992 </span>
 <span class="co">#&gt; y_rep[27] y_rep[28] y_rep[29] y_rep[30] y_rep[31] y_rep[32] y_rep[33] </span>
-<span class="co">#&gt;    47.882    28.828    41.644    31.181    14.286    -6.776    37.436 </span>
+<span class="co">#&gt;    54.856    48.034    14.845    51.714    23.681    -1.549    18.705 </span>
 <span class="co">#&gt; y_rep[34] y_rep[35] y_rep[36] y_rep[37] y_rep[38] y_rep[39] y_rep[40] </span>
-<span class="co">#&gt;     8.027     7.335    21.752    15.772     9.419     4.057    21.350 </span>
+<span class="co">#&gt;    14.650    27.235     7.695    26.999     6.659    11.935    -2.765 </span>
 <span class="co">#&gt; y_rep[41] y_rep[42] y_rep[43] y_rep[44] y_rep[45] </span>
-<span class="co">#&gt;    29.336    15.381     4.734    45.092    20.127 </span>
+<span class="co">#&gt;    16.126     6.159    23.402    38.479     9.517 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] -122</span></code></pre></div>
+<span class="co">#&gt; [1] -122</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $return_code</span>
+<span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>It can also return samples from the multivariate normal (Laplace) approximation to the posterior distribution.</p>
 <p>Adding the option <code>hessian = TRUE</code> returns the hessian, which is defined on the unconstrained parameter space (all parameters are defined over <span class="math inline">\((-\infty, \infty)\)</span>). To get a sample of values from that multivariate normal distribution set <code>draws = TRUE</code>. These draws will be from the unconstrained parameter space, unless <code>constrained = TRUE</code>, in which case they will be on the scales of the original parameters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-
 <span class="st">  </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">constrained =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; STAN OPTIMIZATION COMMAND (LBFGS)</span>
-<span class="co">#&gt; init = random</span>
-<span class="co">#&gt; save_iterations = 1</span>
-<span class="co">#&gt; init_alpha = 0.001</span>
-<span class="co">#&gt; tol_obj = 1e-12</span>
-<span class="co">#&gt; tol_grad = 1e-08</span>
-<span class="co">#&gt; tol_param = 1e-08</span>
-<span class="co">#&gt; tol_rel_obj = 10000</span>
-<span class="co">#&gt; tol_rel_grad = 1e+07</span>
-<span class="co">#&gt; history_size = 5</span>
-<span class="co">#&gt; seed = 764155989</span>
-<span class="co">#&gt; initial log joint probability = -41463.6</span>
+<span class="co">#&gt; Initial log joint probability = -40591.1</span>
 <span class="co">#&gt; Optimization terminated normally: </span>
 <span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span></code></pre></div>
 
@@ -467,8 +488,8 @@ mod1_fit_opt
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="posterior-inference.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="model-checking.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="heteroskedasticity-and-robust-regression.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="posterior-inference.html">
-<link rel="next" href="introduction-to-stan-and-linear-regression.html">
+<link rel="prev" href="heteroskedasticity-and-robust-regression.html">
+
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -242,151 +242,89 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="model-checking" class="section level1">
-<h1><span class="header-section-number">5</span> Model Checking</h1>
-<div id="why-check-models" class="section level2">
-<h2><span class="header-section-number">5.1</span> Why check models?</h2>
-<ul>
-<li>In theory—Bayesian model should include all relevant substantive knowledge and subsume all possible theories.</li>
-<li>In practice—It won’t. Need to check how the model fits data.</li>
-</ul>
-<p>The question is not whether a model is “true”; it isn’t <span class="citation">(Box 1976)</span>. But is it good enough for the purposes of the analysis.</p>
-<p>See <span class="citation">Gelman, Meng, and Stern (1996)</span>, <span class="citation">Gelman (2007)</span>, <span class="citation">Gelman (2009)</span>, <span class="citation">Gelman et al. (2013 Ch. 6)</span>, <span class="citation">Gelman and Shalizi (2012b)</span>, <span class="citation">Kruschke (2013)</span>, <span class="citation">Gelman and Shalizi (2012a)</span>, <span class="citation">Gelman (2014)</span> for more discussion of the motivation and use of posterior predictive checks.</p>
-</div>
-<div id="posterior-predictive-checks" class="section level2">
-<h2><span class="header-section-number">5.2</span> Posterior Predictive Checks</h2>
-<p>One way to evaluate the fit of a model is <strong>posterior predictive checks</strong></p>
-<ul>
-<li>Fit the model to the data to get the posterior distribution of the parameters: <span class="math inline">\(p(\theta | D)\)</span></li>
-<li>Simulate data from the fitted model: <span class="math inline">\(p(\tilde{D} | \theta, D)\)</span></li>
-<li>Compare the simulated data (or a statistic thereof) to the observed data and a statistic thereof. The comparison between data simulated from the model can be formal or visual.</li>
-</ul>
-<p>Within a Stan function, this is done in the <code>generated quantities</code> block using a <code>_rng</code> distribution functions:</p>
-<pre class="stan"><code>generated quantities {
-  vector[n] yrep;
-  for (i in 1:n) {
-    yrep[i] ~ 
-  }
-}</code></pre>
-<p>The package <strong><a href="https://cran.r-project.org/package=bayesplot">bayesplot</a></strong> includes multiple functions for posterior predictive checks; see the help for <a href="https://www.rdocumentation.org/packages/bayesplot//topics/PPC-overview">PPC-overview</a> for a summary of these functions.</p>
-<div id="bayesian-p-values" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Bayesian p-values</h3>
-<p>A <strong>posterior predictive p-value</strong> is a the tail posterior probability for a statistic generated from the model compared to the statistic observed in the data. Let <span class="math inline">\(y = (y_1, \dots, y_n)\)</span> be the observed data. Suppose the model has been fit and there is a set of simulation <span class="math inline">\(\theta^(s)\)</span>, <span class="math inline">\(s = 1, \dots, n_sims\)</span>. In replicated dataset, <span class="math inline">\(y^{rep(s)\)</span>, has been generated from the predictive distribution of the data, <span class="math inline">\(p(y^{(rep)} | \theta = \theta^{(s)}\)</span>. Then the ensemble of simulated datasets, <span class="math inline">\((y^{rep(s)}, \dots, y^{rep(nsims)})\)</span>, is a sample from the posterior predictive distribution, <span class="math inline">\(p(y^{(rep)} | y)\)</span></p>
-<p>The model can be tested by means of discrepancy statistics, which are some function of the data and parameters, <span class="math inline">\(T(y, \theta)\)</span>. If <span class="math inline">\(\theta\)</span> was known, then compare discrepancy by <span class="math inline">\(T(y^{(rep)}, \theta)\)</span>. The statistical significance is <span class="math inline">\(p = \Pr(T(y^{(rep)}, \theta) &gt; T(y, \theta) | y, \theta)\)</span>. If <span class="math inline">\(\theta\)</span> is unknown, then average over the posterior distribution of <span class="math inline">\(\theta\)</span>, <span class="math display">\[
-\begin{aligned}[t]
-p &amp;= \Pr(T(y^{(rep)}, \theta) &gt; T(y, \theta) | y) \\
-&amp;= \int Pr(T(y^{(rep)}, \theta) &gt; T(y, \theta) | y, \theta) p(\theta | y) d\,\theta ,
-\end{aligned}
-\]</span> which is easily estimated from the MCMC samples as, <span class="math display">\[
-p = \frac{1}{n_{sims}}\sum_{s = 1}^{n_{sims}} 1( T(y^{rep(s)}, \theta(s)) &gt; T(y, \theta(s)))
-\]</span></p>
-</div>
-<div id="test-quantities" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> Test quantities</h3>
-<p>The definition of a posterior p-value does not specify a particular test-statistic, <span class="math inline">\(T\)</span>, to use.</p>
-<p>The best advice is that <span class="math inline">\(T\)</span> depends on the application.</p>
-<ul>
-<li><span class="citation">Gelman et al. (2013, 146)</span> Speed of light example uses the 90% interval (61st and 6th order statistics).</li>
-<li><span class="citation">Gelman et al. (2013, 147)</span> binomial trial example uses the number of swicthes (0 to 1, or 1 to 0) in order to test independence.</li>
-<li><p><span class="citation">Gelman et al. (2013, 148)</span> hierarchical model for adolesce smoking uses</p>
-<ul>
-<li>percent of adolescents in the sample who never smoked</li>
-<li>percentage in the sample who smoked in all waves</li>
-<li>precentage of “incident smoker”: adolescents who began the study and non-smokers and ended as smokers.</li>
-</ul></li>
-</ul>
-</div>
-<div id="p-values-vs.u-values" class="section level3">
-<h3><span class="header-section-number">5.2.3</span> p-values vs. u-values</h3>
-<p>A posterior predictive p-value is different than a classical p-value.</p>
-<ul>
-<li><p>Posterior predictive p-value</p>
-<ul>
-<li>distributed uniform if the <strong>model is true</strong></li>
-</ul></li>
-<li><p>Classical p-value</p>
-<ul>
-<li>distributed uniform if the <strong>null hypothesis</strong> (<span class="math inline">\(H_0\)</span>) is true</li>
-</ul></li>
-</ul>
-<p>A <em>u-value</em> is any function of the data that has a <span class="math inline">\(U(0, 1)\)</span> sampling distribution <span class="citation">(Gelman et al. 2013, 151)</span></p>
-<ul>
-<li>a u-value can be averaged over <span class="math inline">\(\theta\)</span>, but it is not Bayesian, and is not a probability distribution</li>
-<li>posterior p-value: probability statement, conditional on model and data, about future observations</li>
-</ul>
-</div>
-<div id="marginal-predictive-checks" class="section level3">
-<h3><span class="header-section-number">5.2.4</span> Marginal predictive checks</h3>
-<p>Compare statistics for each observation.</p>
-<p><em>Conditional Predictive Ordinate (CPO)</em>: The CPO (Gelfand 1996) is the leave-on-out cross-validation predictive density: <span class="math display">\[
-p(y_i | y_{-i}) = \int p(y_i | \theta) p(\theta | y_{-i}) d\,\theta
-\]</span> The pointwise predicted LOO probabilities can be calculated using PSIS-LOO or WAIC in the <strong>loo</strong> package.</p>
-<!-- The sum of the logged CPOs can be an estimator of the log marginal likelihood and is called the log pseudo marginal likelihood. The ratio of PsMLs can be used as a surrogate for a Bayes Factor (pseudo Bayes Factor) (LaplaceDemon p. 20) -->
-<p><strong>Predictive Concordance and Predictive QuantilesP</strong> Gelfand (1996) classifies any <span class="math inline">\(y_i\)</span> that is outside the central 95% predictive posterior of <span class="math inline">\(y^{rep}_i\)</span> is an outlier. Let the <em>predictive quantile</em> (<span class="math inline">\(PQ_i\)</span>) be <span class="math display">\[
-PQ_i = p(y_i^{(rep)} &gt; y_i) .
-\]</span> Then the <em>predictive concordance</em> be the proportion of <span class="math inline">\(y_i\)</span> that are not outliers. Gelfand (1996) argues that the predictive concordance should match 95% - in other words that the posterior predictive distribution should have the correct coverage. (Laplace Demon p. 20)</p>
-</div>
-<div id="outliers" class="section level3">
-<h3><span class="header-section-number">5.2.5</span> Outliers</h3>
-<p>Can be identified by the inverse-CPO.</p>
-<ul>
-<li>larger than 40 are possible outliers, and those higher than 70 are extreme values (Ntzoufras 2009, p. 376).</li>
-<li>Congdon (2005) scales CPO by dividing each by its individual max and considers observations with scaled CPO under 0.01 as outliers.</li>
-</ul>
-</div>
-<div id="grapical-posterior-predictive-checks" class="section level3">
-<h3><span class="header-section-number">5.2.6</span> Grapical Posterior Predictive Checks</h3>
-<blockquote>
-<p>Visualization can surprise you, but it doesn’t scale well. Modeling scales well, but it can’t surprise you. – <a href="https://www.johndcook.com/blog/2013/02/07/visualization-modeling-and-surprises/">paraphrase of Hadley Hickham</a></p>
-</blockquote>
-<p>Instead of calculating posterior probabilities, plot simulated data and observed data and visually compare them. See <span class="citation">Gelman et al. (2013, 154)</span>.</p>
-<ul>
-<li>plot simulated data and real data <span class="citation">(Gelman et al. 2013, 154)</span>. This is similar to ideas in <span class="citation">Wickham et al. (2010)</span>.</li>
-<li>plot summary statistics or inferences</li>
-<li><p>residual plots</p>
-<ul>
-<li>Bayesian residuals have a distribution <span class="math inline">\(r_i^{(s)} = y_i - \E(y_i | \theta^{s})\)</span></li>
-<li>Bayesian resdiual graph plots single realization of the residuals, or a summary of their posterior distributions</li>
-<li>binned plots are best for discrete data <span class="citation">(Gelman et al. 2013, 157)</span></li>
-<li></li>
-</ul></li>
-</ul>
-<!--
-## Average Predictive Comparisons
+<div id="references-3" class="section level1 unnumbered">
+<h1>References</h1>
 
-From @GelmanHill [Ch 21.4]
-Let $u$ be the input of interest, and $v$ be all other inputs, so that $x = (u, v)$.
-$$
-b_u(u^{(lo)}, u^{(hi)}, v, \theta) = \frac{E(y | u^{(hi)}, v, \theta) - E(y | u^{(lo)}, v, \theta)}{u^{(hi)} - u^{(lo)}}
-$$
-the the average predictive difference per unit change in $u$ is,
-$$
-B_{u}(u^{(lo)}, u^{(hi)}) = \frac{1}{n} \sum_{i = 1}^n b_u(u^{(lo)}, u^{(hi)}, v_i, \theta) .
-$$
-This can be adjusted to use observed (weighted) differences of $u$ for each point.
-See the Gelman paper on it.
--->
+<div id="refs" class="references">
+<div>
+<p>Berry, William D., Matt Golder, and Daniel Milton. 2012. “Improving Tests of Theories Positing Interaction.” <em>The Journal of Politics</em> 74 (3). University of Chicago Press: 653–71. doi:<a href="https://doi.org/10.1017/s0022381612000199">10.1017/s0022381612000199</a>.</p>
 </div>
+<div>
+<p>Box, George E. P. 1976. “Science and Statistics.” <em>Journal of the American Statistical Association</em> 71 (356): 791–99. doi:<a href="https://doi.org/10.1080/01621459.1976.10480949">10.1080/01621459.1976.10480949</a>.</p>
 </div>
-<div id="sources" class="section level2">
-<h2><span class="header-section-number">5.3</span> Sources</h2>
-<ul>
-<li>See <span class="citation">Gelman and Shalizi (2012b)</span>, <span class="citation">Gelman and Shalizi (2012a)</span>, <span class="citation">Kruschke (2013)</span></li>
-</ul>
-
+<div>
+<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” <em>Political Analysis</em> 14 (01). Cambridge University Press (CUP): 63–82. doi:<a href="https://doi.org/10.1093/pan/mpi014">10.1093/pan/mpi014</a>.</p>
+</div>
+<div>
+<p>Carpenter, Bob. 2016. “The Impact of Reparameterization on Point Estimates.” <em>Stan Case Studies</em>, April. <a href="http://mc-stan.org/documentation/case-studies/mle-params.html" class="uri">http://mc-stan.org/documentation/case-studies/mle-params.html</a>.</p>
+</div>
+<div>
+<p>Duncan, O. D. 1961. “A Socioeconomic Index for All Occupations.” In <em>Occupations and Social Status</em>, edited by Jr. Reiss A. J. Frre Press.</p>
+</div>
+<div>
+<p>Flegal, James M., Murali Haran, and Galin L. Jones. 2008. “Markov Chain Monte Carlo: Can We Trust the Third Significant Figure?” <em>Statistical Science</em> 23 (2). Institute of Mathematical Statistics: 250–60. doi:<a href="https://doi.org/10.1214/08-sts257">10.1214/08-sts257</a>.</p>
+</div>
+<div>
+<p>Fox, John. 2016. <em>Applied Regression Analysis &amp; Generalized Linear Models</em>. 3rd ed. Sage.</p>
+</div>
+<div>
+<p>Gelman, Andrew. 2007. “A Bayesian Formulation of Exploratory Data Analysis and Goodness-of-Fit Testing.” <em>International Statistical Review</em> 71 (2). Wiley-Blackwell: 369–82. doi:<a href="https://doi.org/10.1111/j.1751-5823.2003.tb00203.x">10.1111/j.1751-5823.2003.tb00203.x</a>.</p>
+</div>
+<div>
+<p>———. 2009. “Confusions About Posterior Predictive Checks.” February 7. <a href="http://andrewgelman.com/2009/02/07/confusions_abou/" class="uri">http://andrewgelman.com/2009/02/07/confusions_abou/</a>.</p>
+</div>
+<div>
+<p>———. 2014. “Discussion with Sander Greenland on Posterior Predictive Checks.” <em>Statistical Modeling, Causal Inference, and Social Science</em>, August. <a href="http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/" class="uri">http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel / Hierarchical Models</em>. Cambridge University Pr. <a href="http://www.ebook.de/de/product/6504222/andrew_gelman_jennifer_hill_data_analysis_using_regression_and_multilevel_hierarchical_models.html" class="uri">http://www.ebook.de/de/product/6504222/andrew_gelman_jennifer_hill_data_analysis_using_regression_and_multilevel_hierarchical_models.html</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Cosma Shalizi. 2012a. “Rejoinder to Discussion of ‘Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 76–80. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02066.x">10.1111/j.2044-8317.2012.02066.x</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Cosma Rohilla Shalizi. 2012b. “Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 8–38. doi:<a href="https://doi.org/10.1111/j.2044-8317.2011.02037.x">10.1111/j.2044-8317.2011.02037.x</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, and Aki Vehtari. 2013. <em>Bayesian Data Analysis</em>. Taylor &amp; Francis Ltd. <a href="http://www.ebook.de/de/product/15022612/andrew_gelman_john_b_carlin_hal_s_stern_david_b_dunson_aki_vehtari_bayesian_data_analysis.html" class="uri">http://www.ebook.de/de/product/15022612/andrew_gelman_john_b_carlin_hal_s_stern_david_b_dunson_aki_vehtari_bayesian_data_analysis.html</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive Assessment of Model Fitness via Realized Discrepancies.” <em>Statistica Sinica</em> 6 (4). Institute of Statistical Science, Academia Sinica: 733–60. <a href="http://www.jstor.org/stable/24306036" class="uri">http://www.jstor.org/stable/24306036</a>.</p>
+</div>
+<div>
+<p>Geyer, C. J. 2011. “Introduction to Markov Chain Monte Carlo.” In <em>Handbook of Markov Chain Monte Carlo</em>, edited by S. Brooks, Gelman, G. L. A. Jones, and X.-L Meng. Chapman; Hall/CRC.</p>
+</div>
+<div>
+<p>Golder, Matthew. 2017. “Interactions.” Accessed March 21. <a href="http://mattgolder.com/interactions" class="uri">http://mattgolder.com/interactions</a>.</p>
+</div>
+<div>
+<p>Kruschke, John K. 2013. “Posterior Predictive Checks Can and Should Be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1): 45–56. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02063.x">10.1111/j.2044-8317.2012.02063.x</a>.</p>
+</div>
+<div>
+<p>Rainey, Carlisle. 2016. “Transformation-Induced Bias: Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest.” <a href="http://www.carlislerainey.com/papers/bias.pdf" class="uri">http://www.carlislerainey.com/papers/bias.pdf</a>.</p>
+</div>
+<div>
+<p>Stan Development Team. 2016. <em>Stan Modeling Language Users Guide and Reference Manual, Version 2.14.0</em>. <a href="https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf" class="uri">https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” <em>IEEE Transactions on Visualization and Computer Graphics</em> 16 (6). Institute of Electrical; Electronics Engineers (IEEE): 973–79. doi:<a href="https://doi.org/10.1109/tvcg.2010.161">10.1109/tvcg.2010.161</a>.</p>
+</div>
 </div>
 </div>
 
 
 
-</div>
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="posterior-inference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="heteroskedasticity-and-robust-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -405,7 +343,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/posterior-predictive.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/references.Rmd",
 "text": "Edit"
 },
 "download": null,

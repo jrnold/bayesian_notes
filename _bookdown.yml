@@ -1,12 +1,20 @@
 new_session: yes
 output_dir: docs
 rmd_subdir: false
-rmd_files: [
-  "index.Rmd",
-  "intro-regression.Rmd",
-  "posterior-inference.Rmd",
-  "posterior-predictive.Rmd"
-]
+rmd_files:
+  - "index.Rmd"
+  - "theory.Rmd"
+  - "bayesian-inference.Rmd"
+  - "computation.Rmd"
+  - "montecarlo.Rmd"
+  - "diagnostics.Rmd"
+  - "posterior-inference.Rmd"
+  - "posterior-predictive.Rmd"
+  - "models.Rmd"
+  - "intro-regression.Rmd"
+  - "robust.Rmd"
+  - "appendix.Rmd"
+  - "references.Rmd"
 edit:
   link: https://github.com/jrnold/bayesian_notes/edit/gh-pages/%s
 
