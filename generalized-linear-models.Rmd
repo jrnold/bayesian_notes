@@ -73,6 +73,40 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
 
 [^binomialcdf]: Since a CDF maps reals to $(0, 1)$, any CDF can be used as a link function.
 
+## Bernoulli Model
+
+$$
+\Pr(y_i = 1) = \pi_i^{y_i}(1 - \pi_i)^{(1 - y_i)}
+$$
+which is
+$$
+\begin{aligned}[t]
+y_i &\sim \dbinom(1, \pi_i) \\
+\end{aligned}
+$$
+$$
+
+
+### Perfect Separation
+
+
+- @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
+- @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
+- @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
+- @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
+- @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
+
+### Rare Events
+
+
+
+
+### Selection
+
+
+
+
+
 ## Poisson
 
 TODO
