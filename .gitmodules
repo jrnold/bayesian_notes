@@ -1,0 +1,3 @@
+[submodule "_submodules/bayesian_notes"]
+	path = _submodules/bayesian_notes
+	url = https://github.com/jrnold/bayesian_notes.git
