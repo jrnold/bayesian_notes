@@ -89,7 +89,6 @@ $$
 
 ### Perfect Separation
 
-
 - @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
 - @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
 - @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
