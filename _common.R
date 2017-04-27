@@ -86,3 +86,47 @@ knit_print.stanmodel <- function(x, options) {
   code_str <- x@model_code
   knitr::asis_output(htmltools::tags$pre(htmltools::tags$code(htmltools::HTML(code_str), class = "stan")))
 }
+
+
+augment.loo <- function(x, data = NULL, ...) {
+  out <- as_tibble(x$pointwise)
+  names(out) <- paste0(".", names(out))
+  out$.pareto_k <- x$pareto_k
+  if (!is.null(data)) {
+    bind_cols(data, out)
+  } else {
+    out
+  }
+}
+
+glance.loo <- function(x, ...) {
+  out <- tibble::as_tibble(unclass(x[setdiff(names(x), c("pointwise", "pareto_k"))]))
+  out$n <- attr(x, "log_lik_dim")[2]
+  out$n_sims <- attr(x, "log_lik_dim")[1]
+  out
+}
+
+tidy.loo <- function(x, ...) {
+  elpd <- grep("^elpd_(loo|waic)$", names(x), value = TRUE)
+  p <- grep("^p_(loo|waic)$", names(x), value = TRUE)
+  ic <- grep("^(waic|looic)$", names(x), value = TRUE)
+  tibble::tibble(
+    param = c(elpd, p, ic),
+    estimate = c(x[[elpd]], x[[p]], x[[ic]]),
+    std.err = c(x[[paste0("se_", elpd)]],
+                x[[paste0("se_", p)]],
+                x[[paste0("se_", ic)]]))
+}
+
+stan_iter <- function(object, permuted = FALSE, inc_warmup = FALSE) {
+  if (rstan:::is.stanreg(object)) {
+    object <- object$stanfit
+  }
+  pars <- rstan::extract(object, permuted = permuted,
+                         inc_warmup = inc_warmup)
+  nchains <- ncol(pars)
+  skeleton <- rstan:::create_skeleton(object@model_pars, object@par_dims)
+  map(array_branch(pars, 1:2), function(theta) {
+    rstan:::rstan_relist(theta, skeleton)
+  })
+}

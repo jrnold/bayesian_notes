@@ -1,0 +1,6 @@
+```{r}
+print(getwd())
+load("data/Hanmer Kalkan AJPS NES example.RData")
+
+```
+

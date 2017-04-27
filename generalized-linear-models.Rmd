@@ -81,10 +81,30 @@ $$
 which is
 $$
 \begin{aligned}[t]
-y_i &\sim \dbinom(1, \pi_i) \\
+y_i &\sim \dbin\left(1, \pi_i \right) \\
 \end{aligned}
 $$
+
 $$
+\pi_i = \logit^{-1}(\mat{X} \vec{\beta})
+$$
+
+```{r}
+data("turnout", package = "Zelig")
+mod_formula <- vote ~ poly(age, 2) + income + educate + race
+```
+
+
+```{r include=FALSE}
+mod1 <- stan_model("stan/logit.stan")
+```
+```{r}
+mod1_data <- lm_preprocess(mod_formula, data = turnout)
+```
+```{r include=FALSE}
+mod1_fit <- sampling(mod1, data = mod1_data)
+```
+
 
 
 ### Perfect Separation

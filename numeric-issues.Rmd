@@ -1,0 +1,14 @@
+# Numerical Stability
+
+Stan includes several functions for numeric stability. These are to avoid arithmetic [underflow]( https://en.wikipedia.org/wiki/Arithmetic_underflow) and overflow.
+
+- separate functions for the CDF and complement of the CDF (CCDF). This is to avoid cases where the $CDF \approx 1$, and $1 - CDF$ could round up to 1.
+- `log_sum_exp`: `log_sum_exp(a, b) = log(exp(a) + exp(b))`
+- `log1p`: safely calculates $log(1 + x)$
+- `exp1m`: safely calculates $exp(x) - 1$
+- Most of the other function in @Stan2016a [Sec 39.14] "Composed Functions".
+- Several distributions include a special form to avoid having to calculate the logit or log link function. These are for numerical stability as well as convenience.
+
+  - `binomial_logit`
+  - `poisson_log`
+  - `categorical_logit`

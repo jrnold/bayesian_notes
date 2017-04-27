@@ -1,0 +1,5 @@
+```{r}
+x <- (load("data/Hanmer Kalkan AJPS NES example.RData"))
+
+```
+

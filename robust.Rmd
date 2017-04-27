@@ -38,6 +38,25 @@ bind_rows(
       
 ```
 
+```{r}
+z <- seq(-6, 6, length.out = 100)
+bind_rows(
+  tibble(z = z,
+         p = dnorm(z, 0, 1),
+         distr = "Normal"),
+  tibble(z = z,
+         p = dt(z, 4),
+         distr = "Student-t (df = 4)"),
+  tibble(z = z,
+         p = VGAM::dlaplace(z, 0, 1),
+         distr = "Double Exponential")) %>%
+  mutate(`-log(p)` = -log(p)) %>%
+  ggplot(aes(x = z, y = p, colour = distr)) + 
+  geom_line()
+      
+```
+
+
 
 [^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
 
@@ -47,6 +66,7 @@ mod_t <- stan_model("stan/rlm.stan")
 ```{r cache=FALSE}
 mod_t
 ```
+
 
 ```{r}
 unionization <- read_tsv("data/western1995/unionization.tsv",
@@ -61,7 +81,7 @@ mod_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size
                                    
 mod_data <- within(mod_data, {
   b_loc <- 0
-  b_scale <- 100
+  b_scale <- 1000
   sigma_scale <- sd(y)
 })
 
@@ -74,7 +94,7 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 ```
 
 ```{r output=FALSE}
-summary(mod_t_fit, pars = c("nu", "sigma", "b"))$summary
+summary(mod_t_fit, pars = c("b"))$summary
 ```
 
 Compare those results when using a model with 
@@ -90,11 +110,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 ```
 
 ```{r}
-summary(mod_normal_fit, pars = c("b", "sigma"))$summary
+summary(mod_normal_fit, pars = c("b"))$summary
 ```
 
-Alternatively, the Double Exponential (Laplace) distribution can be used for the errors.
-This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)
+
+### Double Exponential (Laplace) Errors
+
+An alternative form of "robust" regression is to use the Double Exponential (Laplace) distributions for the errors.
+
+This is the equivalent to least median regression, where the regression line is the median (50% quantile)
 ```{r include=FALSE}
 mod_dbl_exp <- stan_model("stan/lms.stan")
 ```
@@ -106,8 +130,18 @@ mod_dbl_exp
 mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
 ```
 ```{r}
-summary(mod_dbl_exp_fit, par = c("b", "sigma"))$summary
+summary(mod_dbl_exp_fit, par = c("b"))$summary
 ```
+
+
+Model comparison
+```{r}
+library("loo")
+loo_t <- loo(extract_log_lik(mod_normal_fit, "loglik"))
+loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
+loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
+```
+
 
 
 
@@ -143,17 +177,15 @@ $$
 $$
 
 
-### Student-t
+### Student-t Error
 
-It turns out that the Student-t distribution of error terms from the [Robust Regression] chapter can also be derived as a model of heteroskedasticity.
+The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.
 
-A reparameterization that will be used quite often is to rewrite a normal distributions with unequal
-scale parameters as a continuous mixture of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
 $$
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
 $$
-
-If the local scale parameters are distributed as,
+If the local variance parameters are distributed inverse-gamma,
 $$
 \lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
 $$
@@ -161,6 +193,11 @@ then the above is equivalent to a regression with errors distributed Student-t e
 $$
 y_i \sim \dt{\nu}(X \beta, \sigma) .
 $$
+
+```{r}
+
+```
+
 
 [^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
 
