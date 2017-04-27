@@ -1,4 +1,16 @@
-stanfit_summary_tbl <- function(object, summary = TRUE, chains = TRUE) {
+stanfit_summary <- function(x) {
+  structure(x, class = "stanfit_summary")
+}
+
+# print.stanfit_summary <- function(x, ..., n = NULL, width = NULL, n_extra = NULL,
+#                                   stats = c("n_eff", "Rhat", "mean", "se_mean", "sd")) {
+#   x <- as.data.frame(x$summary)
+#   x$parameter <- rownames(x)
+#   print(tibble::trunc_mat(x[ , c("parameter", stats)], n = n, width = width, n_extra = n_extra))
+#   invisible(x)
+# }
+
+as.data.frame.stanfit_summary <- function(object, summary = TRUE, chains = TRUE, ...) {
   assert_that(is.flag(summary))
   assert_that(is.flag(chains))
   assert_that(summary || chains)

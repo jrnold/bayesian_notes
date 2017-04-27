@@ -1,6 +1,8 @@
 suppressPackageStartupMessages({
   library("knitr")
   library("rstan")
+  library("bayesplot")
+  library("loo")
   library("tidyverse")
   library("rubbish")
 })

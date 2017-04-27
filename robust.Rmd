@@ -61,7 +61,7 @@ bind_rows(
 [^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
 
 ```{r include=FALSE}
-mod_t <- stan_model("stan/rlm.stan")
+mod_t <- stan_model("stan/lm_student_t.stan")
 ```
 ```{r cache=FALSE}
 mod_t
@@ -136,12 +136,10 @@ summary(mod_dbl_exp_fit, par = c("b"))$summary
 
 Model comparison
 ```{r}
-library("loo")
 loo_t <- loo(extract_log_lik(mod_normal_fit, "loglik"))
 loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
 loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
 ```
-
 
 
 

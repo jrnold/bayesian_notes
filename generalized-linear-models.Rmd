@@ -52,7 +52,6 @@ The parameter $\pi \in [0, 1]$ is modeled with a link funcction and a linear pre
 
 There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
 
-
 **Logit:** The logistic function,
     $$
     \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
@@ -104,6 +103,32 @@ mod1_data <- lm_preprocess(mod_formula, data = turnout)
 ```{r include=FALSE}
 mod1_fit <- sampling(mod1, data = mod1_data)
 ```
+
+
+
+## Poisson 
+
+```
+data {
+  int N;
+  int y[N];
+  int K;
+  matrix X[K, N]
+  // ...
+}
+parameters {
+  vector[K] b;
+  // ...
+}
+transformed parameters {
+  vector<lower = 0.0> lambda;
+  lambda = exp(X * b);
+}
+model {
+  y ~ poisson(lambda);
+}
+```
+
 
 
 

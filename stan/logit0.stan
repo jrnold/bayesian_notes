@@ -2,8 +2,7 @@
 //
 // y ~ Bernoulli(p)
 // p = a + X B
-// b0 \sim cauchy(0, 10)
-// b \sim cauchy(0, 2.5)
+// no priors
 data {
   // number of observations
   int N;
@@ -26,9 +25,6 @@ transformed parameters {
   p = inv_logit(b0 + X * b);
 }
 model {
-  // priors
-  b0 ~ cauchy(0.0, 10.0);
-  b ~ cauchy(0.0, 2.5);
   // likelihood
   y ~ binomial(1, p);
 }
@@ -36,9 +32,9 @@ generated quantities {
   // simulate data from the posterior
   vector[N] y_rep;
   // log-likelihood posterior
-  vector[N] log_lik;
+  vector[N] loglik;
   for (i in 1:N) {
     y_rep[i] = binomial_rng(1, p[i]);
-    log_lik[i] = binomial_lpmf(y[i] | 1, p[i]);
+    loglik[i] = binomial_lpmf(y[i] | 1, p[i]);
   }
 }

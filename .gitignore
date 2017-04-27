@@ -4,3 +4,5 @@ _main.rds
 /_bookdown_files/
 *.Rhistory
 *.RData
+*.utf8.md
+/*.md
