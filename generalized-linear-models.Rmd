@@ -103,6 +103,10 @@ mod1_data <- lm_preprocess(mod_formula, data = turnout)
 ```{r include=FALSE}
 mod1_fit <- sampling(mod1, data = mod1_data)
 ```
+```{r include=FALSE}
+mod1_fit <- sampling(mod1, data = mod1_data)
+```
+
 
 
 
