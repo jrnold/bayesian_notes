@@ -39,6 +39,6 @@ generated quantities {
   vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
-    loglik[i] = normal_lpdf(y[i] | mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }

@@ -1,5 +1,22 @@
-```{r}
-x <- (load("data/Hanmer Kalkan AJPS NES example.RData"))
+# Hanmer Example
 
+```{r}
+library("haven")
+```
+```{r}
+HanmerKalkan <- read_dta("data/Hanmer Kalkan AJPS NES example.dta") %>%
+  mutate_if(is.labelled, haven::as_factor) %>%
+  filter(exptrnout2 == "Standard") %>%
+  mutate(bush_vote = presvote == "Bush",
+         ideol7b = as.integer(ideol7b))
+```
+
+```{r}
+mod_formula <- bush_vote ~ retecon + white + female + age + educ1_7 + income + partyid + bushiraq
+glm(mod_formula, data = HanmerKalkan)
+```
+
+```{r}
+lm_preprocess(mod_formula, data = HanmerKalkan)
 ```
 

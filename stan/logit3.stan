@@ -32,12 +32,12 @@ generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
   // log-likelihood posterior
-  vector[n] loglik;
+  vector[n] log_lik;
   // predicted probabilities
   vector[n] p;
   p = inv_logit(X * b);
   for (i in 1:n) {
     y_rep[i] = binomial_rng(1, p[i]);
-    loglik[i] = binomial_lpmf(y[i] | 1, p[i]);
+    log_lik[i] = binomial_lpmf(y[i] | 1, p[i]);
   }
 }

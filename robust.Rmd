@@ -219,3 +219,8 @@ When using R, ensure that you are using the correct parameterization of the gamm
 
 - @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
 - @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
+
+### Qunatile regression
+
+- @BenoitPoel2017a
+- @YuZhang2005a for the three-parameter asymmetric Laplace distribution
