@@ -24,9 +24,9 @@ model {
 generated quantities {
   # for each obs draw a y
   vector[n] y_rep;
-  vector[n] loglik;
+  vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
-    loglik[i] = normal_lpdf(y[i] | mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }

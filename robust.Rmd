@@ -120,7 +120,7 @@ An alternative form of "robust" regression is to use the Double Exponential (Lap
 
 This is the equivalent to least median regression, where the regression line is the median (50% quantile)
 ```{r include=FALSE}
-mod_dbl_exp <- stan_model("stan/lms.stan")
+mod_dbl_exp <- stan_model("stan/lm_dbl_exp.stan")
 ```
 ```{r cache=FALSE}
 mod_dbl_exp
@@ -136,7 +136,7 @@ summary(mod_dbl_exp_fit, par = c("b"))$summary
 
 Model comparison
 ```{r}
-loo_t <- loo(extract_log_lik(mod_normal_fit, "loglik"))
+loo_t <- loo(extract_log_lik(mod_normal_fit, "log_lik"))
 loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
 loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
 ```
@@ -219,3 +219,8 @@ When using R, ensure that you are using the correct parameterization of the gamm
 
 - @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
 - @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
+
+### Qunatile regression
+
+- @BenoitPoel2017a
+- @YuZhang2005a for the three-parameter asymmetric Laplace distribution

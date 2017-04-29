@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -93,7 +93,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dnorm}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpoisson}{\mathrm{Poisson}}
+\newcommand{\dbinom}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnegbin}{\mathrm{Neg-bin}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{\Logistic}
+
+\newcommand{\R}{\mathfrak{R}}
+\newcommand{\N}{\mathfrak{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
@@ -154,26 +209,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
 <li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#maximum-a-posteriori-estimation"><i class="fa fa-check"></i><b>6.3</b> Maximum A Posteriori estimation</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
 <li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
-<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#double-exponential-laplace-errors"><i class="fa fa-check"></i><b>7.2.1</b> Double Exponential (Laplace) Errors</a></li>
+</ul></li>
 <li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
 <li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
-<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t"><i class="fa fa-check"></i><b>7.3.2</b> Student-t</a></li>
+<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>7.3.2</b> Student-t Error</a></li>
 </ul></li>
 <li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
 <li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
+<li class="chapter" data-level="7.4.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#qunatile-regression"><i class="fa fa-check"></i><b>7.4.3</b> Qunatile regression</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>8</b> Generalized Linear Models</a><ul>
 <li class="chapter" data-level="8.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>8.1</b> Generalized Linear Models</a></li>
-<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#binomial"><i class="fa fa-check"></i><b>8.2</b> Binomial</a></li>
-<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.3</b> Poisson</a></li>
-<li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a></li>
-<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.5</b> References</a></li>
+<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#binomial"><i class="fa fa-check"></i><b>8.2</b> Binomial</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>8.2.1</b> Example: Vote Turnout</a></li>
+<li class="chapter" data-level="8.2.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#extensions"><i class="fa fa-check"></i><b>8.2.2</b> Extensions</a></li>
+<li class="chapter" data-level="8.2.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#perfect-separation"><i class="fa fa-check"></i><b>8.2.3</b> Perfect Separation</a></li>
+<li class="chapter" data-level="8.2.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.2.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>8.3</b> Count Models</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.3.1</b> Poisson</a></li>
+<li class="chapter" data-level="8.3.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.3.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>8.4.1</b> Multinomial / Categorical Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>8.5</b> Gamma Regression</a></li>
+<li class="chapter" data-level="8.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>8.6</b> Beta Regression</a></li>
+<li class="chapter" data-level="8.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#ordered-logistic"><i class="fa fa-check"></i><b>8.7</b> Ordered Logistic</a></li>
+<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-5"><i class="fa fa-check"></i><b>8.8</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span></li>
 <li class="chapter" data-level="9" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>9</b> Notes</a><ul>
@@ -219,7 +289,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>9.12</b> Empirical Bayes</a></li>
 <li class="chapter" data-level="9.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>9.13</b> Things to cover</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-4.html"><a href="references-4.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="" data-path="references-6.html"><a href="references-6.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -237,62 +307,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-\[
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\Cor}{Cor}
-\DeclareMathOperator{\Bias}{Bias}
-\DeclareMathOperator{\MSE}{MSE}
-\DeclareMathOperator{\RMSE}{RMSE}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\median}{median}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
-
-\newcommand{\mat}[1]{\boldsymbol{#1}}
-\newcommand{\vec}[1]{\boldsymbol{#1}}
-\newcommand{\T}{'}
-
-% This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}[1]{t_{#1}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpoisson}{\mathrm{Poisson}}
-\newcommand{\dbinomial}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnegbin}{\mathrm{Neg-bin}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-
-\DeclareMathOperator{\logistic}{\Logistic}
-
-\newcommand{\R}{\mathfrak{R}}
-\newcommand{\N}{\mathfrak{N}}
-
-\newcommand{\cia}{\perp\!\!\!\perp}
-\DeclareMathOperator*{\plim}{plim}
-\]
 <div id="introduction-to-stan-and-linear-regression" class="section level1">
 <h1><span class="header-section-number">6</span> Introduction to Stan and Linear Regression</h1>
 <p>This chapter is an introduction to writing and running a Stan model in R. Also see the <strong>rstan</strong> <a href="https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html">vignette</a> for similar content.</p>
@@ -401,7 +415,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors
@@ -476,64 +490,8 @@ This is like a proportion (actually, it is a proportion x 100), so ignoring the 
 </ul></li>
 </ul></li>
 </ul>
-</div>
-</div>
-<div id="maximum-a-posteriori-estimation" class="section level2">
-<h2><span class="header-section-number">6.3</span> Maximum A Posteriori estimation</h2>
-<p>The <em>Statistical Rethinking</em> text focuses on maximum a posteriori (MAP) estimation. In addition to sampling from the posterior distribution using HMC, the same Stan model can be used to estimate the MAP estimate of the parameters. Use the <code>optimizing</code> function to find the MAP estimates of the model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-<span class="st"> </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data)
-<span class="co">#&gt; Initial log joint probability = -562878</span>
-<span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
-<span class="co">#&gt; Error evaluating model log probability: Non-finite function evaluation.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Error evaluating model log probability: Non-finite gradient.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Optimization terminated normally: </span>
-<span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span>
-mod1_fit_opt
-<span class="co">#&gt; $par</span>
-<span class="co">#&gt;      b[1]      b[2]      b[3]      b[4]      b[5]     sigma     mu[1] </span>
-<span class="co">#&gt;    -0.198    16.644   -14.679     0.598     0.346     9.180    83.221 </span>
-<span class="co">#&gt;     mu[2]     mu[3]     mu[4]     mu[5]     mu[6]     mu[7]     mu[8] </span>
-<span class="co">#&gt;    85.742    93.064    80.419    84.416    58.025    86.835    98.817 </span>
-<span class="co">#&gt;     mu[9]    mu[10]    mu[11]    mu[12]    mu[13]    mu[14]    mu[15] </span>
-<span class="co">#&gt;    55.232    89.198    67.121    95.735    95.390    69.979    76.581 </span>
-<span class="co">#&gt;    mu[16]    mu[17]    mu[18]    mu[19]    mu[20]    mu[21]    mu[22] </span>
-<span class="co">#&gt;    42.297    63.674    71.659    56.754    91.402    27.337    32.818 </span>
-<span class="co">#&gt;    mu[23]    mu[24]    mu[25]    mu[26]    mu[27]    mu[28]    mu[29] </span>
-<span class="co">#&gt;    42.531    19.734    20.301    41.370    57.890    32.377    20.553 </span>
-<span class="co">#&gt;    mu[30]    mu[31]    mu[32]    mu[33]    mu[34]    mu[35]    mu[36] </span>
-<span class="co">#&gt;    34.739    18.789     6.405    33.889    11.747    17.537    19.265 </span>
-<span class="co">#&gt;    mu[37]    mu[38]    mu[39]    mu[40]    mu[41]    mu[42]    mu[43] </span>
-<span class="co">#&gt;    18.350    19.041    11.056    15.772    17.341    18.602    10.897 </span>
-<span class="co">#&gt;    mu[44]    mu[45]  y_rep[1]  y_rep[2]  y_rep[3]  y_rep[4]  y_rep[5] </span>
-<span class="co">#&gt;    36.365    15.642    83.699    86.726    94.091    85.121    76.229 </span>
-<span class="co">#&gt;  y_rep[6]  y_rep[7]  y_rep[8]  y_rep[9] y_rep[10] y_rep[11] y_rep[12] </span>
-<span class="co">#&gt;    67.198    94.040   107.471    55.463    87.214    81.968   100.999 </span>
-<span class="co">#&gt; y_rep[13] y_rep[14] y_rep[15] y_rep[16] y_rep[17] y_rep[18] y_rep[19] </span>
-<span class="co">#&gt;    94.443    61.613    73.923    35.785    72.805    69.508    51.738 </span>
-<span class="co">#&gt; y_rep[20] y_rep[21] y_rep[22] y_rep[23] y_rep[24] y_rep[25] y_rep[26] </span>
-<span class="co">#&gt;    86.781    18.800    37.047    49.372    22.102    22.935    46.992 </span>
-<span class="co">#&gt; y_rep[27] y_rep[28] y_rep[29] y_rep[30] y_rep[31] y_rep[32] y_rep[33] </span>
-<span class="co">#&gt;    54.856    48.034    14.845    51.714    23.681    -1.549    18.705 </span>
-<span class="co">#&gt; y_rep[34] y_rep[35] y_rep[36] y_rep[37] y_rep[38] y_rep[39] y_rep[40] </span>
-<span class="co">#&gt;    14.650    27.235     7.695    26.999     6.659    11.935    -2.765 </span>
-<span class="co">#&gt; y_rep[41] y_rep[42] y_rep[43] y_rep[44] y_rep[45] </span>
-<span class="co">#&gt;    16.126     6.159    23.402    38.479     9.517 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] -122</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $return_code</span>
-<span class="co">#&gt; [1] 0</span></code></pre></div>
-<p>It can also return samples from the multivariate normal (Laplace) approximation to the posterior distribution.</p>
-<p>Adding the option <code>hessian = TRUE</code> returns the hessian, which is defined on the unconstrained parameter space (all parameters are defined over <span class="math inline">\((-\infty, \infty)\)</span>). To get a sample of values from that multivariate normal distribution set <code>draws = TRUE</code>. These draws will be from the unconstrained parameter space, unless <code>constrained = TRUE</code>, in which case they will be on the scales of the original parameters.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit_opt &lt;-
-<span class="st">  </span><span class="kw">optimizing</span>(mod1, <span class="dt">data =</span> mod1_data, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">constrained =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; Initial log joint probability = -40591.1</span>
-<span class="co">#&gt; Optimization terminated normally: </span>
-<span class="co">#&gt;   Convergence detected: relative gradient magnitude is below tolerance</span></code></pre></div>
 
+</div>
 </div>
 </div>
             </section>

@@ -1,0 +1,25 @@
+# Priors
+
+Priors for coefficients and scales 
+
+- Improper uniform priors $(-\infty, +\infty)$ or $(0, +\infty)$.
+- Uninformative Proper Priors such as $\sigma^2 \sim \dinvgamma(0.001, 0.001)$.
+- Weakly Informative Priors
+- Bounded Priors
+- Informative Priors
+- Conjugate priors
+- Hyperparametrs - "priors on priors" These are usually specified in models.
+    They should be specified to ensure that the posterior is proper and not
+    sensitive statistically or computationally to wide tails in the priors.
+- Boundary avoiding priors - In MAP, priors can be specified to keep parameters away from boundaries, e.g. 0 in a scale model.
+    
+See:
+
+- [Stan Wiki](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and the [rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/priors.html) vignette includes comprehensive advice for prior choice recommendations.
+- @Betancourt2017a provides numerical simulation of how the shapes of weakly informative priors affects inferences.
+- @Stan2016a for discussion of some types of priors in regression models
+- @ChungRabe-HeskethDorieEtAl2013a discuss scale priors in penalized MLE models
+- @GelmanJakulinPittauEtAl2008a discusses using Cauchy(0, 2.5) for prior distributions
+- @Gelman2006a provides a prior distribution on variance parameters in hierarchial models.
+- @PolsonScott2012a on using Half-Cauchy priors for scale parameters
+
