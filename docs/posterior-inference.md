@@ -135,7 +135,54 @@ mod_data <- within(mod_data, {
 mod
 ```
 
-prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // marfx\n  // indexes of main and interaction coef\n  int idx_b_slavicshare;\n  int idx_b_slavicshare_changenonslav;\n  int M;\n  vector[M] changenonslav;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n}\ngenerated quantities {\n  # hardcoded marginal effectx\n  vector[M] dydx;\n  dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;\n\n}")))
+<pre>
+  <code class="stan">data {
+  // number of observations
+  int n;
+  // response vector
+  vector[n] y;
+  // number of columns in the design matrix X
+  int k;
+  // design matrix X
+  matrix [n, k] X;
+  // marfx
+  // indexes of main and interaction coef
+  int idx_b_slavicshare;
+  int idx_b_slavicshare_changenonslav;
+  int M;
+  vector[M] changenonslav;
+  // beta prior
+  real b_loc;
+  real<lower = 0.0> b_scale;
+  // sigma prior
+  real sigma_scale;
+}
+parameters {
+  // regression coefficient vector
+  vector[k] b;
+  // scale of the regression errors
+  real<lower = 0.0> sigma;
+}
+transformed parameters {
+  // mu is the observation fitted/predicted value
+  // also called yhat
+  vector[n] mu;
+  mu = X * b;
+}
+model {
+  // priors
+  b ~ normal(b_loc, b_scale);
+  sigma ~ cauchy(0, sigma_scale);
+  // likelihood
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  # hardcoded marginal effectx
+  vector[M] dydx;
+  dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;
+
+}</code>
+</pre>
 
 
 

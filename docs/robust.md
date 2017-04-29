@@ -44,6 +44,28 @@ bind_rows(
 <img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
 
 
+```r
+z <- seq(-6, 6, length.out = 100)
+bind_rows(
+  tibble(z = z,
+         p = dnorm(z, 0, 1),
+         distr = "Normal"),
+  tibble(z = z,
+         p = dt(z, 4),
+         distr = "Student-t (df = 4)"),
+  tibble(z = z,
+         p = VGAM::dlaplace(z, 0, 1),
+         distr = "Double Exponential")) %>%
+  mutate(`-log(p)` = -log(p)) %>%
+  ggplot(aes(x = z, y = p, colour = distr)) + 
+  geom_line()
+      
+```
+
+<img src="robust_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" />
+
+
+
 [^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
 
 
@@ -52,7 +74,56 @@ bind_rows(
 mod_t
 ```
 
-prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n  real<lower = 1.0> nu;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  nu ~ gamma(2, 0.1);\n  // likelihood\n  y ~ student_t(nu, mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood values\n  vector[n] log_lik;\n  for (i in 1:n) {\n    y_rep[i] = student_t_rng(nu, mu[i], sigma);\n    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);\n  }\n\n}")))
+<pre>
+  <code class="stan">data {
+  // number of observations
+  int n;
+  // response vector
+  vector[n] y;
+  // number of columns in the design matrix X
+  int k;
+  // design matrix X
+  matrix [n, k] X;
+  // beta prior
+  real b_loc;
+  real<lower = 0.0> b_scale;
+  // sigma prior
+  real sigma_scale;
+}
+parameters {
+  // regression coefficient vector
+  vector[k] b;
+  // scale of the regression errors
+  real<lower = 0.0> sigma;
+  real<lower = 1.0> nu;
+}
+transformed parameters {
+  // mu is the observation fitted/predicted value
+  // also called yhat
+  vector[n] mu;
+  mu = X * b;
+}
+model {
+  // priors
+  b ~ normal(b_loc, b_scale);
+  sigma ~ cauchy(0, sigma_scale);
+  nu ~ gamma(2, 0.1);
+  // likelihood
+  y ~ student_t(nu, mu, sigma);
+}
+generated quantities {
+  // simulate data from the posterior
+  vector[n] y_rep;
+  // log-likelihood values
+  vector[n] log_lik;
+  for (i in 1:n) {
+    y_rep[i] = student_t_rng(nu, mu[i], sigma);
+    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
+  }
+
+}</code>
+</pre>
+
 
 
 ```r
@@ -68,7 +139,7 @@ mod_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size
                                    
 mod_data <- within(mod_data, {
   b_loc <- 0
-  b_scale <- 100
+  b_scale <- 1000
   sigma_scale <- sd(y)
 })
 ```
@@ -79,10 +150,10 @@ This is likely due to the wide tails of the Student t distribution.
 ```r
 mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11))
 #> 
-#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 1).
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.35 seconds.
+#> Gradient evaluation took 4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -99,9 +170,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.811644 seconds (Warm-up)
-#>                0.646364 seconds (Sampling)
-#>                1.45801 seconds (Total)
+#>  Elapsed Time: 0.923841 seconds (Warm-up)
+#>                0.81027 seconds (Sampling)
+#>                1.73411 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -109,7 +180,7 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 2).
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 2).
 #> 
 #> Gradient evaluation took 1.4e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
@@ -129,9 +200,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.829618 seconds (Warm-up)
-#>                0.838252 seconds (Sampling)
-#>                1.66787 seconds (Total)
+#>  Elapsed Time: 0.923295 seconds (Warm-up)
+#>                0.833066 seconds (Sampling)
+#>                1.75636 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 2
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -139,7 +210,7 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 3).
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 3).
 #> 
 #> Gradient evaluation took 1.4e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
@@ -159,9 +230,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.755767 seconds (Warm-up)
-#>                0.710474 seconds (Sampling)
-#>                1.46624 seconds (Total)
+#>  Elapsed Time: 1.03297 seconds (Warm-up)
+#>                0.873838 seconds (Sampling)
+#>                1.90681 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 3
 #>                                                                                     count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
@@ -169,10 +240,10 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'rlm' NOW (CHAIN 4).
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -189,9 +260,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.897055 seconds (Warm-up)
-#>                0.758835 seconds (Sampling)
-#>                1.65589 seconds (Total)
+#>  Elapsed Time: 0.897787 seconds (Warm-up)
+#>                0.745622 seconds (Sampling)
+#>                1.64341 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -202,21 +273,12 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 
 
 ```r
-summary(mod_t_fit, pars = c("nu", "sigma", "b"))$summary
-#>         mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff
-#> nu    21.699 0.24416 14.3626   3.599 11.279 18.431  28.918  57.369  3460
-#> sigma 10.441 0.04339  2.0681   7.059  9.015 10.166  11.610  15.230  2272
-#> b[1]  66.279 1.47339 53.0047 -43.640 32.578 67.960 102.590 166.056  1294
-#> b[2]   0.274 0.00149  0.0806   0.114  0.223  0.275   0.326   0.432  2914
-#> b[3]  -4.494 0.09324  3.4316 -11.013 -6.858 -4.598  -2.252   2.676  1354
-#> b[4]  10.789 0.50310 18.3043 -23.366 -2.307 10.319  22.500  48.544  1324
-#>        Rhat
-#> nu    1.000
-#> sigma 1.001
-#> b[1]  1.002
-#> b[2]  0.999
-#> b[3]  1.002
-#> b[4]  1.002
+summary(mod_t_fit, pars = c("b"))$summary
+#>        mean se_mean     sd    2.5%    25%    50%     75%  97.5% n_eff Rhat
+#> b[1] 90.924 2.19841 66.781 -44.196  47.81 91.762 133.164 223.22   923    1
+#> b[2]  0.273 0.00162  0.083   0.103   0.22  0.275   0.328   0.43  2626    1
+#> b[3] -6.082 0.13953  4.322 -14.791  -8.92 -6.101  -3.263   2.57   959    1
+#> b[4]  2.763 0.74224 22.668 -43.434 -11.60  2.445  17.292  48.50   933    1
 ```
 
 Compare those results when using a model with 
@@ -226,7 +288,52 @@ Compare those results when using a model with
 mod_normal
 ```
 
-prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood posterior\n  vector[n] loglik;\n  for (i in 1:n) {\n    y_rep[i] = normal_rng(mu[i], sigma);\n    loglik[i] = normal_lpdf(y[i] | mu[i], sigma);\n  }\n}")))
+<pre>
+  <code class="stan">data {
+  // number of observations
+  int n;
+  // response vector
+  vector[n] y;
+  // number of columns in the design matrix X
+  int k;
+  // design matrix X
+  matrix [n, k] X;
+  // beta prior
+  real b_loc;
+  real<lower = 0.0> b_scale;
+  // sigma prior
+  real sigma_scale;
+}
+parameters {
+  // regression coefficient vector
+  vector[k] b;
+  // scale of the regression errors
+  real<lower = 0.0> sigma;
+}
+transformed parameters {
+  // mu is the observation fitted/predicted value
+  // also called yhat
+  vector[n] mu;
+  mu = X * b;
+}
+model {
+  // priors
+  b ~ normal(b_loc, b_scale);
+  sigma ~ cauchy(0, sigma_scale);
+  // likelihood
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  // simulate data from the posterior
+  vector[n] y_rep;
+  // log-likelihood posterior
+  vector[n] log_lik;
+  for (i in 1:n) {
+    y_rep[i] = normal_rng(mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+  }
+}</code>
+</pre>
 
 
 ```r
@@ -234,8 +341,8 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Gradient evaluation took 3.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -252,15 +359,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.483015 seconds (Warm-up)
-#>                0.435345 seconds (Sampling)
-#>                0.91836 seconds (Total)
+#>  Elapsed Time: 0.71357 seconds (Warm-up)
+#>                0.540196 seconds (Sampling)
+#>                1.25377 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 9e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+#> Gradient evaluation took 1.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -277,15 +384,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.458847 seconds (Warm-up)
-#>                0.349973 seconds (Sampling)
-#>                0.80882 seconds (Total)
+#>  Elapsed Time: 0.544024 seconds (Warm-up)
+#>                0.530679 seconds (Sampling)
+#>                1.0747 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#> Gradient evaluation took 1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -302,15 +409,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.465702 seconds (Warm-up)
-#>                0.335748 seconds (Sampling)
-#>                0.80145 seconds (Total)
+#>  Elapsed Time: 0.5235 seconds (Warm-up)
+#>                0.615163 seconds (Sampling)
+#>                1.13866 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -327,54 +434,114 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.54117 seconds (Warm-up)
-#>                0.407283 seconds (Sampling)
-#>                0.948453 seconds (Total)
+#>  Elapsed Time: 0.593937 seconds (Warm-up)
+#>                0.559731 seconds (Sampling)
+#>                1.15367 seconds (Total)
 ```
 
 
 ```r
-summary(mod_normal_fit, pars = c("b", "sigma"))$summary
-#>         mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff
-#> b[1]  72.930  1.5774 52.9423 -32.488 38.804 72.844 108.590 175.722  1127
-#> b[2]   0.269  0.0019  0.0813   0.105  0.217  0.268   0.321   0.431  1835
-#> b[3]  -4.859  0.1048  3.5445 -11.707 -7.235 -4.898  -2.621   2.184  1143
-#> b[4]   8.368  0.5112 17.6960 -25.508 -3.307  8.001  20.290  43.378  1198
-#> sigma 11.070  0.0621  2.1395   7.879  9.582 10.739  12.195  16.245  1188
-#>       Rhat
-#> b[1]     1
-#> b[2]     1
-#> b[3]     1
-#> b[4]     1
-#> sigma    1
+summary(mod_normal_fit, pars = c("b"))$summary
+#>        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff
+#> b[1] 95.987 2.41105 63.9174 -27.7095  53.147 95.592 137.966 223.008   703
+#> b[2]  0.270 0.00194  0.0842   0.0979   0.217  0.273   0.326   0.434  1891
+#> b[3] -6.356 0.15521  4.2031 -14.8646  -9.116 -6.339  -3.532   1.768   733
+#> b[4]  0.858 0.80219 21.5103 -41.1619 -13.309  0.972  15.252  43.658   719
+#>      Rhat
+#> b[1] 1.01
+#> b[2] 1.00
+#> b[3] 1.01
+#> b[4] 1.01
 ```
 
-Alternatively, the Double Exponential (Laplace) distribution can be used for the errors.
-This is the equivalent to least quantile regression, where the regression line is the median (50% quantile)
+
+### Double Exponential (Laplace) Errors
+
+An alternative form of "robust" regression is to use the Double Exponential (Laplace) distributions for the errors.
+
+This is the equivalent to least median regression, where the regression line is the median (50% quantile)
 
 
 ```r
 mod_dbl_exp
 ```
 
-prelist()list(list(name = "code", attribs = list(class = "stan"), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // beta prior\n  real b_loc;\n  real<lower = 0.0> b_scale;\n  // sigma prior\n  real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  vector[n] mu;\n  // tau are obs-level scale params\n  mu = X * b;\n}\nmodel {\n  // priors\n  b ~ normal(b_loc, b_scale);\n  sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ double_exponential(mu, sigma);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[n] y_rep;\n  // log-likelihood values\n  vector[n] log_lik;\n  // use a single loop since both y_rep and log_lik are elementwise\n  for (i in 1:n) {\n    y_rep[i] = double_exponential_rng(mu[i], sigma);\n    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);\n  }\n\n}")))
+<pre>
+  <code class="stan">data {
+  // number of observations
+  int n;
+  // response vector
+  vector[n] y;
+  // number of columns in the design matrix X
+  int k;
+  // design matrix X
+  matrix [n, k] X;
+  // beta prior
+  real b_loc;
+  real<lower = 0.0> b_scale;
+  // sigma prior
+  real sigma_scale;
+}
+parameters {
+  // regression coefficient vector
+  vector[k] b;
+  // scale of the regression errors
+  real<lower = 0.0> sigma;
+}
+transformed parameters {
+  // mu is the observation fitted/predicted value
+  vector[n] mu;
+  // tau are obs-level scale params
+  mu = X * b;
+}
+model {
+  // priors
+  b ~ normal(b_loc, b_scale);
+  sigma ~ cauchy(0, sigma_scale);
+  // likelihood
+  y ~ double_exponential(mu, sigma);
+}
+generated quantities {
+  // simulate data from the posterior
+  vector[n] y_rep;
+  // log-likelihood values
+  vector[n] log_lik;
+  // use a single loop since both y_rep and log_lik are elementwise
+  for (i in 1:n) {
+    y_rep[i] = double_exponential_rng(mu[i], sigma);
+    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);
+  }
+
+}</code>
+</pre>
 
 
 
 ```r
-summary(mod_dbl_exp_fit, par = c("b", "sigma"))$summary
-#>         mean se_mean      sd    2.5%    25%   50%    75%   97.5% n_eff
-#> b[1]  38.693 1.90247 51.2313 -60.417  5.004 37.97 71.661 140.290   725
-#> b[2]   0.298 0.00225  0.0837   0.131  0.245  0.30  0.352   0.458  1387
-#> b[3]  -2.971 0.11773  3.2419  -9.408 -5.073 -3.01 -0.842   3.242   758
-#> b[4]  20.981 0.67250 18.2690 -15.589  9.157 21.53 33.057  56.774   738
-#> sigma  9.050 0.06676  2.2260   5.585  7.533  8.75 10.209  14.423  1112
-#>       Rhat
-#> b[1]     1
-#> b[2]     1
-#> b[3]     1
-#> b[4]     1
-#> sigma    1
+summary(mod_dbl_exp_fit, par = c("b"))$summary
+#>        mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff
+#> b[1] 60.671 2.58294 72.5324 -84.418 15.896 56.321 105.938 207.022   789
+#> b[2]  0.298 0.00217  0.0815   0.126  0.248  0.304   0.354   0.442  1415
+#> b[3] -4.303 0.15685  4.4911 -13.482 -7.160 -4.100  -1.555   4.641   820
+#> b[4] 13.381 0.91373 25.6984 -38.570 -2.215 14.588  29.270  64.348   791
+#>      Rhat
+#> b[1]    1
+#> b[2]    1
+#> b[3]    1
+#> b[4]    1
+```
+
+
+Model comparison
+
+```r
+loo_t <- loo(extract_log_lik(mod_normal_fit, "log_lik"))
+#> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-
+#> diagnostic') for details.
+loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
+#> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-
+#> diagnostic') for details.
+loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
 ```
 
 
@@ -411,17 +578,15 @@ $$
 $$
 
 
-### Student-t
+### Student-t Error
 
-It turns out that the Student-t distribution of error terms from the [Robust Regression] chapter can also be derived as a model of heteroskedasticity.
+The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.
 
-A reparameterization that will be used quite often is to rewrite a normal distributions with unequal
-scale parameters as a continuous mixture of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
 $$
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
 $$
-
-If the local scale parameters are distributed as,
+If the local variance parameters are distributed inverse-gamma,
 $$
 \lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
 $$
@@ -429,6 +594,9 @@ then the above is equivalent to a regression with errors distributed Student-t e
 $$
 y_i \sim \dt{\nu}(X \beta, \sigma) .
 $$
+
+
+
 
 [^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
 

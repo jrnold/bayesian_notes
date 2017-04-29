@@ -53,7 +53,6 @@ The parameter $\pi \in [0, 1]$ is modeled with a link funcction and a linear pre
 
 There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
 
-
 **Logit:** The logistic function,
     $$
     \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
@@ -73,6 +72,85 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
     Stan function `inv_cloglog`.
 
 [^binomialcdf]: Since a CDF maps reals to $(0, 1)$, any CDF can be used as a link function.
+
+## Bernoulli Model
+
+$$
+\Pr(y_i = 1) = \pi_i^{y_i}(1 - \pi_i)^{(1 - y_i)}
+$$
+which is
+$$
+\begin{aligned}[t]
+y_i &\sim \dbin\left(1, \pi_i \right) \\
+\end{aligned}
+$$
+
+$$
+\pi_i = \logit^{-1}(\mat{X} \vec{\beta})
+$$
+
+
+```r
+data("turnout", package = "Zelig")
+mod_formula <- vote ~ poly(age, 2) + income + educate + race
+```
+
+
+
+
+```r
+mod1_data <- lm_preprocess(mod_formula, data = turnout)
+```
+
+
+
+
+
+
+## Poisson 
+
+```
+data {
+  int N;
+  int y[N];
+  int K;
+  matrix X[K, N]
+  // ...
+}
+parameters {
+  vector[K] b;
+  // ...
+}
+transformed parameters {
+  vector<lower = 0.0> lambda;
+  lambda = exp(X * b);
+}
+model {
+  y ~ poisson(lambda);
+}
+```
+
+
+
+
+### Perfect Separation
+
+- @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
+- @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
+- @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
+- @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
+- @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
+
+### Rare Events
+
+
+
+
+### Selection
+
+
+
+
 
 ## Poisson
 
