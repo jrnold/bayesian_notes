@@ -102,10 +102,13 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
 
 These link-functions are plotted below.
 Of these link functions, the probit has the narrowest tails (sensitivity to outliers), followed by the logit, and cauchit.
-The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric; at zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
+The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric.[^cloglog]
+At zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
 ```{r}
 make.link("cloglog")$linkinv(0)
 ```
+
+[^cloglog]: @BeckKatzTucker1998a show that the cloglog link function can be derived from a grouped duration model with binary response variables.
 
 ```{r}
 map(c("logit", "probit", "cauchit", "cloglog"),  make.link) %>%
@@ -230,7 +233,7 @@ The Negative Binomial distribution has an additional parameter that allows the v
 
 The outcome is modeled as a negative binomial distribution,
 $$
-y_i \sim \dnbinom(\alpha_i, \beta)
+y_i \sim \dbinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
 Then the mean can be modeled and transformed to the 
@@ -243,7 +246,7 @@ $$
 
 
 **Important** The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
 $$
 y_i \sim \dnbinomalt(\mu_i, \phi)
 $$

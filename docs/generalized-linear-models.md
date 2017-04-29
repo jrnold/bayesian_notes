@@ -281,7 +281,7 @@ The Negative Binomial distribution has an additional parameter that allows the v
 
 The outcome is modeled as a negative binomial distribution,
 $$
-y_i \sim \dnbinom(\alpha_i, \beta)
+y_i \sim \dbinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
 Then the mean can be modeled and transformed to the 
@@ -294,7 +294,7 @@ $$
 
 
 **Important** The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
 $$
 y_i \sim \dnbinomalt(\mu_i, \phi)
 $$
