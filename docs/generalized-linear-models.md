@@ -103,12 +103,15 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
 
 These link-functions are plotted below.
 Of these link functions, the probit has the narrowest tails (sensitivity to outliers), followed by the logit, and cauchit.
-The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric; at zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
+The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric.[^cloglog]
+At zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
 
 ```r
 make.link("cloglog")$linkinv(0)
 #> [1] 0.632
 ```
+
+[^cloglog]: @BeckKatzTucker1998a show that the cloglog link function can be derived from a grouped duration model with binary response variables.
 
 
 ```r
