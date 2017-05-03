@@ -14,21 +14,30 @@ data {
   // number of columns in the design matrix X
   int K;
   // design matrix X
+  // should not include an intercept
   matrix [N, K] X;
+}
+transformed data {
+  # default scales same as rstanarm
+  # assume data is centered and scaled
+  real<lower = 0.0> a_scale;
+  vector<lower = 0.0>[K] b_scale;
+  a_scale = 10.0;
+  b_scale = rep_vector(2.5, K);
 }
 parameters {
   // regression coefficient vector
-  real b0;
+  real a;
   vector[K] b;
 }
 transformed parameters {
   vector<lower = 0.0, upper = 1.0>[N] p;
-  p = inv_logit(b0 + X * b);
+  p = inv_logit(a + X * b);
 }
 model {
   // priors
-  b0 ~ cauchy(0.0, 10.0);
-  b ~ cauchy(0.0, 2.5);
+  a ~ normal(0.0, a_scale);
+  b ~ normal(0.0, b_scale);
   // likelihood
   y ~ binomial(1, p);
 }
