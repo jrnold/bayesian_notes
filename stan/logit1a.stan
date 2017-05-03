@@ -16,14 +16,17 @@ data {
   // design matrix X
   // should not include an intercept
   matrix [N, K] X;
+  vector<lower = 0.0>[K] x_scale;
 }
 transformed data {
   # default scales same as rstanarm
   # assume data is centered and scaled
   real<lower = 0.0> a_scale;
+  real<lower = 0.0> b_scale_raw;
   vector<lower = 0.0>[K] b_scale;
   a_scale = 10.0;
-  b_scale = rep_vector(2.5, K);
+  b_scale_raw = 2.5;
+  b_scale = b_scale_raw * x_scale;
 }
 parameters {
   // regression coefficient vector

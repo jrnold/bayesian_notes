@@ -17,6 +17,57 @@ glm(mod_formula, data = HanmerKalkan)
 ```
 
 ```{r}
-X <- lm_preprocess(mod_formula, data = HanmerKalkan)
+library("R6")
+# Rescaler <- R6Class("Rescaler",
+#   public = list(
+#     loc = 0,
+#     scale = 1,
+#     nvals = 0,
+#     initialize = function(x) {
+#       self$nvals = length(unique(x, na.rm = TRUE))
+#       if (self$nvals <= 1) {
+#         self$loc <- 0
+#         self$scale <- 1
+#       } else if (self$nvals == 2) {
+#         self$loc <- min(x, na.rm = TRUE)
+#         self$scale <- max(x, na.rm = TRUE) - self$min
+#       } else {
+#         self$loc <- mean(x, na.rm = TRUE)
+#         self$scale <- sd(x, na.rm = TRUE)           }
+#       self
+#     },
+#     scale = function(x) {
+#       (x - self$loc) / self$scale
+#     },
+#     unscale = function(x) {
+#       self$loc + self$scale * x      
+#     }
+#   )
+# )
+
+# beta_0^* = beta_0 - \sum_{k} \beta_k mean(x_k) / sd(x_k)
+# beta_k^* = \beta_k / sd(x_k)
+standardize_coef = function(x_mean, x_sd, beta) {
+  a = beta[1L]
+  b = beta[-1L]
+  bb = b / x_sd
+  aa = a - sum(bb * x_mean)
+  c(aa, bb)
+}
+
+# beta_0 = beta_0 + \sum_{k} \beta_k^*  \times  mean(x_k) \times sd(x_k)
+# beta_k = \beta_k^* * sd(x_k)
+unstandardize_coef = function(x_mean, x_sd, beta) {
+  a = beta[1L]
+  b = beta[-1L]
+  bb = b * x_sd
+  aa = a + b * x_mean
+  c(aa, bb)
+}
+
+X <- lm_preprocess(update(mod_formula, . ~ . -1), data = HanmerKalkan)
 ```
 
+```{r}
+stan_glm(mod_formula, data = HanmerKalkan)
+```
