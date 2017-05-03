@@ -213,6 +213,19 @@ In Stan, the Poisson distribution has two implementations:
 
 Also, `rstanarm` supports the [Poisson](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
+## Example
+
+A regression model of bilateral sanctions for the period 1939 to 1983. 
+The outcome variable is the number of countries imposing sanctions.
+```{r}
+data("sanction", package = "Zelig")
+```
+
+```{r}
+
+```
+
+
 
 ### References
 
@@ -265,7 +278,6 @@ In Stan, there are multiple parameterizations of the
 - `neg_binomial_2_log_lpdf(y | eta, phi)` with log-mean `eta` and over-dispersion parameter `phi`
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
-
 
 - @BDA3 [Ch 16]
 

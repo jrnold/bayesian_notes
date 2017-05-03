@@ -17,6 +17,6 @@ glm(mod_formula, data = HanmerKalkan)
 ```
 
 ```{r}
-lm_preprocess(mod_formula, data = HanmerKalkan)
+X <- lm_preprocess(mod_formula, data = HanmerKalkan)
 ```
 
