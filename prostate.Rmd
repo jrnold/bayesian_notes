@@ -1,0 +1,157 @@
+
+See the [documentation](https://statweb.stanford.edu/~tibs/ElemStatLearn/datasets/prostate.info.txt).
+
+```{r message = FALSE}
+library("rstan")
+library("glmnet")
+library("tidyverse")
+library("forcats")
+
+```
+
+
+```{r message = FALSE}
+URL <- "https://statweb.stanford.edu/~tibs/ElemStatLearn/datasets/prostate.data"
+
+col_types <- cols(
+  X1 = col_integer(),
+  lcavol = col_double(),
+  lweight = col_double(),
+  age = col_integer(),
+  lbph = col_double(),
+  svi = col_integer(),
+  lcp = col_double(),
+  gleason = col_integer(),
+  pgg45 = col_integer(),
+  lpsa = col_double(),
+  train = col_logical()
+)
+prostate <- read_tsv(URL, col_types = col_types,
+                     skip = 1,
+                     col_names = names(col_types$cols))
+                     
+```
+
+Recall the prostate data example: we are interested in the level of prostate-specific antigen (PSA), elevated in men who have prostate cancer. 
+The data `prostate` has data on on the level of prostate-specific antigen (PSA), which is elevated in men with prostate cancer, for `r nrow(prostate)` men with
+prostate cancer, and clinical predictors. 
+
+```{r}
+library("glmnet")
+glmnet(model.matrix(~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45, data = prostate),
+       prostate$lpsa)
+```
+
+
+```{r}
+library("rubbish")
+f <- lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45 - 1L
+prostate_data <- lm_preprocess(f, data = prostate)[c("y", "X")]
+```
+Center and scale X
+```{r}
+prostate_data <- within(prostate_data, {
+  X <- scale(X)
+  K <- ncol(X)
+  N <- nrow(X)
+})
+```
+
+```{r}
+prostate_mod1 <- stan_model("stan/lm-coef-normal-1.stan")
+```
+
+```{r}
+run_with_tau <- function(tau, mod, data, ...) {
+   data$tau <- tau
+   fit <- sampling(mod, data = data, open_progress = FALSE, 
+                   show_messages = FALSE, verbose = FALSE, ...)
+  out <- summary(fit, par = "b")$summary %>%
+    as.data.frame() %>%
+    rownames_to_column("parameter")
+  out$tau <- tau
+  out
+}
+```
+
+```{r}
+coefpath <- map_df(2 ^ seq(2, -5, by = -.5), run_with_tau,
+                   mod = prostate_mod1, data = prostate_data)
+
+```
+
+```{r}
+ggplot(coefpath, aes(x = log2(tau), y = mean, 
+                     colour = fct_reorder2(parameter, tau, mean), fill = parameter)) +
+  modelr::geom_ref_line(h = 0) +
+  geom_line() +
+  labs(colour = "Parameter")
+```
+
+```{r}
+ggplot(coefpath, aes(x = log10(tau), y = mean)) +
+  facet_wrap(~ parameter) +
+  modelr::geom_ref_line(h = 0) +
+  geom_ribbon(aes(ymin = `25%`, ymax = `75%`), alpha = 0.2) +
+  geom_line()
+```
+
+
+```{r}
+prostate_mod2 <- stan_model("stan/lm-coef-lasso-1.stan")
+```
+
+```{r}
+coefpath <- map_df(2 ^ seq(2, -5, by = -.5),
+                   mod = run_with_tau,
+                   data = prostate_data)
+```
+
+```{r}
+library("forcats")
+ggplot(coefpath, aes(x = log2(tau), y = mean, 
+                     colour = fct_reorder2(parameter, tau, mean), fill = parameter)) +
+  modelr::geom_ref_line(h = 0) +
+  geom_line() +
+  labs(colour = "Parameter")
+```
+
+```{r}
+ggplot(coefpath, aes(x = log10(tau), y = mean)) +
+  facet_wrap(~ parameter) +
+  modelr::geom_ref_line(h = 0) +
+  geom_ribbon(aes(ymin = `25%`, ymax = `75%`), alpha = 0.2) +
+  geom_line()
+```
+
+
+
+```{r}
+prostate_mod3 <- stan_model("stan/lm-coef-hs-1.stan")
+```
+
+```{r}
+coefpath <- map_df(1 ^ seq(2, -5, by = -.5),
+                   run_with_tau, 
+                   mod = prostate_mod3,
+                   data = c(prostate_data, list(df_local = 3)),
+                   control = list(adapt_delta = 0.99))
+
+```
+
+```{r}
+ggplot(coefpath, aes(x = log2(tau), y = mean, 
+                     colour = fct_reorder2(parameter, tau, mean), fill = parameter)) +
+  modelr::geom_ref_line(h = 0) +
+  geom_line() +
+  labs(colour = "Parameter")
+```
+
+```{r}
+ggplot(coefpath, aes(x = log10(tau), y = mean)) +
+  facet_wrap(~ parameter) +
+  modelr::geom_ref_line(h = 0) +
+  geom_ribbon(aes(ymin = `25%`, ymax = `75%`), alpha = 0.2) +
+  geom_line()
+```
+
