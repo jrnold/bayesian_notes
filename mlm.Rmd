@@ -1,0 +1,72 @@
+# Multilevel Models
+
+Group Varying Intercepts
+
+This is a regression, with a different intercept per group:
+$$
+\begin{aligned}[t]
+y_i &\sim N(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
+\end{aligned}
+$$
+The second level model of the group intercepts models them as distributed around a common mean, $\mu_\alpha$, with error:
+$$
+\alpha_j = \mu_\alpha + \eta_j \\
+\eta_j \sim N(0, \sigma_\alpha^2)
+$$
+
+Separate local regressions
+
+For each group, run a regression,
+$$
+y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) \text{for all $i$ in group $j$}
+$$
+And now model the group-level means,
+$$
+\begin{aligned}[t]
+\alpha &= \gamma u_j + \eta_j \\
+\eta_j &\sim N(0, \sigma^2_\alpha)
+\end{aligned}
+$$
+
+
+Modeling the coefficients of a large regression model
+
+
+Suppose that $X$ includes all predictors and $J$ indicators for the $J$ groups. 
+
+We could also put the constant in the second distribution. The coefficients $\beta$ for the coefficients on the group indicators are centered around a $\mu_\alpha$.
+$$
+\begin{aligned}[t]
+y_i &\sim N(x_i \beta, \sigma_y^2) \\
+\beta_j &\sim N(\mu_{\alpha}, \sigma_{\alpha}^2)
+\end{aligned}
+$$
+
+Regression with multiple error terms
+
+$$
+\begin{aligned}[t]
+y_i &\sim N(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
+\eta_j &\sim N(0, \sigma_{\alpha}^2)
+\end{aligned}
+$$
+
+
+Regresion with correlated errors
+
+$$
+\begin{aligned}[t]
+y_i = X_i \beta + \omega_i, & \omega \sim N(0, \Sigma)
+\end{aligned}
+$$
+The errors have an $n \times n$ covaraince matrix, and are
+equivalent to the sum of individual and group errors.
+$$
+\omega_i = \eta_{j[i]} + \epsilon_i
+$$
+
+The variances and covariances 
+
+- for unit $i$: $\Sigma_{ii} = \var(\omega_i) = \sigma_y^2 + \sigma_{\alpha}^2$
+- for units $i$, $k$ in same group $j$: $\Sigma_{ik} = \cov(\omega_i, \omega_k) = \sigma_{\alpha}^2$
+- for units $i$, $k$ in the same group $j$: $\Sigma_{ik} = 0$
