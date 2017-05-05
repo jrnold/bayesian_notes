@@ -1,0 +1,31 @@
+# Proportions
+
+
+## Beta Regression
+
+This is for a response variable that is a proportion, $y_i \in (0, 1)$,
+$$
+y_i \sim \dbeta(\alpha_i, \beta_i)
+$$
+and
+$$
+\begin{aligned}[t]
+\mu_i &= g^{-1}(\vec{x}_i' \vec{\gamma}) \\
+\alpha_i &= \mu_i \phi \\
+\beta_i &= (1 - \mu_i) \phi 
+\end{aligned}
+$$
+Additionally, the $\phi$ parameter could also be modeled.
+
+In Stan:
+
+- `beta(y | alpha, beta)` with positive prior successes plus one, $\alpha > 0$, and negative prior failures plus one, $\beta > 0$. Then $\E(Y) = \alpha / (\alpha + \beta)$ and $\Var(Y) = \alpha\beta / ((\alpha + \beta)^2 (\alpha + \beta + 1))$.
+
+**rstanarm** function `r rdoc("rstasnarm", "stan_betareg")`
+
+See:
+
+- @FerrariCribari-Neto2004a, @Cribari-NetoZeileis2010a, and @GruenKosmidisZeileis2012a on beta regression.
+- **rstanarm** documentation [Modeling Rates/Proportions using Beta Regression with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html)
+
+

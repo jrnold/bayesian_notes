@@ -596,8 +596,6 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 $$
 
 
-
-
 [^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
 
 

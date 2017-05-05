@@ -45,25 +45,6 @@ library("R6")
 #   )
 # )
 
-# beta_0^* = beta_0 - \sum_{k} \beta_k mean(x_k) / sd(x_k)
-# beta_k^* = \beta_k / sd(x_k)
-standardize_coef = function(x_mean, x_sd, beta) {
-  a = beta[1L]
-  b = beta[-1L]
-  bb = b / x_sd
-  aa = a - sum(bb * x_mean)
-  c(aa, bb)
-}
-
-# beta_0 = beta_0 + \sum_{k} \beta_k^*  \times  mean(x_k) \times sd(x_k)
-# beta_k = \beta_k^* * sd(x_k)
-unstandardize_coef = function(x_mean, x_sd, beta) {
-  a = beta[1L]
-  b = beta[-1L]
-  bb = b * x_sd
-  aa = a + b * x_mean
-  c(aa, bb)
-}
 
 X <- lm_preprocess(update(mod_formula, . ~ . -1), data = HanmerKalkan)
 ```

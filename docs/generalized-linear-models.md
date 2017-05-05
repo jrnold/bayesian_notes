@@ -64,176 +64,6 @@ Multinomial            Logit           K-vector of integers, $\{x_1, \dots, x_K\
 
 Table: Common distributions and link functions. Table derived from @Fox2016a [p. 421],  [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model), and [stats](https://www.rdocumentation.org/packages/stats/topics/glm).
 
-## Binomial
-
-- The outcomes $Y$ are non-negative integers: $0, 1, 2, \dots, n_i$.
-- The total number, $n_i$, can vary by observation.
-- Special case: $n_i = 1$ for all $i \in (1, 0)$: logit, probit models.
-
-The outcome is distributed Binomial,
-$$
-\begin{aligned}[t]
-y_i \sim \dbinom\left(n_i, \pi \right)
-\end{aligned}
-$$
-
-The parameter $\pi \in [0, 1]$ is modeled with a link function and a linear predictor.
-
-There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
-
-**Logit:** The logistic function,
-    $$
-    \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
-    $$
-    Stan function `softmax`.
-- **Probit:** The CDF of the normal distribution.
-    $$
-    \pi_i = \Phi(x_i\T \beta)
-    $$
-    Stan function `normal_cdf`.
-
-- **cauchit**: The CDF of the Cauchy distribution. Stan function `cauchy_cdf`.
-- **cloglog**: The inverse of the conditional log-log function (cloglog) is
-    $$
-    \pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
-    $$
-    Stan function `inv_cloglog`.
-
-[^binomialcdf]: Since a CDF maps reals to $(0, 1)$, any CDF can be used as a link function.
-
-These link-functions are plotted below.
-Of these link functions, the probit has the narrowest tails (sensitivity to outliers), followed by the logit, and cauchit.
-The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric.[^cloglog]
-At zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
-
-```r
-make.link("cloglog")$linkinv(0)
-#> [1] 0.632
-```
-
-[^cloglog]: @BeckKatzTucker1998a show that the cloglog link function can be derived from a grouped duration model with binary response variables.
-
-
-```r
-map(c("logit", "probit", "cauchit", "cloglog"),  make.link) %>%
-map_df(
-  function(link) {
-    tibble(x = seq(-4, 4, length.out = 101),
-           y = link$linkinv(x),
-           link_name = link$name)
-  }
-) %>%
-  ggplot(aes(x = x, y = y, colour = link_name)) +
-  geom_line()
-```
-
-<img src="generalized-linear-models_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
-
-
-In Stan, the Binomial distribution has two implementations:
-
-- `binomial_lpdf`
-- `binomial_logit_lpdf`: Poisson with a log link. This implementation is for numeric stability.
-
-
-### Example: Vote Turnout
-
-A general Stan model for estimating logit models is:
-
-
-```r
-mod1
-```
-
-<pre>
-  <code class="stan">// Logit Model
-//
-// y ~ Bernoulli(p)
-// p = a + X B
-// b0 \sim cauchy(0, 10)
-// b \sim cauchy(0, 2.5)
-data {
-  // number of observations
-  int N;
-  // response
-  // vectors are only real numbers
-  // need to use an array
-  int<lower = 0, upper = 1> y[N];
-  // number of columns in the design matrix X
-  int K;
-  // design matrix X
-  matrix [N, K] X;
-}
-parameters {
-  // regression coefficient vector
-  real b0;
-  vector[K] b;
-}
-transformed parameters {
-  vector<lower = 0.0, upper = 1.0>[N] p;
-  p = inv_logit(b0 + X * b);
-}
-model {
-  // priors
-  b0 ~ cauchy(0.0, 10.0);
-  b ~ cauchy(0.0, 2.5);
-  // likelihood
-  y ~ binomial(1, p);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[N] y_rep;
-  // log-likelihood posterior
-  vector[N] log_lik;
-  for (i in 1:N) {
-    y_rep[i] = binomial_rng(1, p[i]);
-    log_lik[i] = binomial_lpmf(y[i] | 1, p[i]);
-  }
-}</code>
-</pre>
-This uses the default semi-informative priors in Gelman 2008 ...
-
-Estimate a model of vote turnout in the 1992 from the American National Election Survey (ANES).
-The data is from [Zelig](https://www.rdocumentation.org/packages/Zelig/topics/turnout).[^ex-logit]
-
-```r
-data("turnout", package = "Zelig")
-```
-Vote choice (`vote`) is modeled as a function of age, income, and race.
-
-```r
-mod_formula <- vote ~ poly(age, 2) + income + educate + race - 1
-```
-
-```r
-mod1_data <- lm_preprocess(mod_formula, data = turnout)
-```
-
-
-[^ex-logit]: Example from [Zelig-logit](http://docs.zeligproject.org/en/latest/zelig-logit.html).
-
-### Extensions
-
-- Separation: 
-- Rare events:
-
-### Perfect Separation
-
-- @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
-- @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
-- @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
-- @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
-- @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
-
-### References
-
-- @Stan2016a [Sec. 8.5]
-- @McElreath2016a [Ch 10]
-- @GelmanHill2007a [Ch. 5; Sec 6.4-6.5]
-- @Fox2016a [Ch. 14]
-- @BDA3 [Ch. 16]
-
-
 
 ## Count Models
 
@@ -264,13 +94,335 @@ In Stan, the Poisson distribution has two implementations:
 
 Also, `rstanarm` supports the [Poisson](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
+## Example
 
-### References
+A regression model of bilateral sanctions for the period 1939 to 1983. 
+The outcome variable is the number of countries imposing sanctions.
 
-- @GelmanHill2007a [p. 109-116]
-- @McElreath2016a [Ch 10]
-- @Fox2016a [Ch. 14]
-- @BDA3 [Ch. 16]
+```r
+data("sanction", package = "Zelig")
+```
+
+
+
+```r
+library("rstan")
+library("tidyverse")
+library("magrittr")
+#> 
+#> Attaching package: 'magrittr'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     set_names
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     extract
+#> The following object is masked from 'package:rstan':
+#> 
+#>     extract
+
+URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv"
+
+autoscale <- function(x, center = TRUE, scale = TRUE) {
+  nvals <- length(unique(x))
+  if (nvals <= 1) {
+    out <- x
+  } else if (nvals == 2) {
+    out <- if (scale) {
+      (x - min(x, na.rm = TRUE)) / diff(range(x, finite = TRUE))
+    } else x
+    if (center) {
+      out <- x - mean(x)
+    }
+  } else {
+    out <- if (center) {
+      x - mean(x, na.rm = TRUE)
+    } else x
+    out <- if (scale) out / sd(out, na.rm = TRUE)
+  }
+  out
+}
+
+
+f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg + percent_uninsured +
+      income + percent_nonwhite + percent_metro)
+
+br <- read_csv(URL) %>%
+  mutate(oppose_expansion = 1 - support_expansion,
+         dem_governor = -1 * gop_governor,
+         obama_win = as.integer(obama_share >= 0.5),
+         percent_nonwhite = percent_black + percent_hispanic) %>%
+  rename(gop_leg = legGOP) %>%
+  # keep only variables in the formula
+  model.frame(f, data = .) %>%
+  # drop missing values (if any?)
+  drop_na()
+#> Parsed with column specification:
+#> cols(
+#>   .default = col_integer(),
+#>   state = col_character(),
+#>   state_abbr = col_character(),
+#>   house12 = col_double(),
+#>   sen12 = col_double(),
+#>   support_expansion_new = col_character(),
+#>   percent_uninsured = col_double(),
+#>   ideology = col_double(),
+#>   income = col_double(),
+#>   percent_black = col_double(),
+#>   percent_hispanic = col_double(),
+#>   percent_metro = col_double(),
+#>   dsh = col_double(),
+#>   obama_share = col_double()
+#> )
+#> See spec(...) for full column specifications.
+
+br_scaled <- br %>%
+  # Autoscale all vars but response
+  mutate_at(vars(-oppose_expansion), autoscale)
+
+glm(f, data = br, family = "binomial") %>% summary()
+#> 
+#> Call:
+#> glm(formula = f, family = "binomial", data = br)
+#> 
+#> Deviance Residuals: 
+#>    Min      1Q  Median      3Q     Max  
+#> -2.374  -0.461  -0.131   0.630   2.207  
+#> 
+#> Coefficients:
+#>                   Estimate Std. Error z value Pr(>|z|)   
+#> (Intercept)         4.5103     4.5986    0.98    0.327   
+#> dem_governor       -4.1556     1.4794   -2.81    0.005 **
+#> obama_win          -2.1470     1.3429   -1.60    0.110   
+#> gop_leg            -0.1865     1.2974   -0.14    0.886   
+#> percent_uninsured  -0.3072     0.1651   -1.86    0.063 . 
+#> income             -0.0421     0.0776   -0.54    0.587   
+#> percent_nonwhite   17.8505    48.3030    0.37    0.712   
+#> percent_metro     -12.4390    32.4446   -0.38    0.701   
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance: 68.593  on 49  degrees of freedom
+#> Residual deviance: 37.948  on 42  degrees of freedom
+#> AIC: 53.95
+#> 
+#> Number of Fisher Scoring iterations: 5
+
+library("rstanarm")
+#> Loading required package: Rcpp
+#> Loading required package: methods
+#> rstanarm (Version 2.15.3, packaged: 2017-04-29 06:18:44 UTC)
+#> - Do not expect the default priors to remain the same in future rstanarm versions.
+#> Thus, R scripts should specify priors explicitly, even if they are just the defaults.
+#> - For execution on a local, multicore CPU with excess RAM we recommend calling
+#> options(mc.cores = parallel::detectCores())
+
+fit1 <- stan_glm(f, data = br, family = "binomial")
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 8.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.83 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.235043 seconds (Warm-up)
+#>                0.22847 seconds (Sampling)
+#>                0.463513 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.31055 seconds (Warm-up)
+#>                0.264407 seconds (Sampling)
+#>                0.574957 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 4.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.252112 seconds (Warm-up)
+#>                0.233343 seconds (Sampling)
+#>                0.485455 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 3.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.240345 seconds (Warm-up)
+#>                0.225775 seconds (Sampling)
+#>                0.46612 seconds (Total)
+
+fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.89876 seconds (Warm-up)
+#>                0.30577 seconds (Sampling)
+#>                2.20453 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.75645 seconds (Warm-up)
+#>                0.297077 seconds (Sampling)
+#>                2.05353 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.38778 seconds (Warm-up)
+#>                0.3123 seconds (Sampling)
+#>                1.70008 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 4.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.43995 seconds (Warm-up)
+#>                0.249752 seconds (Sampling)
+#>                1.6897 seconds (Total)
+```
+
+
 
 
 ## Negative Binomial
@@ -317,10 +469,19 @@ In Stan, there are multiple parameterizations of the
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
-
 - @BDA3 [Ch 16]
 
-### Multinomial / Categorical Models
+### References
+
+For general references on count models see
+
+- @GelmanHill2007a [p. 109-116]
+- @McElreath2016a [Ch 10]
+- @Fox2016a [Ch. 14]
+- @BDA3 [Ch. 16]
+
+
+## Multinomial / Categorical Models
 
 ## Gamma Regression
 
@@ -371,9 +532,7 @@ See:
 
 ## Ordered Logistic
 
-
-
-**rstanarm** function [rstasnarm](https://www.rdocumentation.org/packages/rstasnarm/topics/stan_polr)
+See **rstanarm** function [rstasnarm](https://www.rdocumentation.org/packages/rstasnarm/topics/stan_polr)
 
 - @GelmanHill2007a [Ch 6.5]
 - *rstanarm** vignette [Estimating Ordinal Regression Models with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/polr.html)

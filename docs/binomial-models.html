@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="heteroskedasticity-and-robust-regression.html">
-<link rel="next" href="binomial-models.html">
+<link rel="prev" href="generalized-linear-models.html">
+<link rel="next" href="unbounded-count-models.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -280,7 +280,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="12.3" data-path="generalized-linear-models.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
+<li class="chapter" data-level="12.3" data-path="binomial.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
 <li class="chapter" data-level="12.3.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#location-scale-families"><i class="fa fa-check"></i><b>12.3.1</b> Location-Scale Families</a></li>
 <li class="chapter" data-level="12.3.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>12.3.2</b> Scale Mixtures of Normal Distributions</a></li>
 <li class="chapter" data-level="12.3.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>12.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
@@ -349,193 +349,160 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="generalized-linear-models" class="section level1">
-<h1><span class="header-section-number">8</span> Generalized Linear Models</h1>
-<div id="generalized-linear-models-1" class="section level2">
-<h2><span class="header-section-number">8.1</span> Generalized Linear Models</h2>
-<p>Generalized linear models (GLMs) are a class of commonly used models.[^glm-r] In GLMs, the mean is specified as a function of a linear model of predictors, <span class="math display">\[
-E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta}) .
-\]</span> GLMs are a generalization of linear regression from an unbounded continuous outcome variable to other types of data: binary, count, categorical, bounded continuous.</p>
-<p>A GLM consists of three components:</p>
-<ol style="list-style-type: decimal">
-<li>A <em>probability distribution</em> (<em>family</em>) specifying the conditional distribution of the response variable. In GLMs, the distribution is in the exponential family: Normal, Binomial, Poisson, Categorical, Multinomial, Poisson, Beta.</li>
-<li>A <em>linear predictor</em>, which is a linear function of the predictors, <span class="math display">\[
-\eta = \mat{X} \vec{\beta} .
-\]</span></li>
-<li>A <em>link function</em> (<span class="math inline">\(g(.)\)</span>) which maps the expected value to the the linear predictor, <span class="math display">\[
-g(\mu) = \eta .
-\]</span> The link function is smooth and invertible, and the <em>inverse link function</em> or <em>mean function</em> maps the linear predictor to the mean, <span class="math display">\[
-\mu = g^{-1}(\eta) .
-\]</span> The link function (<span class="math inline">\(g\)</span>) and its inverse ($g^{-1}) translate <span class="math inline">\(\eta\)</span> from <span class="math inline">\((\-infty, +\infty)\)</span> to the proper range for the probability distribution and back again.</li>
-</ol>
-<p>These models are often estimated with MLE, as with the function <a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats</a>. However, these are also easily estimated in a Bayesian setting.</p>
-<p>See the help for <a href="https://www.rdocumentation.org/packages/stats/topics/family">stats</a> for common probability distributions, <a href="https://www.rdocumentation.org/packages/stats/topics/make.link">stats</a> for common links, and the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia</a> page for a table of common GLMs. See the function <strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> for even more examples of link functions and probability distributions.</p>
-<table>
-<caption>Common Link Functions and their inverses. Table derived from <span class="citation">Fox (2016, 419)</span>.</caption>
-<thead>
-<tr class="header">
-<th align="left">Link</th>
-<th align="left">Range of <span class="math inline">\(\mu_i\)</span></th>
-<th align="left"><span class="math inline">\(\eta_i = g(\mu_i)\)</span></th>
-<th align="left"><span class="math inline">\(\mu_i = g^{-1}(\eta)_i\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Identity</td>
-<td align="left"><span class="math inline">\((-\infty, \infty)\)</span></td>
-<td align="left"><span class="math inline">\(\mu_i\)</span></td>
-<td align="left"><span class="math inline">\(\eta_i\)</span></td>
-</tr>
-<tr class="even">
-<td align="left">Inverse</td>
-<td align="left"><span class="math inline">\((-\infty, \infty) \setminus \{0\}\)</span></td>
-<td align="left"><span class="math inline">\(\mu_i^{-1}\)</span></td>
-<td align="left"><span class="math inline">\(\eta_i^{-1}\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left">Log</td>
-<td align="left"><span class="math inline">\((0, \infty)\)</span></td>
-<td align="left"><span class="math inline">\(\log(\mu_i)\)</span></td>
-<td align="left"><span class="math inline">\(\exp(\eta_i)\)</span></td>
-</tr>
-<tr class="even">
-<td align="left">Inverse-square</td>
-<td align="left"><span class="math inline">\((0, \infty)\)</span></td>
-<td align="left"><span class="math inline">\(\mu_i^{-2}\)</span></td>
-<td align="left"><span class="math inline">\(\eta_i^{-1/2}\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left">Square-root</td>
-<td align="left"><span class="math inline">\((0, \infty)\)</span></td>
-<td align="left"><span class="math inline">\(\sqrt{\mu_i}\)</span></td>
-<td align="left"><span class="math inline">\(\eta_{i}^2\)</span></td>
-</tr>
-<tr class="even">
-<td align="left">Logit</td>
-<td align="left"><span class="math inline">\((0, 1)\)</span></td>
-<td align="left"><span class="math inline">\(\log(\mu / (1 - \mu_i)\)</span></td>
-<td align="left"><span class="math inline">\(1 / (1 + \exp(-\eta_i))\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left">Probit</td>
-<td align="left"><span class="math inline">\((0, 1)\)</span></td>
-<td align="left"><span class="math inline">\(\Phi^{-1}(\mu_i)\)</span></td>
-<td align="left"><span class="math inline">\(\Phi(\eta_i)\)</span></td>
-</tr>
-<tr class="even">
-<td align="left">Cauchit</td>
-<td align="left"><span class="math inline">\((0, 1)\)</span></td>
-<td align="left"><span class="math inline">\(\tan(\pi (\mu_i - 1 / 2))\)</span></td>
-<td align="left"><span class="math inline">\(\frac{1}{\pi} \arctan(\eta_i) + \frac{1}{2}\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left">Log-log</td>
-<td align="left"><span class="math inline">\((0, 1)\)</span></td>
-<td align="left"><span class="math inline">\(-\log(-log(\mu_i))\)</span></td>
-<td align="left"><span class="math inline">\(\exp(-\exp(-\eta_i))\)</span></td>
-</tr>
-<tr class="even">
-<td align="left">Complementary Log-log</td>
-<td align="left"><span class="math inline">\((0, 1)\)</span></td>
-<td align="left"><span class="math inline">\(\log(-log(1 - \mu_i))\)</span></td>
-<td align="left"><span class="math inline">\(1 - \exp(-\exp(\eta_i))\)</span></td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Common distributions and link functions. Table derived from <span class="citation">Fox (2016, 421)</span>, <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia</a>, and <a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats</a>.</caption>
-<thead>
-<tr class="header">
-<th align="left">Distribution</th>
-<th align="left">Canonical Link</th>
-<th align="left">Range of <span class="math inline">\(Y_i\)</span></th>
-<th align="left">Other link functions</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Normal</td>
-<td align="left">Identity</td>
-<td align="left">real: <span class="math inline">\((-\infty, +\infty)\)</span></td>
-<td align="left">log, inverse</td>
-</tr>
-<tr class="even">
-<td align="left">Exponential</td>
-<td align="left">Inverse</td>
-<td align="left">real: <span class="math inline">\((0, +\infty)\)</span></td>
-<td align="left">identity, log</td>
-</tr>
-<tr class="odd">
-<td align="left">Gamma</td>
-<td align="left">Inverse</td>
-<td align="left">real: <span class="math inline">\((0, +\infty)\)</span></td>
-<td align="left">identity, log</td>
-</tr>
-<tr class="even">
-<td align="left">Inverse-Gaussian</td>
-<td align="left">Inverse-squared</td>
-<td align="left">real: <span class="math inline">\((0, +\infty)\)</span></td>
-<td align="left">inverse, identity, log</td>
-</tr>
-<tr class="odd">
-<td align="left">Bernoulli</td>
-<td align="left">Logit</td>
-<td align="left">integer: <span class="math inline">\(\{0, 1\}\)</span></td>
-<td align="left">probit, cauchit, log, cloglog</td>
-</tr>
-<tr class="even">
-<td align="left">Binomial</td>
-<td align="left">Logit</td>
-<td align="left">integer: <span class="math inline">\(0, 1, \dots, n_i\)</span></td>
-<td align="left">probit, cauchit, log, cloglog</td>
-</tr>
-<tr class="odd">
-<td align="left">Poisson</td>
-<td align="left">Log</td>
-<td align="left">integer: <span class="math inline">\(0, 1, 2, \dots\)</span></td>
-<td align="left">identity, sqrt</td>
-</tr>
-<tr class="even">
-<td align="left">Categorical</td>
-<td align="left">Logit</td>
-<td align="left"><span class="math inline">\(0, 1, \dots, K\)</span></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Multinomial</td>
-<td align="left">Logit</td>
-<td align="left">K-vector of integers, <span class="math inline">\(\{x_1, \dots, x_K\}\)</span> s.t. <span class="math inline">\(\sum_k x_k = N\)</span>.</td>
-<td align="left"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="count-models" class="section level2">
-<h2><span class="header-section-number">8.2</span> Count Models</h2>
-<div id="poisson" class="section level3">
-<h3><span class="header-section-number">8.2.1</span> Poisson</h3>
-<p>The Poisson model is used for unbounded count data, <span class="math display">\[
-Y = 0, 1, \dots, \infty
-\]</span> The outcome is modeled as a Poisson distribution <span class="math display">\[
-y_i \sim \dpois(\lambda_i)
-\]</span> with positive mean parameter <span class="math inline">\(\lambda_i \in (0, \infty)\)</span>. Since <span class="math inline">\(\lambda_i\)</span> has to be positive, the most common link function is the log, <span class="math display">\[
-\log(\lambda_i) = \exp(\vec{x}_i&#39; \vec{\beta})
-\]</span> which has the inverse, <span class="math display">\[
-\lambda_i = \log(\vec{x}_i \vec{\beta})
+<div id="binomial-models" class="section level1">
+<h1><span class="header-section-number">9</span> Binomial Models</h1>
+<p>Binomial models are used to an outcome that is a bounded integer, <span class="math display">\[
+y_i \in 0, 1, 2, \dots, n .
+\]</span> The outcome is distributed Binomial, <span class="math display">\[
+\begin{aligned}[t]
+y_i \sim \dbin \left(n_i, \pi \right)
+\end{aligned}
 \]</span></p>
-<p>In Stan, the Poisson distribution has two implementations:</p>
+<p>A <em>binary outcome</em> is a common special case, <span class="math display">\[
+y_i \in \{0, 1\},
+\]</span> and <span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dbin \left(1, \pi \right) &amp; \text{for all $i$} \\
+\end{aligned}
+\]</span></p>
+<p>Depending on the <a href="unbounded-count-models.html#link-functions">link function</a>, these are logit and probit models that appear in the literature.</p>
+<div id="link-functions-link-function" class="section level3">
+<h3><span class="header-section-number">9.0.1</span> Link Functions {link-function}</h3>
+<p>The parameter <span class="math inline">\(\pi \in (0, 1)\)</span> is often modeled with a link function is and a linear predictor. <span class="math display">\[
+\pi_i = g^{-1}(\vec{x}_i \vec{\beta}})
+\]</span></p>
+<p>There are several common link functions, but they all have to map <span class="math inline">\(R \to (0, 1)\)</span>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <ul>
-<li><code>poisson_lpdf</code></li>
-<li><code>poisson_log_lpdf</code>: Poisson with a log link. This is for numeric stability.</li>
+<li><strong>Logit:</strong> The logistic function, <span class="math display">\[
+\pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
+\]</span> Stan function <code>softmax</code>.</li>
+<li><p><strong>Probit:</strong> The CDF of the normal distribution. <span class="math display">\[
+\pi_i = \Phi(x_i\T \beta)
+\]</span> Stan function <code>normal_cdf</code>.</p></li>
+<li><strong>cauchit</strong>: The CDF of the Cauchy distribution. Stan function <code>cauchy_cdf</code>.</li>
+<li><p><strong>cloglog</strong>: The inverse of the conditional log-log function (cloglog) is <span class="math display">\[
+\pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
+\]</span> Stan function <code>inv_cloglog</code>.</p></li>
 </ul>
-<p>Also, <code>rstanarm</code> supports the <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html">Poisson</a>.</p>
+<p>Of these link functions, the probit has the narrowest tails (sensitivity to outliers), followed by the logit, and cauchit. The <a href="https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29">cloglog</a> function is different in that it is asymmetric.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> At zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">make.link</span>(<span class="st">&quot;cloglog&quot;</span>)<span class="op">$</span><span class="kw">linkinv</span>(<span class="dv">0</span>)
+<span class="co">#&gt; [1] 0.632</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map</span>(<span class="kw">c</span>(<span class="st">&quot;logit&quot;</span>, <span class="st">&quot;probit&quot;</span>, <span class="st">&quot;cauchit&quot;</span>, <span class="st">&quot;cloglog&quot;</span>),  make.link) <span class="op">%&gt;%</span>
+<span class="kw">map_df</span>(
+  <span class="cf">function</span>(link) {
+    <span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dt">length.out =</span> <span class="dv">101</span>),
+           <span class="dt">y =</span> link<span class="op">$</span><span class="kw">linkinv</span>(x),
+           <span class="dt">link_name =</span> link<span class="op">$</span>name)
+  }
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">colour =</span> link_name)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="binomial_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
+<div id="stan" class="section level3">
+<h3><span class="header-section-number">9.0.2</span> Stan</h3>
+<p>In Stan, the Binomial distribution has two implementations:</p>
+<ul>
+<li><code>binomial_lpdf</code></li>
+<li><code>binomial_logit_lpdf</code>.</li>
+</ul>
+<p>The later implementation is for numeric stability. Taking an exponential of a value can be numerically unstable, and <code>binomial_logit_lpdf</code> input is on the logit scale: Whereas, <span class="math display">\[
+y_i \sim \mathsf{binomial}(1 / (1 + \exp(x_i \beta)))
+\]</span> the following is true, <span class="math display">\[
+y_i \sim \mathsf{binomial\_logit}(x_i \beta)
+\]</span></p>
 </div>
-<div id="example" class="section level2">
-<h2><span class="header-section-number">8.3</span> Example</h2>
-<p>A regression model of bilateral sanctions for the period 1939 to 1983. The outcome variable is the number of countries imposing sanctions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;sanction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)</code></pre></div>
+<div id="example-vote-turnout" class="section level3">
+<h3><span class="header-section-number">9.0.3</span> Example: Vote Turnout</h3>
+<p>A general Stan model for estimating logit models is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1</code></pre></div>
+<pre>
+  <code class="stan">// Logit Model
+//
+// y ~ Bernoulli(p)
+// p = a + X B
+// b0 \sim cauchy(0, 10)
+// b \sim cauchy(0, 2.5)
+data {
+  // number of observations
+  int N;
+  // response
+  // vectors are only real numbers
+  // need to use an array
+  int<lower = 0, upper = 1> y[N];
+  // number of columns in the design matrix X
+  int K;
+  // design matrix X
+  // should not include an intercept
+  matrix [N, K] X;
+}
+transformed data {
+  # default scales same as rstanarm
+  # assume data is centered and scaled
+  real<lower = 0.0> a_scale;
+  vector<lower = 0.0>[K] b_scale;
+  a_scale = 10.0;
+  b_scale = rep_vector(2.5, K);
+}
+parameters {
+  // regression coefficient vector
+  real a;
+  vector[K] b;
+}
+transformed parameters {
+  vector<lower = 0.0, upper = 1.0>[N] p;
+  p = inv_logit(a + X * b);
+}
+model {
+  // priors
+  a ~ normal(0.0, a_scale);
+  b ~ normal(0.0, b_scale);
+  // likelihood
+  y ~ binomial(1, p);
+}
+generated quantities {
+  // simulate data from the posterior
+  vector[N] y_rep;
+  // log-likelihood posterior
+  vector[N] log_lik;
+  for (i in 1:N) {
+    y_rep[i] = binomial_rng(1, p[i]);
+    log_lik[i] = binomial_lpmf(y[i] | 1, p[i]);
+  }
+}</code>
+</pre>
+<p>Estimate a model of vote turnout in the 1992 from the American National Election Survey (ANES). The data is from <a href="https://www.rdocumentation.org/packages/Zelig/topics/turnout">Zelig</a>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;turnout&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)</code></pre></div>
+<p>Vote choice (<code>vote</code>) is modeled as a function of age, income, and race.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_formula &lt;-<span class="st"> </span>vote <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(age, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>educate <span class="op">+</span><span class="st"> </span>race <span class="op">-</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data &lt;-<span class="st"> </span><span class="kw">lm_preprocess</span>(mod_formula, <span class="dt">data =</span> turnout)</code></pre></div>
+</div>
+<div id="separation" class="section level3">
+<h3><span class="header-section-number">9.0.4</span> Separation</h3>
+<p>*<a href="binomial-models.html#separation">Separation</a>(<a href="https://en.wikipedia.org/wiki/Separation_(statistics)*" class="uri">https://en.wikipedia.org/wiki/Separation_(statistics)*</a> is when a predictor perfectly predicts a binary response variable <span class="citation">(Rainey 2016a, <span class="citation">Zorn (2005)</span>)</span></p>
+<ul>
+<li><em>complete separation:</em> the predictor perfectly predicts both 0’s and 1’s.</li>
+<li><em>quasi-complete separation:</em> the predictor perfectly predicts either 0’s or 1’s.</li>
+</ul>
+<p>This is related and similar to identification in MLE and multicollinearity in OLS.</p>
+<p>The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.</p>
+<p>Using a weakly informatin prior such as those suggested by is sufficient to solve separation, <span class="math display">\[
+\beta_k \sim N(0, 2.5)
+\]</span> where all the columns of <span class="math inline">\(\code{x}\)</span> are assumed to mean zero, unit variance (or otherwise standardized). The half-Cauchy prior, <span class="math inline">\(C^{+}(0, 2.5)\)</span>, suggested in <span class="citation">Gelman et al. (2008)</span> is insufficiently informative to to deal with separation <span class="citation">(Ghosh, Li, and Mitra 2015)</span>, but finite-variance weakly informative Student-t or Normal distributions will work.</p>
+<p>These are the priors suggested by <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">Stan</a> and used by default in rstanarm <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
+<p><span class="citation">Rainey (2016a)</span> provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values. Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).</p>
+<p><span class="citation">Firth (1993)</span> suggests the Jeffreys invariant prior, <span class="math display">\[
+p(\beta_k) \propto |I(\beta)|^{\frac{1}{2}}
+\]</span> where <span class="math inline">\(|I(\beta)|\)</span> is the information matrix, <span class="math display">\[
+\begin{aligned}[t]
+I(\beta) &amp;= \mat{X}\T \mat{W} \mat{X} \\
+\mat{W} &amp;= \diag(\pi_i (1 - \pi_i))
+\end{aligned}
+\]</span> This is the Jeffreys invariant prior. This was also recommended <span class="citation">Zorn (2005)</span>.</p>
+<p><span class="citation">Greenland and Mansournia (2015)</span> suggest a log-F prior distribution which has an intuitive interpretation related to the number of observations.</p>
+<div id="example-support-of-aca-medicaid-expansion" class="section level4">
+<h4><span class="header-section-number">9.0.4.1</span> Example: Support of ACA Medicaid Expansion</h4>
+<p>This example is from <span class="citation">Rainey (2016a)</span> from the original paper <span class="citation">Barrilleaux and Rainey (2014)</span> with replication code <a href="https://github.com/carlislerainey/separation">here</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;magrittr&quot;</span>)
@@ -572,7 +539,6 @@ autoscale &lt;-<span class="st"> </span><span class="cf">function</span>(x, <spa
   }
   out
 }
-
 
 f &lt;-<span class="st"> </span>(oppose_expansion <span class="op">~</span><span class="st"> </span>dem_governor <span class="op">+</span><span class="st"> </span>obama_win <span class="op">+</span><span class="st"> </span>gop_leg <span class="op">+</span><span class="st"> </span>percent_uninsured <span class="op">+</span>
 <span class="st">      </span>income <span class="op">+</span><span class="st"> </span>percent_nonwhite <span class="op">+</span><span class="st"> </span>percent_metro)
@@ -640,21 +606,12 @@ br_scaled &lt;-<span class="st"> </span>br <span class="op">%&gt;%</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of Fisher Scoring iterations: 5</span>
 
-<span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)
-<span class="co">#&gt; Loading required package: Rcpp</span>
-<span class="co">#&gt; Loading required package: methods</span>
-<span class="co">#&gt; rstanarm (Version 2.15.3, packaged: 2017-04-29 06:18:44 UTC)</span>
-<span class="co">#&gt; - Do not expect the default priors to remain the same in future rstanarm versions.</span>
-<span class="co">#&gt; Thus, R scripts should specify priors explicitly, even if they are just the defaults.</span>
-<span class="co">#&gt; - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
-<span class="co">#&gt; options(mc.cores = parallel::detectCores())</span>
-
 fit1 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span class="dt">data =</span> br, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 1).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 8.3e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.83 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 8.2e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.82 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -671,110 +628,9 @@ fit1 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span cla
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.235043 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.22847 seconds (Sampling)</span>
-<span class="co">#&gt;                0.463513 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 2).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 2.4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.31055 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.264407 seconds (Sampling)</span>
-<span class="co">#&gt;                0.574957 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 3).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 4.5e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.252112 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.233343 seconds (Sampling)</span>
-<span class="co">#&gt;                0.485455 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 4).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 3.6e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.240345 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.225775 seconds (Sampling)</span>
-<span class="co">#&gt;                0.46612 seconds (Total)</span>
-
-fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span class="dt">data =</span> br, <span class="dt">prior =</span> <span class="ot">NULL</span>, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 1).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 3.3e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.89876 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.30577 seconds (Sampling)</span>
-<span class="co">#&gt;                2.20453 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.23298 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.216148 seconds (Sampling)</span>
+<span class="co">#&gt;                0.449128 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 2).</span>
@@ -797,15 +653,15 @@ fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span cla
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.75645 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.297077 seconds (Sampling)</span>
-<span class="co">#&gt;                2.05353 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.229708 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.228836 seconds (Sampling)</span>
+<span class="co">#&gt;                0.458544 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 3).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 2.6e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -822,15 +678,15 @@ fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span cla
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.38778 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.3123 seconds (Sampling)</span>
-<span class="co">#&gt;                1.70008 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.239766 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.23077 seconds (Sampling)</span>
+<span class="co">#&gt;                0.470536 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 4).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 4.1e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 2.1e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -847,119 +703,203 @@ fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span cla
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 1.43995 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.249752 seconds (Sampling)</span>
-<span class="co">#&gt;                1.6897 seconds (Total)</span></code></pre></div>
+<span class="co">#&gt;  Elapsed Time: 0.230778 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.230523 seconds (Sampling)</span>
+<span class="co">#&gt;                0.461301 seconds (Total)</span>
+fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span class="dt">data =</span> br, <span class="dt">prior =</span> <span class="ot">NULL</span>, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 1).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 2.6e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.61463 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.261314 seconds (Sampling)</span>
+<span class="co">#&gt;                1.87594 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 2.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.50313 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.221118 seconds (Sampling)</span>
+<span class="co">#&gt;                1.72424 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 3).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 2.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.25621 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.302845 seconds (Sampling)</span>
+<span class="co">#&gt;                1.55906 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;bernoulli&#39; NOW (CHAIN 4).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 2.7e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 1.38892 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.23632 seconds (Sampling)</span>
+<span class="co">#&gt;                1.62524 seconds (Total)</span></code></pre></div>
 </div>
-<div id="negative-binomial" class="section level2">
-<h2><span class="header-section-number">8.4</span> Negative Binomial</h2>
-<p>The <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial</a> model is also used for unbounded count data, <span class="math display">\[
-Y = 0, 1, \dots, \infty
-\]</span> The Poisson distribution has the restriction that the mean is equal to the variance, <span class="math inline">\(\E(X) = \Var(X) = \lambda\)</span>. The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).</p>
-<p>The outcome is modeled as a negative binomial distribution, <span class="math display">\[
-y_i \sim \dbinom(\alpha_i, \beta)
-\]</span> with shape <span class="math inline">\(\alpha \in \R^{+}\)</span> and inverse scale <span class="math inline">\(\beta \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \alpha_i / \beta\)</span> and <span class="math inline">\(\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
-\begin{aligned}[t]
-\mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
-\alpha_i &amp;= \mu_i / \beta
-\end{aligned}
+</div>
+<div id="rare-events-logit" class="section level2">
+<h2><span class="header-section-number">9.1</span> Rare Events Logit</h2>
+</div>
+<div id="case-control" class="section level2">
+<h2><span class="header-section-number">9.2</span> Case Control</h2>
+<p>In binary outcome variables, sometimes it is useful to sample on the dependent variable. For example, <span class="citation">King and Zeng (2001b)</span> and <span class="citation">King and Zeng (2001a)</span> discuss applications with respect to conflicts in international relations. For most country-pairs, for most years, there is no conflict. If some data are costly to gather, it may be cost efficient to get data for conflicts and then randomly select a smaller number of non-conflicts on which to gather data. The sample will no longer be representative, but the estimates can be corrected.</p>
+<p>The reason this works well, is that if there are very few 1’s, additional 0’s have little influence on the estimation (<span class="citation">King and Zeng (2001b)</span>). This should hold more generally will unbalanaced classes; in some sense, the amount of effective observations is not much more than the number in the lowest category.</p>
+<p><span class="citation">King and Zeng (2001b)</span> propose two corrections:</p>
+<ol style="list-style-type: decimal">
+<li>Correcting the intercept (prior correctio)</li>
+<li>Weighting observations</li>
+</ol>
+<p>The <em>prior correction</em> ntoes that <span class="math display">\[
+\pi_i = \frac{1}{1 + \exp(-X \beta)}
 \]</span></p>
-<p><strong>Important</strong> The negative binomial distribution has many different parameterizations. An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. <span class="math display">\[
-y_i \sim \dnbinomalt(\mu_i, \phi)
-\]</span> with location parameter <span class="math inline">\(\mu \in \R^{+}\)</span> and over-dispersion parameter <span class="math inline">\(\phi \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \mu_i\)</span> and <span class="math inline">\(\Var(Y) = \mu_i + \frac{\mu_i^2}{\phi}\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
-\begin{aligned}[t]
-\mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
-\end{aligned}
+<p>The unbalanced sample only affects the intercept. If <span class="math inline">\(\hat\beta_0\)</span> is the intercept from the MLE, the case-control corrected intercept <span class="math inline">\(\tilde{\beta}\)</span> is, <span class="math display">\[
+\tilde\beta_0^* = \hat\beta_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
+\]</span> In an MLE setting, this can be applied after estimation, but used in any predicted values. In a Bayesian setting, this correct should be applied within the model by adding the offset to the estimation.</p>
+<p>In a Stan model, this could be implemented by directly incrementing these values</p>
+<pre><code>data {
+  int N;
+  int y[N];
+  real tau;
+}
+transformed data {
+  real offset;
+  real y_mean;
+  y_mean = mean(y);
+  offset = log((1 - tau) / tau * (y_mean) / (1 - y_mean));
+}
+parameters {
+  real alpha0;
+}
+transformed parameters {
+  real alpha;
+  alpha &lt;- alpha0 - offset;
+}</code></pre>
+<p>If there was uncertainty about <span class="math inline">\(\tau\)</span>, then <span class="math inline">\(\tau\)</span> could be modeled as a parameter. It may also be okay to only correct the intercept in a generated quantities block? (not sure).</p>
+<p>An alternative approach is to use a <em>weighted likelihood</em>:</p>
+<ul>
+<li>ones are weighted by <span class="math inline">\(\tau / \bar{y}\)</span></li>
+<li>zeros are weighted by <span class="math inline">\((1 - \tau) / \bar{1 - \bar{y}}\)</span></li>
+</ul>
+<p>The log likelihood would then be <span class="math display">\[
+\ln L_w(\beta | y) = w_1 \sum_{Y_i = 1} \ln (\pi_i) + w_0 \sum_{Y_i = 0} \ln (1 - \pi_i)
 \]</span></p>
-<p>In Stan, there are multiple parameterizations of the</p>
+<p>In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation. For example, something like this,</p>
+<pre><code>if (y[i]) {
+  target += w * binomial_lpdf(1, pi[i])
+} else {
+  target += (1 - w) * binomial_lpdf(1, pi[i])
+}</code></pre>
+<p>See the example for <a href="http://docs.zeligproject.org/en/latest/zelig-relogit.html">Zelig-relogit</a></p>
+<div id="references-5" class="section level4">
+<h4><span class="header-section-number">9.2.0.1</span> References</h4>
 <ul>
-<li><code>neg_binomial_lpdf(y | alpha, beta)</code>with shape parameter <code>alpha</code> and inverse scale parameter <code>beta</code>.</li>
-<li><code>neg_binomial_2_lpdf(y | mu, phi)</code> with mean <code>mu</code> and over-dispersion parameter <code>phi</code>.</li>
-<li><code>neg_binomial_2_log_lpdf(y | eta, phi)</code> with log-mean <code>eta</code> and over-dispersion parameter <code>phi</code></li>
+<li><span class="citation">Firth (1993)</span> proposes a penalized likelihood approach using the Jeffreys invariant prior</li>
+<li><span class="citation">King and Zeng (2001a)</span> and <span class="citation">King and Zeng (2001b)</span> apply an approach similar to the penalized likelihood approach for the similar problem of rare events</li>
+<li><span class="citation">Zorn (2005)</span> also suggests using the Firth logistic regression to avoid perfect separation</li>
+<li><span class="citation">Rainey (2016a)</span> shows that Cauchy(0, 2.5) priors can be used</li>
+<li><span class="citation">Greenland and Mansournia (2015)</span> provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.</li>
 </ul>
-<p>Also, <code>rstanarm</code> supports Poisson and <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html">negative binomial models</a>.</p>
+</div>
+<div id="references-6" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> References</h3>
+<p>For general references on binomial models see</p>
 <ul>
-<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
-</ul>
-<div id="references-3" class="section level3">
-<h3><span class="header-section-number">8.4.1</span> References</h3>
-<p>For general references on count models see</p>
-<ul>
-<li><span class="citation">Gelman and Hill (2007, 109–16)</span></li>
+<li><span class="citation">Stan Development Team (2016 Sec. 8.5)</span></li>
 <li><span class="citation">McElreath (2016 Ch 10)</span></li>
+<li><span class="citation">Gelman and Hill (2007)</span> [Ch. 5; Sec 6.4-6.5]</li>
 <li><span class="citation">Fox (2016 Ch. 14)</span></li>
 <li><span class="citation">Gelman et al. (2013 Ch. 16)</span></li>
 </ul>
-</div>
-</div>
-<div id="multinomial-categorical-models" class="section level2">
-<h2><span class="header-section-number">8.5</span> Multinomial / Categorical Models</h2>
-</div>
-<div id="gamma-regression" class="section level2">
-<h2><span class="header-section-number">8.6</span> Gamma Regression</h2>
-<p>The response variable is continuous and positive. In gamma regression, the coefficient of variation is constant rather than the variance. <span class="math display">\[
-y_i \sim \dgamma(\alpha_i, \beta)
-\]</span> and <span class="math display">\[
-\begin{aligned}[t]
-\alpha_i &amp;= \mu_i / \beta \\
-\mu_i &amp;= \vec{x}_i \vec{\gamma}
-\end{aligned}
-\]</span></p>
-<p>In Stan,</p>
-<ul>
-<li><code>gamma(y | alpha, beta)</code> with shape parameter <span class="math inline">\(\alpha &gt; 0\)</span> and inverse scale parameter <span class="math inline">\(\beta &gt; 0\)</span>. Then <span class="math inline">\(\E(Y) = \alpha / \beta\)</span> and <span class="math inline">\(\Var(Y) = \alpha / \beta^2\)</span>.</li>
-</ul>
-</div>
-<div id="beta-regression" class="section level2">
-<h2><span class="header-section-number">8.7</span> Beta Regression</h2>
-<p>This is for a response variable that is a proportion, <span class="math inline">\(y_i \in (0, 1)\)</span>, <span class="math display">\[
-y_i \sim \dbeta(\alpha_i, \beta_i)
-\]</span> and <span class="math display">\[
-\begin{aligned}[t]
-\mu_i &amp;= g^{-1}(\vec{x}_i&#39; \vec{\gamma}) \\
-\alpha_i &amp;= \mu_i \phi \\
-\beta_i &amp;= (1 - \mu_i) \phi 
-\end{aligned}
-\]</span> Additionally, the <span class="math inline">\(\phi\)</span> parameter could also be modeled.</p>
-<p>In Stan:</p>
-<ul>
-<li><code>beta(y | alpha, beta)</code> with positive prior successes plus one, <span class="math inline">\(\alpha &gt; 0\)</span>, and negative prior failures plus one, <span class="math inline">\(\beta &gt; 0\)</span>. Then <span class="math inline">\(\E(Y) = \alpha / (\alpha + \beta)\)</span> and <span class="math inline">\(\Var(Y) = \alpha\beta / ((\alpha + \beta)^2 (\alpha + \beta + 1))\)</span>.</li>
-</ul>
-<p><strong>rstanarm</strong> function <a href="https://www.rdocumentation.org/packages/rstasnarm/topics/stan_betareg">rstasnarm</a></p>
-<p>See:</p>
-<ul>
-<li><span class="citation">Ferrari and Cribari-Neto (2004)</span>, <span class="citation">Cribari-Neto and Zeileis (2010)</span>, and <span class="citation">Grün, Kosmidis, and Zeileis (2012)</span> on beta regression.</li>
-<li><strong>rstanarm</strong> documentation <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html">Modeling Rates/Proportions using Beta Regression with rstanarm</a></li>
-</ul>
-</div>
-<div id="ordered-logistic" class="section level2">
-<h2><span class="header-section-number">8.8</span> Ordered Logistic</h2>
-<p>See <strong>rstanarm</strong> function <a href="https://www.rdocumentation.org/packages/rstasnarm/topics/stan_polr">rstasnarm</a></p>
-<ul>
-<li><span class="citation">Gelman and Hill (2007 Ch 6.5)</span></li>
-<li>*rstanarm** vignette <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/polr.html">Estimating Ordinal Regression Models with rstanarm</a></li>
-</ul>
-</div>
-<div id="references-4" class="section level2">
-<h2><span class="header-section-number">8.9</span> References</h2>
-<p>Texts:</p>
-<ul>
-<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
-<li><span class="citation">Gelman and Hill (2007 Ch. 5-6)</span></li>
-<li><span class="citation">McElreath (2016 Ch. 9)</span></li>
-<li><span class="citation">King (1998)</span> discusses MLE estimation of many common GLM models</li>
-<li>Many econometrics/statistics textbooks, e.g. <span class="citation">Fox (2016)</span>, discuss GLMs. Though they are not derived from a Bayesian context, they can easily transferred.</li>
-</ul>
 
 </div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="4">
+<li id="fn4"><p>Since the cumulative distribution function of a distribution maps reals to <span class="math inline">\((0, 1)\)</span>, any CDF can be used as a link function.<a href="binomial-models.html#fnref4">↩</a></p></li>
+<li id="fn5"><p><span class="citation">Beck, Katz, and Tucker (1998)</span> show that the cloglog link function can be derived from a grouped duration model with binary response variables.<a href="binomial-models.html#fnref5">↩</a></p></li>
+<li id="fn6"><p>Example from <a href="http://docs.zeligproject.org/en/latest/zelig-logit.html">Zelig-logit</a>.<a href="binomial-models.html#fnref6">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="heteroskedasticity-and-robust-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="binomial-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="generalized-linear-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="unbounded-count-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -978,7 +918,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/generalized-linear-models.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/binomial.Rmd",
 "text": "Edit"
 },
 "download": null,

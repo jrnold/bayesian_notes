@@ -8,7 +8,7 @@
   <title>Updating: A Set of Bayesian Notes</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3.6 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -93,7 +93,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <body>
 
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dnorm}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpois}{\mathrm{Poisson}}
+\newcommand{\dbinom}{\mathrm{Bin}}
+\newcommand{\dbinom}{\mathrm{Bin-alt}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnbinom}{\mathrm{Neg-bin}}
+\newcommand{\dnbinomalt}{\mathrm{Neg-bin-alt}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+
+\DeclareMathOperator{\logistic}{Logistic}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
@@ -177,84 +234,104 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>8</b> Generalized Linear Models</a><ul>
 <li class="chapter" data-level="8.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>8.1</b> Generalized Linear Models</a></li>
-<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#binomial"><i class="fa fa-check"></i><b>8.2</b> Binomial</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>8.2.1</b> Example: Vote Turnout</a></li>
-<li class="chapter" data-level="8.2.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#extensions"><i class="fa fa-check"></i><b>8.2.2</b> Extensions</a></li>
-<li class="chapter" data-level="8.2.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#perfect-separation"><i class="fa fa-check"></i><b>8.2.3</b> Perfect Separation</a></li>
-<li class="chapter" data-level="8.2.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.2.4</b> References</a></li>
+<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>8.2</b> Count Models</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.2.1</b> Poisson</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>8.3</b> Count Models</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.3.1</b> Poisson</a></li>
-<li class="chapter" data-level="8.3.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.3.2</b> References</a></li>
-</ul></li>
+<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example"><i class="fa fa-check"></i><b>8.3</b> Example</a></li>
 <li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>8.4.1</b> Multinomial / Categorical Models</a></li>
+<li class="chapter" data-level="8.4.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.4.1</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>8.5</b> Gamma Regression</a></li>
-<li class="chapter" data-level="8.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>8.6</b> Beta Regression</a></li>
-<li class="chapter" data-level="8.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#ordered-logistic"><i class="fa fa-check"></i><b>8.7</b> Ordered Logistic</a></li>
-<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-5"><i class="fa fa-check"></i><b>8.8</b> References</a></li>
-<li class="chapter" data-level="8.9" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#bayesian-formulation"><i class="fa fa-check"></i><b>8.9</b> Bayesian formulation</a></li>
-<li class="chapter" data-level="8.10" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#worked-example"><i class="fa fa-check"></i><b>8.10</b> Worked Example</a><ul>
-<li class="chapter" data-level="8.10.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example"><i class="fa fa-check"></i><b>8.10.1</b> Example</a></li>
-<li class="chapter" data-level="8.10.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>8.10.2</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="8.10.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>8.10.3</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="8.10.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#comparison"><i class="fa fa-check"></i><b>8.10.4</b> Comparison</a></li>
+<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>8.5</b> Multinomial / Categorical Models</a></li>
+<li class="chapter" data-level="8.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>8.6</b> Gamma Regression</a></li>
+<li class="chapter" data-level="8.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>8.7</b> Beta Regression</a></li>
+<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#ordered-logistic"><i class="fa fa-check"></i><b>8.8</b> Ordered Logistic</a></li>
+<li class="chapter" data-level="8.9" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.9</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>9</b> Binomial Models</a><ul>
+<li class="chapter" data-level="9.0.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>9.0.1</b> Link Functions {link-function}</a></li>
+<li class="chapter" data-level="9.0.2" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>9.0.2</b> Stan</a></li>
+<li class="chapter" data-level="9.0.3" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>9.0.3</b> Example: Vote Turnout</a></li>
+<li class="chapter" data-level="9.0.4" data-path="binomial-models.html"><a href="binomial-models.html#separation"><i class="fa fa-check"></i><b>9.0.4</b> Separation</a></li>
+<li class="chapter" data-level="9.1" data-path="binomial-models.html"><a href="binomial-models.html#rare-events-logit"><i class="fa fa-check"></i><b>9.1</b> Rare Events Logit</a></li>
+<li class="chapter" data-level="9.2" data-path="binomial-models.html"><a href="binomial-models.html#case-control"><i class="fa fa-check"></i><b>9.2</b> Case Control</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="binomial-models.html"><a href="binomial-models.html#references-6"><i class="fa fa-check"></i><b>9.2.1</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html"><i class="fa fa-check"></i><b>10</b> Unbounded Count Models</a><ul>
+<li class="chapter" data-level="10.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#poisson-1"><i class="fa fa-check"></i><b>10.1</b> Poisson</a></li>
+<li class="chapter" data-level="10.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-1"><i class="fa fa-check"></i><b>10.2</b> Negative Binomial</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-7"><i class="fa fa-check"></i><b>10.2.1</b> References</a></li>
+<li class="chapter" data-level="10.2.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#link-functions"><i class="fa fa-check"></i><b>10.2.2</b> Link functions</a></li>
+<li class="chapter" data-level="10.2.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-1"><i class="fa fa-check"></i><b>10.2.3</b> Stan</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-bilateral-sanctions"><i class="fa fa-check"></i><b>10.3</b> Example: Bilateral Sanctions</a></li>
+<li class="chapter" data-level="10.4" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-2"><i class="fa fa-check"></i><b>10.4</b> Negative Binomial</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-8"><i class="fa fa-check"></i><b>10.4.1</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>11</b> Categorical Variables</a></li>
+<li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a><ul>
+<li class="chapter" data-level="12.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#bayesian-formulation"><i class="fa fa-check"></i><b>12.1</b> Bayesian formulation</a></li>
+<li class="chapter" data-level="12.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#worked-example"><i class="fa fa-check"></i><b>12.2</b> Worked Example</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#example-1"><i class="fa fa-check"></i><b>12.2.1</b> Example</a></li>
+<li class="chapter" data-level="12.2.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>12.2.2</b> Double Exponential (Laplace) Prior</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>12.2.3</b> Hierarchical Prior (HS)</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#comparison"><i class="fa fa-check"></i><b>12.2.4</b> Comparison</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="8.11" data-path="robust.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>8.11</b> Miscelleanous Mathematical Background</a><ul>
-<li class="chapter" data-level="8.11.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#location-scale-families"><i class="fa fa-check"></i><b>8.11.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="8.11.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>8.11.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="8.11.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>8.11.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="8.11.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#qr-factorization"><i class="fa fa-check"></i><b>8.11.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="8.11.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>8.11.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="12.3" data-path="robust.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#location-scale-families"><i class="fa fa-check"></i><b>12.3.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="12.3.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>12.3.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="12.3.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>12.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="12.3.4" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#qr-factorization"><i class="fa fa-check"></i><b>12.3.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="12.3.5" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#cholesky-decomposition"><i class="fa fa-check"></i><b>12.3.5</b> Cholesky Decomposition</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>9</b> Notes</a><ul>
-<li class="chapter" data-level="9.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>9.1</b> Syllabi</a></li>
-<li class="chapter" data-level="9.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>9.2</b> Textbooks</a></li>
-<li class="chapter" data-level="9.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>9.3</b> Topics</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>9.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="9.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>9.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="9.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>9.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="9.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>9.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="9.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>9.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="9.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>9.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="9.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>9.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="9.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>9.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="9.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>9.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="9.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>9.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="9.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>9.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="9.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>9.3.12</b> Applied Bayes Rule</a></li>
+<li class="chapter" data-level="13" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>13</b> Notes</a><ul>
+<li class="chapter" data-level="13.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>13.1</b> Syllabi</a></li>
+<li class="chapter" data-level="13.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>13.2</b> Textbooks</a></li>
+<li class="chapter" data-level="13.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>13.3</b> Topics</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>13.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="13.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>13.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="13.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>13.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="13.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>13.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="13.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>13.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="13.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>13.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="13.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>13.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="13.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>13.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="13.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>13.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="13.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>13.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="13.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>13.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="13.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>13.3.12</b> Applied Bayes Rule</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>9.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>9.4.1</b> Software</a></li>
-<li class="chapter" data-level="9.4.2" data-path="notes.html"><a href="notes.html#stan"><i class="fa fa-check"></i><b>9.4.2</b> Stan</a></li>
-<li class="chapter" data-level="9.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>9.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="9.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>9.4.4</b> Political Science Bayesian Works</a></li>
+<li class="chapter" data-level="13.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>13.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>13.4.1</b> Software</a></li>
+<li class="chapter" data-level="13.4.2" data-path="notes.html"><a href="notes.html#stan-2"><i class="fa fa-check"></i><b>13.4.2</b> Stan</a></li>
+<li class="chapter" data-level="13.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>13.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="13.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>13.4.4</b> Political Science Bayesian Works</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>9.5</b> Model Checking</a></li>
-<li class="chapter" data-level="9.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>9.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="9.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>9.6.1</b> Mixed Methods and Qualitative Research</a></li>
+<li class="chapter" data-level="13.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>13.5</b> Model Checking</a></li>
+<li class="chapter" data-level="13.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>13.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>13.6.1</b> Mixed Methods and Qualitative Research</a></li>
 </ul></li>
-<li class="chapter" data-level="9.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>9.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="9.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>9.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="9.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>9.8.1</b> Examples</a></li>
-<li class="chapter" data-level="9.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>9.8.2</b> Latent Variable Models</a></li>
+<li class="chapter" data-level="13.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>13.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="13.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>13.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="13.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>13.8.1</b> Examples</a></li>
+<li class="chapter" data-level="13.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>13.8.2</b> Latent Variable Models</a></li>
 </ul></li>
-<li class="chapter" data-level="9.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>9.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="9.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>9.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="9.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>9.9.2</b> German Tank Problem</a></li>
+<li class="chapter" data-level="13.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>13.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="13.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>13.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="13.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>13.9.2</b> German Tank Problem</a></li>
 </ul></li>
-<li class="chapter" data-level="9.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>9.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="9.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>9.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="9.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>9.11.1</b> Uncategorized</a></li>
+<li class="chapter" data-level="13.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>13.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="13.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>13.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="13.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>13.11.1</b> Uncategorized</a></li>
 </ul></li>
-<li class="chapter" data-level="9.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>9.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="9.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>9.13</b> Things to cover</a></li>
+<li class="chapter" data-level="13.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>13.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="13.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>13.13</b> Things to cover</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-6.html"><a href="references-6.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="" data-path="references-9.html"><a href="references-9.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -272,64 +349,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-\[
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\Cor}{Cor}
-\DeclareMathOperator{\Bias}{Bias}
-\DeclareMathOperator{\MSE}{MSE}
-\DeclareMathOperator{\RMSE}{RMSE}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\median}{median}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
-
-\newcommand{\mat}[1]{\boldsymbol{#1}}
-\newcommand{\vec}[1]{\boldsymbol{#1}}
-\newcommand{\T}{'}
-
-% This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}[1]{t_{#1}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dbinom}{\mathrm{Bin}}
-\newcommand{\dbinom}{\mathrm{Bin-alt}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin-alt}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-
-\DeclareMathOperator{\logistic}{Logistic}
-
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbb{N}}
-
-\newcommand{\cia}{\perp\!\!\!\perp}
-\DeclareMathOperator*{\plim}{plim}
-\]
 <div id="heteroskedasticity-and-robust-regression" class="section level1">
 <h1><span class="header-section-number">7</span> Heteroskedasticity and Robust Regression</h1>
 <div id="prerequisites-1" class="section level2">

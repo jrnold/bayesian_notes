@@ -1,0 +1,73 @@
+# Generalized Linear Models
+
+Generalized linear models (GLMs) are a class of commonly used models.[^glm-r]
+In GLMs, the mean is specified as a function of a linear model of predictors,
+$$
+E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta}) .
+$$
+GLMs are a generalization of linear regression from an unbounded continuous outcome variable to other types of data: binary, count, categorical, bounded continuous.
+
+A GLM consists of three components:
+
+1. A *probability distribution* (*family*) specifying the conditional distribution of the response variable.
+    In GLMs, the distribution is in the exponential family: Normal, Binomial, Poisson, Categorical, Multinomial, Poisson, Beta.
+2. A *linear predictor*, which is a linear function of the predictors,
+    $$
+    \eta = \mat{X} \vec{\beta} .
+    $$
+3. A *link function* ($g(.)$) which maps the expected value to the  the linear predictor,
+    $$
+    g(\mu) = \eta .
+    $$
+    The link function is smooth and invertible, and the  *inverse link function* or *mean function* maps the linear predictor to the mean,
+    $$
+    \mu = g^{-1}(\eta) .
+    $$
+    The link function ($g$) and its inverse ($g^{-1}) translate $\eta$ from $(\-infty, +\infty)$ to the proper range for the probability distribution and back again.
+
+These models are often estimated with MLE, as with the function `r rdoc("stats", "glm")`. 
+However, these are also easily estimated in a Bayesian setting.
+
+See the help for `r rdoc("stats", "family")` for common probability distributions, `r rdoc("stats", "make.link")` for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
+See the function `r rpkg("VGAM")` for even more examples of link functions and probability distributions.
+
+Link                       Range of $\mu_i$                    $\eta_i = g(\mu_i)$                         $\mu_i = g^{-1}(\eta)_i$
+-------------------------- ----------------------------------- ------------------------------------------- ----------------------------------------
+Identity                   $(-\infty, \infty)$                 $\mu_i$                                     $\eta_i$
+Inverse                    $(-\infty, \infty) \setminus \{0\}$ $\mu_i^{-1}$                                $\eta_i^{-1}$
+Log                        $(0, \infty)$                       $\log(\mu_i)$                               $\exp(\eta_i)$
+Inverse-square             $(0, \infty)$                       $\mu_i^{-2}$                                $\eta_i^{-1/2}$
+Square-root                $(0, \infty)$                       $\sqrt{\mu_i}$                              $\eta_{i}^2$
+Logit                      $(0, 1)$                            $\log(\mu / (1 - \mu_i)$                    $1 / (1 + \exp(-\eta_i))$
+Probit                     $(0, 1)$                            $\Phi^{-1}(\mu_i)$                          $\Phi(\eta_i)$
+Cauchit                    $(0, 1)$                            $\tan(\pi (\mu_i - 1 / 2))$                 $\frac{1}{\pi} \arctan(\eta_i) + \frac{1}{2}$
+Log-log                    $(0, 1)$                            $-\log(-log(\mu_i))$                        $\exp(-\exp(-\eta_i))$
+Complementary Log-log      $(0, 1)$                            $\log(-log(1 - \mu_i))$                     $1 - \exp(-\exp(\eta_i))$
+
+Table:  Common Link Functions and their inverses. Table derived from @Fox2016a [p. 419].
+
+
+Distribution           Canonical Link  Range of $Y_i$                                                        Other link functions
+---------------------- --------------- --------------------------------------------------------------------- ------------------------------
+Normal                 Identity        real: $(-\infty, +\infty)$                                            log, inverse
+Exponential            Inverse         real: $(0, +\infty)$                                                  identity, log
+Gamma                  Inverse         real: $(0, +\infty)$                                                  identity, log
+Inverse-Gaussian       Inverse-squared real: $(0, +\infty)$                                                  inverse, identity, log
+Bernoulli              Logit           integer: $\{0, 1\}$                                                   probit, cauchit, log, cloglog
+Binomial               Logit           integer: $0, 1, \dots, n_i$                                           probit, cauchit, log, cloglog
+Poisson                Log             integer: $0, 1, 2, \dots$                                             identity, sqrt
+Categorical            Logit           $0, 1, \dots, K$                                                      
+Multinomial            Logit           K-vector of integers, $\{x_1, \dots, x_K\}$ s.t. $\sum_k x_k = N$.
+
+Table: Common distributions and link functions. Table derived from @Fox2016a [p. 421],  [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model), and `r rdoc("stats", "glm")`.
+
+## References
+
+Texts:
+
+- @BDA3 [Ch 16]
+- @GelmanHill2007a [Ch. 5-6]
+- @McElreath2016a [Ch. 9]
+- @King1998a discusses MLE estimation of many common GLM models
+- Many econometrics/statistics textbooks, e.g. @Fox2016a, discuss GLMs. Though
+    they are not derived from a Bayesian context, they can easily transferred.

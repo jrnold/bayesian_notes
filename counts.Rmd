@@ -1,0 +1,172 @@
+# Unbounded Count Models
+
+Unbounded count models are models in which the response is a natural number with no upper bound,
+$$
+y_i = 0, 1, \dots, \infty .
+$$
+
+The two distributions most commonly used to model this are 
+
+- Poisson
+- Negative Binomial
+
+## Poisson 
+
+The [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution):
+$$
+y_i \sim \dpois(\lambda_i) ,
+$$
+
+
+
+## Negative Binomial
+
+The [Negative Binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) model is also used for unbounded count data,
+$$
+Y = 0, 1, \dots, \infty
+$$
+The Poisson distribution has the restriction that the mean is equal to the variance, $\E(X) = \Var(X) = \lambda$.
+The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).
+
+The outcome is modeled as a negative binomial distribution,
+$$
+y_i \sim \dbinom(\alpha_i, \beta)
+$$
+with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
+Then the mean can be modeled and transformed to the 
+$$
+\begin{aligned}[t]
+\mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
+\alpha_i &= \mu_i / \beta
+\end{aligned}
+$$
+
+
+**Important** The negative binomial distribution has many different parameterizations.
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
+$$
+y_i \sim \dnbinomalt(\mu_i, \phi)
+$$
+with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
+Then the mean can be modeled and transformed to the 
+$$
+\begin{aligned}[t]
+\mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
+\end{aligned}
+$$
+
+In Stan, there are multiple parameterizations of the 
+
+- `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
+- `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
+- `neg_binomial_2_log_lpdf(y | eta, phi)` with log-mean `eta` and over-dispersion parameter `phi`
+
+Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
+
+- @BDA3 [Ch 16]
+
+### References
+
+For general references on count models see
+
+- @GelmanHill2007a [p. 109-116]
+- @McElreath2016a [Ch 10]
+- @Fox2016a [Ch. 14]
+- @BDA3 [Ch. 16]
+
+
+where $y_i \in 0, 1, 2, \dots$.
+
+The parameter $\lambda_i \in (0, \infty)$ is both the mean and variance of the distribution.
+
+### Link functions
+
+In many applications, $\lambda$, is modeled as some function of covariates or other parameters.
+
+Since $\lambda_i$ must be positive, the most common link function is the log,
+$$
+\log(\lambda_i) = \exp(\vec{x}_i' \vec{\beta})
+$$
+which has the inverse,
+$$
+\lambda_i = \log(\vec{x}_i \vec{\beta})
+$$
+
+### Stan
+
+In Stan, the Poisson distribution has two implementations:
+
+- `r stanfunc("poisson_lpdf")`
+- `r stanfunc("poisson_log_lpdf")`
+
+The Poisson with a log link. This is for numeric stability.
+
+In **rstanarm** use `r rdoc("rstanarm", "stan_glm")` for a Poisson GLM.
+
+- **rstanarm** vignette on [counte models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
+
+## Example: Bilateral Sanctions
+
+A regression model of bilateral sanctions for the period 1939 to 1983. 
+The outcome variable is the number of countries imposing sanctions.
+```{r}
+data("sanction", package = "Zelig")
+```
+
+
+
+## Negative Binomial
+
+The [Negative Binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) model is also used for unbounded count data,
+$$
+Y = 0, 1, \dots, \infty
+$$
+The Poisson distribution has the restriction that the mean is equal to the variance, $\E(X) = \Var(X) = \lambda$.
+The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).
+
+The outcome is modeled as a negative binomial distribution,
+$$
+y_i \sim \dbinom(\alpha_i, \beta)
+$$
+with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
+Then the mean can be modeled and transformed to the 
+$$
+\begin{aligned}[t]
+\mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
+\alpha_i &= \mu_i / \beta
+\end{aligned}
+$$
+
+
+**Important** The negative binomial distribution has many different parameterizations.
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
+$$
+y_i \sim \dnbinomalt(\mu_i, \phi)
+$$
+with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
+Then the mean can be modeled and transformed to the 
+$$
+\begin{aligned}[t]
+\mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
+\end{aligned}
+$$
+
+In Stan, there are multiple parameterizations of the 
+
+- `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
+- `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
+- `neg_binomial_2_log_lpdf(y | eta, phi)` with log-mean `eta` and over-dispersion parameter `phi`
+
+Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
+
+- @BDA3 [Ch 16]
+
+### References
+
+For general references on count models see
+
+- @GelmanHill2007a [p. 109-116]
+- @McElreath2016a [Ch 10]
+- @Fox2016a [Ch. 14]
+- @BDA3 [Ch. 16]
+

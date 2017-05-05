@@ -1,6 +1,7 @@
 suppressPackageStartupMessages({
   library("knitr")
   library("rstan")
+  library("rstanarm")
   library("bayesplot")
   library("loo")
   library("tidyverse")
@@ -63,3 +64,16 @@ knit_print.stanmodel <- function(x, options) {
   code_str <- x@model_code
   knitr::asis_output(as.character(htmltools::tags$pre(htmltools::tags$code(htmltools::HTML(code_str), class = "stan"))))
 }
+
+# cat_line <- function (...)  {
+#   cat(..., "\n", sep = "")
+# }
+#
+# print.stanfit_summary <- function(x, n = 10, stats = NULL) {
+#   stats <- stats %||% colnames(x$summary)
+#   comment <- sprintf("stanfit_summary: %d paramters, %d chains",
+#                      nrow(x$summary), length(x$c_summary))
+#   cat_line(comment)
+#   print(head(x$summary[ , stats, drop = FALSE], n))
+# }
+

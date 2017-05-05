@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="markov-chain-monte-carlo.html">
-<link rel="next" href="posterior-inference.html">
+<link rel="prev" href="unbounded-count-models.html">
+<link rel="next" href="ordered-categorical-outcomes.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -280,7 +280,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="12.3" data-path="diagnostics.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
+<li class="chapter" data-level="12.3" data-path="categorical.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
 <li class="chapter" data-level="12.3.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#location-scale-families"><i class="fa fa-check"></i><b>12.3.1</b> Location-Scale Families</a></li>
 <li class="chapter" data-level="12.3.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>12.3.2</b> Scale Mixtures of Normal Distributions</a></li>
 <li class="chapter" data-level="12.3.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>12.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
@@ -349,219 +349,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="mcmc-diagnostics" class="section level1">
-<h1><span class="header-section-number">3</span> MCMC Diagnostics</h1>
-<p>There are two parts of checking a Bayesian model:</p>
-<ol style="list-style-type: decimal">
-<li>diagnostics: Is the sampler working? Is it adequately approximating the specified posterior distribution: <span class="math inline">\(p(\theta | D)\)</span>.</li>
-<li>model fit: Does the model adequately represent the data?</li>
-</ol>
-<p>This chapter covers the former.</p>
-<p>Also see the <strong><a href="https://cran.r-project.org/package=bayesplot">bayesplot</a></strong> vignette <a href="https://cran.r-project.org/web/packages/bayesplot/vignettes/MCMC-diagnostics.html">Visual MCMC diagnostics using the bayesplot package</a>, which though specific to the provides, provides a good overview of these diagnostics.</p>
-<div id="reparameterize-models" class="section level2">
-<h2><span class="header-section-number">3.1</span> Reparameterize Models</h2>
-<ol style="list-style-type: decimal">
-<li>Reduce correlation between parameters (e.g. see <code>mcmc_pairs</code>)</li>
-<li>Put parameters on the same scale. The samplers work best when all parameters are roughly on the same scale, e.g. <span class="math inline">\(\approx 1\)</span>. Try to avoid situations where parameters are orders of magnitude different, e.g. 1e-5 and 1e+10.</li>
-<li>Increase the informativeness of priors. If parameters are too uninformative, the posterior distribution may have wide tails that hamper sampling. One way of thinking about it is that the model is only “weakly identified” and requires either more data or more informative priors to estimate.</li>
-</ol>
-</div>
-<div id="convergence-diagnostics" class="section level2">
-<h2><span class="header-section-number">3.2</span> Convergence Diagnostics</h2>
-<p>Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilbrium. However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.</p>
-<p>In general there is no way to prove that the sampler has converged.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> However, there are several statistics that indicate that a sampler has not converged.</p>
-<div id="potential-scale-reduction-hatr" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</h3>
-<p>In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting values of the chains <span class="citation">(Stan Development Team 2016, Sec 28.2)</span>.</p>
-<p>One way to check this is to compare the distributions of multiple chains—in equilibrium they should all have the same mean. Additionally, the split <span class="math inline">\(\hat{R}\)</span> tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.</p>
-<p>See <span class="citation">Stan Development Team (2016 Sec 28.2)</span> for the equations to calculate these.</p>
-<p><strong>TODO:</strong> Examples of passing and non-passing Rhat chains using fake data generated from known functions with a given autocorrelation.</p>
-<p><strong>Rule of Thumb:</strong> The rule of thumb is that R-hat values for all less than 1.1 <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">source</a>. Note that <strong>all</strong> parameters must show convergence. This is a necessary but not sufficient condition for convergence.</p>
-</div>
-<div id="references-1" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> References</h3>
-<ul>
-<li><span class="citation">Gelman et al. (2013, 267)</span></li>
-<li><span class="citation">Stan Development Team (2016 Ch 28.)</span> for how Stan calculates Rhat, autocorrelations, and ESS.</li>
-<li><span class="citation">Gelman and Rubin (1992)</span> introduce the R-hat statistic</li>
-</ul>
-</div>
-</div>
-<div id="autocorrelation-effective-sample-size-and-mcse" class="section level2">
-<h2><span class="header-section-number">3.3</span> Autocorrelation, Effective Sample Size, and MCSE</h2>
-<p>MCMC samples are dependent. This does not effect the validity of inference on the posterior if the samplers has time to explore the posterior distribution, but it does affect the efficiency of the sampler.</p>
-<p>In other words, highly correlated MCMC samplers requires more samples to produce the same level of Monte Carlo error for an estimate.</p>
-<div id="effective-sample-size" class="section level3">
-<h3><span class="header-section-number">3.3.1</span> Effective Sample Size</h3>
-<p>The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample. Suppose that the <span class="math inline">\(\rho^2_t\)</span> is the ACF function of a sample of size <span class="math inline">\(N\)</span>, the effective sample size, <span class="math inline">\(N_eff\)</span>, is <span class="math display">\[
-N_{eff} = \frac{N}{\sum_{t = -\infty}^\infty \rho_t} = \frac{N}{1 + 2 \sum_{t = -\infty}^\infty \rho_t}.
-\]</span> <strong>TODO</strong> show that if <span class="math inline">\(\rho_t = 1\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = 1\)</span>, and if <span class="math inline">\(\rho_t = 0\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = N\)</span></p>
-<p>Computing the effective sample size requires calculating an autocorrelation. A multichain estimate of the autocorrelation is found by computing the <em>variogram</em> with the correlations for all lags, <span class="math display">\[
-V_t = \frac{1}{m(n - t)} \sum_{j = 1}^m \sum_{i = t + 1}^n (\psi_{i,j} - \psi_{i - t,j})^2
-\]</span> The estimate of the autocorrelations <span class="math inline">\(\hat{\rho}_t\)</span> is <span class="math display">\[
-\hat{\rho}_t = 1 - \frac{V_t}{2 \widehat{\mathrm{var}}^+}
-\]</span> The estimates of the autocorrelations can be noisy, so <span class="math inline">\(\hat{\rho}_t\)</span> are summed from 0, to the last <span class="math inline">\(t\)</span> such that <span class="math inline">\(\rho\)</span> is positive (<span class="math inline">\(T\)</span>), <span class="math display">\[
-\hat{n}_{eff} = \frac{mn}{1 + 2 \sum_{t = 1}^T \hat{\rho}_t}
-\]</span></p>
-<ul>
-<li>See also <span class="citation">Stan Development Team (2016 Sec 28.4)</span>, <span class="citation">Geyer (2011)</span>, and <span class="citation">Gelman et al. (2013 Sec 11.5)</span>.</li>
-<li>This isn’t the only way to calculate the effective sample size. The <strong><a href="https://cran.r-project.org/package=coda">coda</a></strong> package function <a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">coda</a> uses a different method. The differences are due to how the autocorrelation is calculated.</li>
-</ul>
-<p><strong>Example:</strong> Comparison of the effective sample sizes for data generated with various levels of autocorrelation. The package <code>rstan</code> does not directly expose the function it uses to calculate ESS, so this <code>ess</code> function does so (for a single chain).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
-  N &lt;-<span class="st"> </span><span class="kw">length</span>(x)
-  V &lt;-<span class="st"> </span><span class="kw">map_dbl</span>(<span class="kw">seq_len</span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>),
-          <span class="cf">function</span>(t) {
-             <span class="kw">mean</span>(<span class="kw">diff</span>(x, <span class="dt">lag =</span> t) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-          })
-  rho &lt;-<span class="st"> </span><span class="kw">head_while</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>V <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(x), <span class="st">`</span><span class="dt">&gt;</span><span class="st">`</span>, <span class="dt">y =</span> <span class="dv">0</span>)
-  N <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">sum</span>(rho))
-}
-n &lt;-<span class="st"> </span><span class="dv">1024</span>
-sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.99</span>),
-  <span class="cf">function</span>(ar) {
-    <span class="kw">tibble</span>(<span class="dt">ar =</span> ar,
-           <span class="dt">y =</span> <span class="cf">if</span> (ar <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">rnorm</span>(n) <span class="cf">else</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> ar), n),
-           <span class="dt">x =</span> <span class="kw">seq_along</span>(y),
-           <span class="dt">n_eff =</span> <span class="kw">ess</span>(y), 
-           <span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;AR = %.2f (n_eff = %.0f)&quot;</span>, ar, n_eff))
-  }
-)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sims, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
-<p><img src="diagnostics_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="thinning" class="section level2">
-<h2><span class="header-section-number">3.4</span> Thinning</h2>
-<p>Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved. Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.</p>
-<p>Both of these will produce 1,000 samples from the poserior, but effective sample size of <span class="math inline">\(B\)</span> will be greater than the effective sample size of <span class="math inline">\(A\)</span>, since after thinnin g the autocorrelation in <span class="math inline">\(B\)</span> will be lower.</p>
-<ul>
-<li><em>A</em> Generating 1,000 samples after convergence and save all of them</li>
-<li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
-</ul>
-<p>In this case, A produces 10,000 samples, and B produces 1,000. The effective sample size of A will be higher than B. However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: <span class="math inline">\(N_{eff}(A) / N_{eff}(B) &lt; 10\)</span>.</p>
-<ul>
-<li><em>A</em> Generating 10,000 samples after convergence and save all of them</li>
-<li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
-</ul>
-<p>Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.</p>
-<p>Thinning has become less of an issue as memory has become less of a computational constraint, and samplers have become more efficient.</p>
-<p>The following example simulates random values from an autocorrelated series, and applies different levels of thinning. Thinning is always decreasing the effective sample size. However, the number of effective samples per sample (<code>n_eff / n</code>) increases until the thinning is large enough that the thinned samples are uncorrelated.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">thin_ess &lt;-<span class="st"> </span><span class="cf">function</span>(thin, x) {
-  <span class="cf">if</span> (thin <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) {
-    <span class="co"># keep only thinned rows</span>
-    x_thinned &lt;-<span class="st"> </span>x[(<span class="kw">seq_len</span>(<span class="kw">length</span>(x)) <span class="op">%%</span><span class="st"> </span>thin) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]
-  } <span class="cf">else</span> {
-    x_thinned &lt;-<span class="st"> </span>x
-  }
-  <span class="kw">tibble</span>(<span class="dt">thin =</span> thin,
-         <span class="dt">n =</span> <span class="kw">length</span>(x_thinned),
-         <span class="dt">n_eff =</span> <span class="kw">ess</span>(x_thinned),
-         <span class="st">`</span><span class="dt">n_eff / n</span><span class="st">`</span> =<span class="st"> </span>n_eff <span class="op">/</span><span class="st"> </span>n)
-}
+<div id="categorical-variables" class="section level1">
+<h1><span class="header-section-number">11</span> Categorical Variables</h1>
 
-<span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>), thin_ess,
-       <span class="dt">x =</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> .<span class="dv">9</span>), <span class="dv">4096</span>))
-<span class="co">#&gt; # A tibble: 6 × 4</span>
-<span class="co">#&gt;    thin     n n_eff `n_eff / n`</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     1  4096  1266       0.309</span>
-<span class="co">#&gt; 2     2  2048  1087       0.531</span>
-<span class="co">#&gt; 3     4  1024   791       0.773</span>
-<span class="co">#&gt; 4     8   512   512       1.000</span>
-<span class="co">#&gt; 5    16   256   256       1.000</span>
-<span class="co">#&gt; 6    32   128   128       1.000</span></code></pre></div>
-<ul>
-<li><span class="citation">Gelman et al. (2013, 282–83)</span></li>
-<li><span class="citation">Stan Development Team (2016, 354–55)</span></li>
-</ul>
-<div id="traceplots" class="section level3">
-<h3><span class="header-section-number">3.4.1</span> Traceplots</h3>
-<p>Trace plots are a timeseries of sampler iterations, e.g. as produced by <a href="https://www.rdocumentation.org/packages/bayesplot/topics/mcmc_trace">bayesplot</a>.</p>
-<p>These can, but <strong>should not</strong>, be used to assess convergence,</p>
-<ul>
-<li>such visual inspection is ‘notoriously unreliable’ <span class="citation">(Gelman et al. 2013, 285)</span></li>
-<li>it cannot scale to many parameters</li>
-</ul>
-<p>Traceplots may be useful for diagnosing convergence problems <em>after</em> <span class="math inline">\(\hat{R}\)</span> or or <span class="math inline">\(n_eff\)</span> indicates problems. Some possible issues to check in these plots are</p>
-<ul>
-<li>multimodality (the traceplot jumps between different distributions)</li>
-<li>wide posterior tails (the traceplot shows regions where the sampler will reach and have difficulty returning to the main distribution)</li>
-</ul>
-</div>
-<div id="monte-carlo-standard-error-mcse" class="section level3">
-<h3><span class="header-section-number">3.4.2</span> Monte Carlo Standard Error (MCSE)</h3>
-<p>The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error. With a independent sample of size <span class="math inline">\(N\)</span>, the MCSE for the sample mean is <span class="math display">\[
-MCSE(\bar{\theta}) = \frac{s}{\sqrt{N}}
-\]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
-<p>However, MCMC are generally not independent, and the MCSE will be higher than that of an independent sample. One way to calculate the MCSE with autocorrelated samples is to use the effective sample size instead of the sample size, <span class="math display">\[
-MCSE(\bar{\theta}) = \frac{s}{\sqrt{N_{eff}}}
-\]</span></p>
-<p>An MCSE estimator for the mean is <span class="math display">\[
-\mathrm{MCSE}(\hat{\theta}) = \frac{\sd(\theta)}{\sqrt{n_{neff}}}
-\]</span> An MCSE estimator for any posterior probability, where <span class="math inline">\(\hat{p} = \Pr(f(\theta))\)</span>, follows from the standard error of a proportion, but using the effective sample size, <span class="math display">\[
-MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
-\]</span></p>
-<p>See <span class="citation">Flegal, Haran, and Jones (2008)</span> and the <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for methods to calculate MCMC standard errors for means and quantiles using subsampling methods.</p>
-<p><span class="citation">Flegal, Haran, and Jones (2008)</span> argues for using ESS as a stopping rule and convergence diagnostic for Bayesian inference.</p>
-<p>The estimation of standard errors for quantiles, as would be used in is more complicated. See the package <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for Monte Carlo standard errors of quantiles (though calculated in a different method than <strong>rstan</strong>).</p>
-<ul>
-<li><span class="citation">Gelman et al. (2013 Sec. 10.5)</span></li>
-<li><span class="citation">Flegal, Haran, and Jones (2008)</span></li>
-<li><a href="http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf">Talk by Geyer on MCSE</a></li>
-</ul>
-</div>
-</div>
-<div id="hmc-nut-specific-diagnostics" class="section level2">
-<h2><span class="header-section-number">3.5</span> HMC-NUT Specific Diagnostics</h2>
-<p>Hamiltonian Monte Carlo (HMC), and the No-U-Turn Sampler (HMC-NUTS) in particular, produce several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution. This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods such <span class="math inline">\(\hat{R}\)</span>.</p>
-<p>Three specific HMC-NUTS diagnostics are</p>
-<ol style="list-style-type: decimal">
-<li>divergent transitions</li>
-<li>maximum treedepth</li>
-<li>Bayesian fraction of missing information</li>
-</ol>
-<p>The general way to fix these issues is the manually adjust the HMC-NUTS sampler parameters.n</p>
-<ol style="list-style-type: decimal">
-<li>Stepsize: Length of the steps to take</li>
-<li>Treedepth: Number of steps to take</li>
-</ol>
-<p>During the warmup perion, Stan tunes these values, however these auto-tuned parameters may not always be optimal. The other alternative is to reparameterize the models.</p>
-<div id="divergent-transitions" class="section level3">
-<h3><span class="header-section-number">3.5.1</span> Divergent transitions</h3>
-<p><strong>The problem:</strong> The details of the HMC are technical and can be found <strong>TODO</strong>. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating. If the step sizes are too large, the discrete approximation does not work. Helpfully, when the approximation is poor it does not fail without any indication but will produce “divergent transitions”.</p>
-<p><em>If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased</em></p>
-<p><strong>The solution:</strong> Reduce the step size. This can be done by increasing the the <code>adapt_delta</code> parameter. This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup. A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.</p>
-<p>See <span class="citation">Stan Development Team (2016, 380)</span></p>
-</div>
-<div id="maximum-treedepth" class="section level3">
-<h3><span class="header-section-number">3.5.2</span> Maximum Treedepth</h3>
-<p><strong>The problem:</strong> NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try. If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum. While divergent transitions bias inference, a too-small maximum treedepth only affects efficiency. The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum treedepth were set higher.</p>
-<p><strong>The solution:</strong> Increase the maximum treedepth.</p>
-</div>
-<div id="bayesian-fraction-of-missing-information" class="section level3">
-<h3><span class="header-section-number">3.5.3</span> Bayesian Fraction of Missing Information</h3>
-<p>This is rather technical. See <span class="citation">Betancourt (2016)</span>.</p>
-
-</div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>This is also the case in optimization with non-convex objective functions.<a href="mcmc-diagnostics.html#fnref1">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="markov-chain-monte-carlo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="posterior-inference.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="unbounded-count-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ordered-categorical-outcomes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -580,7 +378,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/diagnostics.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/categorical.Rmd",
 "text": "Edit"
 },
 "download": null,

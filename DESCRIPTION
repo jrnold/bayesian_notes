@@ -17,6 +17,7 @@ Imports:
     ggmcmc,
     loo,
     rstan,
+    rstanarm,
     rubbish,
     tidyverse,
 Remotes:

@@ -1,6 +1,9 @@
-# Multilevel Models
+# Hierarchical Models
 
-Group Varying Intercepts
+
+## Equivalent Models
+
+### Group Varying Intercepts
 
 This is a regression, with a different intercept per group:
 $$
@@ -14,11 +17,13 @@ $$
 \eta_j \sim N(0, \sigma_\alpha^2)
 $$
 
-Separate local regressions
+### Separate local regressions
 
 For each group, run a regression,
 $$
-y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) \text{for all $i$ in group $j$}
+\begin{aligned}[t]
+y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) & \text{for all $i$ in group $j$}
+\end{aligned}
 $$
 And now model the group-level means,
 $$
@@ -29,8 +34,7 @@ $$
 $$
 
 
-Modeling the coefficients of a large regression model
-
+### Modeling the coefficients of a large regression model
 
 Suppose that $X$ includes all predictors and $J$ indicators for the $J$ groups. 
 
@@ -42,7 +46,7 @@ y_i &\sim N(x_i \beta, \sigma_y^2) \\
 \end{aligned}
 $$
 
-Regression with multiple error terms
+### Regression with multiple error terms
 
 $$
 \begin{aligned}[t]
@@ -51,8 +55,7 @@ y_i &\sim N(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
 \end{aligned}
 $$
 
-
-Regresion with correlated errors
+### Regresion with correlated errors
 
 $$
 \begin{aligned}[t]
@@ -65,7 +68,7 @@ $$
 \omega_i = \eta_{j[i]} + \epsilon_i
 $$
 
-The variances and covariances 
+The variances and covariances in $\Sigma$ are
 
 - for unit $i$: $\Sigma_{ii} = \var(\omega_i) = \sigma_y^2 + \sigma_{\alpha}^2$
 - for units $i$, $k$ in same group $j$: $\Sigma_{ik} = \cov(\omega_i, \omega_k) = \sigma_{\alpha}^2$

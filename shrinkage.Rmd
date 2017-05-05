@@ -105,7 +105,7 @@ $$
 \end{aligned}
 $$
 If $\nu = 1$, then this is the Horseshoe prior
-[@CarvalhoPolsonScott2010a, @CarvalhoPolsonScott2009a, @PasKleijnVaart2014a, @DattaGhosh2013a, @PolsonScott2011a, @PiironenVehtari2016b]
+[@CarvalhoPolsonScott2010a, @CarvalhoPolsonScott2009a, @PasKleijnVaart2014a, @DattaGhosh2013a, @PolsonScott2011a, @PiironenVehtari2016a]
 
 Hierarchical Shrinkage Plus (HS-$t_{\nu}$+)
 
@@ -399,6 +399,18 @@ mcmc_dens(as.array(fit_lasso), regex_pars = "^b")
 
 
 ### Hierarchical Prior (HS)
+
+The Hierarchical or Horseshoe Prior is defined as as a scale mixture of normals,
+$$
+\begin{aligned}[t]
+\lambda_i &\sim \dt{\nu}(0, 1) \\
+\end{aligned}
+$$
+In the original formulation [@CarvalhoPolsonScott2009a,@CarvalhoPolsonScott2010a] use a half-Cauchy ($\nu = 1$), but Stan suggests and `r rpkg("rstanarm")` uses 
+a Student-t with $\nu = 3$, finding that it has better sampling performance than the half-Cauchy.
+
+
+
 
 ```{r}
 mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
