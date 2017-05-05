@@ -18,19 +18,19 @@ data {
 }
 parameters {
   // regression coefficient vector
-  real b0;
+  real a;
   vector[K] b;
   real<lower = 0.0> phi;
 }
 transformed parameters {
   vector<lower = 0.0, upper = 1.0>[N] mu;
-  mu = exp(b0 + X * b);
+  mu = exp(a + X * b);
 }
 model {
   // priors
-  b0 ~ cauchy(0.0, 10.0);
-  b ~ cauchy(0.0, 2.5);
-  phi ~ cauchy(0.0, 1.0);
+  a ~ normal(0.0, 5.0);
+  b ~ normal(0.0, 2.5);
+  phi ~ cauchy(0.0, 5.0);
   // likelihood
   y ~ neg_binomial_2(mu, phi);
 }
@@ -41,6 +41,6 @@ generated quantities {
   vector[N] log_lik;
   for (i in 1:N) {
     y_rep[i] = neg_binomial_2_rng(mu[i], phi);
-    log_lik[i] = neg_binomial_2_lpdf(y[i] | mu[i], phi);
+    log_lik[i] = neg_binomial_2_lpmf(y[i] | mu[i], phi);
   }
 }

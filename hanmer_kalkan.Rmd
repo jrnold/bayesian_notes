@@ -66,13 +66,8 @@ unstandardize_coef = function(x_mean, x_sd, beta) {
 }
 
 X <- lm_preprocess(update(mod_formula, . ~ . -1), data = HanmerKalkan)
-
-
 ```
-
-
 
 ```{r}
 stan_glm(mod_formula, data = HanmerKalkan)
 ```
-

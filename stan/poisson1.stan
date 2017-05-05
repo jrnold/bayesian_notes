@@ -16,17 +16,17 @@ data {
 }
 parameters {
   // regression coefficient vector
-  real b0;
+  real a;
   vector[K] b;
 }
 transformed parameters {
   vector<lower = 0.0>[N] lambda;
-  lambda = exp(b0 + X * b);
+  lambda = exp(a + X * b);
 }
 model {
   // priors
-  b0 ~ cauchy(0.0, 10.0);
-  b ~ cauchy(0.0, 2.5);
+  a ~ normal(0.0, 5.0);
+  b ~ normal(0.0, 2.5);
   // likelihood
   y ~ poisson(lambda);
 }
@@ -36,7 +36,7 @@ generated quantities {
   // log-likelihood posterior
   vector[N] log_lik;
   for (i in 1:N) {
-    y_rep[i] = poisson_rng(1, lambda[i]);
+    y_rep[i] = poisson_rng(lambda[i]);
     log_lik[i] = poisson_lpmf(y[i] | lambda[i]);
   }
 }

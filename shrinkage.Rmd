@@ -86,6 +86,15 @@ Comparing the normal and double exponential distributions:
 2. however, the probability mass of these distributions (important for the posterior mean) is not too different.
 
 
+Difference
+
+- The point estimates are the posterior modes. In Bayesian estimation,
+    posterior means are the preferred point estimate.
+- The shrinkage parameter $\lambda$ is often a chosen by cross-validation
+    or an approximation thereof. In Bayesian estimation, the estimation 
+    marginalizes over uncertainty about the shrinkage parameter.
+
+
 
 Hierarchical Shrinkage (HS-$t_{\nu}$) 
 
@@ -112,6 +121,47 @@ This induces even more shrinkage towards zero than the
 If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPolsonEtAl2015a.
 
 @PiironenVehtari2015b, "Projection predictive variable selection using Stan+R"
+
+
+In linear regression
+$$
+\begin{aligned}[t]
+p(\beta | \Lambda, \tau, \sigma^2, D) &= N(\beta, \bar{\beta}, \Sigma) \\
+\bar{\beta} &= \tau^2 \Lambda (\tau^2 \Lambda + \sigma^2 (X'X)^{-1})^{-1} \hat{\beta} \\
+\Sigma &= (\tau^{-2} \Lambda^{-1} + \frac{1}{\sigma^2} X'X)^{-1}
+\end{aligned}
+$$
+where $\Lambda = \diag(\lambda_1^2, \dots, \lambda_D^2)$, and $\hat{\beta}$ is the MLE estimate, $(X'X)^{-1} X' y$.
+If predictors are uncorrelated with mean zero and unit variance, then 
+$$
+X'X \approx n I
+$$
+and
+$$
+\bar{\beta}_j = (1 - \kappa_j) \hat{\beta}_j
+$$
+where
+$$
+\kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda_j^2}
+$$
+where $\kappa_j$ is the *shrinkage factor* for the coefficient $\beta_j$, which is how much it is shrunk towards zero from the MLE.
+$\kappa_j = 1$ is complete shrinkage, and $\kappa_j = 0$ is no shrinkage.
+So $\bar{\beta} \to 0$ as $\tau \to 0$ and $\bar{\beta} \to \hat{\beta}$ as $\tau \to \infty$.
+
+Using a plug-in estimate of $\tau$ using cross-validatio or max marginal likelihood. 
+The danger is that $\hat{\tau} = 0$ if it is very sparse.
+
+van de Pas et al (2014) show that the optimal value (upp to a log factor) in terms of MSE and posterior contraction rates compared to the true $\beta^*$ is
+$$
+\tau^* = \frac{p^*}{n}
+$$
+where $p^*$ is the number of non-zero coefficients in the true coefficient vector $\beta^*$.
+
+The effective number of nonzero coefficients is,
+$$
+m_{eff} = \sum_{j = 1}^D (1 - \kappa_j)
+$$
+
 
 - Allan Riddell. [Epistemology of the corral: regression and variable selection with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html) March 10, 2014.
 
