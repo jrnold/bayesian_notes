@@ -7,8 +7,6 @@ data {
   int K;
   // design matrix X
   matrix [N, K] X;
-  //
-  real<lower = 0.> tau;
 }
 transformed data {
   real<lower = 0.> y_sd;
@@ -25,6 +23,8 @@ parameters {
   vector[K] b;
   // scale of the regression errors
   real<lower = 0.> sigma;
+  // scale of prior on  regression
+  real<lower = 0.> tau;
 }
 transformed parameters {
   // mu is the observation fitted/predicted value
@@ -35,7 +35,8 @@ transformed parameters {
 model {
   // priors
   a ~ normal(0., a_pr_scale);
-  b ~ normal(0., tau);
+  b ~ double_exponential(0., tau);
+  tau ~ cauchy(0., 1);
   sigma ~ cauchy(0., sigma_pr_scale);
   // likelihood
   y ~ normal(mu, sigma);
@@ -45,7 +46,6 @@ generated quantities {
   vector[N] y_rep;
   // log-likelihood posterior
   vector[N] log_lik;
-  // mean log likelihood
   for (n in 1:N) {
     y_rep[n] = normal_rng(mu[n], sigma);
     log_lik[n] = normal_lpdf(y[n] | mu[n], sigma);

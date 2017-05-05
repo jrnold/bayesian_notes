@@ -7,8 +7,6 @@ data {
   int K;
   // design matrix X
   matrix [N, K] X;
-  // prior scale on coeff
-  real<lower = 0.> tau;
 }
 transformed data {
   real<lower = 0.> y_sd;
@@ -38,7 +36,7 @@ model {
   // priors
   a ~ normal(0., a_pr_scale);
   b ~ normal(0., tau);
-  tau ~ cauchy(0., tau_pr_scale);
+  tau ~ cauchy(0., 1.);
   sigma ~ cauchy(0., sigma_pr_scale);
   // likelihood
   y ~ normal(mu, sigma);

@@ -14,6 +14,7 @@ rmd_files:
   - "intro-regression.Rmd"
   - "robust.Rmd"
   - "generalized-linear-models.Rmd"
+  - "shrinkage.Rmd"
   - "appendix.Rmd"
   - "annotated.Rmd"
   - "references.Rmd"

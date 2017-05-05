@@ -49,6 +49,7 @@ This is a necessary but not sufficient condition for convergence.
 
 - @BDA3 [p. 267]
 - @Stan2016a [Ch 28.] for how Stan calculates Rhat, autocorrelations, and ESS.
+- @GelmanRubin1992a introduce the R-hat statistic
 
 ## Autocorrelation, Effective Sample Size, and MCSE
 

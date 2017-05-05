@@ -23,7 +23,7 @@ transformed data {
 parameters {
   // regression coefficient vector
   real a;
-  vector[K] b;
+  vector[K] b_raw;
   // scale of the regression errors
   real<lower = 0.> sigma;
   // local scales of coefficients
@@ -33,13 +33,15 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[N] mu;
+  vector[K] b;
+  b = b_raw * tau .* lambda;
   mu = X * b;
 }
 model {
   // priors
   lambda ~ student_t(df_local, 0., 1.);
   a ~ normal(0., a_pr_scale);
-  b ~ normal(0., tau * lambda);
+  b_raw ~ normal(0., 1.);
   sigma ~ cauchy(0., sigma_pr_scale);
   // likelihood
   y ~ normal(mu, sigma);

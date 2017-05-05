@@ -10,7 +10,7 @@ What priors do we put on $\beta$?
 
 - **Improproper priors:** $\beta_k \propto 1$ This produces the equivalent of MLE estimates.
 - **Non-informative priors:** These are priors which have such wide variance that they have little influence on the posterior, e.g. $\beta_k \sim N(0, 1e6)$. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.
-- **Weakly informative priors:** This is described in @Gelman2008a, @Betancourt2017a, and are the defaults suggested in `r rpkg("rstanarm")`. Examples would include $\beta_k \sim \dnorm(0, 2.5)$ or $\beta_k \sim \dcauchy(0, 2.5)$. The purpose of these priors is to ex ante rule out implausible priors. This can help with computation, produce proper posterior distributions, and can help with some estimation issues such as separation or quasi-separation in discrete response models. These priors may help reduce the variance of posterior distribution estimates, they generally are intended to be weak enough to not affect the posterior mean point estimates too much.
+- **Weakly informative priors:** This is described in @GelmanJakulinPittauEtAl2008a, @Betancourt2017a, and are the defaults suggested in `r rpkg("rstanarm")`. Examples would include $\beta_k \sim \dnorm(0, 2.5)$ or $\beta_k \sim \dcauchy(0, 2.5)$. The purpose of these priors is to ex ante rule out implausible priors. This can help with computation, produce proper posterior distributions, and can help with some estimation issues such as separation or quasi-separation in discrete response models. These priors may help reduce the variance of posterior distribution estimates, they generally are intended to be weak enough to not affect the posterior mean point estimates too much.
 
 **Shrinkage priors** have a couple characteristics
 
@@ -115,3 +115,314 @@ If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPol
 
 - Allan Riddell. [Epistemology of the corral: regression and variable selection with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html) March 10, 2014.
 
+## Worked Example
+
+See the [documentation](https://statweb.stanford.edu/~tibs/ElemStatLearn/datasets/prostate.info.txt).
+
+```{r message = FALSE}
+library("rstan")
+library("loo")
+library("glmnet")
+library("tidyverse")
+library("forcats")
+library("rubbish")
+```
+
+
+### Example
+
+```{r message = FALSE}
+URL <- "https://statweb.stanford.edu/~tibs/ElemStatLearn/datasets/prostate.data"
+
+col_types <- cols(
+  X1 = col_integer(),
+  lcavol = col_double(),
+  lweight = col_double(),
+  age = col_integer(),
+  lbph = col_double(),
+  svi = col_integer(),
+  lcp = col_double(),
+  gleason = col_integer(),
+  pgg45 = col_integer(),
+  lpsa = col_double(),
+  train = col_logical()
+)
+prostate <- read_tsv(URL, col_types = col_types,
+                     skip = 1,
+                     col_names = names(col_types$cols))
+```
+
+Recall the prostate data example: we are interested in the level of prostate-specific antigen (PSA), elevated in men who have prostate cancer. 
+The data `prostate` has data on on the level of prostate-specific antigen (PSA), which is elevated in men with prostate cancer, for `r nrow(prostate)` men with
+prostate cancer, and clinical predictors. 
+
+
+```{r}
+f <- lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45 - 1L
+```
+
+```{r}
+prostate_data <- lm_preprocess(f, data = prostate)[c("y", "X")] %>%
+  within({
+    X <- scale(X)
+    K <- ncol(X)
+    N <- nrow(X)  
+  })
+```
+
+```{r}
+run_with_tau <- function(tau, mod, data, ...) {
+  cat("Tau = ", tau)
+  data$tau <- tau
+  fit <- sampling(mod, data = data, open_progress = FALSE, 
+                   show_messages = FALSE, verbose = FALSE, ...)
+  out <- list()
+  out$summary <- summary(fit, par = "b")$summary %>%
+    as.data.frame() %>%
+    rownames_to_column("parameter")
+  
+  ## calculate posterior modes
+  out$summary$mode <- apply(rstan::extract(fit, "b")[[1]], 2, LaplacesDemon::Mode)
+  
+  out$summary$tau <- tau
+  out$loo <- loo(extract_log_lik(fit))
+  out$tau <- tau
+  out
+}
+```
+
+```{r results='hide'}
+mod_lm_coef_normal_1 <- stan_model("stan/lm-coef-normal-1.stan")
+```
+```{r}
+mod_lm_coef_normal_1
+```
+
+```{r}
+tau_values <- 2 ^ seq(2, -5, by = -.5)
+coefpath_normal <-
+  map(tau_values, run_with_tau,
+      mod = mod_lm_coef_normal_1, data = prostate_data)
+```
+
+```{r plot_coefpaths}
+plot_coefpaths <- function(coefpaths, stat = "mean") {
+  ggplot(map_df(coefpaths, "summary"), aes_string(x = "log2(tau)", y = stat,
+                       colour = "fct_reorder2(parameter, tau, mean)", fill = "parameter")) +
+    modelr::geom_ref_line(h = 0) +
+    geom_line() +
+    labs(colour = "Parameter")  
+}
+```
+```{r}
+plot_coefpaths(coefpath_normal)
+```
+
+
+```{r plot_coefpath_loo}
+plot_coefpath_loo <- function(x) {
+  map_df(x,
+       function(x) {
+         tibble(tau = x$tau,
+                elpd = x$loo$elpd_loo,
+                p = x$loo$p_loo)
+       }) %>%
+    gather(parameter, value, -tau) %>%
+    ggplot(aes(x = tau, y = value)) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(~ parameter, scale = "free_y", ncol = 1)
+}
+```
+```{r}
+plot_coefpath_loo(coefpath_normal)
+```
+
+
+Which is the "best" $tau$?
+```{r get_best_tau}
+get_best_tau <- function(coefpath) {
+  map_df(coefpath,
+       function(x) {
+         tibble(tau = x$tau,
+                elpd = x$loo$elpd_loo,
+                p = x$loo$p_loo)
+       }) %>%
+    filter(elpd == max(elpd))  
+}
+```
+
+```{r}
+get_best_tau(coefpath_normal)
+```
+
+The mean estimate of $\tau$ is higher than the best estimate, and there is some uncertainty over it. 
+```{r}
+mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
+```
+```{r}
+fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data,
+                 control = list(adapt_delta = 0.95))
+```
+
+```{r}
+summary(fit_normal, "tau")$summary
+```
+
+```{r}
+loo(extract_log_lik(fit_normal))
+```
+
+
+```{r}
+mcmc_dens(as.array(fit_normal), "tau")
+```
+
+```{r}
+mcmc_dens(as.array(fit_normal), regex_pars = "^b")
+```
+
+### Double Exponential (Laplace) Prior
+
+A second prior to consider for $\vec\beta$ is the Double Exponential.
+
+```{r}
+mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
+```
+
+```{r}
+coefpath_lasso <- map(tau_values,
+                      run_with_tau,
+                   mod = mod_lasso_1,
+                   data = prostate_data)
+```
+
+```{r}
+plot_coefpaths(coefpath_lasso)
+```
+```{r}
+plot_coefpaths(coefpath_lasso, "mode")
+```
+
+```{r}
+plot_coefpath_pars <- function(coefpath) {
+  ggplot(map_df(coefpath, "summary"), aes(x = log10(tau), y = mean)) +
+    facet_wrap(~ parameter) +
+    modelr::geom_ref_line(h = 0) +
+    geom_ribbon(aes(ymin = `25%`, ymax = `75%`), alpha = 0.2) +
+    geom_line()  
+}
+plot_coefpath_pars(coefpath_lasso)
+```
+
+
+Which is the "best" $tau$?
+```{r}
+get_best_tau(coefpath_lasso)
+```
+
+```{r}
+mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
+```
+
+```{r}
+fit_lasso <- sampling(mod_lasso_2, data = prostate_data,
+                 control = list(adapt_delta = 0.9))
+```
+
+```{r}
+summary(fit_lasso, "tau")$summary
+```
+
+```{r}
+loo(extract_log_lik(fit_lasso))
+```
+
+```{r}
+mcmc_dens(as.array(fit_lasso), "tau")
+```
+
+```{r}
+mcmc_dens(as.array(fit_lasso), regex_pars = "^b")
+```
+
+
+
+### Hierarchical Prior (HS)
+
+```{r}
+mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
+```
+
+```{r}
+coefpath_hs <- map(tau_values,
+                   run_with_tau, 
+                   mod = mod_lm_coef_hs_1,
+                   data = c(prostate_data, list(df_local = 3)),
+                   control = list(adapt_delta = 0.999, max_treedepth = 12))
+
+```
+
+```{r}
+plot_coefpaths(coefpath_hs)
+```
+```{r}
+plot_coefpaths(coefpath_hs, "mode")
+```
+```{r}
+get_best_tau(coefpath_hs)
+```
+
+```{r}
+plot_coefpath_loo(coefpath_hs)
+```
+
+
+```{r}
+mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
+```
+
+```{r}
+fit_hs <- sampling(mod_lm_coef_hs_2, data = c(prostate_data, list(df_local = 3, df_global = 3)),
+                 control = list(adapt_delta = 0.995))
+```
+
+```{r}
+summary(fit_hs, "tau")$summary
+```
+
+```{r}
+loo(extract_log_lik(fit_hs))
+```
+
+```{r}
+mcmc_dens(as.array(fit_hs), "tau")
+```
+
+```{r}
+mcmc_dens(as.array(fit_hs), regex_pars = "^b\\[\\d+\\]$")
+```
+
+```{r}
+mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
+```
+
+```{r}
+fit_hs3 <- sampling(mod_lm_coef_hs_3, data = c(prostate_data, list(df_local = 3, df_global = 3, p0 = 2)),
+                 control = list(adapt_delta = 0.995))
+```
+
+### Comparison
+
+Let's compare the various coefficient paths:
+
+```{r}
+all_coefpaths <-
+  bind_rows(mutate(map_df(coefpath_normal, "summary"), model = "normal"),
+          mutate(map_df(coefpath_lasso, "summary"), model = "lasso"),
+          mutate(map_df(coefpath_hs, "summary"), model = "hs"))
+ggplot(all_coefpaths, aes(x = log2(tau), y = mean, colour = model)) + 
+  modelr::geom_ref_line(h = 0) +
+  geom_line() +
+  facet_wrap(~ parameter)
+```
