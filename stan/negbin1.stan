@@ -24,7 +24,7 @@ parameters {
 }
 transformed parameters {
   vector<lower = 0., upper = 1.>[N] mu;
-  vector<lower = 0.>[N] phi;
+  real<lower = 0.> phi;
   phi = 1. / reciprocal_phi;
   mu = exp(a + X * b);
 }
