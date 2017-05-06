@@ -115,10 +115,28 @@ In **rstanarm** use `r rdoc("rstanarm", "stan_glm")` for a Poisson GLM.
 
 ## Example: Bilateral Sanctions
 
-A regression model of bilateral sanctions for the period 1939 to 1983. 
+A regression model of bilateral sanctions for the period 1939 to 1983 [@Martin1992a].
 The outcome variable is the number of countries imposing sanctions.
+
+```{r results='hide'}
+mod_poisson1 <- stan_model("stan/poisson1.stan")
+```
+
 ```{r}
 data("sanction", package = "Zelig")
+
+f <- num ~ coop + target -1L
+reg_model_data <- lm_preprocess(f, data = sanction)
+
+sanction_data <-
+  list(X = autoscale(reg_model_data$X),
+       y = reg_model_data$y)
+sanction_data$N <- nrow(sanction_data$X)
+sanction_data$K <- ncol(sanction_data$X)
+```
+
+```{r result='hide'}
+fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 ```
 
 
@@ -134,7 +152,7 @@ The Negative Binomial distribution has an additional parameter that allows the v
 
 The outcome is modeled as a negative binomial distribution,
 $$
-y_i \sim \dbinom(\alpha_i, \beta)
+y_i \sim \dnegbinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
 Then the mean can be modeled and transformed to the 
@@ -167,7 +185,34 @@ In Stan, there are multiple parameterizations of the
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
-- @BDA3 [Ch 16]
+### Example: Economic Sanctions II {ex-econ-sanctions-2}
+
+Continuing the [economic sanctions example](#ex-econ-sanctions-2) of @Martin1992a.
+
+
+```{r results='hide'}
+mod_negbin1 <- stan_model("stan/negbin1.stan")
+```
+
+
+```{r result='hide'}
+fit_sanction_nb <- sampling(mod_negbin1, data = sanction_data, control = list(adapt_delta  = 0.95))
+```
+
+```{r}
+summary(fit_sanction_nb, par = c("a", "b", "phi"))$summary
+```
+
+We can compare the 
+```{r message=FALSE}
+loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
+loo_sanction_nb <- loo(extract_log_lik(fit_sanction_nb, "log_lik"))
+```
+
+```{r}
+loo::compare(loo_sanction_pois, loo_sanction_nb)
+```
+
 
 ### References
 
@@ -177,4 +222,3 @@ For general references on count models see
 - @McElreath2016a [Ch 10]
 - @Fox2016a [Ch. 14]
 - @BDA3 [Ch. 16]
-
