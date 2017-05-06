@@ -30,7 +30,7 @@ The Negative Binomial distribution has an additional parameter that allows the v
 
 The outcome is modeled as a negative binomial distribution,
 $$
-y_i \sim \dbinom(\alpha_i, \beta)
+y_i \sim \dbin(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
 Then the mean can be modeled and transformed to the 
@@ -45,7 +45,7 @@ $$
 **Important** The negative binomial distribution has many different parameterizations.
 An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
 $$
-y_i \sim \dnbinomalt(\mu_i, \phi)
+y_i \sim \dnbinalt(\mu_i, \phi)
 $$
 with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
 Then the mean can be modeled and transformed to the 
@@ -55,6 +55,8 @@ $$
 \end{aligned}
 $$
 
+### Stan 
+
 In Stan, there are multiple parameterizations of the 
 
 - `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
@@ -63,12 +65,18 @@ In Stan, there are multiple parameterizations of the
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
-- @BDA3 [Ch 16]
+### Example: Number of Number o
+
+```{r}
+
+```
+
 
 ### References
 
 For general references on count models see
 
+- @BDA3 [Ch 16]
 - @GelmanHill2007a [p. 109-116]
 - @McElreath2016a [Ch 10]
 - @Fox2016a [Ch. 14]

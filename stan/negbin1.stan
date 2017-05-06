@@ -20,17 +20,19 @@ parameters {
   // regression coefficient vector
   real a;
   vector[K] b;
-  real<lower = 0.0> phi;
+  real<lower = 0.> reciprocal_phi;
 }
 transformed parameters {
-  vector<lower = 0.0, upper = 1.0>[N] mu;
+  vector<lower = 0., upper = 1.>[N] mu;
+  vector<lower = 0.>[N] phi;
+  phi = 1. / reciprocal_phi;
   mu = exp(a + X * b);
 }
 model {
   // priors
-  a ~ normal(0.0, 5.0);
-  b ~ normal(0.0, 2.5);
-  phi ~ cauchy(0.0, 5.0);
+  a ~ normal(0., 5.);
+  b ~ normal(0., 2.5);
+  reciprocal_phi ~ cauchy(0., 5.);
   // likelihood
   y ~ neg_binomial_2(mu, phi);
 }
