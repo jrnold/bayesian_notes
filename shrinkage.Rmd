@@ -236,12 +236,13 @@ run_with_tau <- function(tau, mod, data, ...) {
   
   out$summary$tau <- tau
   out$loo <- loo(extract_log_lik(fit))
+  out$lppd <- mean(extract_log_lik(fit))
   out$tau <- tau
   out
 }
 ```
 
-```{r results='hide'}
+```{r results='hide',message=FALSE}
 mod_lm_coef_normal_1 <- stan_model("stan/lm-coef-normal-1.stan")
 ```
 ```{r}
@@ -275,6 +276,7 @@ plot_coefpath_loo <- function(x) {
        function(x) {
          tibble(tau = x$tau,
                 elpd = x$loo$elpd_loo,
+                lppd = x$loo$llpd,
                 p = x$loo$p_loo)
        }) %>%
     gather(parameter, value, -tau) %>%
@@ -298,7 +300,7 @@ get_best_tau <- function(coefpath) {
                 elpd = x$loo$elpd_loo,
                 p = x$loo$p_loo)
        }) %>%
-    filter(elpd == max(elpd))  
+    filter(elpd == max(elpd)) 
 }
 ```
 
@@ -409,9 +411,6 @@ $$
 In the original formulation [@CarvalhoPolsonScott2009a,@CarvalhoPolsonScott2010a] use a half-Cauchy ($\nu = 1$), but Stan suggests and `r rpkg("rstanarm")` uses 
 a Student-t with $\nu = 3$, finding that it has better sampling performance than the half-Cauchy.
 
-
-
-
 ```{r}
 mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
 ```
@@ -488,3 +487,165 @@ ggplot(all_coefpaths, aes(x = log2(tau), y = mean, colour = model)) +
   geom_line() +
   facet_wrap(~ parameter)
 ```
+
+
+## Shrinkage Parameters
+
+Given the linear Gaussian regression model
+$$
+y_i &\sim \dnorm(\vec{\beta}\T \vec{x}, \sigma^2)
+$$
+for $i = 1, \dots, n$, where $\vec{x}$ is the $K$ dimensional vector of predictors.
+Suppose a prior
+$$
+\begin{aligned}[t]
+\beta_j | \lambda_j, \tau &\sim N(0, \lambda_j^2 \tau^2)
+\end{aligned}
+$$
+The $\lambda_j$ are local scales - it allows some weights to escape the shrinkage.
+The global parameter $\tau$ pulls all weights towards zero, and effectively controls the sparsity.
+
+The posterior distribution is
+$$
+\begin{aligned}[t]
+p(\vec{\beta} | \mat{\Lambda}, \tau, \sigma^2, \mat{X}, \vec{y}) &= \dnorm(\vec{\beta}, \bar{\vec{\beta}}, \mat{\Sigma}) \\
+\bar{\vec{\beta}} &= \tau^2 \mat{\Lambda}(\tau^2 \mat{\Lambda} + \sigma^2 (\mat{X}\T \mat{X})^{-1})^{-1} \hat{\vec{\beta}} \\
+\mat{\Sigma} &= (\tau^{-2} \mat{\Lambda}^{-1} + \frac{1}{\sigma^2} \mat{X}\T \mat{X})^{-1},
+\end{aligned}
+$$
+where 
+$$
+\mat{\Lambda} = \diag(\lambda_1^2, \dots, \lambda_K^2) 
+$$
+and 
+$$
+\hat{\vec{\beta}} = (\mat{X}\T \mat{X})^{-1} \mat{X}\T \vec{y}
+$$
+is the MLE solution if $(\mat{X}\T \mat{X})^{-1}$ exists.
+
+It the predictors are uncorrelated with zero mean and unit variance, then $\mat{X}\T \mat{X} \approx n \mat{I}$, and approximate
+$$
+\bar{\beta}_j = (1 - \kappa_j) \hat{\beta}_j
+$$
+where $\kappa_j$ is the shrinkage factor for coefficient $j$,
+$$
+\kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda^2_j}
+$$
+When $\kappa = 1$, it is complete shrinkage, and the coefficient is zero.
+When $\kappa = 0$, then there is no shrinkages, and the coefficient is equal to the MLE solution.
+As $\tau \to 0$, then $\bar{\beta} \to 0$, and as $\tau \to \infty$, then $\bar{\beta} \to \hat{\beta}$.
+
+```{r}
+library("tidyverse")
+kappa <- seq(.005, .995, by = 0.005)
+lambda <- (1 - kappa) / kappa
+
+f <- function(x) sqrt(1 / x - 1)
+f_jacobian <- function(x) 1 / (sqrt(1 / x - 1) * x ^ 2)
+f2 <- function(x) 1 / x - 1
+f2_jacobian <- function(x) x ^ (-2)
+
+funs <- list(
+  function(x) {
+    tibble(kappa = x, 
+           dens = dt(f(kappa), df = 3) * f_jacobian(kappa),
+           name = "HS (df = 3)")
+  },
+  function(x) {
+    tibble(kappa = x, 
+           dens = dt(f(kappa), df = 2) * f_jacobian(kappa),
+           name = "HS (df = 2)")
+  },  
+  function(x) {
+    tibble(kappa = x,
+           dens = dcauchy(f(kappa)) * f_jacobian(kappa),
+           name = "HS (df = 1)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 0.5, 0.5) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 1)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 3 / 2, 3 / 2) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 3)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 1000, 1000) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Normal")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 0.0001, 0.0001) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 0)")
+  },  
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dexp(f2(kappa), 0.5) * f2_jacobian(kappa),
+           name = "Double Exponential")
+  }    
+)
+
+shrinkages <- invoke_map_df(funs, x = kappa)
+
+ggplot(shrinkages, aes(x = kappa, y = dens)) +
+  geom_line() +
+  facet_wrap(~ name, scales = "free_y")
+
+```
+
+Note that for these distributions:
+
+- Normal: prior puts weight only on a single point
+- HS for df = 0: prior on shrinkage parameter puts weight on either completely shrunk ($\kappa = 1$) or unshrunk ($\kappa = 0$)
+- HS for df = 3: prior on shrinkage parameter puts a lo of weight on it being completely shrunk ($\kappa = 1$), but truncates the density for completely unshrunk.
+
+
+## Choice of Hyperparameter on $\tau$
+
+The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
+
+@CarvalhoPolsonScott2009a suggest 
+$$
+\tau \sim \dhalfcauchy(0, \sigma),
+$$
+while @PolsonScott2011a suggest,
+$$
+\tau \sim \dhalfcauchy(0, 1) .
+$$
+
+@PasKleijnVaart2014a suggest 
+$$
+\tau \sim \dhalfcauchy(0, p^* / n)
+$$
+where $p^*$ is the true number of non-zero parameters,
+and $n$ is the number of observations.
+
+@PiironenVehtari2016a understand the choice of the prior on $\tau$ as the implied prior on the number of effective parameters.
+The shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$,
+$$
+m_{eff} = \sum_{j = 1}^K (1 - \kappa_j) .
+$$
+This is a measure of effective model size.
+
+The mean and variance of $m_{eff}$ given $\tau$ and $\sigma$ are,
+$$
+\begin{aligned}[t]
+\E[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{1 + \sigma^{-1} \tau \sqrt{n}} K , \\
+\Var[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{2 (1 + \sigma^{-1} \tau \sqrt{n})2} K .
+\end{aligned}
+$$
+
+Based on this, a prior should be chosen so that the prior mass is located near,
+$$
+\tau_0 = \frac{p_0}{K - p_0}\frac{\sigma}{\sqrt{n}}
+$$
+
+Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributions where $\sigma^2 = 1$, $\tau = 1$, for $n = 1$.

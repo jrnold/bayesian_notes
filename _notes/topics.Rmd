@@ -10,7 +10,7 @@
         - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10477
         - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10478
         - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/10483
-        
+
     - Hanmer paper:
         - https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/18542
     - marginal effects
@@ -49,6 +49,20 @@ Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafu
 - Model Comparison and Averaging vs. Continuous Expansion
 
     - Example: Montgomery, Nyhan, et. al.
+
+
+- Multilevel Models
+
+    - Explaining fixed effects: Random effects modeling of time-series cross-sectional and panel data. Political Science Research and Methods , 2015. Bell.
+    - Rendon Fixed and Random Effects in Classical and Bayesian Regression. 10.1111/j.1468-0084.2012.00700.x
+    - Stegmueller, D. (2013), How Many Countries for Multilevel Modeling? A Comparison of Frequentist and Bayesian Approaches. American Journal of Political Science. doi:10.1111/ajps.12001
+    - David K. Park, Andrew Gelman, Joseph Bafumi. 2004. "Bayesian Multilevel Estimation with Poststratification: State-Level Estimates from National Polls." Polit Anal doi:10.1093/pan/mph024
+    - Lax, Jeffrey and Justin Phillips. 2009. "How Should We Estimate Public Opinion in the States?" AJPS
+    - Baseball paper
+    - The Externalities of Inequality: Fear of Crime and Preferences for Redistribution in Western Europe. 10.1111/ajps.12212
+    - The Impact of Persistent Terrorism on Political Tolerance: Israel, 1980 to 2011. https://doi.org/10.1017/S0003055415000441
+
+
 
 - Dynamic Models
 
