@@ -1,3 +1,5 @@
+# Shrinkage and Regularization Priors
+
 Consider the single output linear Gaussian regression model with several input variables, given by
 $$
 \begin{aligned}[t]
@@ -276,7 +278,7 @@ plot_coefpath_loo <- function(x) {
        function(x) {
          tibble(tau = x$tau,
                 elpd = x$loo$elpd_loo,
-                lppd = x$loo$llpd,
+                lppd = x$lppd,
                 p = x$loo$p_loo)
        }) %>%
     gather(parameter, value, -tau) %>%
@@ -314,7 +316,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 ```
 ```{r}
 fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data,
-                 control = list(adapt_delta = 0.95))
+                 control = list(adapt_delta = 0.99))
 ```
 
 ```{r}
