@@ -488,3 +488,25 @@ ggplot(all_coefpaths, aes(x = log2(tau), y = mean, colour = model)) +
   geom_line() +
   facet_wrap(~ parameter)
 ```
+
+## Zellner's g-prior
+
+An alternative prior is the Zellner's g-prior.
+Consider the regression,
+$$
+y_i | \alpha, \vec{\beta}, \sigma \sim N(\alpha + \mat{X} \vec{\beta}, \sigma^2)
+$$
+The $g$-prior is a non-informative, data-dependent prior,
+$$
+\vec{\beta} \sim N(0, \sigma^2 g \mat{X}\T \mat{X})
+$$
+It depends on only a single parameter $g$.
+The prior for $g$ must be proper. Some common choices include,
+$$
+\begin{aligned}
+g &= n \\
+g &= k^2 \\
+g &= \max(n, k^2)
+\end{aligned}
+$$
+or putting a hyperprior on $g$.
