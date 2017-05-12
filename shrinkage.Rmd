@@ -1,3 +1,5 @@
+# Shrinkage and Regularization Priors
+
 Consider the single output linear Gaussian regression model with several input variables, given by
 $$
 \begin{aligned}[t]
@@ -123,6 +125,8 @@ If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPol
 @PiironenVehtari2015b, "Projection predictive variable selection using Stan+R"
 
 
+
+
 In linear regression
 $$
 \begin{aligned}[t]
@@ -148,7 +152,7 @@ where $\kappa_j$ is the *shrinkage factor* for the coefficient $\beta_j$, which 
 $\kappa_j = 1$ is complete shrinkage, and $\kappa_j = 0$ is no shrinkage.
 So $\bar{\beta} \to 0$ as $\tau \to 0$ and $\bar{\beta} \to \hat{\beta}$ as $\tau \to \infty$.
 
-Using a plug-in estimate of $\tau$ using cross-validatio or max marginal likelihood. 
+Using a plug-in estimate of $\tau$ using cross-validation or the maximum marginal likelihood. 
 The danger is that $\hat{\tau} = 0$ if it is very sparse.
 
 van de Pas et al (2014) show that the optimal value (upp to a log factor) in terms of MSE and posterior contraction rates compared to the true $\beta^*$ is
@@ -159,9 +163,90 @@ where $p^*$ is the number of non-zero coefficients in the true coefficient vecto
 
 The effective number of nonzero coefficients is,
 $$
-m_{eff} = \sum_{j = 1}^D (1 - \kappa_j)
+m_{\mathrm{eff}} = \sum_{j = 1}^D (1 - \kappa_j)
 $$
 
+Some other notes
+
+To calculate the distribution of $\kappa_j$ given a distribution of $\lambda$.
+Note that
+$$
+\kappa_j(\lambda_j) = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda_j^2}
+$$
+is monotonically decreasing in $\lambda_j$.
+It is also invertible,
+$$
+\lambda_j(\kappa_j) = \sqrt{\frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}}
+$$
+The derivivative of this with respect to $\kappa_j$ is
+$$
+\frac{\partial \lambda_j(\kappa_j)}{\partial \kappa_j} = - \sqrt{\frac{1}{(1 + n \sigma^{-2} \tau^2)}} \kappa_j^{-\frac{3}{2}}
+$$
+The distribution of $\kappa$, given the distribution $f_\lambda$ for lambda is,
+$$
+\begin{aligned}[t]
+f_\kappa(\kappa_j) &= f_\lambda(\lambda_j(\kappa_j)) \left| \frac{\partial \lambda_j(\kappa_j)}{\partial \kappa_j} \right| \\
+&= f_\lambda\left(\sqrt{\frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}}\right) \left| (1 + n \sigma^{-2} \tau^2)^{-\frac{1}{2}} \kappa_j^{-\frac{3}{2}} \right| \\
+\end{aligned}
+$$
+
+Suppose that the distribution is given for precision, $\lambda_j^{-2}$.
+Then the inverse is,
+$$
+\lambda_j^{-2}(\kappa_j) = (1 + n \sigma^{-2} \tau^2) \kappa_j
+$$
+with derivative,
+$$
+\frac{\partial \lambda_j^{-2}(\kappa_j)}{\partial \kappa_j} = (1 + n \sigma^{-2} \tau^2)
+$$
+Thus,
+$$
+\begin{aligned}[t]
+f_\kappa(\kappa_j) &= f_{\lambda^{-2}}(\lambda_j^{-2}(\kappa_j)) \left| \frac{\partial \lambda_j^{-2}(\kappa_j)}{\partial \kappa_j} \right| \\
+&= f_{\lambda^{-2}}\left((1 + n \sigma^{-2} \tau^2) \kappa_j \right) \left| (1 + n \sigma^{-2} \tau^2)  \right| \\
+\end{aligned}
+$$
+
+Suppose that the distribution is given for variance $\lambda_j^2$.
+Then the inverse is,
+$$
+\lambda_j^2(\kappa_j) = \frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}
+$$
+with derivative,
+$$
+\frac{\partial \lambda_j^2(\kappa_j)}{\partial \kappa_j} = -(1 + n \sigma^{-2} \tau^2)^{-1} \kappa_j^{-2}
+$$
+Thus,
+$$
+\begin{aligned}[t]
+f_\kappa(\kappa_j) &= f_{\lambda^2}(\lambda_j^2(\kappa_j)) \left| \frac{\partial \lambda_j^2(\kappa_j)}{\partial \kappa_j} \right| \\
+&= f_{\lambda^2}\left(\frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}\right) \left| (1 + n \sigma^{-2} \tau^2)^{-1} \kappa_j^{-2} \right| \\
+\end{aligned}
+$$
+
+
+
+I may also be useful to consider the distribution of $\kappa$ given the distribution of $\tau$.
+Note that
+$$
+\kappa_j(\tau) = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda_j^2}
+$$
+is monotonically decreasing in $\tau$.
+It is also invertible,
+$$
+\tau(\kappa_j) = \sqrt{\frac{1}{(1 + n \sigma^{-2} \lambda_j^2) \kappa_j}}
+$$
+The derivivative of this with respect to $\kappa_j$ is
+$$
+\frac{\partial \tau(\kappa_j)}{\partial \kappa_j} = - {(1 + n \sigma^{-2} \lambda_j^2)}^{-\frac{1}{2}} \kappa_j^{-\frac{3}{2}}
+$$
+The distribution of $\kappa$, given the distribution $f_\lambda$ for lambda is,
+$$
+\begin{aligned}[t]
+f_\kappa(\kappa_j) &= f_\tau(\tau(\kappa_j)) \left| \frac{\partial \tau(\kappa_j)}{\partial \kappa_j} \right| \\
+&= f_\tau\left(\frac{1}{(1 + n \sigma^{-2} \lambda_j^2) \kappa_j} \right) \left| {(1 + n \sigma^{-2} \lambda_j^2)}^{-\frac{1}{2}} \kappa_j^{-\frac{3}{2}} \right| \\
+\end{aligned}
+$$
 
 - Allan Riddell. [Epistemology of the corral: regression and variable selection with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html) March 10, 2014.
 
@@ -236,12 +321,13 @@ run_with_tau <- function(tau, mod, data, ...) {
   
   out$summary$tau <- tau
   out$loo <- loo(extract_log_lik(fit))
+  out$lppd <- mean(extract_log_lik(fit))
   out$tau <- tau
   out
 }
 ```
 
-```{r results='hide'}
+```{r results='hide',message=FALSE}
 mod_lm_coef_normal_1 <- stan_model("stan/lm-coef-normal-1.stan")
 ```
 ```{r}
@@ -275,6 +361,7 @@ plot_coefpath_loo <- function(x) {
        function(x) {
          tibble(tau = x$tau,
                 elpd = x$loo$elpd_loo,
+                lppd = x$lppd,
                 p = x$loo$p_loo)
        }) %>%
     gather(parameter, value, -tau) %>%
@@ -298,7 +385,7 @@ get_best_tau <- function(coefpath) {
                 elpd = x$loo$elpd_loo,
                 p = x$loo$p_loo)
        }) %>%
-    filter(elpd == max(elpd))  
+    filter(elpd == max(elpd)) 
 }
 ```
 
@@ -312,7 +399,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 ```
 ```{r}
 fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data,
-                 control = list(adapt_delta = 0.95))
+                 control = list(adapt_delta = 0.99))
 ```
 
 ```{r}
@@ -408,9 +495,6 @@ $$
 $$
 In the original formulation [@CarvalhoPolsonScott2009a,@CarvalhoPolsonScott2010a] use a half-Cauchy ($\nu = 1$), but Stan suggests and `r rpkg("rstanarm")` uses 
 a Student-t with $\nu = 3$, finding that it has better sampling performance than the half-Cauchy.
-
-
-
 
 ```{r}
 mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
@@ -510,3 +594,212 @@ g &= \max(n, k^2)
 \end{aligned}
 $$
 or putting a hyperprior on $g$.
+
+See @LeySteel2012a for a recent overview of g-priors.
+
+## Shrinkage Parameters
+
+Given the linear Gaussian regression model
+$$
+y_i &\sim \dnorm(\vec{\beta}\T \vec{x}, \sigma^2)
+$$
+for $i = 1, \dots, n$, where $\vec{x}$ is the $K$ dimensional vector of predictors.
+Suppose a prior
+$$
+\begin{aligned}[t]
+\beta_j | \lambda_j, \tau &\sim N(0, \lambda_j^2 \tau^2)
+\end{aligned}
+$$
+The $\lambda_j$ are local scales - it allows some weights to escape the shrinkage.
+The global parameter $\tau$ pulls all weights towards zero, and effectively controls the sparsity.
+
+The posterior distribution is
+$$
+\begin{aligned}[t]
+p(\vec{\beta} | \mat{\Lambda}, \tau, \sigma^2, \mat{X}, \vec{y}) &= \dnorm(\vec{\beta}, \bar{\vec{\beta}}, \mat{\Sigma}) \\
+\bar{\vec{\beta}} &= \tau^2 \mat{\Lambda}(\tau^2 \mat{\Lambda} + \sigma^2 (\mat{X}\T \mat{X})^{-1})^{-1} \hat{\vec{\beta}} \\
+\mat{\Sigma} &= (\tau^{-2} \mat{\Lambda}^{-1} + \frac{1}{\sigma^2} \mat{X}\T \mat{X})^{-1},
+\end{aligned}
+$$
+where 
+$$
+\mat{\Lambda} = \diag(\lambda_1^2, \dots, \lambda_K^2) 
+$$
+and 
+$$
+\hat{\vec{\beta}} = (\mat{X}\T \mat{X})^{-1} \mat{X}\T \vec{y}
+$$
+is the MLE solution if $(\mat{X}\T \mat{X})^{-1}$ exists.
+
+It the predictors are uncorrelated with zero mean and unit variance, then $\mat{X}\T \mat{X} \approx n \mat{I}$, and approximate
+$$
+\bar{\beta}_j = (1 - \kappa_j) \hat{\beta}_j
+$$
+where $\kappa_j$ is the shrinkage factor for coefficient $j$,
+$$
+\kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda^2_j}
+$$
+When $\kappa = 1$, it is complete shrinkage, and the coefficient is zero.
+When $\kappa = 0$, then there is no shrinkages, and the coefficient is equal to the MLE solution.
+As $\tau \to 0$, then $\bar{\beta} \to 0$, and as $\tau \to \infty$, then $\bar{\beta} \to \hat{\beta}$.
+
+```{r}
+library("tidyverse")
+kappa <- seq(.005, .995, by = 0.005)
+lambda <- (1 - kappa) / kappa
+
+f <- function(x) sqrt(1 / x - 1)
+f_jacobian <- function(x) 1 / (sqrt(1 / x - 1) * x ^ 2)
+f2 <- function(x) 1 / x - 1
+f2_jacobian <- function(x) x ^ (-2)
+
+funs <- list(
+  function(x) {
+    tibble(kappa = x, 
+           dens = dt(f(kappa), df = 3) * f_jacobian(kappa),
+           name = "HS (df = 3)")
+  },
+  function(x) {
+    tibble(kappa = x, 
+           dens = dt(f(kappa), df = 2) * f_jacobian(kappa),
+           name = "HS (df = 2)")
+  },  
+  function(x) {
+    tibble(kappa = x,
+           dens = dcauchy(f(kappa)) * f_jacobian(kappa),
+           name = "HS (df = 1)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 0.5, 0.5) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 1)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 3 / 2, 3 / 2) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 3)")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 1000, 1000) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Normal")
+  },
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dgamma(x / (1 - x), 0.0001, 0.0001) * (1 / (1 - x) + x / (1 - x) ^ 2),
+           name = "Student t (df = 0)")
+  },  
+  function(x) {
+    df <- 3
+    tibble(kappa = x,
+           dens = dexp(f2(kappa), 0.5) * f2_jacobian(kappa),
+           name = "Double Exponential")
+  }    
+)
+
+shrinkages <- invoke_map_df(funs, x = kappa)
+
+ggplot(shrinkages, aes(x = kappa, y = dens)) +
+  geom_line() +
+  facet_wrap(~ name, scales = "free_y")
+
+```
+
+Note that for these distributions:
+
+- Normal: prior puts weight only on a single point
+- HS for df = 0: prior on shrinkage parameter puts weight on either completely shrunk ($\kappa = 1$) or unshrunk ($\kappa = 0$)
+- HS for df = 3: prior on shrinkage parameter puts a lo of weight on it being completely shrunk ($\kappa = 1$), but truncates the density for completely unshrunk.
+
+
+## Choice of Hyperparameter on $\tau$
+
+The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
+
+@CarvalhoPolsonScott2009a suggest 
+$$
+\tau \sim \dhalfcauchy(0, \sigma),
+$$
+while @PolsonScott2011a suggest,
+$$
+\tau \sim \dhalfcauchy(0, 1) .
+$$
+
+@PasKleijnVaart2014a suggest 
+$$
+\tau \sim \dhalfcauchy(0, p^* / n)
+$$
+where $p^*$ is the true number of non-zero parameters,
+and $n$ is the number of observations.
+They suggest $\tau = p^* / n$ or $\tau p^*  / n \sqrt{log(n / p^*)}$.
+Additionally, they suggest restricting $\tau$ to $[0, 1]$.
+
+@PiironenVehtari2016a understand the choice of the prior on $\tau$ as the implied prior on the number of effective parameters.
+The shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$,
+$$
+m_{eff} = \sum_{j = 1}^K (1 - \kappa_j) .
+$$
+This is a measure of effective model size.
+
+The mean and variance of $m_{eff}$ given $\tau$ and $\sigma$ are,
+$$
+\begin{aligned}[t]
+\E[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{1 + \sigma^{-1} \tau \sqrt{n}} K , \\
+\Var[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{2 (1 + \sigma^{-1} \tau \sqrt{n})2} K .
+\end{aligned}
+$$
+
+Based on this, a prior should be chosen so that the prior mass is located near,
+$$
+\tau_0 = \frac{p_0}{K - p_0}\frac{\sigma}{\sqrt{n}}
+$$
+
+Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributions where $\sigma^2 = 1$, $\tau = 1$, for $n = 1$.
+
+@DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0.
+@ScottBerger2010 consider marginal maximum likelihood estimates of $\tau$.
+@PasKleijnVaart2014a suggest that an empirical Bayes esitmator truncated below at $1 / n$.
+
+## Bayesian Model Averaging Applications
+
+- @TobiasLi2004a Returns to Schooling
+- @BrockDurlaufWest2003a Economic growth
+
+## Technical Notes
+
+Marginal density of the horseshoe+ prior @CarvalhoPolsonScott2010a has no closed form but some bounds
+are available.
+If $\tau^2 = 1$, then the marginal density of the horseshoe+ prior has the following properties:
+$$
+\begin{aligned}[t]
+\frac{K}{2} \log \left(1 + \frac{4}{\theta^2} \right) < p_{HS}(\theta) \leq K \log \left(1 + \frac{2}{\theta^2} \right) \\
+\lim_{|\theta| \to 0} p_{HS}(\theta) = \infty
+\end{aligned}
+$$
+where $K = 1 / \sqrt{2 \pi^3}$.
+
+Marginal density of the horseshoe+ prior @BhadraDattaPolsonEtAl2015a:
+If $\tau^2 = 1$, then the marginal density of the horseshoe+ prior has the following properties:
+$$
+\begin{aligned}[t]
+\frac{1}{\pi^2 \sqrt{2 \pi}} \log \left(1 + \frac{4}{\theta^2} \right) < p_{HS+}(\theta) \leq \frac{1}{\pi^2 |\theta|} \\
+\lim_{|\theta| \to 0} p_{HS+}(\theta) = \infty
+\end{aligned}
+$$
+
+
+Prior for $\theta_i$               Density for $\lambda_i$                      Density for $\kappa_i$
+---------------------------------- -------------------------------------------- -------------------------------------------------------------------------------
+Double-exponential                 $\lambda_i \exp(\lambda_i^2 / 2)             $\kappa_i^{-2} \exp\left( \frac{- 1}{2 \kappa_i} \right)$
+Cauchy                             $\lambda_i^{-2} \exp(-1 / \lambda_i^2)$      $\kappa_i^{-\frac{1}{2}} (1 - \kappa_i)^{- \frac{3}{2}} \exp \left(\frac{\kappa_i}{2 (1 - \kappa_i)}\right)$
+Strawderman-Berger                 $\lambda_i (1 + \lambda_i^2)^{-\frac{3}{2}}$ $\kappa_i^{-\frac{1}{2}}$
+Normal-exponential-gamma           $\lambda_i (1 + \lambda_i^2)^{-(c + 1)}$     $\kappa_i^{c - 1}$
+Normal-Jeffreys                    $1 / \lambda_i$                              $\kappa_i^{-1} (1 - \kappa_i)^{-1}$
+Horsehoe                           $(1 + \lambda_i^2)^{-1}$                     $\kappa_i^{-1/2} (1 - \kappa_i)^{-1/2}$
+
+
+Threshholding. The horseshoe has an implicit threshold of $|T_\tau(y) - y| < \sqrt{2 \sigma ^ 2 \log (1 / \tau))$ [@PasKleijnVaart2014a].
