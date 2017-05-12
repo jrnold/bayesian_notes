@@ -59,36 +59,100 @@ sim_meff <- function(fun_lambda, fun_tau, sigma = 1, D = 1, n = 1,
 # kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda_j^2}
 # inverse
 # lambda_j(kappa_j) = \frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}
-kappa_funs <- function(tau = 1, sigma = 1, n = 1) {
-  precision <- sigma ^ -2
+kappa_lambda_funs <- function(tau = 1, sigma = 1, n = 1) {
+  nprec <- n * sigma ^ -2
   list(
     # kappa(lambda)
     fun = function(lambda) {
-      1 / (1 + n * precision * tau ^ 2 * lambda ^ 2)
+      1 / (1 + nprec * tau ^ 2 * lambda ^ 2)
     },
     # lambda(kappa)
-    inv_scale = function(x) {
-      sqrt(1 / ((1 + n * precision * tau ^ 2) * kappa))
+    inv_scale = function(kappa) {
+      sqrt(1 / ((1 + nprec * tau ^ 2) * kappa))
     },
     # d(lambda(kappa)) / d kappa
-    jacobian_scale = function(kappa) {
-      (1 + n * precision * tau ^ 2) ^ (-0.5) * kappa ^ (-1.5)
+    dinv_scale = function(kappa) {
+      -0.5 * (1 + nprec * tau ^ 2) ^ (-0.5) * kappa ^ (-1.5)
     },
     # lambda^2(kappa)
     inv_var = function(kappa) {
-      1 / ((1 + n * precision * tau ^ 2) * kappa)
+      1 / ((1 + nprec * tau ^ 2) * kappa)
     },
     # d(lambda^2(kappa)) / d kappa
-    jacobian_var = function(kappa) {
-      (1 + n * precision * tau ^ 2) ^ (-1) * kappa ^ (-2)
+    dinv_var = function(kappa) {
+      -(1 + nprec * tau ^ 2) ^ (-1) * kappa ^ (-2)
     },
     # lambda^{-2}(kappa)
     inv_prec = function(kappa) {
-      (1 + n * precision * tau ^ 2) * kappa
+      (1 + nprec * tau ^ 2) * kappa
     },
     # d(lambda^{-2}(kappa)) / d kappa
+    dinv_prec = function(kappa) {
+      (1 + nprec * tau ^ 2)
+    }
+  )
+}
+
+kappa_tau_funs <- function(lambda = 1, sigma = 1, n = 1) {
+  nprec <- n * sigma ^ -2
+  tau2 <- tau ^ 2
+  lambda2 <- lambda ^ 2
+  list(
+    # kappa(lambda)
+    fun = function(lambda) {
+      1 / (1 + nprec * tau2 * lambda2)
+    },
+    # lambda(kappa)
+    inv_scale = function(kappa) {
+      sqrt(1 / ((1 + nprec * lambda2) * kappa))
+    },
+    # d(lambda(kappa)) / d kappa
+    dinv_scale = function(kappa) {
+      -0.5 * (1 + nprec * lambda2) ^ (-0.5) * kappa ^ (-1.5)
+    },
+    # lambda^2(kappa)
+    inv_var = function(kappa) {
+      1 / ((1 + nprec * lambda2) * kappa)
+    },
+    # d(lambda^2(kappa)) / d kappa
+    dinv_var = function(kappa) {
+      -(1 + nprec * lambda2) ^ (-1) * kappa ^ (-2)
+    },
+    # lambda^{-2}(kappa)
+    inv_prec = function(kappa) {
+      (1 + nprec * lambda2) * kappa
+    },
+    # d(lambda^{-2}(kappa)) / d kappa
+    dinv_prec = function(kappa) {
+      (1 + nprec * lambda2)
+    }
+  )
+}
+
+kappa_sigma_funs <- function(lambda = 1, tau = 1, n = 1) {
+  tau2 <- tau ^ 2
+  lambda2 <- lambda ^ 2
+  list(
+    fun = function(sigma) {
+      1 / (1 + n * sigma ^ (-2) * tau2 * lambda2)
+    },
+    inv_scale = function(kappa) {
+      tau * lambda * sqrt(n / (1 - kappa))
+    },
+    dinv_scale = function(kappa) {
+      -0.5 * tau * lambda * sqrt(n) * (1 - kappa) ^ (-3 / 2)
+    },
+    inv_var = function(kappa) {
+      (tau2 * lambda2 * n) / (1 - kappa)
+    },
+    dinv_var = function(kappa) {
+      -(tau2 * lambda2 * n) * kappa ^ (-2)
+    },
+    inv_prec = function(kappa) {
+      (1 - kappa) / (n * tau2 * lambda2)
+    },
     jacobian_prec = function(kappa) {
-      (1 + n * precision * tau ^ 2)
+      -1 / (n * tau2 * lambda2)
     }
   )
 }
