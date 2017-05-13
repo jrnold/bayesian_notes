@@ -6,3 +6,5 @@ _main.rds
 *.RData
 *.utf8.md
 /*.md
+*_cache
+/*.rds

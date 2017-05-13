@@ -134,11 +134,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\dlogistic}{\mathrm{Logistic}}
 \newcommand{\dllogistic}{\mathrm{Log-logistic}}
 \newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dbinom}{\mathrm{Bin}}
-\newcommand{\dbinom}{\mathrm{Bin-alt}}
+\newcommand{\dbin}{\mathrm{Bin}}
 \newcommand{\dmultinom}{\mathrm{Multinom}}
 \newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin-alt}}
+\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
 \newcommand{\dbetabinom}{\mathrm{Beta-bin}}
 \newcommand{\dcauchy}{\mathrm{Cauchy}}
 \newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
@@ -260,76 +259,87 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html"><i class="fa fa-check"></i><b>10</b> Unbounded Count Models</a><ul>
 <li class="chapter" data-level="10.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#poisson-1"><i class="fa fa-check"></i><b>10.1</b> Poisson</a></li>
 <li class="chapter" data-level="10.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-1"><i class="fa fa-check"></i><b>10.2</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-7"><i class="fa fa-check"></i><b>10.2.1</b> References</a></li>
-<li class="chapter" data-level="10.2.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#link-functions"><i class="fa fa-check"></i><b>10.2.2</b> Link functions</a></li>
-<li class="chapter" data-level="10.2.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-1"><i class="fa fa-check"></i><b>10.2.3</b> Stan</a></li>
+<li class="chapter" data-level="10.2.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-1"><i class="fa fa-check"></i><b>10.2.1</b> Stan</a></li>
+<li class="chapter" data-level="10.2.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-number-of-number-o"><i class="fa fa-check"></i><b>10.2.2</b> Example: Number of Number o</a></li>
+<li class="chapter" data-level="10.2.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-7"><i class="fa fa-check"></i><b>10.2.3</b> References</a></li>
+<li class="chapter" data-level="10.2.4" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#link-functions"><i class="fa fa-check"></i><b>10.2.4</b> Link functions</a></li>
+<li class="chapter" data-level="10.2.5" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-2"><i class="fa fa-check"></i><b>10.2.5</b> Stan</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-bilateral-sanctions"><i class="fa fa-check"></i><b>10.3</b> Example: Bilateral Sanctions</a></li>
 <li class="chapter" data-level="10.4" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-2"><i class="fa fa-check"></i><b>10.4</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="10.4.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-8"><i class="fa fa-check"></i><b>10.4.1</b> References</a></li>
+<li class="chapter" data-level="10.4.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-economic-sanctions-ii-ex-econ-sanctions-2"><i class="fa fa-check"></i><b>10.4.1</b> Example: Economic Sanctions II {ex-econ-sanctions-2}</a></li>
+<li class="chapter" data-level="10.4.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-8"><i class="fa fa-check"></i><b>10.4.2</b> References</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>11</b> Categorical Variables</a></li>
-<li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a><ul>
-<li class="chapter" data-level="12.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#bayesian-formulation"><i class="fa fa-check"></i><b>12.1</b> Bayesian formulation</a></li>
-<li class="chapter" data-level="12.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#worked-example"><i class="fa fa-check"></i><b>12.2</b> Worked Example</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#example-1"><i class="fa fa-check"></i><b>12.2.1</b> Example</a></li>
-<li class="chapter" data-level="12.2.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>12.2.2</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="12.2.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>12.2.3</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="12.2.4" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#comparison"><i class="fa fa-check"></i><b>12.2.4</b> Comparison</a></li>
+<li class="chapter" data-level="11" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>11</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="11.1" data-path="categorical-variables.html"><a href="categorical-variables.html#example-mexico-vote-choice"><i class="fa fa-check"></i><b>11.1</b> Example: Mexico Vote Choice</a></li>
 </ul></li>
+<li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a></li>
+<li class="chapter" data-level="13" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization Priors</a><ul>
+<li class="chapter" data-level="13.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-formulation"><i class="fa fa-check"></i><b>13.1</b> Bayesian formulation</a></li>
+<li class="chapter" data-level="13.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#worked-example"><i class="fa fa-check"></i><b>13.2</b> Worked Example</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#example-1"><i class="fa fa-check"></i><b>13.2.1</b> Example</a></li>
+<li class="chapter" data-level="13.2.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.2.2</b> Double Exponential (Laplace) Prior</a></li>
+<li class="chapter" data-level="13.2.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.2.3</b> Hierarchical Prior (HS)</a></li>
+<li class="chapter" data-level="13.2.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#comparison"><i class="fa fa-check"></i><b>13.2.4</b> Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.3</b> Zellner’s g-prior</a></li>
+<li class="chapter" data-level="13.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.4</b> Shrinkage Parameters</a></li>
+<li class="chapter" data-level="13.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="13.6" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-model-averaging-applications"><i class="fa fa-check"></i><b>13.6</b> Bayesian Model Averaging Applications</a></li>
+<li class="chapter" data-level="13.7" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#technical-notes"><i class="fa fa-check"></i><b>13.7</b> Technical Notes</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="12.3" data-path="counts.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>12.3</b> Miscelleanous Mathematical Background</a><ul>
-<li class="chapter" data-level="12.3.1" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#location-scale-families"><i class="fa fa-check"></i><b>12.3.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="12.3.2" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>12.3.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="12.3.3" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>12.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="12.3.4" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#qr-factorization"><i class="fa fa-check"></i><b>12.3.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="12.3.5" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html#cholesky-decomposition"><i class="fa fa-check"></i><b>12.3.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="13.8" data-path="counts.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>13.8</b> Miscelleanous Mathematical Background</a><ul>
+<li class="chapter" data-level="13.8.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#location-scale-families"><i class="fa fa-check"></i><b>13.8.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="13.8.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>13.8.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="13.8.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>13.8.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="13.8.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#qr-factorization"><i class="fa fa-check"></i><b>13.8.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="13.8.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#cholesky-decomposition"><i class="fa fa-check"></i><b>13.8.5</b> Cholesky Decomposition</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>13</b> Notes</a><ul>
-<li class="chapter" data-level="13.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>13.1</b> Syllabi</a></li>
-<li class="chapter" data-level="13.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>13.2</b> Textbooks</a></li>
-<li class="chapter" data-level="13.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>13.3</b> Topics</a><ul>
-<li class="chapter" data-level="13.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>13.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="13.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>13.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="13.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>13.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="13.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>13.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="13.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>13.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="13.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>13.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="13.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>13.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="13.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>13.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="13.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>13.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="13.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>13.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="13.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>13.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="13.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>13.3.12</b> Applied Bayes Rule</a></li>
+<li class="chapter" data-level="14" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>14</b> Notes</a><ul>
+<li class="chapter" data-level="14.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>14.1</b> Syllabi</a></li>
+<li class="chapter" data-level="14.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>14.2</b> Textbooks</a></li>
+<li class="chapter" data-level="14.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>14.3</b> Topics</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>14.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="14.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="14.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>14.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="14.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>14.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="14.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>14.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="14.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>14.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="14.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>14.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="14.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>14.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="14.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>14.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="14.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>14.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="14.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>14.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="14.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>14.3.12</b> Applied Bayes Rule</a></li>
 </ul></li>
-<li class="chapter" data-level="13.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>13.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="13.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>13.4.1</b> Software</a></li>
-<li class="chapter" data-level="13.4.2" data-path="notes.html"><a href="notes.html#stan-2"><i class="fa fa-check"></i><b>13.4.2</b> Stan</a></li>
-<li class="chapter" data-level="13.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>13.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="13.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>13.4.4</b> Political Science Bayesian Works</a></li>
+<li class="chapter" data-level="14.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>14.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="14.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>14.4.1</b> Software</a></li>
+<li class="chapter" data-level="14.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>14.4.2</b> Stan</a></li>
+<li class="chapter" data-level="14.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>14.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="14.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>14.4.4</b> Political Science Bayesian Works</a></li>
 </ul></li>
-<li class="chapter" data-level="13.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>13.5</b> Model Checking</a></li>
-<li class="chapter" data-level="13.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>13.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="13.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>13.6.1</b> Mixed Methods and Qualitative Research</a></li>
+<li class="chapter" data-level="14.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>14.5</b> Model Checking</a></li>
+<li class="chapter" data-level="14.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>14.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>14.6.1</b> Mixed Methods and Qualitative Research</a></li>
 </ul></li>
-<li class="chapter" data-level="13.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>13.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="13.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>13.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="13.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>13.8.1</b> Examples</a></li>
-<li class="chapter" data-level="13.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>13.8.2</b> Latent Variable Models</a></li>
+<li class="chapter" data-level="14.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>14.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="14.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>14.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="14.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>14.8.1</b> Examples</a></li>
+<li class="chapter" data-level="14.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>14.8.2</b> Latent Variable Models</a></li>
 </ul></li>
-<li class="chapter" data-level="13.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>13.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="13.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>13.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="13.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>13.9.2</b> German Tank Problem</a></li>
+<li class="chapter" data-level="14.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>14.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="14.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>14.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="14.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>14.9.2</b> German Tank Problem</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>13.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="13.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>13.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="13.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>13.11.1</b> Uncategorized</a></li>
+<li class="chapter" data-level="14.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>14.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="14.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>14.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="14.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>14.11.1</b> Uncategorized</a></li>
 </ul></li>
-<li class="chapter" data-level="13.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>13.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="13.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>13.13</b> Things to cover</a></li>
+<li class="chapter" data-level="14.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>14.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="14.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>14.13</b> Things to cover</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references-9.html"><a href="references-9.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -371,7 +381,7 @@ y_i \sim \dpois(\lambda_i) ,
 Y = 0, 1, \dots, \infty
 \]</span> The Poisson distribution has the restriction that the mean is equal to the variance, <span class="math inline">\(\E(X) = \Var(X) = \lambda\)</span>. The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).</p>
 <p>The outcome is modeled as a negative binomial distribution, <span class="math display">\[
-y_i \sim \dbinom(\alpha_i, \beta)
+y_i \sim \dbin(\alpha_i, \beta)
 \]</span> with shape <span class="math inline">\(\alpha \in \R^{+}\)</span> and inverse scale <span class="math inline">\(\beta \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \alpha_i / \beta\)</span> and <span class="math inline">\(\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
@@ -379,12 +389,14 @@ y_i \sim \dbinom(\alpha_i, \beta)
 \end{aligned}
 \]</span></p>
 <p><strong>Important</strong> The negative binomial distribution has many different parameterizations. An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. <span class="math display">\[
-y_i \sim \dnbinomalt(\mu_i, \phi)
+y_i \sim \dnbinalt(\mu_i, \phi)
 \]</span> with location parameter <span class="math inline">\(\mu \in \R^{+}\)</span> and over-dispersion parameter <span class="math inline">\(\phi \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \mu_i\)</span> and <span class="math inline">\(\Var(Y) = \mu_i + \frac{\mu_i^2}{\phi}\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
 \end{aligned}
 \]</span></p>
+<div id="stan-1" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Stan</h3>
 <p>In Stan, there are multiple parameterizations of the</p>
 <ul>
 <li><code>neg_binomial_lpdf(y | alpha, beta)</code>with shape parameter <code>alpha</code> and inverse scale parameter <code>beta</code>.</li>
@@ -392,13 +404,15 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 <li><code>neg_binomial_2_log_lpdf(y | eta, phi)</code> with log-mean <code>eta</code> and over-dispersion parameter <code>phi</code></li>
 </ul>
 <p>Also, <code>rstanarm</code> supports Poisson and <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html">negative binomial models</a>.</p>
-<ul>
-<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
-</ul>
+</div>
+<div id="example-number-of-number-o" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> Example: Number of Number o</h3>
+</div>
 <div id="references-7" class="section level3">
-<h3><span class="header-section-number">10.2.1</span> References</h3>
+<h3><span class="header-section-number">10.2.3</span> References</h3>
 <p>For general references on count models see</p>
 <ul>
+<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
 <li><span class="citation">Gelman and Hill (2007, 109–16)</span></li>
 <li><span class="citation">McElreath (2016 Ch 10)</span></li>
 <li><span class="citation">Fox (2016 Ch. 14)</span></li>
@@ -408,7 +422,7 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 <p>The parameter <span class="math inline">\(\lambda_i \in (0, \infty)\)</span> is both the mean and variance of the distribution.</p>
 </div>
 <div id="link-functions" class="section level3">
-<h3><span class="header-section-number">10.2.2</span> Link functions</h3>
+<h3><span class="header-section-number">10.2.4</span> Link functions</h3>
 <p>In many applications, <span class="math inline">\(\lambda\)</span>, is modeled as some function of covariates or other parameters.</p>
 <p>Since <span class="math inline">\(\lambda_i\)</span> must be positive, the most common link function is the log, <span class="math display">\[
 \log(\lambda_i) = \exp(\vec{x}_i&#39; \vec{\beta})
@@ -416,8 +430,8 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 \lambda_i = \log(\vec{x}_i \vec{\beta})
 \]</span></p>
 </div>
-<div id="stan-1" class="section level3">
-<h3><span class="header-section-number">10.2.3</span> Stan</h3>
+<div id="stan-2" class="section level3">
+<h3><span class="header-section-number">10.2.5</span> Stan</h3>
 <p>In Stan, the Poisson distribution has two implementations:</p>
 <ul>
 <li><code>poisson_lpdf</code></li>
@@ -432,8 +446,118 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 </div>
 <div id="example-bilateral-sanctions" class="section level2">
 <h2><span class="header-section-number">10.3</span> Example: Bilateral Sanctions</h2>
-<p>A regression model of bilateral sanctions for the period 1939 to 1983. The outcome variable is the number of countries imposing sanctions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;sanction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)</code></pre></div>
+<p>A regression model of bilateral sanctions for the period 1939 to 1983 <span class="citation">(Martin 1992)</span>. The outcome variable is the number of countries imposing sanctions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_poisson1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/poisson1.stan&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;sanction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)
+
+f &lt;-<span class="st"> </span>num <span class="op">~</span><span class="st"> </span>coop <span class="op">+</span><span class="st"> </span>target <span class="op">-</span>1L
+reg_model_data &lt;-<span class="st"> </span><span class="kw">lm_preprocess</span>(f, <span class="dt">data =</span> sanction)
+
+sanction_data &lt;-
+<span class="st">  </span><span class="kw">list</span>(<span class="dt">X =</span> <span class="kw">autoscale</span>(reg_model_data<span class="op">$</span>X),
+       <span class="dt">y =</span> reg_model_data<span class="op">$</span>y)
+sanction_data<span class="op">$</span>N &lt;-<span class="st"> </span><span class="kw">nrow</span>(sanction_data<span class="op">$</span>X)
+sanction_data<span class="op">$</span>K &lt;-<span class="st"> </span><span class="kw">ncol</span>(sanction_data<span class="op">$</span>X)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_sanction_pois &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_poisson1, <span class="dt">data =</span> sanction_data)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;poisson1&#39; NOW (CHAIN 1).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 4.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.09828 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.095359 seconds (Sampling)</span>
+<span class="co">#&gt;                0.193639 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;poisson1&#39; NOW (CHAIN 2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.6e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.101347 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.103472 seconds (Sampling)</span>
+<span class="co">#&gt;                0.204819 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;poisson1&#39; NOW (CHAIN 3).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.7e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.101324 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.107138 seconds (Sampling)</span>
+<span class="co">#&gt;                0.208462 seconds (Total)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;poisson1&#39; NOW (CHAIN 4).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.7e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.10045 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.093848 seconds (Sampling)</span>
+<span class="co">#&gt;                0.194298 seconds (Total)</span></code></pre></div>
 </div>
 <div id="negative-binomial-2" class="section level2">
 <h2><span class="header-section-number">10.4</span> Negative Binomial</h2>
@@ -441,7 +565,7 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 Y = 0, 1, \dots, \infty
 \]</span> The Poisson distribution has the restriction that the mean is equal to the variance, <span class="math inline">\(\E(X) = \Var(X) = \lambda\)</span>. The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).</p>
 <p>The outcome is modeled as a negative binomial distribution, <span class="math display">\[
-y_i \sim \dbinom(\alpha_i, \beta)
+y_i \sim \dnegbinom(\alpha_i, \beta)
 \]</span> with shape <span class="math inline">\(\alpha \in \R^{+}\)</span> and inverse scale <span class="math inline">\(\beta \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \alpha_i / \beta\)</span> and <span class="math inline">\(\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
@@ -462,11 +586,35 @@ y_i \sim \dnbinomalt(\mu_i, \phi)
 <li><code>neg_binomial_2_log_lpdf(y | eta, phi)</code> with log-mean <code>eta</code> and over-dispersion parameter <code>phi</code></li>
 </ul>
 <p>Also, <code>rstanarm</code> supports Poisson and <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html">negative binomial models</a>.</p>
-<ul>
-<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
-</ul>
+<div id="example-economic-sanctions-ii-ex-econ-sanctions-2" class="section level3">
+<h3><span class="header-section-number">10.4.1</span> Example: Economic Sanctions II {ex-econ-sanctions-2}</h3>
+<p>Continuing the <a href="#ex-econ-sanctions-2">economic sanctions example</a> of <span class="citation">Martin (1992)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_negbin1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/negbin1.stan&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_sanction_nb &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_negbin1, <span class="dt">data =</span> sanction_data, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">adapt_delta  =</span> <span class="fl">0.95</span>))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;negbin1&#39; NOW (CHAIN 1).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 7.6e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.76 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; [1] &quot;Error in sampler$call_sampler(args_list[[i]]) : &quot;                                                                                                    </span>
+<span class="co">#&gt; [2] &quot;  Exception thrown at line 48: neg_binomial_2_rng: Random number that came from gamma distribution is 4.11693e+10, but must be less than 1.07374e+09&quot;</span>
+<span class="co">#&gt; error occurred during calling the sampler; sampling not done</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fit_sanction_nb, <span class="dt">par =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;phi&quot;</span>))<span class="op">$</span>summary
+<span class="co">#&gt; Stan model &#39;negbin1&#39; does not contain samples.</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
+<p>We can compare the</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loo_sanction_pois &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(fit_sanction_pois, <span class="st">&quot;log_lik&quot;</span>))
+<span class="co">#&gt; Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-</span>
+<span class="co">#&gt; diagnostic&#39;) for details.</span>
+<span class="co"># loo_sanction_nb &lt;- loo(extract_log_lik(fit_sanction_nb, &quot;log_lik&quot;))</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># loo::compare(loo_sanction_pois, loo_sanction_nb)</span></code></pre></div>
+</div>
 <div id="references-8" class="section level3">
-<h3><span class="header-section-number">10.4.1</span> References</h3>
+<h3><span class="header-section-number">10.4.2</span> References</h3>
 <p>For general references on count models see</p>
 <ul>
 <li><span class="citation">Gelman and Hill (2007, 109–16)</span></li>

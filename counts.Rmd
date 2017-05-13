@@ -206,11 +206,11 @@ summary(fit_sanction_nb, par = c("a", "b", "phi"))$summary
 We can compare the 
 ```{r message=FALSE}
 loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
-loo_sanction_nb <- loo(extract_log_lik(fit_sanction_nb, "log_lik"))
+# loo_sanction_nb <- loo(extract_log_lik(fit_sanction_nb, "log_lik"))
 ```
 
 ```{r}
-loo::compare(loo_sanction_pois, loo_sanction_nb)
+# loo::compare(loo_sanction_pois, loo_sanction_nb)
 ```
 
 

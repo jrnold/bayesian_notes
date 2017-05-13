@@ -248,25 +248,7 @@ library("magrittr")
 
 URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv"
 
-autoscale <- function(x, center = TRUE, scale = TRUE) {
-  nvals <- length(unique(x))
-  if (nvals <= 1) {
-    out <- x
-  } else if (nvals == 2) {
-    out <- if (scale) {
-      (x - min(x, na.rm = TRUE)) / diff(range(x, finite = TRUE))
-    } else x
-    if (center) {
-      out <- x - mean(x)
-    }
-  } else {
-    out <- if (center) {
-      x - mean(x, na.rm = TRUE)
-    } else x
-    out <- if (scale) out / sd(out, na.rm = TRUE)
-  }
-  out
-}
+
 
 f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg + percent_uninsured +
       income + percent_nonwhite + percent_metro)
@@ -338,8 +320,8 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 8.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.82 seconds.
+#> Gradient evaluation took 8.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.85 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -356,62 +338,12 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.23298 seconds (Warm-up)
-#>                0.216148 seconds (Sampling)
-#>                0.449128 seconds (Total)
+#>  Elapsed Time: 0.224432 seconds (Warm-up)
+#>                0.210568 seconds (Sampling)
+#>                0.435 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.229708 seconds (Warm-up)
-#>                0.228836 seconds (Sampling)
-#>                0.458544 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.239766 seconds (Warm-up)
-#>                0.23077 seconds (Sampling)
-#>                0.470536 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2.1e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
@@ -431,65 +363,15 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.230778 seconds (Warm-up)
-#>                0.230523 seconds (Sampling)
-#>                0.461301 seconds (Total)
-fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.61463 seconds (Warm-up)
-#>                0.261314 seconds (Sampling)
-#>                1.87594 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.50313 seconds (Warm-up)
-#>                0.221118 seconds (Sampling)
-#>                1.72424 seconds (Total)
+#>  Elapsed Time: 0.222537 seconds (Warm-up)
+#>                0.231917 seconds (Sampling)
+#>                0.454454 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -506,12 +388,37 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.25621 seconds (Warm-up)
-#>                0.302845 seconds (Sampling)
-#>                1.55906 seconds (Total)
+#>  Elapsed Time: 0.229284 seconds (Warm-up)
+#>                0.221269 seconds (Sampling)
+#>                0.450553 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.217782 seconds (Warm-up)
+#>                0.220388 seconds (Sampling)
+#>                0.43817 seconds (Total)
+fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
 #> 
 #> Gradient evaluation took 2.7e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
@@ -531,9 +438,84 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.38892 seconds (Warm-up)
-#>                0.23632 seconds (Sampling)
-#>                1.62524 seconds (Total)
+#>  Elapsed Time: 1.55551 seconds (Warm-up)
+#>                0.243953 seconds (Sampling)
+#>                1.79946 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.39207 seconds (Warm-up)
+#>                0.209127 seconds (Sampling)
+#>                1.6012 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.06268 seconds (Warm-up)
+#>                0.242076 seconds (Sampling)
+#>                1.30476 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.21102 seconds (Warm-up)
+#>                0.217264 seconds (Sampling)
+#>                1.42828 seconds (Total)
 ```
 
 

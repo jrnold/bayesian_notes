@@ -761,7 +761,7 @@ $$
 Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributions where $\sigma^2 = 1$, $\tau = 1$, for $n = 1$.
 
 @DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0.
-@ScottBerger2010 consider marginal maximum likelihood estimates of $\tau$.
+@ScottBerger2010a consider marginal maximum likelihood estimates of $\tau$.
 @PasKleijnVaart2014a suggest that an empirical Bayes esitmator truncated below at $1 / n$.
 
 ## Bayesian Model Averaging Applications

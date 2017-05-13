@@ -45,7 +45,7 @@ generated quantities {
   vector[N] log_lik;
   mu = exp(eta);
   for (i in 1:N) {
-    y_rep[i] = neg_binomial_2_rng(mu[i], phi);
-    log_lik[i] = neg_binomial_2_lpmf(y[i] | mu[i], phi);
+    y_rep[i] = neg_binomial_2_log_rng(eta[i], phi);
+    log_lik[i] = neg_binomial_2_log_lpmf(y[i] | eta[i], phi);
   }
 }

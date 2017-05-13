@@ -1,3 +1,12 @@
 
 # Categorical Variables
 
+## Example: Mexico Vote Choice
+
+This example from [Zelig](http://docs.zeligproject.org/en/latest/zeligchoice-mlogit.html) uses a multinomial model 
+
+
+```r
+data("mexico", package = "Zelig")
+```
+
