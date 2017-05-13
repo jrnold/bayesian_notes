@@ -41,7 +41,7 @@ transformed parameters {
   // tau0 from Piironen and Vehtari (2017)
   tau0 = p0 * (K - p0) * sigma * pow(N, 0.5);
   b = b_raw * tau .* lambda;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors

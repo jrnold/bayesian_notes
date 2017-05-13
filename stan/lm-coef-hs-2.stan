@@ -36,7 +36,7 @@ transformed parameters {
   vector[N] mu;
   vector[K] b;
   b = b_raw * tau .* lambda;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors

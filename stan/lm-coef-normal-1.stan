@@ -30,7 +30,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[N] mu;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors
