@@ -1,5 +1,56 @@
 # Hierarchical Models
 
+## Baseball Example
+
+
+
+```{r}
+data("bball1970", package = "rstanarm")
+```
+
+
+```{r}
+bball1970_data <- list(
+  N = nrow(bball1970),
+  k = bball1970$AB,
+  y = bball1970$Hits,
+  k_new = bball1970$RemainingAB,
+  y_new = bball1970$RemainingHits
+)
+```
+
+```{r results='hide'}
+binomial_nopool <- stan_model("stan/binomial-no-pooling.stan")
+```
+```{r results='hide}
+binomial_pool <- stan_model("stan/binomial-complete-pooling.stan")
+```
+```{r results='hide'}
+binomial_partial <- stan_model("stan/binomial-partial-pooling.stan")
+```
+
+
+```{r}
+bball1970_pool <- sampling(binomial_pool, data = bball1970_data)
+loo_pool <- loo(extract_log_lik(bball1970_pool, "log_lik"))
+elpd_loo <- loo_pool$elpd_loo / bball1970_data$N
+elpd_new <- mean(log(colMeans(exp(rstan::extract(bball1970_pool)[["log_lik_new"]]))))
+```
+```{r}
+bball1970_nopool <- sampling(binomial_nopool, data = bball1970_data)
+loo_partial <- loo(extract_log_lik(bball1970_nopool, "log_lik"))
+lliknew_nopool <- mean(log(colMeans(exp(rstan::extract(bball1970_nopool)[["log_lik_new"]]))))
+```
+```{r}
+bball1970_partial <- sampling(binomial_partial, data = bball1970_data)
+loo_partial <- loo(extract_log_lik(bball1970_partial, "log_lik"))
+
+elpd_new <- mean(log(colMeans(exp(rstan::extract(bball1970_partial)[["log_lik_new"]]))))
+```
+
+### Eight Schools
+
+
 
 ## Equivalent Models
 
