@@ -77,7 +77,7 @@ unionization <- read_tsv("data/western1995/unionization.tsv",
               labor_force_size = col_number(),
               econ_conc = col_double()
             ))
-mod_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
+mod_data <- lm_preprocess(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
                                    
 mod_data <- within(mod_data, {
   b_loc <- 0

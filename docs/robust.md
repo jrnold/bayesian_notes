@@ -135,7 +135,7 @@ unionization <- read_tsv("data/western1995/unionization.tsv",
               labor_force_size = col_number(),
               econ_conc = col_double()
             ))
-mod_data <- preprocess_lm(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
+mod_data <- lm_preprocess(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
                                    
 mod_data <- within(mod_data, {
   b_loc <- 0
@@ -152,8 +152,8 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> 
 #> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#> Gradient evaluation took 3.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -170,9 +170,9 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.924295 seconds (Warm-up)
-#>                0.797333 seconds (Sampling)
-#>                1.72163 seconds (Total)
+#>  Elapsed Time: 0.916274 seconds (Warm-up)
+#>                0.793757 seconds (Sampling)
+#>                1.71003 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -181,36 +181,6 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
 #> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.912943 seconds (Warm-up)
-#>                0.842836 seconds (Sampling)
-#>                1.75578 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 2
-#>                                                                                          count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 3).
 #> 
 #> Gradient evaluation took 1.5e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
@@ -230,20 +200,20 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.978823 seconds (Warm-up)
-#>                0.815824 seconds (Sampling)
-#>                1.79465 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 3
-#>                                                                                     count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
+#>  Elapsed Time: 0.895086 seconds (Warm-up)
+#>                0.851101 seconds (Sampling)
+#>                1.74619 seconds (Total)
+#> The following numerical problems occurred the indicated number of times on chain 2
+#>                                                                                          count
+#> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
 #> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 4).
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -260,9 +230,39 @@ mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.903471 seconds (Warm-up)
-#>                0.748265 seconds (Sampling)
-#>                1.65174 seconds (Total)
+#>  Elapsed Time: 0.959192 seconds (Warm-up)
+#>                0.806953 seconds (Sampling)
+#>                1.76615 seconds (Total)
+#> The following numerical problems occurred the indicated number of times on chain 3
+#>                                                                                     count
+#> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
+#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
+#> 
+#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.883576 seconds (Warm-up)
+#>                0.731602 seconds (Sampling)
+#>                1.61518 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                          count
 #> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
@@ -341,8 +341,8 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 2.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -359,15 +359,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.551241 seconds (Warm-up)
-#>                0.482792 seconds (Sampling)
-#>                1.03403 seconds (Total)
+#>  Elapsed Time: 0.57835 seconds (Warm-up)
+#>                0.504448 seconds (Sampling)
+#>                1.0828 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 9e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -384,15 +384,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.507048 seconds (Warm-up)
-#>                0.455422 seconds (Sampling)
-#>                0.96247 seconds (Total)
+#>  Elapsed Time: 0.533096 seconds (Warm-up)
+#>                0.469512 seconds (Sampling)
+#>                1.00261 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Gradient evaluation took 1.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -409,15 +409,15 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.493311 seconds (Warm-up)
-#>                0.568471 seconds (Sampling)
-#>                1.06178 seconds (Total)
+#>  Elapsed Time: 0.516238 seconds (Warm-up)
+#>                0.602928 seconds (Sampling)
+#>                1.11917 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 9e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -434,9 +434,9 @@ mod_normal_fit <- sampling(mod_normal, data = mod_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.511245 seconds (Warm-up)
-#>                0.405449 seconds (Sampling)
-#>                0.916694 seconds (Total)
+#>  Elapsed Time: 0.525881 seconds (Warm-up)
+#>                0.422686 seconds (Sampling)
+#>                0.948567 seconds (Total)
 ```
 
 
