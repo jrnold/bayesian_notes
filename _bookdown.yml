@@ -19,6 +19,7 @@ rmd_files:
   - "categorical.Rmd"
   - "ordered.Rmd"
   - "shrinkage.Rmd"
+  - "hierarchical.Rmd"
   - "appendix.Rmd"
   - "annotated.Rmd"
   - "references.Rmd"

@@ -1,7 +1,14 @@
 
 # (PART) Appendix {-}
 
-## Miscelleanous Mathematical Background
+
+```r
+library("tidyverse")
+library("stringr")
+```
+
+
+## Miscellaneous Mathematical Background
 
 ### Location-Scale Families
 
@@ -11,7 +18,7 @@ Y = \mu + \sigma X ,
 $$
 has mean $\mu$ and standard deviation $\sigma$.
 
-**Normal distribution:** Suppse $X \sim \dnorm(0, 1)$, then
+**Normal distribution:** Suppose $X \sim \dnorm(0, 1)$, then
 $$
 Y = \mu + \sigma X,
 $$
@@ -51,7 +58,7 @@ model {
 
 Some commonly used distributions can be represented as scale mixtures of normal distributions.
 For formal details of scale mixtures of normal distributions see @West1987a.
-Distributions that are scale-mixtures of normals can be written as,
+Distributions that are scale-mixtures of normal distributions can be written as,
 $$
 Y \sim \dnorm(\mu, \sigma_i^2) \\
 \sigma_i \sim \pi(\sigma_i)
@@ -72,16 +79,15 @@ And in HMC, it may induce a more tractable posterior density.
 
 ### Covariance-Correlation Matrix Decomposition
 
-A covariance matrix $\Sigma$ can be decomposed into a standard deviation vector $\sigma$, 
-and a correlation matrix $R$,
+The suggested method for modeling covariance matrices in Stan is the separation strategy which decomposes a covariance matrix $\Sigma$ can be decomposed into a standard deviation vector $\sigma$,  and a correlation matrix $R$ [@BarnardMcCullochMeng2000a],
 $$
-\Sigma = \diag(\sigma) R \diag(\sigma)
+\Sigma = \diag(\sigma) R \diag(\sigma) .
 $$
 This is useful for setting priors on covariance because separate priors can be set 
 for the scales of the variables via $\sigma$, and the correlation between them,
 via $R$.
 
-The [rstanarm](https://github.com/stan-dev/rstanarm/wiki/Prior-distributions) `decov` prior coes further and decomposes the covariance matrix into a correlation matrix, $\mat{R}$, 
+The [rstanarm](https://github.com/stan-dev/rstanarm/wiki/Prior-distributions) `decov` prior goes further and decomposes the covariance matrix into a correlation matrix, $\mat{R}$, 
 a diagonal variance matrix $\mat{\Omega}$ with trace $n \sigma^2$, a scalar global variance $\sigma^2$, and a simplex $\vec{\pi}$ (proportion of total variance for each variable):
 $$
 \begin{aligned}[t]
@@ -91,6 +97,70 @@ $$
 $$
 Separate and interpretable priors can be put on $\mat{R}$, $\vec{\pi}$, and $\sigma^2$.
 
+The LKJ (Lewandowski, ) distribution is a distribution over correlation coefficients,
+$$
+R \sim \dlkjcorr(\eta) ,
+$$
+where
+$$
+\dlkjcorr(\Sigma | \eta) \propto \det(\Sigma)^{(\eta - 1)} .
+$$
+
+This distribution has the following properties:
+
+- $\eta = 1$: uniform correlations
+- $\eta \to \infty$: approaches the identity matrix
+- $0 < \eta < 1$: there is a trough at the identity matrix with higher probabilities placed on non-zero correlations.
+- For all positive $\eta$ ($\eta > 0$), $\E(R) = \mat{I}$.
+
+
+
+```r
+lkjcorr_df <- function(eta, n = 2) {
+  out <- as.data.frame(rlkjcorr(n, eta))
+  out$.row <- seq_len(nrow(out))
+  out <- gather(out, .col, value, -.row)
+  out$.col <- as.integer(str_replace(out$.col, "^V", ""))
+  out$eta <- eta
+  out  
+}
+
+lkjsims <- purrr::map_df(c(0.01, 0.1, 1, 2, 50, 1000), lkjcorr_df, n = 50)
+```
+
+This simulates a single matrix from the LKJ distribution with different values of $\eta$. 
+As $\eta \to \infty$, the off-diagonal correlations tend towards 0, and the correlation matrix to the identity matrix.
+
+```r
+ggplot(lkjsims,
+       aes(x = .row, y = .col, fill = value)) +
+  facet_wrap(~ eta, ncol = 2) +
+  scale_fill_distiller(limits = c(-1, 1), type = "div", palette = "RdYlBu") +
+  geom_raster() +
+  theme_minimal() +
+  theme(panel.grid = element_blank(), axis.text = element_blank()) +
+  labs(x = "", y = "")
+```
+
+<img src="appendix_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" />
+
+The density of the off-diagonal correlations.
+
+```r
+lkjsims %>%
+  filter(.row < .col) %>%
+  ggplot(aes(x = value, colour = factor(eta))) +
+  geom_density()
+```
+
+<img src="appendix_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
+
+For other discussions of the LKJ correlation distribution, see these:
+
+- https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices/125017#125017
+- http://www.zinkov.com/posts/2015-06-09-where-priors-come-from/
+- http://www.psychstatistics.com/2014/12/27/d-lkj-priors/
+
 
 ### QR Factorization
 
@@ -98,10 +168,10 @@ For a full-rank $N \times K$ matrix, the QR factorization is
 $$
 \mat{X} = \mat{Q} \mat{R} 
 $$
-where $\mat{Q}$ is an orthonormal matix such that $\mat{Q}\T \mat{Q}$ and 
+where $\mat{Q}$ is an orthonormal matrix such that $\mat{Q}\T \mat{Q}$ and 
 $\mat{R}$ is an upper triangular matrix.
 
-Stan functio
+Stan function
 @Stan2016a suggest writing it is 
 $$
 \begin{aligned}[t]

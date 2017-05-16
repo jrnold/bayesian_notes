@@ -104,10 +104,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \DeclareMathOperator{\RMSE}{RMSE}
 \DeclareMathOperator{\sd}{sd}
 \DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\median}{median}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\logistic}{Logistic}
+\DeclareMathOperator{\logit}{Logit}
 
 \newcommand{\mat}[1]{\boldsymbol{#1}}
 \newcommand{\vec}[1]{\boldsymbol{#1}}
@@ -141,8 +144,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\dbetabinom}{\mathrm{Beta-bin}}
 \newcommand{\dcauchy}{\mathrm{Cauchy}}
 \newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
 
-\DeclareMathOperator{\logistic}{Logistic}
+
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -275,76 +279,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="categorical-variables.html"><a href="categorical-variables.html#example-mexico-vote-choice"><i class="fa fa-check"></i><b>11.1</b> Example: Mexico Vote Choice</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a></li>
-<li class="chapter" data-level="13" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization Priors</a><ul>
-<li class="chapter" data-level="13.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-formulation"><i class="fa fa-check"></i><b>13.1</b> Bayesian formulation</a></li>
-<li class="chapter" data-level="13.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#worked-example"><i class="fa fa-check"></i><b>13.2</b> Worked Example</a><ul>
-<li class="chapter" data-level="13.2.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#example-1"><i class="fa fa-check"></i><b>13.2.1</b> Example</a></li>
-<li class="chapter" data-level="13.2.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.2.2</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="13.2.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.2.3</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="13.2.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#comparison"><i class="fa fa-check"></i><b>13.2.4</b> Comparison</a></li>
+<li class="chapter" data-level="13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization</a><ul>
+<li class="chapter" data-level="13.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#normal-linear-regression-model"><i class="fa fa-check"></i><b>13.1</b> Normal Linear Regression Model</a></li>
+<li class="chapter" data-level="13.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#penalized-regression"><i class="fa fa-check"></i><b>13.2</b> Penalized Regression</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#ridge-regression"><i class="fa fa-check"></i><b>13.2.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="13.2.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#lasso"><i class="fa fa-check"></i><b>13.2.2</b> Lasso</a></li>
 </ul></li>
-<li class="chapter" data-level="13.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.3</b> Shrinkage Parameters</a></li>
-<li class="chapter" data-level="13.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.4</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="13.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#r-implementations"><i class="fa fa-check"></i><b>13.5</b> R Implementations</a></li>
-<li class="chapter" data-level="13.6" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>13.6</b> Bayesian Model Averaging</a><ul>
-<li class="chapter" data-level="13.6.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.6.1</b> Zellner’s g-prior</a></li>
+<li class="chapter" data-level="13.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-shrinkage-priors"><i class="fa fa-check"></i><b>13.3</b> Bayesian Shrinkage Priors</a></li>
+<li class="chapter" data-level="13.4" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#differences-between-bayesian-shrinkage-and-penalized-likelihood"><i class="fa fa-check"></i><b>13.4</b> Differences between Bayesian Shrinkage and Penalized Likelihood</a></li>
+<li class="chapter" data-level="13.5" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-shrinkage-priors"><i class="fa fa-check"></i><b>13.5</b> Hierarchical Shrinkage Priors</a></li>
+<li class="chapter" data-level="13.6" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#example-1"><i class="fa fa-check"></i><b>13.6</b> Example</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.6.1</b> Double Exponential (Laplace) Prior</a></li>
+<li class="chapter" data-level="13.6.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.6.2</b> Hierarchical Prior (HS)</a></li>
+<li class="chapter" data-level="13.6.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#comparison"><i class="fa fa-check"></i><b>13.6.3</b> Comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="13.7" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>13.7</b> Slab and Spike Priors</a></li>
-<li class="chapter" data-level="13.8" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#technical-notes"><i class="fa fa-check"></i><b>13.8</b> Technical Notes</a></li>
-<li class="chapter" data-level="13.9" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>13.9</b> Multiple Comparisons and Thresholding rules</a></li>
-<li class="chapter" data-level="13.10" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>13.10</b> Examples of Applications of Sensitivity Analysis</a></li>
+<li class="chapter" data-level="13.7" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.7</b> Shrinkage Parameters</a></li>
+<li class="chapter" data-level="13.8" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.8</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="13.9" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#r-implementations"><i class="fa fa-check"></i><b>13.9</b> R Implementations</a></li>
+<li class="chapter" data-level="13.10" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>13.10</b> Bayesian Model Averaging</a><ul>
+<li class="chapter" data-level="13.10.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.10.1</b> Zellner’s g-prior</a></li>
+</ul></li>
+<li class="chapter" data-level="13.11" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>13.11</b> Slab and Spike Priors</a></li>
+<li class="chapter" data-level="13.12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#technical-notes"><i class="fa fa-check"></i><b>13.12</b> Technical Notes</a></li>
+<li class="chapter" data-level="13.13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>13.13</b> Multiple Comparisons and Thresholding rules</a></li>
+<li class="chapter" data-level="13.14" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>13.14</b> Examples of Applications of Sensitivity Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>14</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="14.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#baseball-hitting"><i class="fa fa-check"></i><b>14.1</b> Baseball Hitting</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#other-examples"><i class="fa fa-check"></i><b>14.1.1</b> Other Examples</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#equivalent-models"><i class="fa fa-check"></i><b>14.2</b> Equivalent Models</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#group-varying-intercepts"><i class="fa fa-check"></i><b>14.2.1</b> Group Varying Intercepts</a></li>
+<li class="chapter" data-level="14.2.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#separate-local-regressions"><i class="fa fa-check"></i><b>14.2.2</b> Separate local regressions</a></li>
+<li class="chapter" data-level="14.2.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#modeling-the-coefficients-of-a-large-regression-model"><i class="fa fa-check"></i><b>14.2.3</b> Modeling the coefficients of a large regression model</a></li>
+<li class="chapter" data-level="14.2.4" data-path="hierarchical-models.html"><a href="hierarchical-models.html#regression-with-multiple-error-terms"><i class="fa fa-check"></i><b>14.2.4</b> Regression with multiple error terms</a></li>
+<li class="chapter" data-level="14.2.5" data-path="hierarchical-models.html"><a href="hierarchical-models.html#regresion-with-correlated-errors"><i class="fa fa-check"></i><b>14.2.5</b> Regresion with correlated errors</a></li>
+</ul></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="13.11" data-path="references.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>13.11</b> Miscelleanous Mathematical Background</a><ul>
-<li class="chapter" data-level="13.11.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#location-scale-families"><i class="fa fa-check"></i><b>13.11.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="13.11.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>13.11.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="13.11.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>13.11.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="13.11.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#qr-factorization"><i class="fa fa-check"></i><b>13.11.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="13.11.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#cholesky-decomposition"><i class="fa fa-check"></i><b>13.11.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="14.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>14.3</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#location-scale-families"><i class="fa fa-check"></i><b>14.3.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="14.3.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>14.3.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="14.3.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>14.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="14.3.4" data-path="hierarchical-models.html"><a href="hierarchical-models.html#qr-factorization"><i class="fa fa-check"></i><b>14.3.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="14.3.5" data-path="hierarchical-models.html"><a href="hierarchical-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>14.3.5</b> Cholesky Decomposition</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>14</b> Notes</a><ul>
-<li class="chapter" data-level="14.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>14.1</b> Syllabi</a></li>
-<li class="chapter" data-level="14.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>14.2</b> Textbooks</a></li>
-<li class="chapter" data-level="14.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>14.3</b> Topics</a><ul>
-<li class="chapter" data-level="14.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>14.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="14.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="14.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>14.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="14.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>14.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="14.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>14.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="14.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>14.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="14.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>14.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="14.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>14.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="14.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>14.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="14.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>14.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="14.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>14.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="14.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>14.3.12</b> Applied Bayes Rule</a></li>
+<li class="chapter" data-level="15" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>15</b> Notes</a><ul>
+<li class="chapter" data-level="15.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>15.1</b> Syllabi</a></li>
+<li class="chapter" data-level="15.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>15.2</b> Textbooks</a></li>
+<li class="chapter" data-level="15.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>15.3</b> Topics</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>15.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="15.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>15.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="15.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>15.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="15.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>15.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="15.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>15.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="15.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>15.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="15.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>15.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="15.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>15.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="15.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>15.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="15.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>15.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="15.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>15.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="15.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>15.3.12</b> Applied Bayes Rule</a></li>
 </ul></li>
-<li class="chapter" data-level="14.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>14.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="14.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>14.4.1</b> Software</a></li>
-<li class="chapter" data-level="14.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>14.4.2</b> Stan</a></li>
-<li class="chapter" data-level="14.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>14.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="14.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>14.4.4</b> Political Science Bayesian Works</a></li>
+<li class="chapter" data-level="15.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>15.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>15.4.1</b> Software</a></li>
+<li class="chapter" data-level="15.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>15.4.2</b> Stan</a></li>
+<li class="chapter" data-level="15.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>15.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="15.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>15.4.4</b> Political Science Bayesian Works</a></li>
 </ul></li>
-<li class="chapter" data-level="14.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>14.5</b> Model Checking</a></li>
-<li class="chapter" data-level="14.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>14.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="14.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>14.6.1</b> Mixed Methods and Qualitative Research</a></li>
+<li class="chapter" data-level="15.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>15.5</b> Model Checking</a></li>
+<li class="chapter" data-level="15.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>15.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="15.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>15.6.1</b> Mixed Methods and Qualitative Research</a></li>
 </ul></li>
-<li class="chapter" data-level="14.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>14.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="14.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>14.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="14.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>14.8.1</b> Examples</a></li>
-<li class="chapter" data-level="14.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>14.8.2</b> Latent Variable Models</a></li>
+<li class="chapter" data-level="15.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>15.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="15.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>15.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="15.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>15.8.1</b> Examples</a></li>
+<li class="chapter" data-level="15.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>15.8.2</b> Latent Variable Models</a></li>
 </ul></li>
-<li class="chapter" data-level="14.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>14.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="14.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>14.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="14.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>14.9.2</b> German Tank Problem</a></li>
+<li class="chapter" data-level="15.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>15.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="15.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>15.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="15.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>15.9.2</b> German Tank Problem</a></li>
 </ul></li>
-<li class="chapter" data-level="14.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>14.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="14.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>14.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="14.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>14.11.1</b> Uncategorized</a></li>
+<li class="chapter" data-level="15.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>15.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="15.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>15.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="15.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>15.11.1</b> Uncategorized</a></li>
 </ul></li>
-<li class="chapter" data-level="14.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>14.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="14.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>14.13</b> Things to cover</a></li>
+<li class="chapter" data-level="15.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>15.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="15.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>15.13</b> Things to cover</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references-9.html"><a href="references-9.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -372,6 +394,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Alexseev, Mikhail A. 2006. “Ballot-Box Vigilantism? Ethnic Population Shifts and Xenophobic Voting in Post-Soviet Russia.” <em>Political Behavior</em> 28 (3). Springer Nature: 211–40. doi:<a href="https://doi.org/10.1007/s11109-006-9009-2">10.1007/s11109-006-9009-2</a>.</p>
 </div>
 <div>
+<p>Barnard, John, Robert McCulloch, and Xiao-Li Meng. 2000. “Modeling Covariance Matrices in Terms of Standard Deviations and Correlations, with Application to Shrinkage.” <em>Statistica Sinica</em> 10 (4). Institute of Statistical Science, Academia Sinica: 1281–1311. <a href="http://www.jstor.org/stable/24306780" class="uri">http://www.jstor.org/stable/24306780</a>.</p>
+</div>
+<div>
 <p>Barrilleaux, Charles, and Carlisle Rainey. 2014. “The Politics of Need.” <em>State Politics &amp; Policy Quarterly</em> 14 (4). SAGE Publications: 437–60. doi:<a href="https://doi.org/10.1177/1532440014561644">10.1177/1532440014561644</a>.</p>
 </div>
 <div>
@@ -387,9 +412,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Betancourt, Michael. 2016. “Diagnosing Suboptimal Cotangent Disintegrations in Hamiltonian Monte Carlo,” April. <a href="http://arxiv.org/abs/1604.00695v1" class="uri">http://arxiv.org/abs/1604.00695v1</a>.</p>
 </div>
 <div>
-<p>———. 2017. “How the Shape of a Weakly Informative Prior Affects Inferences.” <em>Stan Case Studies</em>, January. <a href="http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html" class="uri">http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html</a>.</p>
-</div>
-<div>
 <p>Bhadra, Anindya, Jyotishka Datta, Nicholas G. Polson, and Brandon Willard. 2015. “The Horseshoe+ Estimator of Ultra-Sparse Signals,” February. <a href="http://arxiv.org/abs/1502.00560v2" class="uri">http://arxiv.org/abs/1502.00560v2</a>.</p>
 </div>
 <div>
@@ -403,6 +425,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div>
 <p>Carpenter, Bob. 2016. “The Impact of Reparameterization on Point Estimatesekgam.” <em>Stan Case Studies</em>, April. <a href="http://mc-stan.org/documentation/case-studies/mle-params.html" class="uri">http://mc-stan.org/documentation/case-studies/mle-params.html</a>.</p>
+</div>
+<div>
+<p>Carpenter, Bob, Jonah Gabry, and Ben Goodrich. 2017. “Hierarchical Partial Pooling for Repeated Binary Trials.” <em>Stan Case Studies</em>, January. <a href="http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html" class="uri">http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html</a>.</p>
 </div>
 <div>
 <p>Carvalho, C. M., N. G. Polson, and J. G. Scott. 2010. “The Horseshoe Estimator for Sparse Signals.” <em>Biometrika</em> 97 (2). Oxford University Press (OUP): 465–80. doi:<a href="https://doi.org/10.1093/biomet/asq017">10.1093/biomet/asq017</a>.</p>
@@ -421,6 +446,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div>
 <p>Duncan, O. D. 1961. “A Socioeconomic Index for All Occupations.” In <em>Occupations and Social Status</em>, edited by Jr. Reiss A. J. Frre Press.</p>
+</div>
+<div>
+<p>Efron, Bradley, and Trevor Hastie. 2016. <em>Computer Age Statistical Inference</em>. Cambridge University Pr. <a href="http://www.ebook.de/de/product/26311758/bradley_efron_trevor_hastie_computer_age_statistical_inference.html" class="uri">http://www.ebook.de/de/product/26311758/bradley_efron_trevor_hastie_computer_age_statistical_inference.html</a>.</p>
+</div>
+<div>
+<p>Efron, Bradley, and Carl Morris. 1975. “Data Analysis Using Stein’s Estimator and Its Generalizations.” <em>Journal of the American Statistical Association</em> 70 (350). Informa UK Limited: 311–19. doi:<a href="https://doi.org/10.1080/01621459.1975.10479864">10.1080/01621459.1975.10479864</a>.</p>
 </div>
 <div>
 <p>Eicher, Theo S., Chris Papageorgiou, and Adrian E. Raftery. 2009. “Default Priors and Predictive Performance in Bayesian Model Averaging, with Application to Growth Determinants.” <em>Journal of Applied Econometrics</em> 26 (1). Wiley-Blackwell: 30–55. doi:<a href="https://doi.org/10.1002/jae.1112">10.1002/jae.1112</a>.</p>
@@ -504,10 +535,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Hegre, Håvard, and Nicholas Sambanis. 2006. “Sensitivity Analysis of Empirical Results on Civil War Onset.” <em>Journal of Conflict Resolution</em> 50 (4). SAGE Publications: 508–35. doi:<a href="https://doi.org/10.1177/0022002706289303">10.1177/0022002706289303</a>.</p>
 </div>
 <div>
+<p>Hoerl, Arthur E., and Robert W. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12 (1). Informa UK Limited: 55–67. doi:<a href="https://doi.org/10.1080/00401706.1970.10488634">10.1080/00401706.1970.10488634</a>.</p>
+</div>
+<div>
 <p>Ishwaran, Hemant, and J. Sunil Rao. 2005. “Spike and Slab Variable Selection: Frequentist and Bayesian Strategies.” <em>The Annals of Statistics</em> 33 (2). Institute of Mathematical Statistics: 730–73. doi:<a href="https://doi.org/10.1214/009053604000001147">10.1214/009053604000001147</a>.</p>
 </div>
 <div>
 <p>Ishwaran, Hemant, Udaya B. Kogalur, and J. Sunil Rao. 2010. “spikeslab: Prediction and Variable Selection Using Spike and Slab Regression.” <em>R Journal</em>. <a href="https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf" class="uri">https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf</a>.</p>
+</div>
+<div>
+<p>Jensen, Shane T., Blakeley B. McShane, and Abraham J. Wyner. 2009. “Hierarchical Bayesian Modeling of Hitting Performance in Baseball.” <em>Bayesian Analysis</em> 4 (4). Institute of Mathematical Statistics: 631–52. doi:<a href="https://doi.org/10.1214/09-ba424">10.1214/09-ba424</a>.</p>
 </div>
 <div>
 <p>King, Gary. 1998. <em>Unifying Political Methodology: The Likelihood Theory of Statistical Inference</em>. UNIV OF MICHIGAN PR. <a href="http://www.ebook.de/de/product/8442790/gary_king_unifying_political_methodology_the_likelihood_theory_of_statistical_inference.html" class="uri">http://www.ebook.de/de/product/8442790/gary_king_unifying_political_methodology_the_likelihood_theory_of_statistical_inference.html</a>.</p>
@@ -555,10 +592,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Pas, S. L. van der, B. J. K. Kleijn, and A. W. van der Vaart. 2014. “The Horseshoe Estimator: Posterior Concentration Around Nearly Black Vectors.” <em>Electronic Journal of Statistics</em> 8 (2). Institute of Mathematical Statistics: 2585–2618. doi:<a href="https://doi.org/10.1214/14-ejs962">10.1214/14-ejs962</a>.</p>
 </div>
 <div>
-<p>Piironen, Juho, and Aki Vehtari. 2015a. “Projection Predictive Variable Selection Using Stan+R,” August. <a href="http://arxiv.org/abs/1508.02502v1" class="uri">http://arxiv.org/abs/1508.02502v1</a>.</p>
-</div>
-<div>
-<p>———. 2015b. “Projection Predictive Model Selection for Gaussian Processes,” October. doi:<a href="https://doi.org/10.1109/MLSP.2016.7738829">10.1109/MLSP.2016.7738829</a>.</p>
+<p>Piironen, Juho, and Aki Vehtari. 2015. “Projection Predictive Model Selection for Gaussian Processes,” October. doi:<a href="https://doi.org/10.1109/MLSP.2016.7738829">10.1109/MLSP.2016.7738829</a>.</p>
 </div>
 <div>
 <p>———. 2016. “On the Hyperprior Choice for the Global Shrinkage Parameter in the Horseshoe Prior,” October. <a href="http://arxiv.org/abs/1610.05559v1" class="uri">http://arxiv.org/abs/1610.05559v1</a>.</p>
@@ -583,6 +617,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div>
 <p>Team, Stan Development. 2016. <em>Stan Modeling Language Users Guide and Reference Manual, Version 2.14.0</em>. <a href="https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf" class="uri">https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf</a>.</p>
+</div>
+<div>
+<p>Tibshirani, Robert. 1996. “Regression Shrinkage and Selection via the Lasso.” <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (1). [Royal Statistical Society, Wiley]: 267–88. <a href="http://www.jstor.org/stable/2346178" class="uri">http://www.jstor.org/stable/2346178</a>.</p>
 </div>
 <div>
 <p>Tobias, Justin L., and Mingliang Li. 2004. “Returns to Schooling and Bayesian Model Averaging: A Union of Two Literatures.” <em>Journal of Economic Surveys</em> 18 (2). Wiley-Blackwell: 153–80. doi:<a href="https://doi.org/10.1111/j.0950-0804.2004.00003.x">10.1111/j.0950-0804.2004.00003.x</a>.</p>

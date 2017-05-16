@@ -5,7 +5,9 @@ suppressPackageStartupMessages({
   library("bayesplot")
   library("loo")
   library("tidyverse")
+  library("stringr")
   library("rubbish")
+  library("bayz")
 })
 
 set.seed(92508117 )
@@ -76,35 +78,3 @@ knit_print.stanmodel <- function(x, options) {
 #   cat_line(comment)
 #   print(head(x$summary[ , stats, drop = FALSE], n))
 # }
-
-autoscale <- function(x, ...) {
-  UseMethod("autoscale")
-}
-
-autoscale.numeric <- function(x, center = TRUE, scale = TRUE) {
-  nvals <- length(unique(x))
-  if (nvals <= 1) {
-    out <- x
-  } else if (nvals == 2) {
-    out <- if (scale) {
-      (x - min(x, na.rm = TRUE)) / diff(range(x, finite = TRUE))
-    } else x
-    if (center) {
-      out <- x - mean(x)
-    }
-  } else {
-    out <- if (center) {
-      x - mean(x, na.rm = TRUE)
-    } else x
-    out <- if (scale) out / sd(out, na.rm = TRUE)
-  }
-  out
-}
-
-autoscale.matrix <- function(x, center = TRUE, scale = TRUE) {
-  apply(x, 2, autoscale, center = center, scale = scale)
-}
-
-autoscale.data_frame <- function(x, center = TRUE, scale = TRUE) {
-  mutate_if(is.numeric, autoscale.numeric, center = center, scale = scale)
-}

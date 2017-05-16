@@ -104,10 +104,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \DeclareMathOperator{\RMSE}{RMSE}
 \DeclareMathOperator{\sd}{sd}
 \DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\median}{median}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\logistic}{Logistic}
+\DeclareMathOperator{\logit}{Logit}
 
 \newcommand{\mat}[1]{\boldsymbol{#1}}
 \newcommand{\vec}[1]{\boldsymbol{#1}}
@@ -141,8 +144,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\dbetabinom}{\mathrm{Beta-bin}}
 \newcommand{\dcauchy}{\mathrm{Cauchy}}
 \newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
 
-\DeclareMathOperator{\logistic}{Logistic}
+
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -275,76 +279,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="categorical-variables.html"><a href="categorical-variables.html#example-mexico-vote-choice"><i class="fa fa-check"></i><b>11.1</b> Example: Mexico Vote Choice</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a></li>
-<li class="chapter" data-level="13" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization Priors</a><ul>
-<li class="chapter" data-level="13.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-formulation"><i class="fa fa-check"></i><b>13.1</b> Bayesian formulation</a></li>
-<li class="chapter" data-level="13.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#worked-example"><i class="fa fa-check"></i><b>13.2</b> Worked Example</a><ul>
-<li class="chapter" data-level="13.2.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#example-1"><i class="fa fa-check"></i><b>13.2.1</b> Example</a></li>
-<li class="chapter" data-level="13.2.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.2.2</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="13.2.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.2.3</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="13.2.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#comparison"><i class="fa fa-check"></i><b>13.2.4</b> Comparison</a></li>
+<li class="chapter" data-level="13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization</a><ul>
+<li class="chapter" data-level="13.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#normal-linear-regression-model"><i class="fa fa-check"></i><b>13.1</b> Normal Linear Regression Model</a></li>
+<li class="chapter" data-level="13.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#penalized-regression"><i class="fa fa-check"></i><b>13.2</b> Penalized Regression</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#ridge-regression"><i class="fa fa-check"></i><b>13.2.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="13.2.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#lasso"><i class="fa fa-check"></i><b>13.2.2</b> Lasso</a></li>
 </ul></li>
-<li class="chapter" data-level="13.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.3</b> Shrinkage Parameters</a></li>
-<li class="chapter" data-level="13.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.4</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="13.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#r-implementations"><i class="fa fa-check"></i><b>13.5</b> R Implementations</a></li>
-<li class="chapter" data-level="13.6" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>13.6</b> Bayesian Model Averaging</a><ul>
-<li class="chapter" data-level="13.6.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.6.1</b> Zellner’s g-prior</a></li>
+<li class="chapter" data-level="13.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-shrinkage-priors"><i class="fa fa-check"></i><b>13.3</b> Bayesian Shrinkage Priors</a></li>
+<li class="chapter" data-level="13.4" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#differences-between-bayesian-shrinkage-and-penalized-likelihood"><i class="fa fa-check"></i><b>13.4</b> Differences between Bayesian Shrinkage and Penalized Likelihood</a></li>
+<li class="chapter" data-level="13.5" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-shrinkage-priors"><i class="fa fa-check"></i><b>13.5</b> Hierarchical Shrinkage Priors</a></li>
+<li class="chapter" data-level="13.6" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#example-1"><i class="fa fa-check"></i><b>13.6</b> Example</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.6.1</b> Double Exponential (Laplace) Prior</a></li>
+<li class="chapter" data-level="13.6.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.6.2</b> Hierarchical Prior (HS)</a></li>
+<li class="chapter" data-level="13.6.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#comparison"><i class="fa fa-check"></i><b>13.6.3</b> Comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="13.7" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>13.7</b> Slab and Spike Priors</a></li>
-<li class="chapter" data-level="13.8" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#technical-notes"><i class="fa fa-check"></i><b>13.8</b> Technical Notes</a></li>
-<li class="chapter" data-level="13.9" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>13.9</b> Multiple Comparisons and Thresholding rules</a></li>
-<li class="chapter" data-level="13.10" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>13.10</b> Examples of Applications of Sensitivity Analysis</a></li>
+<li class="chapter" data-level="13.7" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.7</b> Shrinkage Parameters</a></li>
+<li class="chapter" data-level="13.8" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.8</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="13.9" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#r-implementations"><i class="fa fa-check"></i><b>13.9</b> R Implementations</a></li>
+<li class="chapter" data-level="13.10" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>13.10</b> Bayesian Model Averaging</a><ul>
+<li class="chapter" data-level="13.10.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.10.1</b> Zellner’s g-prior</a></li>
+</ul></li>
+<li class="chapter" data-level="13.11" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>13.11</b> Slab and Spike Priors</a></li>
+<li class="chapter" data-level="13.12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#technical-notes"><i class="fa fa-check"></i><b>13.12</b> Technical Notes</a></li>
+<li class="chapter" data-level="13.13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>13.13</b> Multiple Comparisons and Thresholding rules</a></li>
+<li class="chapter" data-level="13.14" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>13.14</b> Examples of Applications of Sensitivity Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>14</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="14.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#baseball-hitting"><i class="fa fa-check"></i><b>14.1</b> Baseball Hitting</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#other-examples"><i class="fa fa-check"></i><b>14.1.1</b> Other Examples</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#equivalent-models"><i class="fa fa-check"></i><b>14.2</b> Equivalent Models</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#group-varying-intercepts"><i class="fa fa-check"></i><b>14.2.1</b> Group Varying Intercepts</a></li>
+<li class="chapter" data-level="14.2.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#separate-local-regressions"><i class="fa fa-check"></i><b>14.2.2</b> Separate local regressions</a></li>
+<li class="chapter" data-level="14.2.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#modeling-the-coefficients-of-a-large-regression-model"><i class="fa fa-check"></i><b>14.2.3</b> Modeling the coefficients of a large regression model</a></li>
+<li class="chapter" data-level="14.2.4" data-path="hierarchical-models.html"><a href="hierarchical-models.html#regression-with-multiple-error-terms"><i class="fa fa-check"></i><b>14.2.4</b> Regression with multiple error terms</a></li>
+<li class="chapter" data-level="14.2.5" data-path="hierarchical-models.html"><a href="hierarchical-models.html#regresion-with-correlated-errors"><i class="fa fa-check"></i><b>14.2.5</b> Regresion with correlated errors</a></li>
+</ul></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="13.11" data-path="robust.html"><a href="#miscelleanous-mathematical-background"><i class="fa fa-check"></i><b>13.11</b> Miscelleanous Mathematical Background</a><ul>
-<li class="chapter" data-level="13.11.1" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#location-scale-families"><i class="fa fa-check"></i><b>13.11.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="13.11.2" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>13.11.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="13.11.3" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>13.11.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="13.11.4" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#qr-factorization"><i class="fa fa-check"></i><b>13.11.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="13.11.5" data-path="shrinkage-and-regularization-priors.html"><a href="shrinkage-and-regularization-priors.html#cholesky-decomposition"><i class="fa fa-check"></i><b>13.11.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="14.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>14.3</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#location-scale-families"><i class="fa fa-check"></i><b>14.3.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="14.3.2" data-path="hierarchical-models.html"><a href="hierarchical-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>14.3.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="14.3.3" data-path="hierarchical-models.html"><a href="hierarchical-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>14.3.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="14.3.4" data-path="hierarchical-models.html"><a href="hierarchical-models.html#qr-factorization"><i class="fa fa-check"></i><b>14.3.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="14.3.5" data-path="hierarchical-models.html"><a href="hierarchical-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>14.3.5</b> Cholesky Decomposition</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>14</b> Notes</a><ul>
-<li class="chapter" data-level="14.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>14.1</b> Syllabi</a></li>
-<li class="chapter" data-level="14.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>14.2</b> Textbooks</a></li>
-<li class="chapter" data-level="14.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>14.3</b> Topics</a><ul>
-<li class="chapter" data-level="14.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>14.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="14.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="14.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>14.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="14.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>14.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="14.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>14.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="14.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>14.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="14.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>14.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="14.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>14.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="14.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>14.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="14.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>14.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="14.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>14.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="14.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>14.3.12</b> Applied Bayes Rule</a></li>
+<li class="chapter" data-level="15" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>15</b> Notes</a><ul>
+<li class="chapter" data-level="15.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>15.1</b> Syllabi</a></li>
+<li class="chapter" data-level="15.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>15.2</b> Textbooks</a></li>
+<li class="chapter" data-level="15.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>15.3</b> Topics</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>15.3.1</b> Overviews</a></li>
+<li class="chapter" data-level="15.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>15.3.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="15.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>15.3.3</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="15.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>15.3.4</b> Categorical</a></li>
+<li class="chapter" data-level="15.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>15.3.5</b> Identifiability</a></li>
+<li class="chapter" data-level="15.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>15.3.6</b> Time Series</a></li>
+<li class="chapter" data-level="15.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>15.3.7</b> Topic Models</a></li>
+<li class="chapter" data-level="15.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>15.3.8</b> Nonparametric Bayesian Methods</a></li>
+<li class="chapter" data-level="15.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>15.3.9</b> Prior Elicitation</a></li>
+<li class="chapter" data-level="15.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>15.3.10</b> Variable Selection</a></li>
+<li class="chapter" data-level="15.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>15.3.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="15.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>15.3.12</b> Applied Bayes Rule</a></li>
 </ul></li>
-<li class="chapter" data-level="14.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>14.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="14.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>14.4.1</b> Software</a></li>
-<li class="chapter" data-level="14.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>14.4.2</b> Stan</a></li>
-<li class="chapter" data-level="14.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>14.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="14.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>14.4.4</b> Political Science Bayesian Works</a></li>
+<li class="chapter" data-level="15.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>15.4</b> Computation Methods</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>15.4.1</b> Software</a></li>
+<li class="chapter" data-level="15.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>15.4.2</b> Stan</a></li>
+<li class="chapter" data-level="15.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>15.4.3</b> Diagrams</a></li>
+<li class="chapter" data-level="15.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>15.4.4</b> Political Science Bayesian Works</a></li>
 </ul></li>
-<li class="chapter" data-level="14.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>14.5</b> Model Checking</a></li>
-<li class="chapter" data-level="14.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>14.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="14.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>14.6.1</b> Mixed Methods and Qualitative Research</a></li>
+<li class="chapter" data-level="15.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>15.5</b> Model Checking</a></li>
+<li class="chapter" data-level="15.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>15.6</b> General Applications and Models</a><ul>
+<li class="chapter" data-level="15.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>15.6.1</b> Mixed Methods and Qualitative Research</a></li>
 </ul></li>
-<li class="chapter" data-level="14.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>14.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="14.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>14.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="14.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>14.8.1</b> Examples</a></li>
-<li class="chapter" data-level="14.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>14.8.2</b> Latent Variable Models</a></li>
+<li class="chapter" data-level="15.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>15.7</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="15.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>15.8</b> Shrinkage/Regularization</a><ul>
+<li class="chapter" data-level="15.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>15.8.1</b> Examples</a></li>
+<li class="chapter" data-level="15.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>15.8.2</b> Latent Variable Models</a></li>
 </ul></li>
-<li class="chapter" data-level="14.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>14.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="14.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>14.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="14.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>14.9.2</b> German Tank Problem</a></li>
+<li class="chapter" data-level="15.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>15.9</b> Bayes Theorem Examples</a><ul>
+<li class="chapter" data-level="15.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>15.9.1</b> Miscallaneous</a></li>
+<li class="chapter" data-level="15.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>15.9.2</b> German Tank Problem</a></li>
 </ul></li>
-<li class="chapter" data-level="14.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>14.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="14.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>14.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="14.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>14.11.1</b> Uncategorized</a></li>
+<li class="chapter" data-level="15.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>15.10</b> Good-Turing Estimator</a></li>
+<li class="chapter" data-level="15.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>15.11</b> Reproducibility</a><ul>
+<li class="chapter" data-level="15.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>15.11.1</b> Uncategorized</a></li>
 </ul></li>
-<li class="chapter" data-level="14.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>14.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="14.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>14.13</b> Things to cover</a></li>
+<li class="chapter" data-level="15.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>15.12</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="15.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>15.13</b> Things to cover</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references-9.html"><a href="references-9.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -477,8 +499,8 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 1).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 3.7e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 3.9e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -495,9 +517,9 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.916274 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.793757 seconds (Sampling)</span>
-<span class="co">#&gt;                1.71003 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.924295 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.797333 seconds (Sampling)</span>
+<span class="co">#&gt;                1.72163 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
 <span class="co">#&gt;                                                                                          count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -506,6 +528,36 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 2).</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Gradient evaluation took 1.3e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span>
+<span class="co">#&gt; Adjust your expectations accordingly!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
+<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
+<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
+<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Elapsed Time: 0.912943 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.842836 seconds (Sampling)</span>
+<span class="co">#&gt;                1.75578 seconds (Total)</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
+<span class="co">#&gt;                                                                                          count</span>
+<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
+<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
+<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
+<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 3).</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Gradient evaluation took 1.5e-05 seconds</span>
 <span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.</span>
@@ -525,39 +577,9 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.895086 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.851101 seconds (Sampling)</span>
-<span class="co">#&gt;                1.74619 seconds (Total)</span>
-<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
-<span class="co">#&gt;                                                                                          count</span>
-<span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
-<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
-<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
-<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 3).</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span>
-<span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span>
-<span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
-<span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.959192 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.806953 seconds (Sampling)</span>
-<span class="co">#&gt;                1.76615 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.978823 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.815824 seconds (Sampling)</span>
+<span class="co">#&gt;                1.79465 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span>
 <span class="co">#&gt;                                                                                     count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
@@ -567,8 +589,8 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 4).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 2.5e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -585,9 +607,9 @@ mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, 
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.883576 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.731602 seconds (Sampling)</span>
-<span class="co">#&gt;                1.61518 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.903471 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.748265 seconds (Sampling)</span>
+<span class="co">#&gt;                1.65174 seconds (Total)</span>
 <span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span>
 <span class="co">#&gt;                                                                                          count</span>
 <span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span>
@@ -652,8 +674,8 @@ generated quantities {
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 1).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 2.7e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 2.9e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -670,15 +692,15 @@ generated quantities {
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.57835 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.504448 seconds (Sampling)</span>
-<span class="co">#&gt;                1.0828 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.551241 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.482792 seconds (Sampling)</span>
+<span class="co">#&gt;                1.03403 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 2).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.2e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 9e-06 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -695,15 +717,15 @@ generated quantities {
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.533096 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.469512 seconds (Sampling)</span>
-<span class="co">#&gt;                1.00261 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.507048 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.455422 seconds (Sampling)</span>
+<span class="co">#&gt;                0.96247 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 3).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.1e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 1.6e-05 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -720,15 +742,15 @@ generated quantities {
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.516238 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.602928 seconds (Sampling)</span>
-<span class="co">#&gt;                1.11917 seconds (Total)</span>
+<span class="co">#&gt;  Elapsed Time: 0.493311 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.568471 seconds (Sampling)</span>
+<span class="co">#&gt;                1.06178 seconds (Total)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 4).</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.9e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.</span>
+<span class="co">#&gt; Gradient evaluation took 9e-06 seconds</span>
+<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.</span>
 <span class="co">#&gt; Adjust your expectations accordingly!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -745,9 +767,9 @@ generated quantities {
 <span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.525881 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.422686 seconds (Sampling)</span>
-<span class="co">#&gt;                0.948567 seconds (Total)</span></code></pre></div>
+<span class="co">#&gt;  Elapsed Time: 0.511245 seconds (Warm-up)</span>
+<span class="co">#&gt;                0.405449 seconds (Sampling)</span>
+<span class="co">#&gt;                0.916694 seconds (Total)</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_normal_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary
 <span class="co">#&gt;        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff</span>
 <span class="co">#&gt; b[1] 95.987 2.41105 63.9174 -27.7095  53.147 95.592 137.966 223.008   703</span>

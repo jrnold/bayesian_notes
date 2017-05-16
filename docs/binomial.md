@@ -320,8 +320,8 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 8.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
+#> Gradient evaluation took 8.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.85 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -338,15 +338,15 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.227748 seconds (Warm-up)
-#>                0.214925 seconds (Sampling)
-#>                0.442673 seconds (Total)
+#>  Elapsed Time: 0.224432 seconds (Warm-up)
+#>                0.210568 seconds (Sampling)
+#>                0.435 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 3.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -363,15 +363,15 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.231406 seconds (Warm-up)
-#>                0.233346 seconds (Sampling)
-#>                0.464752 seconds (Total)
+#>  Elapsed Time: 0.222537 seconds (Warm-up)
+#>                0.231917 seconds (Sampling)
+#>                0.454454 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -388,15 +388,15 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.234338 seconds (Warm-up)
-#>                0.228623 seconds (Sampling)
-#>                0.462961 seconds (Total)
+#>  Elapsed Time: 0.229284 seconds (Warm-up)
+#>                0.221269 seconds (Sampling)
+#>                0.450553 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -413,15 +413,15 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.221922 seconds (Warm-up)
-#>                0.23226 seconds (Sampling)
-#>                0.454182 seconds (Total)
+#>  Elapsed Time: 0.217782 seconds (Warm-up)
+#>                0.220388 seconds (Sampling)
+#>                0.43817 seconds (Total)
 fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -438,15 +438,15 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.61822 seconds (Warm-up)
-#>                0.265233 seconds (Sampling)
-#>                1.88345 seconds (Total)
+#>  Elapsed Time: 1.55551 seconds (Warm-up)
+#>                0.243953 seconds (Sampling)
+#>                1.79946 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -463,15 +463,15 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.50074 seconds (Warm-up)
-#>                0.243987 seconds (Sampling)
-#>                1.74472 seconds (Total)
+#>  Elapsed Time: 1.39207 seconds (Warm-up)
+#>                0.209127 seconds (Sampling)
+#>                1.6012 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -488,15 +488,15 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.37159 seconds (Warm-up)
-#>                0.260649 seconds (Sampling)
-#>                1.63223 seconds (Total)
+#>  Elapsed Time: 1.06268 seconds (Warm-up)
+#>                0.242076 seconds (Sampling)
+#>                1.30476 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -513,9 +513,9 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.23982 seconds (Warm-up)
-#>                0.225543 seconds (Sampling)
-#>                1.46537 seconds (Total)
+#>  Elapsed Time: 1.21102 seconds (Warm-up)
+#>                0.217264 seconds (Sampling)
+#>                1.42828 seconds (Total)
 ```
 
 

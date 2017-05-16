@@ -1,5 +1,14 @@
 
-# Shrinkage and Regularization Priors
+# Shrinkage and Regularization {#shrinkage-regularization}
+
+*Shrinkage estimation* deliberately introduces biases into the model to improve overall performance, often at the cost of individual estimates [@EfronHastie2016a, p. 91].
+
+This is opposed to MLE, which produces unbiased estimates (asymptotically, given certain regularity conditions). Likewise, the Bayesian estimates with non- or weakly-informative priors will produce estimates similar to the MLE.
+With shrinkage, the priors are used to produce estimates *different* than the MLE case.
+
+*Regularization* describes any method that reduces variability in high dimensional estimation or prediction problems [@EfronHastie2016a].
+
+## Normal Linear Regression Model
 
 Consider the single output linear Gaussian regression model with several input variables, given by
 $$
@@ -13,37 +22,77 @@ What priors do we put on $\beta$?
 
 - **Improproper priors:** $\beta_k \propto 1$ This produces the equivalent of MLE estimates.
 - **Non-informative priors:** These are priors which have such wide variance that they have little influence on the posterior, e.g. $\beta_k \sim N(0, 1e6)$. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.
-- **Weakly informative priors:** This is described in @GelmanJakulinPittauEtAl2008a, @Betancourt2017a, and are the defaults suggested in **[rstanarm](https://cran.r-project.org/package=rstanarm)**. Examples would include $\beta_k \sim \dnorm(0, 2.5)$ or $\beta_k \sim \dcauchy(0, 2.5)$. The purpose of these priors is to ex ante rule out implausible priors. This can help with computation, produce proper posterior distributions, and can help with some estimation issues such as separation or quasi-separation in discrete response models. These priors may help reduce the variance of posterior distribution estimates, they generally are intended to be weak enough to not affect the posterior mean point estimates too much.
 
 **Shrinkage priors** have a couple characteristics
 
 - they push $\beta_k \to 0$
 - while in the other cases, the scale of the prior on $\beta$ is fixed, in shrinkage priors there is often a hyperprior on it. E.g. $\beta_k \sim N(0, \tau)$, where $\tau$ is also a parameter to be estimated.
 
-Penalized Regression
+## Penalized Regression
+
+Penalized regressions are regressions of the form:
 $$
 \hat{\beta}_{penalized} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + f(\beta)
 $$
 where $f$ is some sort of penalty function on $\beta$ that penalizes larger (in magnitude) values of $\beta$.
 
-Two common penalized regressions are lasso and ridge.
+Two common forms
 
-Ridge Regression
+- Ridge: uses an $\ell_2$ penalty: $\vec{beta}^2$
+- Lasso: uses an $\ell_1$ penalty: $|\vec{\beta}|$
 
+### Ridge Regression
+
+Ridge regression uses the following penalty [@HoerlKennard1970a]:
 $$
-\hat{\beta}_{ridge} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} \beta_k^2
+\hat{\beta}_{\text{ridge}} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} \beta_k^2
 $$
 This penalty produces smaller in magnitude coefficients, $|\hat{\beta}_{ridge}| < |\hat{\beta}_{OLS}|$.
 However, this "bias" in the coefficients can be offset by a lower variance, better MSE, and better out-of-sample performance than the OLS estimates.
 
-LASSO: The LASSO replaces squared the penalty on $\beta$ with an absolute value penalty.
+The point estimate for ridge regression coefficients is:
 $$
-\hat{\beta}_{lasso} = \argmin_{\beta} \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} |\beta_k|
+\hat{\vec{\beta}}_{\text{ridge}} = {(\mat{X}\T \mat{X} + \lambda \mat{I}_p)}^{-1} \mat{X}\T \vec{y}
+$$
+The variance-covariance matrix of the point estimate is,
+$$
+\mathrm{df}(\lambda) = \tr(\mat{X}(\mat{X}\T \mat{X} + \lambda \mat{I}_p)^{-1} \mat{X}\T) = \sum_{j = 1}^p \frac{d_j^2}{d_j^2 + \lambda}
+$$
+where $d_j$ are the singular values of $X$
+
+Some implications:
+
+- $\hat{\vec{\beta}}$ exists even if $\hat{\vec{\beta}}_{\text{OLS}}$ ($(\mat{X}\T\mat{X})^{-1}$), i.e. cases of $n > p$ and collinearity, does not exist.
+- If $\mat{X}$ is orthogonal (mean 0, unit variance, zero correlation), $\mat{X}\T \mat{X} = n \mat{I}_p$ then
+  $$
+  \hat{\vec{\beta}}_{\text{ridge}} = \frac{n}{n + \lambda} \hat{\vec{\beta}}_{\text{ols}}
+  $$
+  meaning 
+  $$
+  |\hat{\vec{\beta}}_{\text{ols}}| > 
+  |\hat{\vec{\beta}}_{\text{ridge}}| \geq 0
+  $$
+- Ridge does not produce sparse estimates, since $(n / (n + \lambda)) \vec{\vec{\beta}}_{ols} = 0$ iff $\vec{\vec{\beta}}_{ols} = 0$
+- $\lambda = 0$, then there is no shrinkage
+- $\lambda \to \infty$, then there is complete shrinkage and all coefficients are tend to 0.
+  
+### Lasso
+
+The Lasso or LASSO (least absolute shrinkage and selection operator) replaces squared the penalty on $\beta$ with an absolute value penalty [@Tibshirani1996a]:
+$$
+\hat{\beta}_{\text{lasso}} = \argmin_{\beta} \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} |\beta_k|
 $$
 The absolute value penalty will put some $\hat{\beta}_k = 0$, producing a "sparse" solution.
 
 
-## Bayesian formulation
+Properties:
+
+- Unlike ridge regression, it sets some coefficients to exactly 0
+- If variables are perfectly correlated, there is no unique solution (unlike the ridge regression)
+- Used as the best convex approximation of the "best subset selection" regression problem, which finds the number of nonzero entries in a vector.
+
+
+## Bayesian Shrinkage Priors
 
 $$
 \log p(\theta|y, x) \propto \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} \beta_k^2
@@ -67,39 +116,32 @@ The double exponential distribution density is similar to a normal distribution,
 $$
 \log p(y | \mu, \sigma) \propto - \frac{|y - \mu|}{\sigma}
 $$
-So the LASSO penalty is equaivalent to the log density of a double exponential distribution with location $0$, and scale $1 / \lambda$.
+So the LASSO penalty is equivalent to the log density of a double exponential distribution with location $0$, and scale $1 / \lambda$.
 $$
 \beta_k \sim \dlaplace(0, \tau)
 $$
 
+## Differences between Bayesian Shrinkage and Penalized Likelihood
 
 There are several differences between Bayesian approaches to shrinkage and penalized ML approaches.
 
-The most important is the primary point estimate.
-In penalized ML, the point estimate is the mode. 
-In full Bayesian estimation, the primary point estimate of interest is the mean. 
-This difference will be most apparent in sparse shrinkage esimators such as the LASSO.
+The point estimates:
 
-Using a double exponential penalty induces a sparse solution for $\hat\beta$ by placing the modes of the coefficients at zero. 
-However, using the double exponential as a prior does not place the means of coefficients at zero.
+- ML: mode
+- Bayesian: posterior mean (or median)
 
-Comparing the normal and double exponential distributions: 
+In Lasso
 
-1. the double exponential distribution has a spike at zero, unlike the normal
-2. however, the probability mass of these distributions (important for the posterior mean) is not too different.
+- ML: the mode produces exact zeros and sparsity
+- Bayesian: posterior mean is not sparse (zero)
 
+Choosing the shrinkage penalty:
 
-Difference
-
-- The point estimates are the posterior modes. In Bayesian estimation,
-    posterior means are the preferred point estimate.
-- The shrinkage parameter $\lambda$ is often a chosen by cross-validation
-    or an approximation thereof. In Bayesian estimation, the estimation 
-    marginalizes over uncertainty about the shrinkage parameter.
+- ML: cross-validation
+- Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.  
 
 
-
-Hierarchical Shrinkage (HS-$t_{\nu}$) 
+## Hierarchical Shrinkage Priors
 
 $$
 \begin{aligned}
@@ -122,10 +164,6 @@ $$
 This induces even more shrinkage towards zero than the 
 
 If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPolsonEtAl2015a.
-
-@PiironenVehtari2015b, "Projection predictive variable selection using Stan+R"
-
-
 
 
 In linear regression
@@ -156,7 +194,7 @@ So $\bar{\beta} \to 0$ as $\tau \to 0$ and $\bar{\beta} \to \hat{\beta}$ as $\ta
 Using a plug-in estimate of $\tau$ using cross-validation or the maximum marginal likelihood. 
 The danger is that $\hat{\tau} = 0$ if it is very sparse.
 
-van de Pas et al (2014) show that the optimal value (upp to a log factor) in terms of MSE and posterior contraction rates compared to the true $\beta^*$ is
+van de Pas et al (2014) show that the optimal value (up to a log factor) in terms of MSE and posterior contraction rates compared to the true $\beta^*$ is
 $$
 \tau^* = \frac{p^*}{n}
 $$
@@ -179,7 +217,7 @@ It is also invertible,
 $$
 \lambda_j(\kappa_j) = \sqrt{\frac{1}{(1 + n \sigma^{-2} \tau^2) \kappa_j}}
 $$
-The derivivative of this with respect to $\kappa_j$ is
+The derivative of this with respect to $\kappa_j$ is
 $$
 \frac{\partial \lambda_j(\kappa_j)}{\partial \kappa_j} = - \sqrt{\frac{1}{(1 + n \sigma^{-2} \tau^2)}} \kappa_j^{-\frac{3}{2}}
 $$
@@ -237,7 +275,7 @@ It is also invertible,
 $$
 \tau(\kappa_j) = \sqrt{\frac{1}{(1 + n \sigma^{-2} \lambda_j^2) \kappa_j}}
 $$
-The derivivative of this with respect to $\kappa_j$ is
+The derivative of this with respect to $\kappa_j$ is
 $$
 \frac{\partial \tau(\kappa_j)}{\partial \kappa_j} = - {(1 + n \sigma^{-2} \lambda_j^2)}^{-\frac{1}{2}} \kappa_j^{-\frac{3}{2}}
 $$
@@ -251,7 +289,7 @@ $$
 
 - Allan Riddell. [Epistemology of the corral: regression and variable selection with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html) March 10, 2014.
 
-## Worked Example
+## Example
 
 See the [documentation](https://statweb.stanford.edu/~tibs/ElemStatLearn/datasets/prostate.info.txt).
 
@@ -265,8 +303,6 @@ library("forcats")
 library("rubbish")
 ```
 
-
-### Example
 
 
 ```r
@@ -315,8 +351,7 @@ prostate_data <- lm_preprocess(f, data = prostate)[c("y", "X")] %>%
 run_with_tau <- function(tau, mod, data, ...) {
   cat("Tau = ", tau)
   data$tau <- tau
-  fit <- sampling(mod, data = data, open_progress = FALSE, 
-                   show_messages = FALSE, verbose = FALSE, ...)
+  fit <- sampling(mod, data = data, refresh = -1, verbose = FALSE, ...)
   out <- list()
   out$summary <- summary(fit, par = "b")$summary %>%
     as.data.frame() %>%
@@ -375,7 +410,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[N] mu;
-  mu = a + X * b;
+  mu = X * b;
 }
 model {
   // priors
@@ -407,8 +442,8 @@ coefpath_normal <-
 #> Tau =  4
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 0.000104 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 1.04 seconds.
+#> Gradient evaluation took 5.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.56 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -425,62 +460,12 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.1543 seconds (Warm-up)
-#>                0.190139 seconds (Sampling)
-#>                0.344439 seconds (Total)
+#>  Elapsed Time: 0.17799 seconds (Warm-up)
+#>                0.126119 seconds (Sampling)
+#>                0.304109 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.162513 seconds (Warm-up)
-#>                0.152582 seconds (Sampling)
-#>                0.315095 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.18301 seconds (Warm-up)
-#>                0.203906 seconds (Sampling)
-#>                0.386916 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 1.7e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
@@ -500,16 +485,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.172697 seconds (Warm-up)
-#>                0.190956 seconds (Sampling)
-#>                0.363653 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  2.83
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#>  Elapsed Time: 0.153112 seconds (Warm-up)
+#>                0.128688 seconds (Sampling)
+#>                0.2818 seconds (Total)
 #> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -526,9 +510,260 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.169097 seconds (Warm-up)
-#>                0.17704 seconds (Sampling)
-#>                0.346137 seconds (Total)
+#>  Elapsed Time: 0.172674 seconds (Warm-up)
+#>                0.138926 seconds (Sampling)
+#>                0.3116 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.168585 seconds (Warm-up)
+#>                0.13534 seconds (Sampling)
+#>                0.303925 seconds (Total)
+#> 
+#> Tau =  2.83
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.168349 seconds (Warm-up)
+#>                0.137366 seconds (Sampling)
+#>                0.305715 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.166031 seconds (Warm-up)
+#>                0.139874 seconds (Sampling)
+#>                0.305905 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.162088 seconds (Warm-up)
+#>                0.127644 seconds (Sampling)
+#>                0.289732 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.177064 seconds (Warm-up)
+#>                0.131347 seconds (Sampling)
+#>                0.308411 seconds (Total)
+#> Warning: Some Pareto k diagnostic values are slightly high. See
+#> help('pareto-k-diagnostic') for details.
+#> Tau =  2
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.157295 seconds (Warm-up)
+#>                0.12598 seconds (Sampling)
+#>                0.283275 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.165807 seconds (Warm-up)
+#>                0.128247 seconds (Sampling)
+#>                0.294054 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.17434 seconds (Warm-up)
+#>                0.137339 seconds (Sampling)
+#>                0.311679 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.155348 seconds (Warm-up)
+#>                0.12996 seconds (Sampling)
+#>                0.285308 seconds (Total)
+#> 
+#> Tau =  1.41
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.151035 seconds (Warm-up)
+#>                0.122661 seconds (Sampling)
+#>                0.273696 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
@@ -551,137 +786,12 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.164801 seconds (Warm-up)
-#>                0.163248 seconds (Sampling)
-#>                0.328049 seconds (Total)
+#>  Elapsed Time: 0.168477 seconds (Warm-up)
+#>                0.138765 seconds (Sampling)
+#>                0.307242 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.161894 seconds (Warm-up)
-#>                0.143494 seconds (Sampling)
-#>                0.305388 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.157856 seconds (Warm-up)
-#>                0.168858 seconds (Sampling)
-#>                0.326714 seconds (Total)
-#> 
-#> Tau =  2
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.154067 seconds (Warm-up)
-#>                0.160981 seconds (Sampling)
-#>                0.315048 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.161518 seconds (Warm-up)
-#>                0.171595 seconds (Sampling)
-#>                0.333113 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.161746 seconds (Warm-up)
-#>                0.174263 seconds (Sampling)
-#>                0.336009 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 1.7e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
@@ -701,90 +811,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.158683 seconds (Warm-up)
-#>                0.183478 seconds (Sampling)
-#>                0.342161 seconds (Total)
-#> 
-#> Tau =  1.41
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.159914 seconds (Warm-up)
-#>                0.161926 seconds (Sampling)
-#>                0.32184 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.160035 seconds (Warm-up)
-#>                0.15434 seconds (Sampling)
-#>                0.314375 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 3.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.176951 seconds (Warm-up)
-#>                0.157688 seconds (Sampling)
-#>                0.334639 seconds (Total)
+#>  Elapsed Time: 0.166347 seconds (Warm-up)
+#>                0.119069 seconds (Sampling)
+#>                0.285416 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -801,15 +836,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.171092 seconds (Warm-up)
-#>                0.181056 seconds (Sampling)
-#>                0.352148 seconds (Total)
+#>  Elapsed Time: 0.165977 seconds (Warm-up)
+#>                0.13783 seconds (Sampling)
+#>                0.303807 seconds (Total)
 #> 
 #> Tau =  1
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Gradient evaluation took 2.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -826,12 +861,37 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.161437 seconds (Warm-up)
-#>                0.164732 seconds (Sampling)
-#>                0.326169 seconds (Total)
+#>  Elapsed Time: 0.155363 seconds (Warm-up)
+#>                0.135929 seconds (Sampling)
+#>                0.291292 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.156522 seconds (Warm-up)
+#>                0.12641 seconds (Sampling)
+#>                0.282932 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
 #> 
 #> Gradient evaluation took 2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
@@ -851,40 +911,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.164972 seconds (Warm-up)
-#>                0.161937 seconds (Sampling)
-#>                0.326909 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.154466 seconds (Warm-up)
-#>                0.178186 seconds (Sampling)
-#>                0.332652 seconds (Total)
+#>  Elapsed Time: 0.152098 seconds (Warm-up)
+#>                0.117134 seconds (Sampling)
+#>                0.269232 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -901,15 +936,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.154616 seconds (Warm-up)
-#>                0.171853 seconds (Sampling)
-#>                0.326469 seconds (Total)
+#>  Elapsed Time: 0.169239 seconds (Warm-up)
+#>                0.126917 seconds (Sampling)
+#>                0.296156 seconds (Total)
 #> 
 #> Tau =  0.707
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
+#> Gradient evaluation took 2.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -926,15 +961,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.16607 seconds (Warm-up)
-#>                0.172031 seconds (Sampling)
-#>                0.338101 seconds (Total)
+#>  Elapsed Time: 0.144612 seconds (Warm-up)
+#>                0.125574 seconds (Sampling)
+#>                0.270186 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -951,15 +986,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.163191 seconds (Warm-up)
-#>                0.172667 seconds (Sampling)
-#>                0.335858 seconds (Total)
+#>  Elapsed Time: 0.141649 seconds (Warm-up)
+#>                0.119192 seconds (Sampling)
+#>                0.260841 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -976,15 +1011,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.201741 seconds (Warm-up)
-#>                0.190361 seconds (Sampling)
-#>                0.392102 seconds (Total)
+#>  Elapsed Time: 0.152489 seconds (Warm-up)
+#>                0.131134 seconds (Sampling)
+#>                0.283623 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1001,38 +1036,13 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.177854 seconds (Warm-up)
-#>                0.160295 seconds (Sampling)
-#>                0.338149 seconds (Total)
+#>  Elapsed Time: 0.161852 seconds (Warm-up)
+#>                0.13558 seconds (Sampling)
+#>                0.297432 seconds (Total)
 #> 
 #> Tau =  0.5
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.158924 seconds (Warm-up)
-#>                0.18051 seconds (Sampling)
-#>                0.339434 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
 #> Gradient evaluation took 1.9e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
@@ -1051,15 +1061,40 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.175663 seconds (Warm-up)
-#>                0.185959 seconds (Sampling)
-#>                0.361622 seconds (Total)
+#>  Elapsed Time: 0.132697 seconds (Warm-up)
+#>                0.101804 seconds (Sampling)
+#>                0.234501 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.141479 seconds (Warm-up)
+#>                0.124046 seconds (Sampling)
+#>                0.265525 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1076,15 +1111,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.171764 seconds (Warm-up)
-#>                0.157551 seconds (Sampling)
-#>                0.329315 seconds (Total)
+#>  Elapsed Time: 0.145724 seconds (Warm-up)
+#>                0.107125 seconds (Sampling)
+#>                0.252849 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Gradient evaluation took 1.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1101,187 +1136,12 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.163013 seconds (Warm-up)
-#>                0.170233 seconds (Sampling)
-#>                0.333246 seconds (Total)
+#>  Elapsed Time: 0.138335 seconds (Warm-up)
+#>                0.0871 seconds (Sampling)
+#>                0.225435 seconds (Total)
 #> 
 #> Tau =  0.354
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.153612 seconds (Warm-up)
-#>                0.170838 seconds (Sampling)
-#>                0.32445 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.150046 seconds (Warm-up)
-#>                0.171348 seconds (Sampling)
-#>                0.321394 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.155045 seconds (Warm-up)
-#>                0.170737 seconds (Sampling)
-#>                0.325782 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.152903 seconds (Warm-up)
-#>                0.168739 seconds (Sampling)
-#>                0.321642 seconds (Total)
-#> 
-#> Tau =  0.25
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.149275 seconds (Warm-up)
-#>                0.173242 seconds (Sampling)
-#>                0.322517 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.156782 seconds (Warm-up)
-#>                0.157241 seconds (Sampling)
-#>                0.314023 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.141657 seconds (Warm-up)
-#>                0.155932 seconds (Sampling)
-#>                0.297589 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2.1e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
@@ -1301,12 +1161,537 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.154183 seconds (Warm-up)
-#>                0.172394 seconds (Sampling)
-#>                0.326577 seconds (Total)
+#>  Elapsed Time: 0.137622 seconds (Warm-up)
+#>                0.085612 seconds (Sampling)
+#>                0.223234 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.132972 seconds (Warm-up)
+#>                0.106316 seconds (Sampling)
+#>                0.239288 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.124177 seconds (Warm-up)
+#>                0.087221 seconds (Sampling)
+#>                0.211398 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.141065 seconds (Warm-up)
+#>                0.090947 seconds (Sampling)
+#>                0.232012 seconds (Total)
+#> 
+#> Tau =  0.25
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.123187 seconds (Warm-up)
+#>                0.085269 seconds (Sampling)
+#>                0.208456 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.116354 seconds (Warm-up)
+#>                0.084139 seconds (Sampling)
+#>                0.200493 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.123148 seconds (Warm-up)
+#>                0.08502 seconds (Sampling)
+#>                0.208168 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.129021 seconds (Warm-up)
+#>                0.087296 seconds (Sampling)
+#>                0.216317 seconds (Total)
 #> 
 #> Tau =  0.177
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.146875 seconds (Warm-up)
+#>                0.084014 seconds (Sampling)
+#>                0.230889 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.114281 seconds (Warm-up)
+#>                0.082986 seconds (Sampling)
+#>                0.197267 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.124388 seconds (Warm-up)
+#>                0.085893 seconds (Sampling)
+#>                0.210281 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.127223 seconds (Warm-up)
+#>                0.081284 seconds (Sampling)
+#>                0.208507 seconds (Total)
+#> 
+#> Tau =  0.125
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.130665 seconds (Warm-up)
+#>                0.082034 seconds (Sampling)
+#>                0.212699 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.122393 seconds (Warm-up)
+#>                0.083755 seconds (Sampling)
+#>                0.206148 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.117707 seconds (Warm-up)
+#>                0.08409 seconds (Sampling)
+#>                0.201797 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.11971 seconds (Warm-up)
+#>                0.081726 seconds (Sampling)
+#>                0.201436 seconds (Total)
+#> 
+#> Tau =  0.0884
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.130868 seconds (Warm-up)
+#>                0.083027 seconds (Sampling)
+#>                0.213895 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.121938 seconds (Warm-up)
+#>                0.082334 seconds (Sampling)
+#>                0.204272 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.134972 seconds (Warm-up)
+#>                0.085134 seconds (Sampling)
+#>                0.220106 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.12292 seconds (Warm-up)
+#>                0.079876 seconds (Sampling)
+#>                0.202796 seconds (Total)
+#> 
+#> Tau =  0.0625
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.141243 seconds (Warm-up)
+#>                0.080644 seconds (Sampling)
+#>                0.221887 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.147777 seconds (Warm-up)
+#>                0.080076 seconds (Sampling)
+#>                0.227853 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
 #> 
 #> Gradient evaluation took 2.5e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
@@ -1326,65 +1711,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.143822 seconds (Warm-up)
-#>                0.151508 seconds (Sampling)
-#>                0.29533 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.179214 seconds (Warm-up)
-#>                0.178023 seconds (Sampling)
-#>                0.357237 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.138711 seconds (Warm-up)
-#>                0.14841 seconds (Sampling)
-#>                0.287121 seconds (Total)
+#>  Elapsed Time: 0.14366 seconds (Warm-up)
+#>                0.079912 seconds (Sampling)
+#>                0.223572 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1401,315 +1736,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.14488 seconds (Warm-up)
-#>                0.135397 seconds (Sampling)
-#>                0.280277 seconds (Total)
-#> 
-#> Tau =  0.125
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 7.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.71 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.149672 seconds (Warm-up)
-#>                0.149073 seconds (Sampling)
-#>                0.298745 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.131941 seconds (Warm-up)
-#>                0.139512 seconds (Sampling)
-#>                0.271453 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.129412 seconds (Warm-up)
-#>                0.151603 seconds (Sampling)
-#>                0.281015 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.133446 seconds (Warm-up)
-#>                0.132621 seconds (Sampling)
-#>                0.266067 seconds (Total)
-#> 
-#> Tau =  0.0884
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.179764 seconds (Warm-up)
-#>                0.121011 seconds (Sampling)
-#>                0.300775 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.124772 seconds (Warm-up)
-#>                0.107458 seconds (Sampling)
-#>                0.23223 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.125093 seconds (Warm-up)
-#>                0.10432 seconds (Sampling)
-#>                0.229413 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.126442 seconds (Warm-up)
-#>                0.108657 seconds (Sampling)
-#>                0.235099 seconds (Total)
-#> 
-#> Tau =  0.0625
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.149902 seconds (Warm-up)
-#>                0.115689 seconds (Sampling)
-#>                0.265591 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.122284 seconds (Warm-up)
-#>                0.105552 seconds (Sampling)
-#>                0.227836 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.118246 seconds (Warm-up)
-#>                0.104767 seconds (Sampling)
-#>                0.223013 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.115285 seconds (Warm-up)
-#>                0.102742 seconds (Sampling)
-#>                0.218027 seconds (Total)
+#>  Elapsed Time: 0.12876 seconds (Warm-up)
+#>                0.079623 seconds (Sampling)
+#>                0.208383 seconds (Total)
 #> 
 #> Tau =  0.0442
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.34 seconds.
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1726,9 +1761,109 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.127408 seconds (Warm-up)
-#>                0.109975 seconds (Sampling)
-#>                0.237383 seconds (Total)
+#>  Elapsed Time: 0.135554 seconds (Warm-up)
+#>                0.080896 seconds (Sampling)
+#>                0.21645 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.138415 seconds (Warm-up)
+#>                0.082123 seconds (Sampling)
+#>                0.220538 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.143854 seconds (Warm-up)
+#>                0.079031 seconds (Sampling)
+#>                0.222885 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.140652 seconds (Warm-up)
+#>                0.222103 seconds (Sampling)
+#>                0.362755 seconds (Total)
+#> 
+#> Tau =  0.0312
+#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.152801 seconds (Warm-up)
+#>                0.082293 seconds (Sampling)
+#>                0.235094 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
@@ -1751,15 +1886,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.124119 seconds (Warm-up)
-#>                0.103228 seconds (Sampling)
-#>                0.227347 seconds (Total)
+#>  Elapsed Time: 0.187366 seconds (Warm-up)
+#>                0.082302 seconds (Sampling)
+#>                0.269668 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1776,15 +1911,15 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.13138 seconds (Warm-up)
-#>                0.1137 seconds (Sampling)
-#>                0.24508 seconds (Total)
+#>  Elapsed Time: 0.191033 seconds (Warm-up)
+#>                0.085223 seconds (Sampling)
+#>                0.276256 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Gradient evaluation took 3.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -1801,109 +1936,9 @@ coefpath_normal <-
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.127846 seconds (Warm-up)
-#>                0.106882 seconds (Sampling)
-#>                0.234728 seconds (Total)
-#> 
-#> Tau =  0.0312
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.47 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.12768 seconds (Warm-up)
-#>                0.108943 seconds (Sampling)
-#>                0.236623 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.12821 seconds (Warm-up)
-#>                0.113621 seconds (Sampling)
-#>                0.241831 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.118366 seconds (Warm-up)
-#>                0.110171 seconds (Sampling)
-#>                0.228537 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.121803 seconds (Warm-up)
-#>                0.116616 seconds (Sampling)
-#>                0.238419 seconds (Total)
+#>  Elapsed Time: 0.188981 seconds (Warm-up)
+#>                0.081884 seconds (Sampling)
+#>                0.270865 seconds (Total)
 ```
 
 
@@ -1969,14 +2004,14 @@ get_best_tau(coefpath_normal)
 #> # A tibble: 1 × 3
 #>     tau  elpd     p
 #>   <dbl> <dbl> <dbl>
-#> 1  0.25  -108  8.59
+#> 1 0.177  -234   2.3
 ```
 
 The mean estimate of $\tau$ is higher than the best estimate, and there is some uncertainty over it. 
 
 ```r
 mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
-#> In file included from filea4941210d6a.cpp:8:
+#> In file included from file278426df96ec.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -1991,7 +2026,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea4941210d6a.cpp:8:
+#> In file included from file278426df96ec.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -1999,7 +2034,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea4941210d6a.cpp:8:
+#> In file included from file278426df96ec.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -2007,7 +2042,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea4941210d6a.cpp:8:
+#> In file included from file278426df96ec.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -2015,7 +2050,7 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea4941210d6a.cpp:8:
+#> In file included from file278426df96ec.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -2042,114 +2077,58 @@ mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 ```
 
 ```r
-fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data,
+fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data, refresh = -1,
                  control = list(adapt_delta = 0.99))
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-2' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 5.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.59 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.358717 seconds (Warm-up)
-#>                0.394966 seconds (Sampling)
-#>                0.753683 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-2' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.3658 seconds (Warm-up)
-#>                0.322043 seconds (Sampling)
-#>                0.687843 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-2' NOW (CHAIN 3).
 #> 
 #> Gradient evaluation took 3.3e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.416882 seconds (Warm-up)
-#>                0.383479 seconds (Sampling)
-#>                0.800361 seconds (Total)
+#>  Elapsed Time: 0.377087 seconds (Warm-up)
+#>                0.244246 seconds (Sampling)
+#>                0.621333 seconds (Total)
 #> 
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-normal-2' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.501369 seconds (Warm-up)
-#>                0.389132 seconds (Sampling)
-#>                0.890501 seconds (Total)
+#>  Elapsed Time: 0.395013 seconds (Warm-up)
+#>                0.219145 seconds (Sampling)
+#>                0.614158 seconds (Total)
+#> 
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> 
+#>  Elapsed Time: 0.290592 seconds (Warm-up)
+#>                0.233561 seconds (Sampling)
+#>                0.524153 seconds (Total)
+#> 
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> 
+#>  Elapsed Time: 0.411155 seconds (Warm-up)
+#>                0.273809 seconds (Sampling)
+#>                0.684964 seconds (Total)
 ```
 
 
 ```r
 summary(fit_normal, "tau")$summary
-#>      mean se_mean    sd 2.5%   25%   50%   75% 97.5% n_eff Rhat
-#> tau 0.326 0.00203 0.111 0.18 0.251 0.306 0.377   0.6  2983    1
+#>      mean se_mean    sd   2.5%   25%   50%   75% 97.5% n_eff Rhat
+#> tau 0.265 0.00519 0.139 0.0542 0.167 0.245 0.339 0.603   718    1
 ```
 
 
@@ -2157,10 +2136,10 @@ summary(fit_normal, "tau")$summary
 loo(extract_log_lik(fit_normal))
 #> Computed from 4000 by 97 log-likelihood matrix
 #> 
-#>          Estimate   SE
-#> elpd_loo   -108.9  7.4
-#> p_loo         9.2  1.6
-#> looic       217.7 14.7
+#>          Estimate  SE
+#> elpd_loo   -234.6 3.0
+#> p_loo         3.8 0.4
+#> looic       469.2 6.0
 #> 
 #> All Pareto k estimates are good (k < 0.5)
 #> See help('pareto-k-diagnostic') for details.
@@ -2188,7 +2167,7 @@ A second prior to consider for $\vec\beta$ is the Double Exponential.
 
 ```r
 mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
-#> In file included from filea496aa58487.cpp:8:
+#> In file included from file278426ec8e21.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -2203,7 +2182,7 @@ mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea496aa58487.cpp:8:
+#> In file included from file278426ec8e21.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -2211,7 +2190,7 @@ mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea496aa58487.cpp:8:
+#> In file included from file278426ec8e21.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -2219,7 +2198,7 @@ mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea496aa58487.cpp:8:
+#> In file included from file278426ec8e21.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -2227,7 +2206,7 @@ mod_lasso_1 <- stan_model("stan/lm-coef-lasso-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea496aa58487.cpp:8:
+#> In file included from file278426ec8e21.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -2262,106 +2241,6 @@ coefpath_lasso <- map(tau_values,
 #> Tau =  4
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 6.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.66 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.17492 seconds (Warm-up)
-#>                0.203918 seconds (Sampling)
-#>                0.378838 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.23089 seconds (Warm-up)
-#>                0.25815 seconds (Sampling)
-#>                0.48904 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.249945 seconds (Warm-up)
-#>                0.17073 seconds (Sampling)
-#>                0.420675 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.160322 seconds (Warm-up)
-#>                0.171437 seconds (Sampling)
-#>                0.331759 seconds (Total)
-#> 
-#> Tau =  2.83
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
 #> Gradient evaluation took 3.2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #> Adjust your expectations accordingly!
@@ -2380,15 +2259,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.233266 seconds (Warm-up)
-#>                0.226426 seconds (Sampling)
-#>                0.459692 seconds (Total)
+#>  Elapsed Time: 0.169471 seconds (Warm-up)
+#>                0.136615 seconds (Sampling)
+#>                0.306086 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -2405,15 +2284,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.159963 seconds (Warm-up)
-#>                0.178618 seconds (Sampling)
-#>                0.338581 seconds (Total)
+#>  Elapsed Time: 0.160739 seconds (Warm-up)
+#>                0.132459 seconds (Sampling)
+#>                0.293198 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -2430,739 +2309,12 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.187203 seconds (Warm-up)
-#>                0.236616 seconds (Sampling)
-#>                0.423819 seconds (Total)
+#>  Elapsed Time: 0.163054 seconds (Warm-up)
+#>                0.119725 seconds (Sampling)
+#>                0.282779 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.22078 seconds (Warm-up)
-#>                0.174313 seconds (Sampling)
-#>                0.395093 seconds (Total)
-#> 
-#> Tau =  2
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.152418 seconds (Warm-up)
-#>                0.16321 seconds (Sampling)
-#>                0.315628 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 3.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.34 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.159017 seconds (Warm-up)
-#>                0.154324 seconds (Sampling)
-#>                0.313341 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.159111 seconds (Warm-up)
-#>                0.162825 seconds (Sampling)
-#>                0.321936 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.160985 seconds (Warm-up)
-#>                0.174181 seconds (Sampling)
-#>                0.335166 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  1.41
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.156407 seconds (Warm-up)
-#>                0.180095 seconds (Sampling)
-#>                0.336502 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 5.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.55 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.2215 seconds (Warm-up)
-#>                0.235111 seconds (Sampling)
-#>                0.456611 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.264109 seconds (Warm-up)
-#>                0.244515 seconds (Sampling)
-#>                0.508624 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.267923 seconds (Warm-up)
-#>                0.268041 seconds (Sampling)
-#>                0.535964 seconds (Total)
-#> 
-#> Tau =  1
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 6.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.66 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.163104 seconds (Warm-up)
-#>                0.187946 seconds (Sampling)
-#>                0.35105 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.163891 seconds (Warm-up)
-#>                0.19467 seconds (Sampling)
-#>                0.358561 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.195605 seconds (Warm-up)
-#>                0.176253 seconds (Sampling)
-#>                0.371858 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.171045 seconds (Warm-up)
-#>                0.182622 seconds (Sampling)
-#>                0.353667 seconds (Total)
-#> 
-#> Tau =  0.707
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.161189 seconds (Warm-up)
-#>                0.184951 seconds (Sampling)
-#>                0.34614 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.163111 seconds (Warm-up)
-#>                0.171172 seconds (Sampling)
-#>                0.334283 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.158858 seconds (Warm-up)
-#>                0.208449 seconds (Sampling)
-#>                0.367307 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.175315 seconds (Warm-up)
-#>                0.186435 seconds (Sampling)
-#>                0.36175 seconds (Total)
-#> 
-#> Tau =  0.5
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.47 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.181583 seconds (Warm-up)
-#>                0.191976 seconds (Sampling)
-#>                0.373559 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.177783 seconds (Warm-up)
-#>                0.207356 seconds (Sampling)
-#>                0.385139 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.168496 seconds (Warm-up)
-#>                0.182827 seconds (Sampling)
-#>                0.351323 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.21181 seconds (Warm-up)
-#>                0.211252 seconds (Sampling)
-#>                0.423062 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  0.354
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.285272 seconds (Warm-up)
-#>                0.276128 seconds (Sampling)
-#>                0.5614 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.241838 seconds (Warm-up)
-#>                0.228847 seconds (Sampling)
-#>                0.470685 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.280786 seconds (Warm-up)
-#>                0.279861 seconds (Sampling)
-#>                0.560647 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.201949 seconds (Warm-up)
-#>                0.260328 seconds (Sampling)
-#>                0.462277 seconds (Total)
-#> 
-#> Tau =  0.25
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.158389 seconds (Warm-up)
-#>                0.153786 seconds (Sampling)
-#>                0.312175 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.157284 seconds (Warm-up)
-#>                0.151697 seconds (Sampling)
-#>                0.308981 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.150705 seconds (Warm-up)
-#>                0.161812 seconds (Sampling)
-#>                0.312517 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.165404 seconds (Warm-up)
-#>                0.206648 seconds (Sampling)
-#>                0.372052 seconds (Total)
-#> 
-#> Tau =  0.177
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
 #> Gradient evaluation took 3.8e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
@@ -3182,15 +2334,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.168852 seconds (Warm-up)
-#>                0.241641 seconds (Sampling)
-#>                0.410493 seconds (Total)
+#>  Elapsed Time: 0.156085 seconds (Warm-up)
+#>                0.13623 seconds (Sampling)
+#>                0.292315 seconds (Total)
 #> 
+#> Tau =  2.83
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Gradient evaluation took 2.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3207,9 +2359,134 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.204063 seconds (Warm-up)
-#>                0.166764 seconds (Sampling)
-#>                0.370827 seconds (Total)
+#>  Elapsed Time: 0.16491 seconds (Warm-up)
+#>                0.131669 seconds (Sampling)
+#>                0.296579 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.15949 seconds (Warm-up)
+#>                0.122812 seconds (Sampling)
+#>                0.282302 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 3.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.158244 seconds (Warm-up)
+#>                0.128231 seconds (Sampling)
+#>                0.286475 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.144683 seconds (Warm-up)
+#>                0.127824 seconds (Sampling)
+#>                0.272507 seconds (Total)
+#> 
+#> Tau =  2
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.154439 seconds (Warm-up)
+#>                0.123893 seconds (Sampling)
+#>                0.278332 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.151097 seconds (Warm-up)
+#>                0.132078 seconds (Sampling)
+#>                0.283175 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
@@ -3232,37 +2509,12 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.150153 seconds (Warm-up)
-#>                0.187049 seconds (Sampling)
-#>                0.337202 seconds (Total)
+#>  Elapsed Time: 0.165071 seconds (Warm-up)
+#>                0.128108 seconds (Sampling)
+#>                0.293179 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.156256 seconds (Warm-up)
-#>                0.189365 seconds (Sampling)
-#>                0.345621 seconds (Total)
-#> 
-#> Tau =  0.125
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
 #> Gradient evaluation took 2.9e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
@@ -3282,15 +2534,40 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.183602 seconds (Warm-up)
-#>                0.242062 seconds (Sampling)
-#>                0.425664 seconds (Total)
+#>  Elapsed Time: 0.165049 seconds (Warm-up)
+#>                0.11433 seconds (Sampling)
+#>                0.279379 seconds (Total)
+#> 
+#> Tau =  1.41
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.151507 seconds (Warm-up)
+#>                0.128273 seconds (Sampling)
+#>                0.27978 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3307,13 +2584,38 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.160867 seconds (Warm-up)
-#>                0.161937 seconds (Sampling)
-#>                0.322804 seconds (Total)
+#>  Elapsed Time: 0.153933 seconds (Warm-up)
+#>                0.114526 seconds (Sampling)
+#>                0.268459 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
 #> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.148666 seconds (Warm-up)
+#>                0.13089 seconds (Sampling)
+#>                0.279556 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
 #> Gradient evaluation took 1.7e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #> Adjust your expectations accordingly!
@@ -3332,15 +2634,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.155386 seconds (Warm-up)
-#>                0.165269 seconds (Sampling)
-#>                0.320655 seconds (Total)
+#>  Elapsed Time: 0.157489 seconds (Warm-up)
+#>                0.133079 seconds (Sampling)
+#>                0.290568 seconds (Total)
 #> 
+#> Tau =  1
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Gradient evaluation took 2.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3357,9 +2659,684 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.150882 seconds (Warm-up)
-#>                0.162966 seconds (Sampling)
-#>                0.313848 seconds (Total)
+#>  Elapsed Time: 0.157807 seconds (Warm-up)
+#>                0.119827 seconds (Sampling)
+#>                0.277634 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.152256 seconds (Warm-up)
+#>                0.129752 seconds (Sampling)
+#>                0.282008 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.152488 seconds (Warm-up)
+#>                0.115369 seconds (Sampling)
+#>                0.267857 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.138709 seconds (Warm-up)
+#>                0.119415 seconds (Sampling)
+#>                0.258124 seconds (Total)
+#> 
+#> Tau =  0.707
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.148239 seconds (Warm-up)
+#>                0.130681 seconds (Sampling)
+#>                0.27892 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.159341 seconds (Warm-up)
+#>                0.13126 seconds (Sampling)
+#>                0.290601 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.150785 seconds (Warm-up)
+#>                0.132919 seconds (Sampling)
+#>                0.283704 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.140309 seconds (Warm-up)
+#>                0.1175 seconds (Sampling)
+#>                0.257809 seconds (Total)
+#> 
+#> Tau =  0.5
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.168461 seconds (Warm-up)
+#>                0.137516 seconds (Sampling)
+#>                0.305977 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.178259 seconds (Warm-up)
+#>                0.13673 seconds (Sampling)
+#>                0.314989 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.163207 seconds (Warm-up)
+#>                0.12666 seconds (Sampling)
+#>                0.289867 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.148402 seconds (Warm-up)
+#>                0.118888 seconds (Sampling)
+#>                0.26729 seconds (Total)
+#> 
+#> Tau =  0.354
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.162557 seconds (Warm-up)
+#>                0.138546 seconds (Sampling)
+#>                0.301103 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.167166 seconds (Warm-up)
+#>                0.097878 seconds (Sampling)
+#>                0.265044 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.155406 seconds (Warm-up)
+#>                0.10972 seconds (Sampling)
+#>                0.265126 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.156223 seconds (Warm-up)
+#>                0.136394 seconds (Sampling)
+#>                0.292617 seconds (Total)
+#> 
+#> Tau =  0.25
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.176802 seconds (Warm-up)
+#>                0.129965 seconds (Sampling)
+#>                0.306767 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.183236 seconds (Warm-up)
+#>                0.141074 seconds (Sampling)
+#>                0.32431 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.163929 seconds (Warm-up)
+#>                0.137625 seconds (Sampling)
+#>                0.301554 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.208815 seconds (Warm-up)
+#>                0.138363 seconds (Sampling)
+#>                0.347178 seconds (Total)
+#> 
+#> Tau =  0.177
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.202964 seconds (Warm-up)
+#>                0.144704 seconds (Sampling)
+#>                0.347668 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.183398 seconds (Warm-up)
+#>                0.133954 seconds (Sampling)
+#>                0.317352 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.207131 seconds (Warm-up)
+#>                0.144178 seconds (Sampling)
+#>                0.351309 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.189636 seconds (Warm-up)
+#>                0.147323 seconds (Sampling)
+#>                0.336959 seconds (Total)
+#> 
+#> Tau =  0.125
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.216855 seconds (Warm-up)
+#>                0.152283 seconds (Sampling)
+#>                0.369138 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.240154 seconds (Warm-up)
+#>                0.153379 seconds (Sampling)
+#>                0.393533 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.241622 seconds (Warm-up)
+#>                0.163411 seconds (Sampling)
+#>                0.405033 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.276523 seconds (Warm-up)
+#>                0.172288 seconds (Sampling)
+#>                0.448811 seconds (Total)
 #> 
 #> Tau =  0.0884
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
@@ -3382,15 +3359,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.156589 seconds (Warm-up)
-#>                0.167874 seconds (Sampling)
-#>                0.324463 seconds (Total)
+#>  Elapsed Time: 0.26097 seconds (Warm-up)
+#>                0.168084 seconds (Sampling)
+#>                0.429054 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3407,9 +3384,9 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.169234 seconds (Warm-up)
-#>                0.209105 seconds (Sampling)
-#>                0.378339 seconds (Total)
+#>  Elapsed Time: 0.24219 seconds (Warm-up)
+#>                0.170399 seconds (Sampling)
+#>                0.412589 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
@@ -3432,15 +3409,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.182933 seconds (Warm-up)
-#>                0.170653 seconds (Sampling)
-#>                0.353586 seconds (Total)
+#>  Elapsed Time: 0.236765 seconds (Warm-up)
+#>                0.161416 seconds (Sampling)
+#>                0.398181 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3457,15 +3434,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.204164 seconds (Warm-up)
-#>                0.173697 seconds (Sampling)
-#>                0.377861 seconds (Total)
+#>  Elapsed Time: 0.27547 seconds (Warm-up)
+#>                0.160869 seconds (Sampling)
+#>                0.436339 seconds (Total)
 #> 
 #> Tau =  0.0625
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3482,15 +3459,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.186449 seconds (Warm-up)
-#>                0.181862 seconds (Sampling)
-#>                0.368311 seconds (Total)
+#>  Elapsed Time: 0.296557 seconds (Warm-up)
+#>                0.23422 seconds (Sampling)
+#>                0.530777 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3507,15 +3484,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.178637 seconds (Warm-up)
-#>                0.17492 seconds (Sampling)
-#>                0.353557 seconds (Total)
+#>  Elapsed Time: 0.259157 seconds (Warm-up)
+#>                0.201577 seconds (Sampling)
+#>                0.460734 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3532,15 +3509,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.181184 seconds (Warm-up)
-#>                0.164903 seconds (Sampling)
-#>                0.346087 seconds (Total)
+#>  Elapsed Time: 0.388088 seconds (Warm-up)
+#>                0.18296 seconds (Sampling)
+#>                0.571048 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3557,15 +3534,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.180838 seconds (Warm-up)
-#>                0.217337 seconds (Sampling)
-#>                0.398175 seconds (Total)
+#>  Elapsed Time: 0.282283 seconds (Warm-up)
+#>                0.212218 seconds (Sampling)
+#>                0.494501 seconds (Total)
 #> 
 #> Tau =  0.0442
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 4.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds.
+#> Gradient evaluation took 2.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3582,15 +3559,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.25347 seconds (Warm-up)
-#>                0.248864 seconds (Sampling)
-#>                0.502334 seconds (Total)
+#>  Elapsed Time: 0.283107 seconds (Warm-up)
+#>                0.203368 seconds (Sampling)
+#>                0.486475 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Gradient evaluation took 1.4e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3607,15 +3584,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.20956 seconds (Warm-up)
-#>                0.182575 seconds (Sampling)
-#>                0.392135 seconds (Total)
+#>  Elapsed Time: 0.319521 seconds (Warm-up)
+#>                0.175834 seconds (Sampling)
+#>                0.495355 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3632,15 +3609,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.226423 seconds (Warm-up)
-#>                0.188328 seconds (Sampling)
-#>                0.414751 seconds (Total)
+#>  Elapsed Time: 0.314637 seconds (Warm-up)
+#>                0.222073 seconds (Sampling)
+#>                0.53671 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3657,15 +3634,15 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.211653 seconds (Warm-up)
-#>                0.191678 seconds (Sampling)
-#>                0.403331 seconds (Total)
+#>  Elapsed Time: 0.309884 seconds (Warm-up)
+#>                0.174977 seconds (Sampling)
+#>                0.484861 seconds (Total)
 #> 
 #> Tau =  0.0312
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 2.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
+#> Gradient evaluation took 2.3e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -3682,62 +3659,12 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.303936 seconds (Warm-up)
-#>                0.293557 seconds (Sampling)
-#>                0.597493 seconds (Total)
+#>  Elapsed Time: 0.336272 seconds (Warm-up)
+#>                0.205675 seconds (Sampling)
+#>                0.541947 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.31577 seconds (Warm-up)
-#>                0.223772 seconds (Sampling)
-#>                0.539542 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.274582 seconds (Warm-up)
-#>                0.281145 seconds (Sampling)
-#>                0.555727 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2.5e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
@@ -3757,9 +3684,59 @@ coefpath_lasso <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.30202 seconds (Warm-up)
-#>                0.367167 seconds (Sampling)
-#>                0.669187 seconds (Total)
+#>  Elapsed Time: 0.314891 seconds (Warm-up)
+#>                0.192009 seconds (Sampling)
+#>                0.5069 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.354932 seconds (Warm-up)
+#>                0.219093 seconds (Sampling)
+#>                0.574025 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-lasso-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 4.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.281833 seconds (Warm-up)
+#>                0.195115 seconds (Sampling)
+#>                0.476948 seconds (Total)
 ```
 
 
@@ -3797,13 +3774,13 @@ get_best_tau(coefpath_lasso)
 #> # A tibble: 1 × 3
 #>     tau  elpd     p
 #>   <dbl> <dbl> <dbl>
-#> 1  0.25  -108  8.69
+#> 1 0.125  -234  2.47
 ```
 
 
 ```r
 mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
-#> In file included from filea495f823861.cpp:8:
+#> In file included from file27846d0ff3da.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -3818,7 +3795,7 @@ mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea495f823861.cpp:8:
+#> In file included from file27846d0ff3da.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -3826,7 +3803,7 @@ mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea495f823861.cpp:8:
+#> In file included from file27846d0ff3da.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -3834,7 +3811,7 @@ mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea495f823861.cpp:8:
+#> In file included from file27846d0ff3da.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -3842,7 +3819,7 @@ mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea495f823861.cpp:8:
+#> In file included from file27846d0ff3da.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -3870,120 +3847,69 @@ mod_lasso_2 <- stan_model("stan/lm-coef-lasso-2.stan")
 
 
 ```r
-fit_lasso <- sampling(mod_lasso_2, data = prostate_data,
-                 control = list(adapt_delta = 0.9))
+fit_lasso <- sampling(mod_lasso_2, 
+                      data = prostate_data, 
+                      refresh = -1,
+                      control = list(adapt_delta = 0.9))
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-2' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#> Gradient evaluation took 3.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.35 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.1768 seconds (Warm-up)
-#>                0.168257 seconds (Sampling)
-#>                0.345057 seconds (Total)
+#>  Elapsed Time: 0.520379 seconds (Warm-up)
+#>                0.239833 seconds (Sampling)
+#>                0.760212 seconds (Total)
 #> 
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-2' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.180525 seconds (Warm-up)
-#>                0.167003 seconds (Sampling)
-#>                0.347528 seconds (Total)
+#>  Elapsed Time: 0.578325 seconds (Warm-up)
+#>                0.270174 seconds (Sampling)
+#>                0.848499 seconds (Total)
 #> 
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-2' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 4.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.47 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.180146 seconds (Warm-up)
-#>                0.16818 seconds (Sampling)
-#>                0.348326 seconds (Total)
+#>  Elapsed Time: 0.413246 seconds (Warm-up)
+#>                0.223016 seconds (Sampling)
+#>                0.636262 seconds (Total)
 #> 
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-lasso-2' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Gradient evaluation took 1.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.178289 seconds (Warm-up)
-#>                0.164578 seconds (Sampling)
-#>                0.342867 seconds (Total)
+#>  Elapsed Time: 0.470348 seconds (Warm-up)
+#>                0.246839 seconds (Sampling)
+#>                0.717187 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                                                   count
 #> Exception thrown at line 38: double_exponential_lpdf: Scale parameter is inf, but must be finite!     1
 #> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
+#> Warning: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+#> http://mc-stan.org/misc/warnings.html#bfmi-low
+#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 
 ```r
 summary(fit_lasso, "tau")$summary
-#>      mean se_mean    sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-#> tau 0.263 0.00212 0.122 0.115 0.181 0.236 0.311 0.563  3302    1
+#>      mean se_mean    sd   2.5%  25%   50%   75% 97.5% n_eff Rhat
+#> tau 0.216 0.00859 0.146 0.0173 0.12 0.193 0.282 0.576   288 1.01
 ```
 
 
@@ -3991,10 +3917,10 @@ summary(fit_lasso, "tau")$summary
 loo(extract_log_lik(fit_lasso))
 #> Computed from 4000 by 97 log-likelihood matrix
 #> 
-#>          Estimate   SE
-#> elpd_loo   -108.3  7.3
-#> p_loo         8.7  1.5
-#> looic       216.6 14.5
+#>          Estimate  SE
+#> elpd_loo   -234.6 3.0
+#> p_loo         3.7 0.4
+#> looic       469.2 6.0
 #> 
 #> All Pareto k estimates are good (k < 0.5)
 #> See help('pareto-k-diagnostic') for details.
@@ -4018,7 +3944,7 @@ mcmc_dens(as.array(fit_lasso), regex_pars = "^b")
 
 ### Hierarchical Prior (HS)
 
-The Hierarchical or Horseshoe Prior is defined as as a scale mixture of normals,
+The Hierarchical or Horseshoe Prior is defined as as a scale mixture of normal distributions,
 $$
 \begin{aligned}[t]
 \lambda_i &\sim \dt{\nu}(0, 1) \\
@@ -4030,7 +3956,7 @@ a Student-t with $\nu = 3$, finding that it has better sampling performance than
 
 ```r
 mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
-#> In file included from filea4957c7f030.cpp:8:
+#> In file included from file278478b1328d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -4045,7 +3971,7 @@ mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea4957c7f030.cpp:8:
+#> In file included from file278478b1328d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -4053,7 +3979,7 @@ mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea4957c7f030.cpp:8:
+#> In file included from file278478b1328d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -4061,7 +3987,7 @@ mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea4957c7f030.cpp:8:
+#> In file included from file278478b1328d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -4069,7 +3995,7 @@ mod_lm_coef_hs_1 <- stan_model("stan/lm-coef-hs-1.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea4957c7f030.cpp:8:
+#> In file included from file278478b1328d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -4105,8 +4031,8 @@ coefpath_hs <- map(tau_values,
 #> Tau =  4
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 4.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
+#> Gradient evaluation took 3.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4123,9 +4049,9 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 8.91271 seconds (Warm-up)
-#>                14.1299 seconds (Sampling)
-#>                23.0426 seconds (Total)
+#>  Elapsed Time: 2.87611 seconds (Warm-up)
+#>                6.20805 seconds (Sampling)
+#>                9.08416 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
@@ -4148,15 +4074,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 7.08894 seconds (Warm-up)
-#>                5.28367 seconds (Sampling)
-#>                12.3726 seconds (Total)
+#>  Elapsed Time: 3.52193 seconds (Warm-up)
+#>                1.54883 seconds (Sampling)
+#>                5.07076 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4173,15 +4099,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 8.18893 seconds (Warm-up)
-#>                8.57508 seconds (Sampling)
-#>                16.764 seconds (Total)
+#>  Elapsed Time: 2.86541 seconds (Warm-up)
+#>                2.61092 seconds (Sampling)
+#>                5.47633 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4198,15 +4124,419 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 8.16461 seconds (Warm-up)
-#>                9.40632 seconds (Sampling)
-#>                17.5709 seconds (Total)
-#> Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
+#>  Elapsed Time: 2.47924 seconds (Warm-up)
+#>                3.56892 seconds (Sampling)
+#>                6.04816 seconds (Total)
+#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
 #> Tau =  2.83
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.55465 seconds (Warm-up)
+#>                5.27214 seconds (Sampling)
+#>                7.82679 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.32708 seconds (Warm-up)
+#>                1.8418 seconds (Sampling)
+#>                4.16887 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.59388 seconds (Warm-up)
+#>                2.63362 seconds (Sampling)
+#>                5.2275 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.16754 seconds (Warm-up)
+#>                3.22175 seconds (Sampling)
+#>                5.38929 seconds (Total)
+#> 
+#> Tau =  2
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.41352 seconds (Warm-up)
+#>                1.06254 seconds (Sampling)
+#>                3.47605 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.79026 seconds (Warm-up)
+#>                1.07781 seconds (Sampling)
+#>                2.86808 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.83395 seconds (Warm-up)
+#>                2.11641 seconds (Sampling)
+#>                3.95036 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.791 seconds (Warm-up)
+#>                1.14265 seconds (Sampling)
+#>                2.93365 seconds (Total)
+#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
+#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+
+#> Warning: Examine the pairs() plot to diagnose sampling problems
+#> Tau =  1.41
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 4.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.25397 seconds (Warm-up)
+#>                1.20778 seconds (Sampling)
+#>                2.46175 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.78616 seconds (Warm-up)
+#>                1.15518 seconds (Sampling)
+#>                2.94134 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.0846 seconds (Warm-up)
+#>                0.736958 seconds (Sampling)
+#>                2.82156 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 2.22619 seconds (Warm-up)
+#>                0.638367 seconds (Sampling)
+#>                2.86456 seconds (Total)
+#> Warning: There were 3 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
+#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+
+#> Warning: Examine the pairs() plot to diagnose sampling problems
+#> Tau =  1
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.15944 seconds (Warm-up)
+#>                1.33754 seconds (Sampling)
+#>                2.49697 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.18318 seconds (Warm-up)
+#>                1.75236 seconds (Sampling)
+#>                2.93555 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.11993 seconds (Warm-up)
+#>                0.755497 seconds (Sampling)
+#>                1.87542 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.63862 seconds (Warm-up)
+#>                1.18794 seconds (Sampling)
+#>                2.82656 seconds (Total)
+#> 
+#> Tau =  0.707
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
 #> Gradient evaluation took 3.5e-05 seconds
@@ -4227,15 +4557,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 6.30514 seconds (Warm-up)
-#>                5.20978 seconds (Sampling)
-#>                11.5149 seconds (Total)
+#>  Elapsed Time: 1.13553 seconds (Warm-up)
+#>                1.44398 seconds (Sampling)
+#>                2.57951 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4252,139 +4582,12 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 8.84614 seconds (Warm-up)
-#>                7.34652 seconds (Sampling)
-#>                16.1927 seconds (Total)
+#>  Elapsed Time: 1.22404 seconds (Warm-up)
+#>                1.56945 seconds (Sampling)
+#>                2.79349 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 6.14174 seconds (Warm-up)
-#>                5.25611 seconds (Sampling)
-#>                11.3979 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 6.95079 seconds (Warm-up)
-#>                5.98807 seconds (Sampling)
-#>                12.9389 seconds (Total)
-#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
-#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> Warning: Examine the pairs() plot to diagnose sampling problems
-#> Tau =  2
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 5.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.51 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 4.90614 seconds (Warm-up)
-#>                10.3736 seconds (Sampling)
-#>                15.2798 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.6 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 5.95164 seconds (Warm-up)
-#>                11.3686 seconds (Sampling)
-#>                17.3202 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 4.46233 seconds (Warm-up)
-#>                3.38537 seconds (Sampling)
-#>                7.8477 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
@@ -4404,95 +4607,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 5.95473 seconds (Warm-up)
-#>                4.23735 seconds (Sampling)
-#>                10.1921 seconds (Total)
-#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
-#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-
-#> Warning: Examine the pairs() plot to diagnose sampling problems
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  1.41
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 3.85546 seconds (Warm-up)
-#>                4.23018 seconds (Sampling)
-#>                8.08564 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 4.94961 seconds (Warm-up)
-#>                6.84936 seconds (Sampling)
-#>                11.799 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 4.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 4.69521 seconds (Warm-up)
-#>                3.66351 seconds (Sampling)
-#>                8.35872 seconds (Total)
+#>  Elapsed Time: 0.908564 seconds (Warm-up)
+#>                0.78698 seconds (Sampling)
+#>                1.69554 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4509,19 +4632,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 4.25596 seconds (Warm-up)
-#>                3.88909 seconds (Sampling)
-#>                8.14505 seconds (Total)
-#> Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
-#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> Warning: Examine the pairs() plot to diagnose sampling problems
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  1
+#>  Elapsed Time: 1.45544 seconds (Warm-up)
+#>                0.707461 seconds (Sampling)
+#>                2.1629 seconds (Total)
+#> 
+#> Tau =  0.5
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 5.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
+#> Gradient evaluation took 3.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4538,15 +4657,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.97371 seconds (Warm-up)
-#>                3.63311 seconds (Sampling)
-#>                7.60682 seconds (Total)
+#>  Elapsed Time: 0.873706 seconds (Warm-up)
+#>                0.612853 seconds (Sampling)
+#>                1.48656 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4563,12 +4682,87 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.51316 seconds (Warm-up)
-#>                3.54133 seconds (Sampling)
-#>                7.0545 seconds (Total)
+#>  Elapsed Time: 0.821891 seconds (Warm-up)
+#>                0.668755 seconds (Sampling)
+#>                1.49065 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.4445 seconds (Warm-up)
+#>                0.50983 seconds (Sampling)
+#>                1.95433 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.882806 seconds (Warm-up)
+#>                0.749524 seconds (Sampling)
+#>                1.63233 seconds (Total)
+#> 
+#> Tau =  0.354
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.904845 seconds (Warm-up)
+#>                1.21261 seconds (Sampling)
+#>                2.11746 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
 #> Gradient evaluation took 2.9e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.
@@ -4588,112 +4782,12 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.57886 seconds (Warm-up)
-#>                3.84504 seconds (Sampling)
-#>                7.4239 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 3.57172 seconds (Warm-up)
-#>                3.46354 seconds (Sampling)
-#>                7.03526 seconds (Total)
-#> 
-#> Tau =  0.707
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 3.19481 seconds (Warm-up)
-#>                1.68287 seconds (Sampling)
-#>                4.87769 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.43456 seconds (Warm-up)
-#>                2.23063 seconds (Sampling)
-#>                4.6652 seconds (Total)
+#>  Elapsed Time: 0.967748 seconds (Warm-up)
+#>                1.14564 seconds (Sampling)
+#>                2.11338 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.70733 seconds (Warm-up)
-#>                2.78359 seconds (Sampling)
-#>                5.49092 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
@@ -4713,91 +4807,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.62972 seconds (Warm-up)
-#>                3.55194 seconds (Sampling)
-#>                6.18166 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  0.5
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.80724 seconds (Warm-up)
-#>                2.53693 seconds (Sampling)
-#>                5.34417 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.57132 seconds (Warm-up)
-#>                4.9641 seconds (Sampling)
-#>                7.53542 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 4.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.52779 seconds (Warm-up)
-#>                1.63948 seconds (Sampling)
-#>                4.16727 seconds (Total)
+#>  Elapsed Time: 0.824583 seconds (Warm-up)
+#>                0.614315 seconds (Sampling)
+#>                1.4389 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4814,116 +4832,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.47088 seconds (Warm-up)
-#>                3.17054 seconds (Sampling)
-#>                5.64142 seconds (Total)
+#>  Elapsed Time: 0.751391 seconds (Warm-up)
+#>                0.580313 seconds (Sampling)
+#>                1.3317 seconds (Total)
 #> 
-#> Tau =  0.354
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.37468 seconds (Warm-up)
-#>                2.30717 seconds (Sampling)
-#>                4.68185 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.72291 seconds (Warm-up)
-#>                1.46516 seconds (Sampling)
-#>                3.18807 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.08659 seconds (Warm-up)
-#>                1.40555 seconds (Sampling)
-#>                3.49214 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.9246 seconds (Warm-up)
-#>                2.67549 seconds (Sampling)
-#>                4.60009 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
 #> Tau =  0.25
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 6.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.62 seconds.
+#> Gradient evaluation took 2.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4940,15 +4857,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.51227 seconds (Warm-up)
-#>                3.22459 seconds (Sampling)
-#>                5.73686 seconds (Total)
+#>  Elapsed Time: 0.958892 seconds (Warm-up)
+#>                0.630532 seconds (Sampling)
+#>                1.58942 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -4965,12 +4882,87 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.69852 seconds (Warm-up)
-#>                2.68782 seconds (Sampling)
-#>                4.38634 seconds (Total)
+#>  Elapsed Time: 0.819902 seconds (Warm-up)
+#>                0.632382 seconds (Sampling)
+#>                1.45228 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.707015 seconds (Warm-up)
+#>                0.607349 seconds (Sampling)
+#>                1.31436 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.792171 seconds (Warm-up)
+#>                0.603033 seconds (Sampling)
+#>                1.3952 seconds (Total)
+#> 
+#> Tau =  0.177
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 3.2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.37449 seconds (Warm-up)
+#>                0.360441 seconds (Sampling)
+#>                1.73493 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
 #> Gradient evaluation took 2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
@@ -4990,91 +4982,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.97475 seconds (Warm-up)
-#>                2.75891 seconds (Sampling)
-#>                4.73366 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.88592 seconds (Warm-up)
-#>                3.05429 seconds (Sampling)
-#>                4.9402 seconds (Total)
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> Tau =  0.177
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.86321 seconds (Warm-up)
-#>                1.89621 seconds (Sampling)
-#>                3.75942 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 2.18973 seconds (Warm-up)
-#>                1.06727 seconds (Sampling)
-#>                3.25701 seconds (Total)
+#>  Elapsed Time: 0.710186 seconds (Warm-up)
+#>                0.748483 seconds (Sampling)
+#>                1.45867 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5091,15 +5007,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.53029 seconds (Warm-up)
-#>                1.16353 seconds (Sampling)
-#>                3.69383 seconds (Total)
+#>  Elapsed Time: 1.33735 seconds (Warm-up)
+#>                1.07732 seconds (Sampling)
+#>                2.41467 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 3.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5116,15 +5032,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.96126 seconds (Warm-up)
-#>                1.57868 seconds (Sampling)
-#>                3.53994 seconds (Total)
+#>  Elapsed Time: 0.661162 seconds (Warm-up)
+#>                0.730974 seconds (Sampling)
+#>                1.39214 seconds (Total)
 #> 
 #> Tau =  0.125
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.5 seconds.
+#> Gradient evaluation took 2.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5141,9 +5057,9 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.95433 seconds (Warm-up)
-#>                3.05009 seconds (Sampling)
-#>                5.00443 seconds (Total)
+#>  Elapsed Time: 1.25579 seconds (Warm-up)
+#>                0.4392 seconds (Sampling)
+#>                1.69499 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
@@ -5166,15 +5082,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.84622 seconds (Warm-up)
-#>                2.08597 seconds (Sampling)
-#>                3.93219 seconds (Total)
+#>  Elapsed Time: 0.78691 seconds (Warm-up)
+#>                0.378782 seconds (Sampling)
+#>                1.16569 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5191,15 +5107,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.78112 seconds (Warm-up)
-#>                1.51935 seconds (Sampling)
-#>                3.30047 seconds (Total)
+#>  Elapsed Time: 0.868063 seconds (Warm-up)
+#>                0.598435 seconds (Sampling)
+#>                1.4665 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5216,15 +5132,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.25613 seconds (Warm-up)
-#>                1.19105 seconds (Sampling)
-#>                2.44718 seconds (Total)
+#>  Elapsed Time: 0.95026 seconds (Warm-up)
+#>                0.914547 seconds (Sampling)
+#>                1.86481 seconds (Total)
 #> 
 #> Tau =  0.0884
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 3.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.34 seconds.
+#> Gradient evaluation took 4.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5241,15 +5157,15 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.24976 seconds (Warm-up)
-#>                2.01587 seconds (Sampling)
-#>                3.26563 seconds (Total)
+#>  Elapsed Time: 0.898391 seconds (Warm-up)
+#>                0.627058 seconds (Sampling)
+#>                1.52545 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
+#> Gradient evaluation took 1.5e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -5266,109 +5182,9 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.44549 seconds (Warm-up)
-#>                1.39831 seconds (Sampling)
-#>                2.8438 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 3.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.40628 seconds (Warm-up)
-#>                0.815435 seconds (Sampling)
-#>                2.22171 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.56705 seconds (Warm-up)
-#>                2.20953 seconds (Sampling)
-#>                3.77657 seconds (Total)
-#> 
-#> Tau =  0.0625
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.75582 seconds (Warm-up)
-#>                1.85506 seconds (Sampling)
-#>                3.61088 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.54255 seconds (Warm-up)
-#>                0.837307 seconds (Sampling)
-#>                2.37986 seconds (Total)
+#>  Elapsed Time: 0.590551 seconds (Warm-up)
+#>                0.639761 seconds (Sampling)
+#>                1.23031 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
@@ -5391,62 +5207,12 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.29091 seconds (Warm-up)
-#>                2.31218 seconds (Sampling)
-#>                4.60309 seconds (Total)
+#>  Elapsed Time: 0.632818 seconds (Warm-up)
+#>                0.425219 seconds (Sampling)
+#>                1.05804 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.37782 seconds (Warm-up)
-#>                1.33236 seconds (Sampling)
-#>                2.71018 seconds (Total)
-#> 
-#> Tau =  0.0442
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.41546 seconds (Warm-up)
-#>                1.49732 seconds (Sampling)
-#>                2.91278 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
 #> 
 #> Gradient evaluation took 2.2e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
@@ -5466,137 +5232,12 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.09049 seconds (Warm-up)
-#>                1.82298 seconds (Sampling)
-#>                2.91347 seconds (Total)
+#>  Elapsed Time: 0.72216 seconds (Warm-up)
+#>                0.629402 seconds (Sampling)
+#>                1.35156 seconds (Total)
 #> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 9.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.91 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.42522 seconds (Warm-up)
-#>                1.54792 seconds (Sampling)
-#>                2.97314 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.2673 seconds (Warm-up)
-#>                1.35575 seconds (Sampling)
-#>                2.62305 seconds (Total)
-#> 
-#> Tau =  0.0312
+#> Tau =  0.0625
 #> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.56484 seconds (Warm-up)
-#>                1.88445 seconds (Sampling)
-#>                3.44929 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.36318 seconds (Warm-up)
-#>                0.874956 seconds (Sampling)
-#>                2.23814 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.14549 seconds (Warm-up)
-#>                0.796954 seconds (Sampling)
-#>                1.94244 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
 #> 
 #> Gradient evaluation took 2.6e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
@@ -5616,12 +5257,286 @@ coefpath_hs <- map(tau_values,
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.62643 seconds (Warm-up)
-#>                2.31511 seconds (Sampling)
-#>                3.94153 seconds (Total)
-#> Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.999 may help. See
-#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> Warning: Examine the pairs() plot to diagnose sampling problems
+#>  Elapsed Time: 0.586961 seconds (Warm-up)
+#>                1.1543 seconds (Sampling)
+#>                1.74126 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.61856 seconds (Warm-up)
+#>                0.32033 seconds (Sampling)
+#>                0.93889 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.607866 seconds (Warm-up)
+#>                0.625017 seconds (Sampling)
+#>                1.23288 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.515886 seconds (Warm-up)
+#>                0.443247 seconds (Sampling)
+#>                0.959133 seconds (Total)
+#> 
+#> Tau =  0.0442
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 1.00163 seconds (Warm-up)
+#>                0.45284 seconds (Sampling)
+#>                1.45447 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.489896 seconds (Warm-up)
+#>                0.544579 seconds (Sampling)
+#>                1.03448 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.54948 seconds (Warm-up)
+#>                0.589965 seconds (Sampling)
+#>                1.13944 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 2.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.562241 seconds (Warm-up)
+#>                0.527688 seconds (Sampling)
+#>                1.08993 seconds (Total)
+#> 
+#> Tau =  0.0312
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 1).
+#> 
+#> Gradient evaluation took 2.7e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.897725 seconds (Warm-up)
+#>                0.414058 seconds (Sampling)
+#>                1.31178 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 2).
+#> 
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.697267 seconds (Warm-up)
+#>                0.458762 seconds (Sampling)
+#>                1.15603 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 3).
+#> 
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.605598 seconds (Warm-up)
+#>                0.328416 seconds (Sampling)
+#>                0.934014 seconds (Total)
+#> 
+#> 
+#> SAMPLING FOR MODEL 'lm-coef-hs-1' NOW (CHAIN 4).
+#> 
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 2000 [  0%]  (Warmup)
+#> Iteration:  200 / 2000 [ 10%]  (Warmup)
+#> Iteration:  400 / 2000 [ 20%]  (Warmup)
+#> Iteration:  600 / 2000 [ 30%]  (Warmup)
+#> Iteration:  800 / 2000 [ 40%]  (Warmup)
+#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#> Iteration: 2000 / 2000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 0.576019 seconds (Warm-up)
+#>                0.642967 seconds (Sampling)
+#>                1.21899 seconds (Total)
+#> Warning: Some Pareto k diagnostic values are slightly high. See
+#> help('pareto-k-diagnostic') for details.
 ```
 
 
@@ -5642,7 +5557,7 @@ get_best_tau(coefpath_hs)
 #> # A tibble: 1 × 3
 #>     tau  elpd     p
 #>   <dbl> <dbl> <dbl>
-#> 1 0.354  -108  8.55
+#> 1 0.125  -234  2.51
 ```
 
 
@@ -5656,7 +5571,7 @@ plot_coefpath_loo(coefpath_hs)
 
 ```r
 mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
-#> In file included from filea4971f61e44.cpp:8:
+#> In file included from file27845219544d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5671,7 +5586,7 @@ mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea4971f61e44.cpp:8:
+#> In file included from file27845219544d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5679,7 +5594,7 @@ mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea4971f61e44.cpp:8:
+#> In file included from file27845219544d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5687,7 +5602,7 @@ mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea4971f61e44.cpp:8:
+#> In file included from file27845219544d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -5695,7 +5610,7 @@ mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea4971f61e44.cpp:8:
+#> In file included from file27845219544d.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -5723,32 +5638,19 @@ mod_lm_coef_hs_2 <- stan_model("stan/lm-coef-hs-2.stan")
 
 
 ```r
-fit_hs <- sampling(mod_lm_coef_hs_2, data = c(prostate_data, list(df_local = 3, df_global = 3)),
+fit_hs <- sampling(mod_lm_coef_hs_2, refresh = -1,
+                   data = c(prostate_data, list(df_local = 3, df_global = 3)),
                  control = list(adapt_delta = 0.995))
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-2' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 6.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.64 seconds.
+#> Gradient evaluation took 4.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.63923 seconds (Warm-up)
-#>                1.83781 seconds (Sampling)
-#>                4.47704 seconds (Total)
+#>  Elapsed Time: 1.00399 seconds (Warm-up)
+#>                0.582382 seconds (Sampling)
+#>                1.58637 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                          count
 #> Exception thrown at line 39: multiply: B[1] is nan, but must not be nan!     2
@@ -5757,29 +5659,15 @@ fit_hs <- sampling(mod_lm_coef_hs_2, data = c(prostate_data, list(df_local = 3, 
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-2' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 2e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.58603 seconds (Warm-up)
-#>                2.03597 seconds (Sampling)
-#>                4.622 seconds (Total)
+#>  Elapsed Time: 0.988918 seconds (Warm-up)
+#>                0.412526 seconds (Sampling)
+#>                1.40144 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 2
 #>                                                                          count
 #> Exception thrown at line 39: multiply: B[1] is nan, but must not be nan!     5
@@ -5789,70 +5677,39 @@ fit_hs <- sampling(mod_lm_coef_hs_2, data = c(prostate_data, list(df_local = 3, 
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-2' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.96307 seconds (Warm-up)
-#>                1.57151 seconds (Sampling)
-#>                3.53458 seconds (Total)
+#>  Elapsed Time: 1.15877 seconds (Warm-up)
+#>                1.16426 seconds (Sampling)
+#>                2.32303 seconds (Total)
 #> 
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-2' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.6e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 1.93737 seconds (Warm-up)
-#>                1.51731 seconds (Sampling)
-#>                3.45468 seconds (Total)
+#>  Elapsed Time: 0.90871 seconds (Warm-up)
+#>                0.473369 seconds (Sampling)
+#>                1.38208 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 4
 #>                                                                          count
 #> Exception thrown at line 39: multiply: B[1] is nan, but must not be nan!     1
 #> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.995 may help. See
-#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 
 ```r
 summary(fit_hs, "tau")$summary
-#>      mean se_mean    sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-#> tau 0.365 0.00536 0.213 0.118 0.218 0.315 0.448 0.923  1575    1
+#>      mean se_mean    sd   2.5%   25%  50%   75% 97.5% n_eff Rhat
+#> tau 0.298 0.00459 0.223 0.0361 0.147 0.24 0.382 0.885  2359    1
 ```
 
 
@@ -5860,10 +5717,10 @@ summary(fit_hs, "tau")$summary
 loo(extract_log_lik(fit_hs))
 #> Computed from 4000 by 97 log-likelihood matrix
 #> 
-#>          Estimate   SE
-#> elpd_loo   -108.7  7.1
-#> p_loo         8.6  1.4
-#> looic       217.3 14.2
+#>          Estimate  SE
+#> elpd_loo   -234.5 3.0
+#> p_loo         3.7 0.4
+#> looic       469.0 5.9
 #> 
 #> All Pareto k estimates are good (k < 0.5)
 #> See help('pareto-k-diagnostic') for details.
@@ -5886,7 +5743,7 @@ mcmc_dens(as.array(fit_hs), regex_pars = "^b\\[\\d+\\]$")
 
 ```r
 mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
-#> In file included from filea4926200396.cpp:8:
+#> In file included from file278473f93038.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5901,7 +5758,7 @@ mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
 #> <command line>:6:9: note: previous definition is here
 #> #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #>         ^
-#> In file included from filea4926200396.cpp:8:
+#> In file included from file278473f93038.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5909,7 +5766,7 @@ mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
 #>     static void set_zero_all_adjoints() {
 #>                 ^
-#> In file included from filea4926200396.cpp:8:
+#> In file included from file278473f93038.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -5917,7 +5774,7 @@ mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: 'static' function 'set_zero_all_adjoints_nested' declared in header file should be declared 'static inline' [-Wunneeded-internal-declaration]
 #>     static void set_zero_all_adjoints_nested() {
 #>                 ^
-#> In file included from filea4926200396.cpp:8:
+#> In file included from file278473f93038.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -5925,7 +5782,7 @@ mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
 #> /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function 'fft_next_good_size' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 #>       size_t fft_next_good_size(size_t N) {
 #>              ^
-#> In file included from filea4926200396.cpp:8:
+#> In file included from file278473f93038.cpp:8:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:
 #> In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:11:
@@ -5953,93 +5810,47 @@ mod_lm_coef_hs_3 <- stan_model("stan/lm-coef-hs-3.stan")
 
 
 ```r
-fit_hs3 <- sampling(mod_lm_coef_hs_3, data = c(prostate_data, list(df_local = 3, df_global = 3, p0 = 2)),
-                 control = list(adapt_delta = 0.995))
+fit_hs3 <- sampling(mod_lm_coef_hs_3,
+                    refresh = -1,
+                    data = c(prostate_data, list(df_local = 3, df_global = 3, p0 = 2)),
+                    control = list(adapt_delta = 0.995))
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-3' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 4.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
+#> Gradient evaluation took 3.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 7.31057 seconds (Warm-up)
-#>                12.7548 seconds (Sampling)
-#>                20.0654 seconds (Total)
+#>  Elapsed Time: 7.08115 seconds (Warm-up)
+#>                9.70287 seconds (Sampling)
+#>                16.784 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 1
 #>                                                                                          count
 #> Exception thrown at line 51: student_t_lpdf: Scale parameter is inf, but must be finite!     4
-#> Exception thrown at line 44: multiply: B[6] is nan, but must not be nan!                     1
 #> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-3' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 11.0969 seconds (Warm-up)
-#>                11.6418 seconds (Sampling)
-#>                22.7387 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 2
-#>                                                                                          count
-#> Exception thrown at line 51: student_t_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
+#>  Elapsed Time: 5.45486 seconds (Warm-up)
+#>                9.76004 seconds (Sampling)
+#>                15.2149 seconds (Total)
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-3' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 2.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#> Gradient evaluation took 1.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 8.11516 seconds (Warm-up)
-#>                13.0324 seconds (Sampling)
-#>                21.1475 seconds (Total)
+#>  Elapsed Time: 9.2612 seconds (Warm-up)
+#>                9.87074 seconds (Sampling)
+#>                19.1319 seconds (Total)
 #> The following numerical problems occurred the indicated number of times on chain 3
 #>                                                                                          count
 #> Exception thrown at line 44: multiply: B[1] is nan, but must not be nan!                     1
@@ -6048,32 +5859,18 @@ fit_hs3 <- sampling(mod_lm_coef_hs_3, data = c(prostate_data, list(df_local = 3,
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
 #> 
-#> SAMPLING FOR MODEL 'lm-coef-hs-3' NOW (CHAIN 4).
-#> 
 #> Gradient evaluation took 2.1e-05 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 11.2265 seconds (Warm-up)
-#>                12.7211 seconds (Sampling)
-#>                23.9476 seconds (Total)
-#> Warning: There were 133 divergent transitions after warmup. Increasing adapt_delta above 0.995 may help. See
+#>  Elapsed Time: 2.91756 seconds (Warm-up)
+#>                5.69903 seconds (Sampling)
+#>                8.61659 seconds (Total)
+#> Warning: There were 531 divergent transitions after warmup. Increasing adapt_delta above 0.995 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> Warning: There were 3794 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+#> Warning: There were 3342 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 #> http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -6141,7 +5938,7 @@ $$
 \kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 \lambda^2_j}
 $$
 When $\kappa = 1$, it is complete shrinkage, and the coefficient is zero.
-When $\kappa = 0$, then there is no shrinkages, and the coefficient is equal to the MLE solution.
+When $\kappa = 0$, then there is no shrinkage, and the coefficient is equal to the MLE solution.
 As $\tau \to 0$, then $\bar{\beta} \to 0$, and as $\tau \to \infty$, then $\bar{\beta} \to \hat{\beta}$.
 
 <img src="shrinkage_files/figure-html/unnamed-chunk-46-1.png" width="70%" style="display: block; margin: auto;" />
@@ -6199,7 +5996,7 @@ Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributi
 
 @DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0.
 @ScottBerger2010a consider marginal maximum likelihood estimates of $\tau$.
-@PasKleijnVaart2014a suggest that an empirical Bayes esitmator truncated below at $1 / n$.
+@PasKleijnVaart2014a suggest that an empirical Bayes estimator truncated below at $1 / n$.
 
 ## R Implementations
 
@@ -6208,7 +6005,7 @@ See
 - **[rstanarm](https://cran.r-project.org/package=rstanarm)**: estimates GLM regressions with various priors
 - **[rmonomvn](https://cran.r-project.org/package=rmonomvn)**: estimates Bayesian ridge, lasso, horseshoe, and ridge regression.
 - **[bayesreg](https://cran.r-project.org/package=bayesreg)**: See @MakalicSchmidt2016a for documentation and a good review of Bayesian regularized regression.
-
+- [fastHorseshoe]( http://jingyuhe.com/fastHorseshoe.html)
 
 ## Bayesian Model Averaging
 
@@ -6236,7 +6033,7 @@ The Bayes Factor for models $l$ and $m$ is
 $$
 BF_{lm} = \frac{p(M_l | y)}{p(M_m | y)} .
 $$
-Given a baseline model, $M_1$, the model evicence can be written in terms of Bayes Factors relative to that model,
+Given a baseline model, $M_1$, the model evidence can be written in terms of Bayes Factors relative to that model,
 $$
 p(M_l|y) = \frac{BF_{1l} p(M_l)}{\sum_{m = 1}^K BF_{m1} p(M_m)} .
 $$
@@ -6258,7 +6055,7 @@ $$
 
 Why is BMA difficult? 
 
-- The posterior is sensitive to the model priorf, $p(M_k)$.
+- The posterior is sensitive to the model prior, $p(M_k)$.
 - Calculating the model evidence, $p(y | M_k)$, is computationally difficult, except in special cases
 - The model space can be very large. In regression, it is $2^K$. This means that it may be impossible to compute model probabilities for the full set of models. Thus, it may require sampling from the (discrete) model space.
 
@@ -6279,7 +6076,7 @@ The model selection problem in this case is the choice of the $K$ variables to i
 Thus, there are $2^K$ models to consider.
 Very quickly, 
 
-See @FragosoNeto2015a for a recent review. See @VolinskyRafteryMadiganEtAl1999a for an earlier reivew.
+See @FragosoNeto2015a for a recent review. See @VolinskyRafteryMadiganEtAl1999a for an earlier review.
 
 There are several R packages that implement BMA. See @AminiShahramParmeterChristopher2011a for a review of R packages.
 
@@ -6322,7 +6119,7 @@ The spike and slab prior is a "two-group" solution
 $$
 p(\beta_k) = (1 - w) \delta_0 + w \pi(\beta_k)
 $$
-where $\delta_0$ is a Dira delta function putting a point mass at 0, and $\pi(\beta_k)$ is an uniformative distribution, e.g. $\pi(\beta_k) = \dnorm(\beta_k | 0, \sigma^2)$ where $\sigma$ is large.
+where $\delta_0$ is a Dirac delta function putting a point mass at 0, and $\pi(\beta_k)$ is an uninformative distribution, e.g. $\pi(\beta_k) = \dnorm(\beta_k | 0, \sigma^2)$ where $\sigma$ is large.
 
 The posterior distribution of $w$ is the probability that $\beta_k \neq 0$, and the conditional posterior distribution $p(\beta_k | y, w = 1)$ is the distribution of $\beta_k$ given that $\beta_k \neq 0$.
 
@@ -6358,16 +6155,16 @@ Cauchy                             $\lambda_i^{-2} \exp(-1 / \lambda_i^2)$      
 Strawderman-Berger                 $\lambda_i (1 + \lambda_i^2)^{-\frac{3}{2}}$ $\kappa_i^{-\frac{1}{2}}$
 Normal-exponential-gamma           $\lambda_i (1 + \lambda_i^2)^{-(c + 1)}$     $\kappa_i^{c - 1}$
 Normal-Jeffreys                    $1 / \lambda_i$                              $\kappa_i^{-1} (1 - \kappa_i)^{-1}$
-Horsehoe                           $(1 + \lambda_i^2)^{-1}$                     $\kappa_i^{-1/2} (1 - \kappa_i)^{-1/2}$
+Horseshoe                           $(1 + \lambda_i^2)^{-1}$                     $\kappa_i^{-1/2} (1 - \kappa_i)^{-1/2}$
 
 
-Threshholding. The horseshoe has an implicit threshold of $|T_\tau(y) - y| < \sqrt{2 \sigma ^ 2 \log (1 / \tau))$ [@PasKleijnVaart2014a].
+Thresh-holding. The horseshoe has an implicit threshold of $|T_\tau(y) - y| < \sqrt{2 \sigma ^ 2 \log (1 / \tau))$ [@PasKleijnVaart2014a].
 
 
 ## Multiple Comparisons and Thresholding rules
 
-Multiple comparisons, familywise error rate, and false discovery rates are frequentist 
-concepts. There are some attempts to bridge thse two worlds - see Efron in particular.  However, even if methodologically different, shrinkage addresses some of broadest
+Multiple comparisons, family-wise error rate, and false discovery rates are frequentist 
+concepts. There are some attempts to bridge these two worlds - see Efron in particular.  However, even if methodologically different, shrinkage addresses some of broadest
 concerns about making multiple comparisons.
 
 Although discussing hierarchical models, @GelmanHillYajima2012a compares the shrinkage in hierarchical models to multiple comparisons, also see this [post](http://andrewgelman.com/2013/08/20/correcting-for-multiple-comparisons-in-a-bayesian-regression-model/).
@@ -6389,9 +6186,9 @@ The memorably titled "Let's Take the Con Out of Econometrics" [@Leamer1983a],
 that economic models fail to account for model uncertainty and suggests using 
 an ensemble-like method called extreme-bounds.
 
-On economic growth: (confidence bounds) @Sala-I-Martin1997a, (bayesian model averaging) @FernandezLeySteel2001a, @LeySteel2009a, @EicherPapageorgiouRaftery2009a, @BrockDurlaufWest2003a
+On economic growth: (confidence bounds) @Sala-I-Martin1997a, (Bayesian model averaging) @FernandezLeySteel2001a, @LeySteel2009a, @EicherPapageorgiouRaftery2009a, @BrockDurlaufWest2003a
 
-Wars: @HegreSambanis2006a use extereme bounds for civil war onset. @WardGreenhillBakke2010a use model comparison and a step-wise method, but are focused on the difference between note the difference between p-values and prediction; @Goenner2004a use BMA for inter-state wars (democratic peace). 
+Wars: @HegreSambanis2006a use extreme bounds for civil war onset. @WardGreenhillBakke2010a use model comparison and a step-wise method, but are focused on the difference between note the difference between p-values and prediction; @Goenner2004a use BMA for inter-state wars (democratic peace). 
 
 @MontgomeryHollenbachWard2012a and @MontgomeryNyhan2010a apply BMA to multiple political science issues including voting, presidential elections, and civil war onset.
 

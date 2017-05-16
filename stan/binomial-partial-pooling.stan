@@ -5,8 +5,9 @@
   \begin{aligned}[t]
   p(y_i | n_i, \mu_i) &\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
   \mu_i &= \logit^{-1}(\eta_i) \\
-  p(\eta_i | \tau) &\sim \mathsf{Normal}(0, \tau) \\
-  p(\tau) &\sim \mathsf{Normal}^+(0, 2.5) \\
+  p(\eta_i | \tau) &\sim \mathsf{Normal}(alpha, \tau) \\
+  p(\tau) &\sim \mathsf{Normal}^+(0, 1) \\
+  p(alpha) & \sim \mathsf{Normal}(0, 2.5) \\
   \end{aligned}
   $$
 
@@ -21,11 +22,13 @@ data {
 }
 parameters {
   vector[N] eta;
+  real alpha;
   real<lower = 0.> tau;
 }
 model {
-  tau ~ normal(0., 2.5);
-  eta ~ normal(0., tau);
+  alpha ~ normal(0., 10.);
+  tau ~ normal(0., 1);
+  eta ~ normal(alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {
