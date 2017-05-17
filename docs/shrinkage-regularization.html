@@ -395,18 +395,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">13.1</span> Normal Linear Regression Model</h2>
 <p>Consider the single output linear Gaussian regression model with several input variables, given by <span class="math display">\[
 \begin{aligned}[t]
-y_i \sim N(\vec{x}_i&#39; \vec{\beta}, \sigma^2)
+y_i \sim \dnorm(\vec{x}_i&#39; \vec{\beta}, \sigma^2)
 \end{aligned}
 \]</span> where <span class="math inline">\(\vec{x}\)</span> is a <span class="math inline">\(k\)</span>-vector of predictors, and <span class="math inline">\(\vec{\beta}\)</span> are the coefficients.</p>
 <p>What priors do we put on <span class="math inline">\(\beta\)</span>?</p>
 <ul>
 <li><strong>Improproper priors:</strong> <span class="math inline">\(\beta_k \propto 1\)</span> This produces the equivalent of MLE estimates.</li>
-<li><strong>Non-informative priors:</strong> These are priors which have such wide variance that they have little influence on the posterior, e.g. <span class="math inline">\(\beta_k \sim N(0, 1e6)\)</span>. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.</li>
+<li><strong>Non-informative priors:</strong> These are priors which have such wide variance that they have little influence on the posterior, e.g. <span class="math inline">\(\beta_k \sim \dnorm(0, 1e6)\)</span>. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.</li>
 </ul>
 <p><strong>Shrinkage priors</strong> have a couple characteristics</p>
 <ul>
 <li>they push <span class="math inline">\(\beta_k \to 0\)</span></li>
-<li>while in the other cases, the scale of the prior on <span class="math inline">\(\beta\)</span> is fixed, in shrinkage priors there is often a hyperprior on it. E.g. <span class="math inline">\(\beta_k \sim N(0, \tau)\)</span>, where <span class="math inline">\(\tau\)</span> is also a parameter to be estimated.</li>
+<li>while in the other cases, the scale of the prior on <span class="math inline">\(\beta\)</span> is fixed, in shrinkage priors there is often a hyperprior on it. E.g. <span class="math inline">\(\beta_k \sim \dnorm(0, \tau)\)</span>, where <span class="math inline">\(\tau\)</span> is also a parameter to be estimated.</li>
 </ul>
 </div>
 <div id="penalized-regression" class="section level2">
@@ -463,9 +463,9 @@ y_i \sim N(\vec{x}_i&#39; \vec{\beta}, \sigma^2)
 \]</span> In the first case, the log density of a normal distribution is, <span class="math display">\[
 \log p(y | \mu, x) \propto \frac{1}{2 \sigma} (x - \mu)^2
 \]</span> The first regression term is the produce of normal distributions (sum of their log probabilities), <span class="math display">\[
-y_i \sim N(\vec{x}_i\T \vec{\beta}, \sigma) 
+y_i \sim \dnorm(\vec{x}_i\T \vec{\beta}, \sigma) 
 \]</span> The second term, <span class="math inline">\(\lambda \sum_{k} \beta_k^2\)</span> is also the sum of the log of densities of i.i.d. normal densities, with mean 0, and scale <span class="math inline">\(\tau = 1 / 2 \lambda\)</span>, <span class="math display">\[
-\beta_k \sim N(0, \tau^2)
+\beta_k \sim \dnorm(0, \tau^2)
 \]</span></p>
 <p>The only difference in the LASSO is the penalty term, which uses an absolute value penalty for <span class="math inline">\(\beta_k\)</span>. That term corresponds to a sum of log densities of i.i.d. double exponential (Laplace) distributions. The double exponential distribution density is similar to a normal distribution, <span class="math display">\[
 \log p(y | \mu, \sigma) \propto - \frac{|y - \mu|}{\sigma}
@@ -511,7 +511,7 @@ y_i \sim N(\vec{x}_i\T \vec{\beta}, \sigma)
 <p>If <span class="math inline">\(\nu = 1\)</span>, then this is the Horseshoe+ prior as introduced by <span class="citation">Bhadra et al. (2015)</span>.</p>
 <p>In linear regression <span class="math display">\[
 \begin{aligned}[t]
-p(\beta | \Lambda, \tau, \sigma^2, D) &amp;= N(\beta, \bar{\beta}, \Sigma) \\
+p(\beta | \Lambda, \tau, \sigma^2, D) &amp;= \dnorm(\beta, \bar{\beta}, \Sigma) \\
 \bar{\beta} &amp;= \tau^2 \Lambda (\tau^2 \Lambda + \sigma^2 (X&#39;X)^{-1})^{-1} \hat{\beta} \\
 \Sigma &amp;= (\tau^{-2} \Lambda^{-1} + \frac{1}{\sigma^2} X&#39;X)^{-1}
 \end{aligned}
@@ -5976,7 +5976,7 @@ coefpath_normal &lt;-
 y_i \sim \dnorm(\vec{\beta}\T \vec{x}, \sigma^2)
 \]</span> for <span class="math inline">\(i = 1, \dots, n\)</span>, where <span class="math inline">\(\vec{x}\)</span> is the <span class="math inline">\(K\)</span> dimensional vector of predictors. Suppose a prior <span class="math display">\[
 \begin{aligned}[t]
-\beta_j | \lambda_j, \tau &amp;\sim N(0, \lambda_j^2 \tau^2)
+\beta_j | \lambda_j, \tau &amp;\sim \dnorm(0, \lambda_j^2 \tau^2)
 \end{aligned}
 \]</span> The <span class="math inline">\(\lambda_j\)</span> are local scales - it allows some weights to escape the shrinkage. The global parameter <span class="math inline">\(\tau\)</span> pulls all weights towards zero, and effectively controls the sparsity.</p>
 <p>The posterior distribution is <span class="math display">\[
@@ -6093,9 +6093,9 @@ y &amp;= \alpha + X \beta + \epsilon &amp; \epsilon &amp;\sim \dnorm(0, \sigma^2
 <div id="zellners-g-prior" class="section level3">
 <h3><span class="header-section-number">13.10.1</span> Zellner’s g-prior</h3>
 <p>An alternative prior is the Zellner’s g-prior. Consider the regression, <span class="math display">\[
-y_i | \alpha, \vec{\beta}, \sigma \sim N(\alpha + \mat{X} \vec{\beta}, \sigma^2)
+y_i | \alpha, \vec{\beta}, \sigma \sim \dnorm(\alpha + \mat{X} \vec{\beta}, \sigma^2)
 \]</span> The <span class="math inline">\(g\)</span>-prior is a non-informative, data-dependent prior, <span class="math display">\[
-\vec{\beta} \sim N(0, \sigma^2 g \mat{X}\T \mat{X})
+\vec{\beta} \sim \dnorm(0, \sigma^2 g \mat{X}\T \mat{X})
 \]</span> It depends on only a single parameter <span class="math inline">\(g\)</span>. The prior for <span class="math inline">\(g\)</span> must be proper. Some common choices include, <span class="math display">\[
 \begin{aligned}
 g &amp;= n \\

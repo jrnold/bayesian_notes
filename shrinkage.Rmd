@@ -12,7 +12,7 @@ With shrinkage, the priors are used to produce estimates *different* than the ML
 Consider the single output linear Gaussian regression model with several input variables, given by
 $$
 \begin{aligned}[t]
-y_i \sim N(\vec{x}_i' \vec{\beta}, \sigma^2)
+y_i \sim \dnorm(\vec{x}_i' \vec{\beta}, \sigma^2)
 \end{aligned}
 $$
 where $\vec{x}$ is a $k$-vector of predictors, and $\vec{\beta}$ are the coefficients.
@@ -20,12 +20,12 @@ where $\vec{x}$ is a $k$-vector of predictors, and $\vec{\beta}$ are the coeffic
 What priors do we put on $\beta$? 
 
 - **Improproper priors:** $\beta_k \propto 1$ This produces the equivalent of MLE estimates.
-- **Non-informative priors:** These are priors which have such wide variance that they have little influence on the posterior, e.g. $\beta_k \sim N(0, 1e6)$. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.
+- **Non-informative priors:** These are priors which have such wide variance that they have little influence on the posterior, e.g. $\beta_k \sim \dnorm(0, 1e6)$. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.
 
 **Shrinkage priors** have a couple characteristics
 
 - they push $\beta_k \to 0$
-- while in the other cases, the scale of the prior on $\beta$ is fixed, in shrinkage priors there is often a hyperprior on it. E.g. $\beta_k \sim N(0, \tau)$, where $\tau$ is also a parameter to be estimated.
+- while in the other cases, the scale of the prior on $\beta$ is fixed, in shrinkage priors there is often a hyperprior on it. E.g. $\beta_k \sim \dnorm(0, \tau)$, where $\tau$ is also a parameter to be estimated.
 
 ## Penalized Regression
 
@@ -102,11 +102,11 @@ $$
 $$
 The first regression term is the produce of normal distributions (sum of their log probabilities),
 $$
-y_i \sim N(\vec{x}_i\T \vec{\beta}, \sigma) 
+y_i \sim \dnorm(\vec{x}_i\T \vec{\beta}, \sigma) 
 $$
 The second term, $\lambda \sum_{k} \beta_k^2$ is also the sum of the log of densities of i.i.d. normal densities, with mean 0, and scale $\tau = 1 / 2 \lambda$,
 $$
-\beta_k \sim N(0, \tau^2)
+\beta_k \sim \dnorm(0, \tau^2)
 $$
 
 The only difference in the LASSO is the penalty term, which uses an absolute value penalty for $\beta_k$.
@@ -168,7 +168,7 @@ If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPol
 In linear regression
 $$
 \begin{aligned}[t]
-p(\beta | \Lambda, \tau, \sigma^2, D) &= N(\beta, \bar{\beta}, \Sigma) \\
+p(\beta | \Lambda, \tau, \sigma^2, D) &= \dnorm(\beta, \bar{\beta}, \Sigma) \\
 \bar{\beta} &= \tau^2 \Lambda (\tau^2 \Lambda + \sigma^2 (X'X)^{-1})^{-1} \hat{\beta} \\
 \Sigma &= (\tau^{-2} \Lambda^{-1} + \frac{1}{\sigma^2} X'X)^{-1}
 \end{aligned}
@@ -625,7 +625,7 @@ for $i = 1, \dots, n$, where $\vec{x}$ is the $K$ dimensional vector of predicto
 Suppose a prior
 $$
 \begin{aligned}[t]
-\beta_j | \lambda_j, \tau &\sim N(0, \lambda_j^2 \tau^2)
+\beta_j | \lambda_j, \tau &\sim \dnorm(0, \lambda_j^2 \tau^2)
 \end{aligned}
 $$
 The $\lambda_j$ are local scales - it allows some weights to escape the shrinkage.
@@ -874,11 +874,11 @@ There are several R packages that implement BMA. See @AminiShahramParmeterChrist
 An alternative prior is the Zellner's g-prior.
 Consider the regression,
 $$
-y_i | \alpha, \vec{\beta}, \sigma \sim N(\alpha + \mat{X} \vec{\beta}, \sigma^2)
+y_i | \alpha, \vec{\beta}, \sigma \sim \dnorm(\alpha + \mat{X} \vec{\beta}, \sigma^2)
 $$
 The $g$-prior is a non-informative, data-dependent prior,
 $$
-\vec{\beta} \sim N(0, \sigma^2 g \mat{X}\T \mat{X})
+\vec{\beta} \sim \dnorm(0, \sigma^2 g \mat{X}\T \mat{X})
 $$
 It depends on only a single parameter $g$.
 The prior for $g$ must be proper. Some common choices include,

@@ -432,6 +432,7 @@ bball1970
 <p>Let <span class="math inline">\(y_i\)</span> be the number of hits in the first 45 at bats for player <span class="math inline">\(i\)</span>, <span class="math display">\[
 \begin{aligned}[t]
 y_i &amp; \sim \dbin(45, \mu_i),
+\end{aligned}
 \]</span> where <span class="math inline">\(\mu_i \in (0, 1)\)</span> is the player-specific batting average. Priors will be placed on the log-odds parameter, <span class="math inline">\(\eta \in \R\)</span>, <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;\sim \frac{1}{1 + \exp(-\eta_i)} . \\
@@ -443,7 +444,7 @@ y_i &amp; \sim \dbin(45, \mu_i),
 \eta_i = \eta .
 \]</span> The common (log-odds) batting average is given a weakly informative prior, <span class="math display">\[
 \eta \sim \dnorm(0, 2.5)
-\]</span> On the log odds scale, this places 95% of the probability mass between NaN and NaN on the proportion scale.</p></li>
+\]</span> On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.</p></li>
 <li><p><strong>Non-pooled:</strong> Each players (log-odds) batting average is independent, with each assigned a separate weak prior. <span class="math display">\[
 \begin{aligned}[t]
 \eta_i &amp;\sim \dnorm(0, 2.5)
@@ -813,8 +814,12 @@ generated quantities {
 <p><img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Extensions:</p>
 <ul>
-<li>The</li>
-<li>Suppose you think that</li>
+<li>Redo this analysis with the <a href="https://www.rdocumentation.org/packages/rstanarm/topics/bball2006">rstanarm</a> dataset with hits and at-bats for the entire 2006 AL season of MLB.</li>
+<li>Use a beta distribution for the prior of <span class="math inline">\(\mu_i\)</span>. How would you specify the prior beta distribution so that it is uniformative?</li>
+<li>If you used the beta distribution, how would you specify the beta distribution as a function of the mean?</li>
+<li>The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribuiton.</li>
+<li>There may be some truly exceptional players. Model this by replacing the normal prior for <span class="math inline">\(\eta\)</span> with a wide tailed distribution.</li>
+<li>The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.</li>
 </ul>
 <p>References:</p>
 <ul>
@@ -837,23 +842,23 @@ generated quantities {
 <h3><span class="header-section-number">14.2.1</span> Group Varying Intercepts</h3>
 <p>This is a regression, with a different intercept per group: <span class="math display">\[
 \begin{aligned}[t]
-y_i &amp;\sim N(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
+y_i &amp;\sim \dnorm(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
 \end{aligned}
 \]</span> The second level model of the group intercepts models them as distributed around a common mean, <span class="math inline">\(\mu_\alpha\)</span>, with error: <span class="math display">\[
 \alpha_j = \mu_\alpha + \eta_j \\
-\eta_j \sim N(0, \sigma_\alpha^2)
+\eta_j \sim \dnorm(0, \sigma_\alpha^2)
 \]</span></p>
 </div>
 <div id="separate-local-regressions" class="section level3">
 <h3><span class="header-section-number">14.2.2</span> Separate local regressions</h3>
 <p>For each group, run a regression, <span class="math display">\[
 \begin{aligned}[t]
-y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) &amp; \text{for all $i$ in group $j$}
+y_i \sim \dnorm(\alpha_j + \beta x_i, \sigma_y^2) &amp; \text{for all $i$ in group $j$}
 \end{aligned}
 \]</span> And now model the group-level means, <span class="math display">\[
 \begin{aligned}[t]
-\alpha &amp;= \gamma u_j + \eta_j \\
-\eta_j &amp;\sim N(0, \sigma^2_\alpha)
+\alpha &amp;= \dgamma u_j + \eta_j \\
+\eta_j &amp;\sim \dnorm(0, \sigma^2_\alpha)
 \end{aligned}
 \]</span></p>
 </div>
@@ -862,8 +867,8 @@ y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) &amp; \text{for all $i$ in group $j
 <p>Suppose that <span class="math inline">\(X\)</span> includes all predictors and <span class="math inline">\(J\)</span> indicators for the <span class="math inline">\(J\)</span> groups.</p>
 <p>We could also put the constant in the second distribution. The coefficients <span class="math inline">\(\beta\)</span> for the coefficients on the group indicators are centered around a <span class="math inline">\(\mu_\alpha\)</span>. <span class="math display">\[
 \begin{aligned}[t]
-y_i &amp;\sim N(x_i \beta, \sigma_y^2) \\
-\beta_j &amp;\sim N(\mu_{\alpha}, \sigma_{\alpha}^2)
+y_i &amp;\sim \dnorm(x_i \beta, \sigma_y^2) \\
+\beta_j &amp;\sim \dnorm(\mu_{\alpha}, \sigma_{\alpha}^2)
 \end{aligned}
 \]</span></p>
 </div>
@@ -871,8 +876,8 @@ y_i &amp;\sim N(x_i \beta, \sigma_y^2) \\
 <h3><span class="header-section-number">14.2.4</span> Regression with multiple error terms</h3>
 <p><span class="math display">\[
 \begin{aligned}[t]
-y_i &amp;\sim N(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
-\eta_j &amp;\sim N(0, \sigma_{\alpha}^2)
+y_i &amp;\sim \dnorm(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
+\eta_j &amp;\sim \dnorm(0, \sigma_{\alpha}^2)
 \end{aligned}
 \]</span></p>
 </div>
@@ -880,7 +885,7 @@ y_i &amp;\sim N(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
 <h3><span class="header-section-number">14.2.5</span> Regresion with correlated errors</h3>
 <p><span class="math display">\[
 \begin{aligned}[t]
-y_i = X_i \beta + \omega_i, &amp; \omega \sim N(0, \Sigma)
+y_i &amp;= X_i \beta + \omega_i, &amp; \omega &amp;\sim \dnorm(0, \Sigma)
 \end{aligned}
 \]</span> The errors have an <span class="math inline">\(n \times n\)</span> covariance matrix, and are equivalent to the sum of individual and group errors. <span class="math display">\[
 \omega_i = \eta_{j[i]} + \epsilon_i

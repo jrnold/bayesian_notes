@@ -55,6 +55,7 @@ Let $y_i$ be the number of hits in the first 45 at bats for player $i$,
 $$
 \begin{aligned}[t]
 y_i & \sim \dbin(45, \mu_i),
+\end{aligned}
 $$
 where $\mu_i \in (0, 1)$ is the player-specific batting average.
 Priors will be placed on the log-odds parameter, $\eta \in \R$,
@@ -75,7 +76,7 @@ This example considers three ways of modeling $\mu_i$:
     $$
     \eta \sim \dnorm(0, 2.5)
     $$
-    On the log odds scale, this places 95% of the probability mass between NaN and NaN on the proportion scale.
+    On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.
     
 2. **Non-pooled:** Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
     $$
@@ -516,8 +517,12 @@ select(bball1970,
 
 Extensions:
 
-- The 
-- Suppose you think that
+- Redo this analysis with the [rstanarm](https://www.rdocumentation.org/packages/rstanarm/topics/bball2006) dataset with hits and at-bats for the entire 2006 AL season of MLB.
+- Use a beta distribution for the prior of $\mu_i$. How would you specify the prior beta distribution so that it is uniformative?
+- If you used the beta distribution, how would you specify the beta distribution as a function of the mean?
+- The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribuiton.
+- There may be some truly exceptional players. Model this by replacing the normal prior for $\eta$ with a wide tailed distribution.
+- The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.
 
 
 References:
@@ -540,13 +545,13 @@ References:
 This is a regression, with a different intercept per group:
 $$
 \begin{aligned}[t]
-y_i &\sim N(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
+y_i &\sim \dnorm(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
 \end{aligned}
 $$
 The second level model of the group intercepts models them as distributed around a common mean, $\mu_\alpha$, with error:
 $$
 \alpha_j = \mu_\alpha + \eta_j \\
-\eta_j \sim N(0, \sigma_\alpha^2)
+\eta_j \sim \dnorm(0, \sigma_\alpha^2)
 $$
 
 ### Separate local regressions
@@ -554,14 +559,14 @@ $$
 For each group, run a regression,
 $$
 \begin{aligned}[t]
-y_i \sim N(\alpha_j + \beta x_i, \sigma_y^2) & \text{for all $i$ in group $j$}
+y_i \sim \dnorm(\alpha_j + \beta x_i, \sigma_y^2) & \text{for all $i$ in group $j$}
 \end{aligned}
 $$
 And now model the group-level means,
 $$
 \begin{aligned}[t]
-\alpha &= \gamma u_j + \eta_j \\
-\eta_j &\sim N(0, \sigma^2_\alpha)
+\alpha &= \dgamma u_j + \eta_j \\
+\eta_j &\sim \dnorm(0, \sigma^2_\alpha)
 \end{aligned}
 $$
 
@@ -573,8 +578,8 @@ Suppose that $X$ includes all predictors and $J$ indicators for the $J$ groups.
 We could also put the constant in the second distribution. The coefficients $\beta$ for the coefficients on the group indicators are centered around a $\mu_\alpha$.
 $$
 \begin{aligned}[t]
-y_i &\sim N(x_i \beta, \sigma_y^2) \\
-\beta_j &\sim N(\mu_{\alpha}, \sigma_{\alpha}^2)
+y_i &\sim \dnorm(x_i \beta, \sigma_y^2) \\
+\beta_j &\sim \dnorm(\mu_{\alpha}, \sigma_{\alpha}^2)
 \end{aligned}
 $$
 
@@ -582,8 +587,8 @@ $$
 
 $$
 \begin{aligned}[t]
-y_i &\sim N(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
-\eta_j &\sim N(0, \sigma_{\alpha}^2)
+y_i &\sim \dnorm(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
+\eta_j &\sim \dnorm(0, \sigma_{\alpha}^2)
 \end{aligned}
 $$
 
@@ -591,7 +596,7 @@ $$
 
 $$
 \begin{aligned}[t]
-y_i = X_i \beta + \omega_i, & \omega \sim N(0, \Sigma)
+y_i &= X_i \beta + \omega_i, & \omega &\sim \dnorm(0, \Sigma)
 \end{aligned}
 $$
 The errors have an $n \times n$ covariance matrix, and are
