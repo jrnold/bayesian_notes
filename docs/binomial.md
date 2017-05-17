@@ -197,7 +197,7 @@ The general solution is to penalize the likelihood, which in a Bayesian context 
 
 Using a weakly informatin prior such as those suggested by is sufficient to solve separation,
 $$
-\beta_k \sim N(0, 2.5)
+\beta_k \sim \dnorm(0, 2.5)
 $$
 where all the columns of $\code{x}$ are assumed to mean zero, unit variance (or otherwise standardized).
 The half-Cauchy prior, $C^{+}(0, 2.5)$, suggested in @GelmanJakulinPittauEtAl2008a is insufficiently informative to  to deal with separation [@GhoshLiMitra2015a], but finite-variance weakly informative Student-t or Normal distributions will work.
@@ -539,12 +539,12 @@ This should hold more generally will unbalanaced classes; in some sense, the amo
 
 The *prior correction* ntoes that
 $$
-\pi_i = \frac{1}{1 + \exp(-X \beta)}
+\pi_i = \frac{1}{1 + \exp(-\mat{X} \vec{beta})}
 $$
 
 The unbalanced sample only affects the intercept. If $\hat\beta_0$ is the intercept from the MLE, the case-control corrected intercept $\tilde{\beta}$ is,
 $$
-\tilde\beta_0^* = \hat\beta_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
+\tilde{\vec{\beta}}_0^* = \hat{\vec{\beta}}_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
 $$
 In an MLE setting, this can be applied after estimation, but used in any predicted values.
 In a Bayesian setting, this correct should be applied within the model by adding the offset to the estimation.

@@ -549,7 +549,7 @@ generated quantities {
   }
 }</code>
 </pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling.stan&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling-t.stan&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]]</code></pre></div>
 <pre>
   <code class="stan">/* Binomial Model
@@ -811,6 +811,11 @@ generated quantities {
 <span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>sample, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
 <p><img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Extensions:</p>
+<ul>
+<li>The</li>
+<li>Suppose you think that</li>
+</ul>
 <p>References:</p>
 <ul>
 <li>Albert, Jim. <a href="https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/">Revisiting Efron and Morris’s Baseball Study</a> Feb 15, 2016</li>

@@ -524,7 +524,7 @@ generated quantities {
 <p>This is related and similar to identification in MLE and multicollinearity in OLS.</p>
 <p>The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.</p>
 <p>Using a weakly informatin prior such as those suggested by is sufficient to solve separation, <span class="math display">\[
-\beta_k \sim N(0, 2.5)
+\beta_k \sim \dnorm(0, 2.5)
 \]</span> where all the columns of <span class="math inline">\(\code{x}\)</span> are assumed to mean zero, unit variance (or otherwise standardized). The half-Cauchy prior, <span class="math inline">\(C^{+}(0, 2.5)\)</span>, suggested in <span class="citation">Gelman et al. (2008)</span> is insufficiently informative to to deal with separation <span class="citation">(Ghosh, Li, and Mitra 2015)</span>, but finite-variance weakly informative Student-t or Normal distributions will work.</p>
 <p>These are the priors suggested by <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">Stan</a> and used by default in rstanarm <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
 <p><span class="citation">Rainey (2016a)</span> provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values. Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).</p>
@@ -840,10 +840,10 @@ fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span cla
 <li>Weighting observations</li>
 </ol>
 <p>The <em>prior correction</em> ntoes that <span class="math display">\[
-\pi_i = \frac{1}{1 + \exp(-X \beta)}
+\pi_i = \frac{1}{1 + \exp(-\mat{X} \vec{beta})}
 \]</span></p>
 <p>The unbalanced sample only affects the intercept. If <span class="math inline">\(\hat\beta_0\)</span> is the intercept from the MLE, the case-control corrected intercept <span class="math inline">\(\tilde{\beta}\)</span> is, <span class="math display">\[
-\tilde\beta_0^* = \hat\beta_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
+\tilde{\vec{\beta}}_0^* = \hat{\vec{\beta}}_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
 \]</span> In an MLE setting, this can be applied after estimation, but used in any predicted values. In a Bayesian setting, this correct should be applied within the model by adding the offset to the estimation.</p>
 <p>In a Stan model, this could be implemented by directly incrementing these values</p>
 <pre><code>data {

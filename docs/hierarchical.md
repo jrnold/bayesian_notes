@@ -211,7 +211,7 @@ generated quantities {
 
 
 ```r
-models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
+models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
 ```
 
 ```r
@@ -513,6 +513,12 @@ select(bball1970,
 ```
 
 <img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" />
+
+Extensions:
+
+- The 
+- Suppose you think that
+
 
 References:
 

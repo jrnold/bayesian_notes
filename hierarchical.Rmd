@@ -101,7 +101,7 @@ models[["pool"]]
 ```
 
 ```{r results='hide'}
-models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
+models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
 ```
 ```{r}
 models[["partial"]]
@@ -191,6 +191,12 @@ select(bball1970,
   facet_wrap(~ sample, ncol = 1) +
   theme(legend.position = "bottom")
 ```
+
+Extensions:
+
+- The 
+- Suppose you think that
+
 
 References:
 
