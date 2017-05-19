@@ -531,7 +531,6 @@ generated quantities {
   # hardcoded marginal effectx
   vector[M] dydx;
   dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;
-
 }</code>
 </pre>
 <p>The function <a href="https://www.rdocumentation.org/packages/rstan/topics/extract">rstan</a> extracts parameters from the <a href="https://www.rdocumentation.org/packages/rstan/topics/stanfit">rstan</a> object as a list with an element for each parameter.</p>

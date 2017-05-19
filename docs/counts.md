@@ -142,8 +142,8 @@ fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 #> 
 #> SAMPLING FOR MODEL 'poisson1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 4.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
+#> Gradient evaluation took 3.9e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -160,15 +160,15 @@ fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.09828 seconds (Warm-up)
-#>                0.095359 seconds (Sampling)
-#>                0.193639 seconds (Total)
+#>  Elapsed Time: 0.129051 seconds (Warm-up)
+#>                0.100602 seconds (Sampling)
+#>                0.229653 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'poisson1' NOW (CHAIN 2).
 #> 
-#> Gradient evaluation took 1.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Gradient evaluation took 1.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -185,15 +185,15 @@ fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.101347 seconds (Warm-up)
-#>                0.103472 seconds (Sampling)
-#>                0.204819 seconds (Total)
+#>  Elapsed Time: 0.11001 seconds (Warm-up)
+#>                0.114903 seconds (Sampling)
+#>                0.224913 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'poisson1' NOW (CHAIN 3).
 #> 
-#> Gradient evaluation took 1.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#> Gradient evaluation took 2.8e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.28 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -210,9 +210,9 @@ fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.101324 seconds (Warm-up)
-#>                0.107138 seconds (Sampling)
-#>                0.208462 seconds (Total)
+#>  Elapsed Time: 0.122137 seconds (Warm-up)
+#>                0.115765 seconds (Sampling)
+#>                0.237902 seconds (Total)
 #> 
 #> 
 #> SAMPLING FOR MODEL 'poisson1' NOW (CHAIN 4).
@@ -235,9 +235,9 @@ fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
 #> Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Iteration: 2000 / 2000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 0.10045 seconds (Warm-up)
-#>                0.093848 seconds (Sampling)
-#>                0.194298 seconds (Total)
+#>  Elapsed Time: 0.139709 seconds (Warm-up)
+#>                0.123741 seconds (Sampling)
+#>                0.26345 seconds (Total)
 ```
 
 
@@ -303,14 +303,14 @@ fit_sanction_nb <- sampling(mod_negbin1, data = sanction_data, control = list(ad
 #> 
 #> SAMPLING FOR MODEL 'negbin1' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 7.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.76 seconds.
+#> Gradient evaluation took 7.1e-05 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0.71 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> [1] "Error in sampler$call_sampler(args_list[[i]]) : "                                                                                                    
-#> [2] "  Exception thrown at line 48: neg_binomial_2_rng: Random number that came from gamma distribution is 4.11693e+10, but must be less than 1.07374e+09"
+#> [1] "Error in sampler$call_sampler(args_list[[i]]) : "                                                                                                        
+#> [2] "  Exception thrown at line 48: neg_binomial_2_log_rng: Random number that came from gamma distribution is 4.11693e+10, but must be less than 1.07374e+09"
 #> error occurred during calling the sampler; sampling not done
 ```
 

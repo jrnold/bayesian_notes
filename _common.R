@@ -5,6 +5,7 @@ suppressPackageStartupMessages({
   library("bayesplot")
   library("loo")
   library("tidyverse")
+  library("forcats")
   library("stringr")
   library("rubbish")
   library("bayz")
@@ -26,6 +27,9 @@ knitr::opts_chunk$set(
 
 options(dplyr.print_min = 6,
         dplyr.print_max = 6)
+
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 
 # Helpful Documentation functions
 rpkg_url <- function(pkg) {

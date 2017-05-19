@@ -494,7 +494,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = a + X * b;
+  mu = X * b;
 }
 model {
   // priors
@@ -506,8 +506,11 @@ model {
 generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
+  // log-likelihood posterior
+  vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/lm.stan&quot;</span>)</code></pre></div>
@@ -550,8 +553,11 @@ model {
 generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
+  // log-likelihood posterior
+  vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }</code>
 </pre>

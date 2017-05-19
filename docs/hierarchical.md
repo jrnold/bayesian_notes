@@ -250,7 +250,7 @@ parameters {
 model {
   alpha ~ normal(0., 10.);
   tau ~ normal(0., 1);
-  eta ~ normal(alpha, tau);
+  eta ~ student_t(4., alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {
@@ -273,143 +273,13 @@ Sample from all three models a
 fits <- map(models, sampling, data = bball1970_data,
             refresh = -1) %>%
   set_names(names(models))
-#> 
-#> Gradient evaluation took 1.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.081766 seconds (Warm-up)
-#>                0.063807 seconds (Sampling)
-#>                0.145573 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 6e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.078533 seconds (Warm-up)
-#>                0.063834 seconds (Sampling)
-#>                0.142367 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 7e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.080248 seconds (Warm-up)
-#>                0.063807 seconds (Sampling)
-#>                0.144055 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 6e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.081984 seconds (Warm-up)
-#>                0.064391 seconds (Sampling)
-#>                0.146375 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 1.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.030174 seconds (Warm-up)
-#>                0.030791 seconds (Sampling)
-#>                0.060965 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 4e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.03112 seconds (Warm-up)
-#>                0.02919 seconds (Sampling)
-#>                0.06031 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 3e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.030345 seconds (Warm-up)
-#>                0.03132 seconds (Sampling)
-#>                0.061665 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 5e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.031033 seconds (Warm-up)
-#>                0.029282 seconds (Sampling)
-#>                0.060315 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 1.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.115527 seconds (Warm-up)
-#>                0.168691 seconds (Sampling)
-#>                0.284218 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 8e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.108639 seconds (Warm-up)
-#>                0.107101 seconds (Sampling)
-#>                0.21574 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 2
-#>                                                                                  count
-#> Exception thrown at line 31: normal_lpdf: Scale parameter is 0, but must be > 0!     1
+#> The following numerical problems occurred the indicated number of times on chain 1
+#>                                                                                     count
+#> Exception thrown at line 31: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
 #> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
 #> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
 #> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> Gradient evaluation took 9e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.154264 seconds (Warm-up)
-#>                0.145727 seconds (Sampling)
-#>                0.299991 seconds (Total)
-#> 
-#> 
-#> Gradient evaluation took 8e-06 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> 
-#>  Elapsed Time: 0.130128 seconds (Warm-up)
-#>                0.077703 seconds (Sampling)
-#>                0.207831 seconds (Total)
-#> Warning: There were 387 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> Warning: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
 #> http://mc-stan.org/misc/warnings.html#bfmi-low
@@ -453,11 +323,12 @@ We can plot the actual batting averages (`BatAvg1` and `BatAvg2`) and the model 
 
 ```r
 select(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) %>% 
+       Player, nopool, partial, pool, BatAvg1, BatAvg2) %>%
   mutate(Player = factor(Player, levels = Player)) %>%
   gather(variable, value, -Player) %>%
   ggplot(aes(y = Player, x = value, colour = variable)) +
-  geom_point()
+  geom_point() +
+  labs(x = expression(mu), y = "")
 ```
 
 <img src="hierarchical_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" />
@@ -478,16 +349,12 @@ map2_df(names(fits), fits,
              loo = loo$elpd_loo / bball1970_data$N,
              ll_out = mean(log(colMeans(exp(ll_new)))))
      })
-#> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-
-#> diagnostic') for details.
-#> Warning: Some Pareto k diagnostic values are slightly high. See
-#> help('pareto-k-diagnostic') for details.
-#> # A tibble: 3 × 3
+#> # A tibble: 3 x 3
 #>     model   loo ll_out
 #>     <chr> <dbl>  <dbl>
 #> 1  nopool -3.20  -4.60
 #> 2    pool -2.58  -4.06
-#> 3 partial -2.59  -4.02
+#> 3 partial -2.59  -4.01
 ```
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.

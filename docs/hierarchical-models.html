@@ -583,7 +583,7 @@ parameters {
 model {
   alpha ~ normal(0., 10.);
   tau ~ normal(0., 1);
-  eta ~ normal(alpha, tau);
+  eta ~ student_t(4., alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {
@@ -603,143 +603,13 @@ generated quantities {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fits &lt;-<span class="st"> </span><span class="kw">map</span>(models, sampling, <span class="dt">data =</span> bball1970_data,
             <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">set_names</span>(<span class="kw">names</span>(models))
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.4e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.081766 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.063807 seconds (Sampling)</span>
-<span class="co">#&gt;                0.145573 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 6e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.078533 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.063834 seconds (Sampling)</span>
-<span class="co">#&gt;                0.142367 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 7e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.080248 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.063807 seconds (Sampling)</span>
-<span class="co">#&gt;                0.144055 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 6e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.081984 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.064391 seconds (Sampling)</span>
-<span class="co">#&gt;                0.146375 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.1e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.030174 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.030791 seconds (Sampling)</span>
-<span class="co">#&gt;                0.060965 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 4e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.03112 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.02919 seconds (Sampling)</span>
-<span class="co">#&gt;                0.06031 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 3e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.030345 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.03132 seconds (Sampling)</span>
-<span class="co">#&gt;                0.061665 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 5e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.031033 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.029282 seconds (Sampling)</span>
-<span class="co">#&gt;                0.060315 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 1.5e-05 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.115527 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.168691 seconds (Sampling)</span>
-<span class="co">#&gt;                0.284218 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 8e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.108639 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.107101 seconds (Sampling)</span>
-<span class="co">#&gt;                0.21574 seconds (Total)</span>
-<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span>
-<span class="co">#&gt;                                                                                  count</span>
-<span class="co">#&gt; Exception thrown at line 31: normal_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
+<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
+<span class="co">#&gt;                                                                                     count</span>
+<span class="co">#&gt; Exception thrown at line 31: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
 <span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
 <span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
 <span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 9e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.154264 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.145727 seconds (Sampling)</span>
-<span class="co">#&gt;                0.299991 seconds (Total)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Gradient evaluation took 8e-06 seconds</span>
-<span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.</span>
-<span class="co">#&gt; Adjust your expectations accordingly!</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Elapsed Time: 0.130128 seconds (Warm-up)</span>
-<span class="co">#&gt;                0.077703 seconds (Sampling)</span>
-<span class="co">#&gt;                0.207831 seconds (Total)</span>
-<span class="co">#&gt; Warning: There were 387 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
+<span class="co">#&gt; Warning: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
 <span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="co">#&gt; Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See</span>
 <span class="co">#&gt; http://mc-stan.org/misc/warnings.html#bfmi-low</span>
@@ -771,11 +641,12 @@ generated quantities {
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="kw">expression</span>(mu))</code></pre></div>
 <p><img src="hierarchical_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /> We can plot the actual batting averages (<code>BatAvg1</code> and <code>BatAvg2</code>) and the model estimates:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span><span class="st"> </span>
+       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Player, <span class="dt">x =</span> value, <span class="dt">colour =</span> variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="kw">expression</span>(mu), <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="hierarchical_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /> The estimates of the no-pooling model is almost exactly the same as <code>BatAvg1</code>. The out-of-sample batting averages <code>BatAvg2</code> show regression to the mean.</p>
 <p>For these models, compare the overall out-of-sample performance by calculating the actual average out-of-sample log-pointwise predictive density (lppd), and the expected lppd using LOO-PSIS. The LOO-PSIS estimates of the out-of-sample lppd are optimistic. However, they still show the pooling and partial estimates as superior to the no-pooling estimates. The actual out-of-sample average lppd for the partial pooled model is the best fitting.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, 
@@ -786,16 +657,12 @@ generated quantities {
              <span class="dt">loo =</span> loo<span class="op">$</span>elpd_loo <span class="op">/</span><span class="st"> </span>bball1970_data<span class="op">$</span>N,
              <span class="dt">ll_out =</span> <span class="kw">mean</span>(<span class="kw">log</span>(<span class="kw">colMeans</span>(<span class="kw">exp</span>(ll_new)))))
      })
-<span class="co">#&gt; Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-</span>
-<span class="co">#&gt; diagnostic&#39;) for details.</span>
-<span class="co">#&gt; Warning: Some Pareto k diagnostic values are slightly high. See</span>
-<span class="co">#&gt; help(&#39;pareto-k-diagnostic&#39;) for details.</span>
-<span class="co">#&gt; # A tibble: 3 × 3</span>
+<span class="co">#&gt; # A tibble: 3 x 3</span>
 <span class="co">#&gt;     model   loo ll_out</span>
 <span class="co">#&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
 <span class="co">#&gt; 1  nopool -3.20  -4.60</span>
 <span class="co">#&gt; 2    pool -2.58  -4.06</span>
-<span class="co">#&gt; 3 partial -2.59  -4.02</span></code></pre></div>
+<span class="co">#&gt; 3 partial -2.59  -4.01</span></code></pre></div>
 <p>To see why this is the case, plot the average errors for each observation in- and out-of-sample. In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats—this is regression to the mean. In sample, the partially pooling model shrinks the estimates towards the mean and reducing error. Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
        Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span><span class="st"> </span>
