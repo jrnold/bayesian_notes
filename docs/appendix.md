@@ -7,6 +7,18 @@ library("tidyverse")
 library("stringr")
 ```
 
+## Parameters
+
+Category                Description
+----------------------- -----------------------------------------------
+modeled data            Data, assigned distribution
+unmodeled data          Data not given a distribution
+modeled parameters      Parameters with an informative prior distribution
+unmodeled parameters    Parameters with non-informative prior distribution
+derived quantities      Variables defined deterministicically
+
+See @GelmanHill2007a [p. 366]
+
 
 ## Miscellaneous Mathematical Background
 

@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="shrinkage-regularization.html">
-<link rel="next" href="multilevel-models.html">
+<link rel="prev" href="notes.html">
+
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -394,326 +394,292 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hierarchical-models" class="section level1">
-<h1><span class="header-section-number">14</span> Hierarchical Models</h1>
-<ul>
-<li><em>Hierarchical models:</em> often groups of parameters, <span class="math inline">\(\{\theta_1, \dots, \theta_J\}\)</span>, are related.</li>
-<li>E.g. countries, states, counties, years, etc. Even the regression coefficients, <span class="math inline">\(\beta_1, \dots, \beta_k\)</span> seen the in the <a href="shrinkage-regularization.html#shrinkage-regularization">Shrinkage and Regularization</a> chapter.</li>
-<li>We can treat those <span class="math inline">\(\theta_j\)</span> as drawn from a <em>population distribution</em>, <span class="math inline">\(\theta_j \sim p(\theta)\)</span>.</li>
-<li>The prior distribution <span class="math inline">\(p(\theta)\)</span> is called a <em>hyperprior</em> and its parameters are <em>hyperparameters</em></li>
-</ul>
-<p><em>Exchangeability:</em></p>
-<ul>
-<li>parameters <span class="math inline">\((\theta_1, \dots, \theta_J)\)</span> are <em>exchangeable</em> if <span class="math inline">\(p(\theta_1, \dots, \theta_J)\)</span> don’t depend on the indexes.</li>
-<li>i.i.d. models are a special case of exchangeability.</li>
-</ul>
-<div id="example-baseball-hits" class="section level2">
-<h2><span class="header-section-number">14.1</span> Example: Baseball Hits</h2>
-<p><span class="citation">Efron and Morris (1975)</span> analyzed data from 18 players in the 1970 season. The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.</p>
-<p>The following example is based on <span class="citation">Carpenter, Gabry, and Goodrich (2017)</span> and the <strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong> vignette <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/pooling.html">Hierarchical Partial Pooling for Repeated Binary Trials</a>.</p>
-<p>The hitting data used in <span class="citation">Efron and Morris (1975)</span> is included in <strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong> as <a href="https://www.rdocumentation.org/packages/rstanarm/topics/bball1970">rstanarm</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;bball1970&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;rstanarm&quot;</span>)
-bball1970 &lt;-
-<span class="st">  </span><span class="kw">mutate</span>(bball1970,
-         <span class="dt">BatAvg1 =</span> Hits <span class="op">/</span><span class="st"> </span>AB,
-         <span class="dt">BatAvg2 =</span> RemainingHits <span class="op">/</span><span class="st"> </span>RemainingAB)
-bball1970
-<span class="co">#&gt;        Player AB Hits RemainingAB RemainingHits BatAvg1 BatAvg2</span>
-<span class="co">#&gt; 1    Clemente 45   18         367           127   0.400   0.346</span>
-<span class="co">#&gt; 2    Robinson 45   17         426           127   0.378   0.298</span>
-<span class="co">#&gt; 3      Howard 45   16         521           144   0.356   0.276</span>
-<span class="co">#&gt; 4   Johnstone 45   15         275            61   0.333   0.222</span>
-<span class="co">#&gt; 5       Berry 45   14         418           114   0.311   0.273</span>
-<span class="co">#&gt; 6     Spencer 45   14         466           126   0.311   0.270</span>
-<span class="co">#&gt; 7   Kessinger 45   13         586           155   0.289   0.265</span>
-<span class="co">#&gt; 8    Alvarado 45   12         138            29   0.267   0.210</span>
-<span class="co">#&gt; 9       Santo 45   11         510           137   0.244   0.269</span>
-<span class="co">#&gt; 10    Swaboda 45   11         200            46   0.244   0.230</span>
-<span class="co">#&gt; 11 Petrocelli 45   10         538           142   0.222   0.264</span>
-<span class="co">#&gt; 12  Rodriguez 45   10         186            42   0.222   0.226</span>
-<span class="co">#&gt; 13      Scott 45   10         435           132   0.222   0.303</span>
-<span class="co">#&gt; 14      Unser 45   10         277            73   0.222   0.264</span>
-<span class="co">#&gt; 15   Williams 45   10         591           195   0.222   0.330</span>
-<span class="co">#&gt; 16 Campaneris 45    9         558           159   0.200   0.285</span>
-<span class="co">#&gt; 17     Munson 45    8         408           129   0.178   0.316</span>
-<span class="co">#&gt; 18      Alvis 45    7          70            14   0.156   0.200</span></code></pre></div>
-<p>Let <span class="math inline">\(y_i\)</span> be the number of hits in the first 45 at bats for player <span class="math inline">\(i\)</span>, <span class="math display">\[
-\begin{aligned}[t]
-y_i &amp; \sim \dbin(45, \mu_i),
-\end{aligned}
-\]</span> where <span class="math inline">\(\mu_i \in (0, 1)\)</span> is the player-specific batting average. Priors will be placed on the log-odds parameter, <span class="math inline">\(\eta \in \R\)</span>, <span class="math display">\[
-\begin{aligned}[t]
-\mu_i &amp;\sim \frac{1}{1 + \exp(-\eta_i)} . \\
-\end{aligned}
-\]</span></p>
-<p>This example considers three ways of modeling <span class="math inline">\(\mu_i\)</span>:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Complete Pooling:</strong> All players have the same batting average parameter. <span class="math display">\[
-\eta_i = \eta .
-\]</span> The common (log-odds) batting average is given a weakly informative prior, <span class="math display">\[
-\eta \sim \dnorm(0, 2.5)
-\]</span> On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.</p></li>
-<li><p><strong>Non-pooled:</strong> Each players (log-odds) batting average is independent, with each assigned a separate weak prior. <span class="math display">\[
-\begin{aligned}[t]
-\eta_i &amp;\sim \dnorm(0, 2.5)
-\end{aligned}
-\]</span></p></li>
-<li><p><strong>Partial-pooling:</strong> Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution. <span class="math display">\[
-\begin{aligned}[t]
-\eta_i &amp;\sim \dnorm(0, \tau) \\
-\tau &amp;\sim \dnorm(0, 1)
-\end{aligned}
-\]</span></p></li>
-</ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bball1970_data &lt;-<span class="st"> </span><span class="kw">list</span>(
-  <span class="dt">N =</span> <span class="kw">nrow</span>(bball1970),
-  <span class="dt">k =</span> bball1970<span class="op">$</span>AB,
-  <span class="dt">y =</span> bball1970<span class="op">$</span>Hits,
-  <span class="dt">k_new =</span> bball1970<span class="op">$</span>RemainingAB,
-  <span class="dt">y_new =</span> bball1970<span class="op">$</span>RemainingHits
-)</code></pre></div>
-<p>Create a list to store models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models &lt;-<span class="st"> </span><span class="kw">list</span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;nopool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-no-pooling.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;nopool&quot;</span>]]</code></pre></div>
-<pre>
-  <code class="stan">/* Binomial Model (No pooling)
+<div id="references-10" class="section level1 unnumbered">
+<h1>References</h1>
 
-  A binomial model for $i = 1, \dots, N$, no pooling:
-  $$
-  p(y_i | n_i, \mu_i) &\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
-  \mu_i &= \logit^{-1}(\eta_i) \\
-  p(\eta_i) &\sim \mathsf{Normal}^+(0, 10)
-  $$
-
-*/
-data {
-  int N;
-  int y[N];
-  int k[N];
-  // new data
-  int y_new[N];
-  int k_new[N];
-}
-parameters {
-  vector[N] eta;
-}
-model {
-  eta ~ normal(0., 10.);
-  y ~ binomial_logit(k, eta);
-}
-generated quantities {
-  int y_rep[N];
-  vector[N] log_lik;
-  vector[N] log_lik_new;
-  vector<lower = 0., upper = 1.>[N] mu;
-  mu = inv_logit(eta);
-  for (n in 1:N) {
-    y_rep[n] = binomial_rng(k[n], mu[n]);
-    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
-    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
-  }
-}</code>
-</pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;pool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-complete-pooling.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;pool&quot;</span>]]</code></pre></div>
-<pre>
-  <code class="stan">/* Binomial Model
-
-  A binomial model for $i = 1, \dots, N$, with complete pooling
-  $$
-  \begin{aligned}[t]
-  p(y_i | n_i, \mu) &\sim \mathsf{Binomial}(n_i, \mu) \\
-  \mu &= \logit^{-1}(\eta) \\
-  p(\eta) &\sim \mathsf{Normal}^+(0, 10)
-  \end{aligned}
-  $$
-
-*/
-data {
-  int N;
-  int y[N];
-  int k[N];
-  // new data
-  int y_new[N];
-  int k_new[N];
-}
-parameters {
-  real eta;
-}
-model {
-  eta ~ normal(0., 10.);
-  y ~ binomial_logit(k, eta);
-}
-generated quantities {
-  int y_rep[N];
-  vector[N] log_lik;
-  vector[N] log_lik_new;
-  real<lower = 0., upper = 1.> mu;
-  mu = inv_logit(eta);
-  for (n in 1:N) { //
-    y_rep[n] = binomial_rng(k[n], mu);
-    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta);
-    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta);
-  }
-}</code>
-</pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling-t.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]]</code></pre></div>
-<pre>
-  <code class="stan">/* Binomial Model
-
-  A binomial model for $i = 1, \dots, N$, with partial pooling
-  $$
-  \begin{aligned}[t]
-  p(y_i | n_i, \mu_i) &\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
-  \mu_i &= \logit^{-1}(\eta_i) \\
-  p(\eta_i | \tau) &\sim \mathsf{Normal}(alpha, \tau) \\
-  p(\tau) &\sim \mathsf{Normal}^+(0, 1) \\
-  p(alpha) & \sim \mathsf{Normal}(0, 2.5) \\
-  \end{aligned}
-  $$
-
-*/
-data {
-  int N;
-  int y[N];
-  int k[N];
-  // new data
-  int y_new[N];
-  int k_new[N];
-}
-parameters {
-  vector[N] eta;
-  real alpha;
-  real<lower = 0.> tau;
-}
-model {
-  alpha ~ normal(0., 10.);
-  tau ~ normal(0., 1);
-  eta ~ normal(alpha, tau);
-  y ~ binomial_logit(k, eta);
-}
-generated quantities {
-  int y_rep[N];
-  vector[N] log_lik;
-  vector[N] log_lik_new;
-  vector<lower = 0., upper = 1.>[N] mu;
-  mu = inv_logit(eta);
-  for (n in 1:N) { //
-    y_rep[n] = binomial_rng(k[n], mu[n]);
-    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
-    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
-  }
-}</code>
-</pre>
-<p>Sample from all three models a</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fits &lt;-<span class="st"> </span><span class="kw">map</span>(models, sampling, <span class="dt">data =</span> bball1970_data,
-            <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">set_names</span>(<span class="kw">names</span>(models))
-<span class="co">#&gt; Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
-<span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
-<span class="co">#&gt; Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See</span>
-<span class="co">#&gt; http://mc-stan.org/misc/warnings.html#bfmi-low</span>
-<span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></code></pre></div>
-<p>For each model calculate the posterior mean of <span class="math inline">\(\mu\)</span> for each player:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bball1970 &lt;-
-<span class="st">  </span><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, 
-     <span class="cf">function</span>(nm, fit) {
-      mu &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(fit) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;^mu&quot;</span>))
-      <span class="cf">if</span> (<span class="kw">nrow</span>(mu) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {
-        out &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">estimate =</span> <span class="kw">rep</span>(mu<span class="op">$</span>estimate, 18L))
-      } <span class="cf">else</span> {
-        out &lt;-<span class="st"> </span><span class="kw">select</span>(mu, estimate)
-      }
-      out<span class="op">$</span>model &lt;-<span class="st"> </span>nm
-      out<span class="op">$</span>.id &lt;-<span class="st"> </span><span class="kw">seq_len</span>(<span class="kw">nrow</span>(out))
-      out
-     }) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(model, estimate) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_cols</span>(bball1970)</code></pre></div>
-<p>The partially pooled estiamtes are shrunk towards the overall average, and are between the no-pooling and pooled estimates.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> value, <span class="dt">x =</span> <span class="kw">factor</span>(variable), <span class="dt">group =</span> Player)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="kw">expression</span>(mu))</code></pre></div>
-<p><img src="hierarchical_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /> We can plot the actual batting averages (<code>BatAvg1</code> and <code>BatAvg2</code>) and the model estimates:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Player, <span class="dt">x =</span> value, <span class="dt">colour =</span> variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="kw">expression</span>(mu), <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
-<p><img src="hierarchical_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /> The estimates of the no-pooling model is almost exactly the same as <code>BatAvg1</code>. The out-of-sample batting averages <code>BatAvg2</code> show regression to the mean.</p>
-<p>For these models, compare the overall out-of-sample performance by calculating the actual average out-of-sample log-pointwise predictive density (lppd), and the expected lppd using LOO-PSIS. The LOO-PSIS estimates of the out-of-sample lppd are optimistic. However, they still show the pooling and partial estimates as superior to the no-pooling estimates. The actual out-of-sample average lppd for the partial pooled model is the best fitting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, 
-     <span class="cf">function</span>(nm, fit) {
-      loo &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(fit, <span class="st">&quot;log_lik&quot;</span>))
-      ll_new &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit)[[<span class="st">&quot;log_lik_new&quot;</span>]]
-      <span class="kw">tibble</span>(<span class="dt">model =</span> nm,
-             <span class="dt">loo =</span> loo<span class="op">$</span>elpd_loo <span class="op">/</span><span class="st"> </span>bball1970_data<span class="op">$</span>N,
-             <span class="dt">ll_out =</span> <span class="kw">mean</span>(<span class="kw">log</span>(<span class="kw">colMeans</span>(<span class="kw">exp</span>(ll_new)))))
-     })
-<span class="co">#&gt; # A tibble: 3 × 3</span>
-<span class="co">#&gt;     model   loo ll_out</span>
-<span class="co">#&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1  nopool -3.20  -4.60</span>
-<span class="co">#&gt; 2    pool -2.58  -4.05</span>
-<span class="co">#&gt; 3 partial -2.59  -3.99</span></code></pre></div>
-<p>To see why this is the case, plot the average errors for each observation in- and out-of-sample. In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats—this is regression to the mean. In sample, the partially pooling model shrinks the estimates towards the mean and reducing error. Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">as.integer</span>(<span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player))) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player, <span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">In-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg1,
-         <span class="st">`</span><span class="dt">Out-of-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>), <span class="op">-</span>value) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(sample, error, <span class="op">-</span>variable, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> error, <span class="dt">x =</span> Player, <span class="dt">colour =</span> variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>sample, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
-<p><img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>Extensions:</p>
-<ul>
-<li>Redo this analysis with the <a href="https://www.rdocumentation.org/packages/rstanarm/topics/bball2006">rstanarm</a> dataset with hits and at-bats for the entire 2006 AL season of MLB.</li>
-<li>Use a beta distribution for the prior of <span class="math inline">\(\mu_i\)</span>. How would you specify the prior beta distribution so that it is uniformative?</li>
-<li>If you used the beta distribution, how would you specify the beta distribution as a function of the mean?</li>
-<li>The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribuiton.</li>
-<li>There may be some truly exceptional players. Model this by replacing the normal prior for <span class="math inline">\(\eta\)</span> with a wide tailed distribution.</li>
-<li>The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.</li>
-</ul>
-<p>References:</p>
-<ul>
-<li>Albert, Jim. <a href="https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/">Revisiting Efron and Morris’s Baseball Study</a> Feb 15, 2016</li>
-<li>Bob Carpenter. <a href="https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/">Hierarchical Bayesian Batting Ability, with Multiple Comparisons</a>. November 4, 2009.</li>
-<li>John Kruschke. <a href="http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html">Shrinkage in multi-level hierarchical models</a>. November 27, 2012.</li>
-<li>See <span class="citation">Jensen, McShane, and Wyner (2009)</span> for an updated hierarchical model of baseball hitting</li>
-</ul>
-<div id="other-examples" class="section level3">
-<h3><span class="header-section-number">14.1.1</span> Other Examples</h3>
-<ul>
-<li>Rat Tumors - BDA</li>
-<li>Eight Schools - BDA</li>
-</ul>
-
+<div id="refs" class="references">
+<div>
+<p>Alexseev, Mikhail A. 2006. “Ballot-Box Vigilantism? Ethnic Population Shifts and Xenophobic Voting in Post-Soviet Russia.” <em>Political Behavior</em> 28 (3). Springer Nature: 211–40. doi:<a href="https://doi.org/10.1007/s11109-006-9009-2">10.1007/s11109-006-9009-2</a>.</p>
+</div>
+<div>
+<p>Barnard, John, Robert McCulloch, and Xiao-Li Meng. 2000. “Modeling Covariance Matrices in Terms of Standard Deviations and Correlations, with Application to Shrinkage.” <em>Statistica Sinica</em> 10 (4). Institute of Statistical Science, Academia Sinica: 1281–1311. <a href="http://www.jstor.org/stable/24306780" class="uri">http://www.jstor.org/stable/24306780</a>.</p>
+</div>
+<div>
+<p>Barrilleaux, Charles, and Carlisle Rainey. 2014. “The Politics of Need.” <em>State Politics &amp; Policy Quarterly</em> 14 (4). SAGE Publications: 437–60. doi:<a href="https://doi.org/10.1177/1532440014561644">10.1177/1532440014561644</a>.</p>
+</div>
+<div>
+<p>Bates, Douglas M. 2010. <em>lme4: Mixed-Effects Modeling with R</em>. <a href="http://lme4.r-forge.r-project.org/book/front.pdf" class="uri">http://lme4.r-forge.r-project.org/book/front.pdf</a>.</p>
+</div>
+<div>
+<p>Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2014. “Fitting Linear Mixed-Effects Models Using Lme4,” June. <a href="http://arxiv.org/abs/1406.5823v1" class="uri">http://arxiv.org/abs/1406.5823v1</a>.</p>
+</div>
+<div>
+<p>Beck, Nathaniel, Jonathan N. Katz, and Richard Tucker. 1998. “Taking Time Seriously: Time-Series-Cross-Section Analysis with a Binary Dependent Variable.” <em>American Journal of Political Science</em> 42 (4). [Midwest Political Science Association, Wiley]: 1260–88. <a href="http://www.jstor.org/stable/2991857" class="uri">http://www.jstor.org/stable/2991857</a>.</p>
+</div>
+<div>
+<p>Benoit, Dries F., and Dirk Van den Poel. 2017. “bayesQR: A Bayesian Approach to Quantile Regression.” <em>Journal of Statistical Software</em> 76 (7). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v076.i07">10.18637/jss.v076.i07</a>.</p>
+</div>
+<div>
+<p>Berry, William D., Matt Golder, and Daniel Milton. 2012. “Improving Tests of Theories Positing Interaction.” <em>The Journal of Politics</em> 74 (3). University of Chicago Press: 653–71. doi:<a href="https://doi.org/10.1017/s0022381612000199">10.1017/s0022381612000199</a>.</p>
+</div>
+<div>
+<p>Betancourt, Michael. 2016. “Diagnosing Suboptimal Cotangent Disintegrations in Hamiltonian Monte Carlo,” April. <a href="http://arxiv.org/abs/1604.00695v1" class="uri">http://arxiv.org/abs/1604.00695v1</a>.</p>
+</div>
+<div>
+<p>Bhadra, Anindya, Jyotishka Datta, Nicholas G. Polson, and Brandon Willard. 2015. “The Horseshoe+ Estimator of Ultra-Sparse Signals,” February. <a href="http://arxiv.org/abs/1502.00560v2" class="uri">http://arxiv.org/abs/1502.00560v2</a>.</p>
+</div>
+<div>
+<p>Box, George E. P. 1976. “Science and Statistics.” <em>Journal of the American Statistical Association</em> 71 (356): 791–99. doi:<a href="https://doi.org/10.1080/01621459.1976.10480949">10.1080/01621459.1976.10480949</a>.</p>
+</div>
+<div>
+<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” <em>Political Analysis</em> 14 (01). Cambridge University Press (CUP): 63–82. doi:<a href="https://doi.org/10.1093/pan/mpi014">10.1093/pan/mpi014</a>.</p>
+</div>
+<div>
+<p>Brock, William, Steven Durlauf, and Kenneth West. 2003. “Policy Evaluation in Uncertain Economic Environments.” National Bureau of Economic Research. doi:<a href="https://doi.org/10.3386/w10025">10.3386/w10025</a>.</p>
+</div>
+<div>
+<p>Carpenter, Bob. 2016. “The Impact of Reparameterization on Point Estimatesekgam.” <em>Stan Case Studies</em>, April. <a href="http://mc-stan.org/documentation/case-studies/mle-params.html" class="uri">http://mc-stan.org/documentation/case-studies/mle-params.html</a>.</p>
+</div>
+<div>
+<p>Carpenter, Bob, Jonah Gabry, and Ben Goodrich. 2017. “Hierarchical Partial Pooling for Repeated Binary Trials.” <em>Stan Case Studies</em>, January. <a href="http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html" class="uri">http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html</a>.</p>
+</div>
+<div>
+<p>Carvalho, C. M., N. G. Polson, and J. G. Scott. 2010. “The Horseshoe Estimator for Sparse Signals.” <em>Biometrika</em> 97 (2). Oxford University Press (OUP): 465–80. doi:<a href="https://doi.org/10.1093/biomet/asq017">10.1093/biomet/asq017</a>.</p>
+</div>
+<div>
+<p>Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. 2009. “Handling Sparsity via the Horseshoe.” Edited by David van Dyk and Max Welling, Proceedings of machine learning research, 5. Hilton Clearwater Beach Resort, Clearwater Beach, Florida USA: PMLR: 73–80. <a href="http://proceedings.mlr.press/v5/carvalho09a.html" class="uri">http://proceedings.mlr.press/v5/carvalho09a.html</a>.</p>
+</div>
+<div>
+<p>Clyde, Merlise A. 2017. “Using the Bayesian Adaptive Sampling (BAS) Package for Bayesian Model Averaging.” R package vignette. <a href="https://cran.r-project.org/web/packages/BAS/vignettes/BAS-vignette.html" class="uri">https://cran.r-project.org/web/packages/BAS/vignettes/BAS-vignette.html</a>.</p>
+</div>
+<div>
+<p>Cribari-Neto, Francisco, and Achim Zeileis. 2010. “Beta Regression inR.” <em>Journal of Statistical Software</em> 34 (2). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v034.i02">10.18637/jss.v034.i02</a>.</p>
+</div>
+<div>
+<p>Datta, Jyotishka, and Jayanta. K. Ghosh. 2013. “Asymptotic Properties of Bayes Risk for the Horseshoe Prior.” <em>Bayesian Analysis</em> 8 (1). Institute of Mathematical Statistics: 111–32. doi:<a href="https://doi.org/10.1214/13-ba805">10.1214/13-ba805</a>.</p>
+</div>
+<div>
+<p>Duncan, O. D. 1961. “A Socioeconomic Index for All Occupations.” In <em>Occupations and Social Status</em>, edited by Jr. Reiss A. J. Frre Press.</p>
+</div>
+<div>
+<p>Efron, Bradley, and Trevor Hastie. 2016. <em>Computer Age Statistical Inference</em>. Cambridge University Pr. <a href="http://www.ebook.de/de/product/26311758/bradley_efron_trevor_hastie_computer_age_statistical_inference.html" class="uri">http://www.ebook.de/de/product/26311758/bradley_efron_trevor_hastie_computer_age_statistical_inference.html</a>.</p>
+</div>
+<div>
+<p>Efron, Bradley, and Carl Morris. 1975. “Data Analysis Using Stein’s Estimator and Its Generalizations.” <em>Journal of the American Statistical Association</em> 70 (350). Informa UK Limited: 311–19. doi:<a href="https://doi.org/10.1080/01621459.1975.10479864">10.1080/01621459.1975.10479864</a>.</p>
+</div>
+<div>
+<p>Eicher, Theo S., Chris Papageorgiou, and Adrian E. Raftery. 2009. “Default Priors and Predictive Performance in Bayesian Model Averaging, with Application to Growth Determinants.” <em>Journal of Applied Econometrics</em> 26 (1). Wiley-Blackwell: 30–55. doi:<a href="https://doi.org/10.1002/jae.1112">10.1002/jae.1112</a>.</p>
+</div>
+<div>
+<p>Fernández, Carmen, Eduardo Ley, and Mark F. J. Steel. 2001. “Benchmark Priors for Bayesian Model Averaging.” <em>Journal of Econometrics</em> 100 (2). Elsevier BV: 381–427. doi:<a href="https://doi.org/10.1016/s0304-4076(00)00076-2">10.1016/s0304-4076(00)00076-2</a>.</p>
+</div>
+<div>
+<p>Ferrari, Silvia, and Francisco Cribari-Neto. 2004. “Beta Regression for Modelling Rates and Proportions.” <em>Journal of Applied Statistics</em> 31 (7). Informa UK Limited: 799–815. doi:<a href="https://doi.org/10.1080/0266476042000214501">10.1080/0266476042000214501</a>.</p>
+</div>
+<div>
+<p>Firth, David. 1993. “Bias Reduction of Maximum Likelihood Estimates.” <em>Biometrika</em> 80 (1). Oxford University Press (OUP): 27–38. doi:<a href="https://doi.org/10.1093/biomet/80.1.27">10.1093/biomet/80.1.27</a>.</p>
+</div>
+<div>
+<p>Flegal, James M., Murali Haran, and Galin L. Jones. 2008. “Markov Chain Monte Carlo: Can We Trust the Third Significant Figure?” <em>Statistical Science</em> 23 (2). Institute of Mathematical Statistics: 250–60. doi:<a href="https://doi.org/10.1214/08-sts257">10.1214/08-sts257</a>.</p>
+</div>
+<div>
+<p>Fox, John. 2016. <em>Applied Regression Analysis &amp; Generalized Linear Models</em>. 3rd ed. Sage.</p>
+</div>
+<div>
+<p>Fragoso, Tiago M., and Francisco Louzada Neto. 2015. “Bayesian Model Averaging: A Systematic Review and Conceptual Classification,” September. <a href="http://arxiv.org/abs/1509.08864v1" class="uri">http://arxiv.org/abs/1509.08864v1</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew. 2007. “A Bayesian Formulation of Exploratory Data Analysis and Goodness-of-Fit Testing.” <em>International Statistical Review</em> 71 (2). Wiley-Blackwell: 369–82. doi:<a href="https://doi.org/10.1111/j.1751-5823.2003.tb00203.x">10.1111/j.1751-5823.2003.tb00203.x</a>.</p>
+</div>
+<div>
+<p>———. 2009. “Confusions About Posterior Predictive Checks.” February 7. <a href="http://andrewgelman.com/2009/02/07/confusions_abou/" class="uri">http://andrewgelman.com/2009/02/07/confusions_abou/</a>.</p>
+</div>
+<div>
+<p>———. 2014. “Discussion with Sander Greenland on Posterior Predictive Checks.” <em>Statistical Modeling, Causal Inference, and Social Science</em>, August. <a href="http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/" class="uri">http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel / Hierarchical Models</em>. Cambridge University Pr. <a href="http://www.ebook.de/de/product/6504222/andrew_gelman_jennifer_hill_data_analysis_using_regression_and_multilevel_hierarchical_models.html" class="uri">http://www.ebook.de/de/product/6504222/andrew_gelman_jennifer_hill_data_analysis_using_regression_and_multilevel_hierarchical_models.html</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Donald B. Rubin. 1992. “Inference from Iterative Simulation Using Multiple Sequences.” <em>Statistical Science</em> 7 (4). Institute of Mathematical Statistics: 457–72. <a href="http://www.jstor.org/stable/2246093" class="uri">http://www.jstor.org/stable/2246093</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Cosma Shalizi. 2012a. “Rejoinder to Discussion of ‘Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 76–80. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02066.x">10.1111/j.2044-8317.2012.02066.x</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, and Cosma Rohilla Shalizi. 2012b. “Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 8–38. doi:<a href="https://doi.org/10.1111/j.2044-8317.2011.02037.x">10.1111/j.2044-8317.2011.02037.x</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, and Aki Vehtari. 2013. <em>Bayesian Data Analysis</em>. Taylor &amp; Francis Ltd. <a href="http://www.ebook.de/de/product/15022612/andrew_gelman_john_b_carlin_hal_s_stern_david_b_dunson_aki_vehtari_bayesian_data_analysis.html" class="uri">http://www.ebook.de/de/product/15022612/andrew_gelman_john_b_carlin_hal_s_stern_david_b_dunson_aki_vehtari_bayesian_data_analysis.html</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Jennifer Hill, and Masanao Yajima. 2012. “Why We (Usually) Don’t Have to Worry About Multiple Comparisons.” <em>Journal of Research on Educational Effectiveness</em> 5 (2). Informa UK Limited: 189–211. doi:<a href="https://doi.org/10.1080/19345747.2011.618213">10.1080/19345747.2011.618213</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Aleks Jakulin, Maria Grazia Pittau, and Yu-Sung Su. 2008. “A Weakly Informative Default Prior Distribution for Logistic and Other Regression Models.” <em>The Annals of Applied Statistics</em> 2 (4). Institute of Mathematical Statistics: 1360–83. doi:<a href="https://doi.org/10.1214/08-aoas191">10.1214/08-aoas191</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive Assessment of Model Fitness via Realized Discrepancies.” <em>Statistica Sinica</em> 6 (4). Institute of Statistical Science, Academia Sinica: 733–60. <a href="http://www.jstor.org/stable/24306036" class="uri">http://www.jstor.org/stable/24306036</a>.</p>
+</div>
+<div>
+<p>George, Edward I., and Robert E. McCulloch. 1993. “Variable Selection via Gibbs Sampling.” <em>Journal of the American Statistical Association</em> 88 (423). Informa UK Limited: 881–89. doi:<a href="https://doi.org/10.1080/01621459.1993.10476353">10.1080/01621459.1993.10476353</a>.</p>
+</div>
+<div>
+<p>Geyer, C. J. 2011. “Introduction to Markov Chain Monte Carlo.” In <em>Handbook of Markov Chain Monte Carlo</em>, edited by S. Brooks, Gelman, G. L. A. Jones, and X.-L Meng. Chapman; Hall/CRC.</p>
+</div>
+<div>
+<p>Ghosh, Joyee, Yingbo Li, and Robin Mitra. 2015. “On the Use of Cauchy Prior Distributions for Bayesian Logistic Regression,” July. <a href="http://arxiv.org/abs/1507.07170v2" class="uri">http://arxiv.org/abs/1507.07170v2</a>.</p>
+</div>
+<div>
+<p>Goenner, Cullen F. 2004. “Uncertainty of the Liberal Peace.” <em>Journal of Peace Research</em> 41 (5). Sage Publications, Ltd.: 589–605. <a href="http://www.jstor.org/stable/4149615" class="uri">http://www.jstor.org/stable/4149615</a>.</p>
+</div>
+<div>
+<p>Golder, Matthew. 2017. “Interactions.” Accessed March 21. <a href="http://mattgolder.com/interactions" class="uri">http://mattgolder.com/interactions</a>.</p>
+</div>
+<div>
+<p>Greenland, Sander, and Mohammad Ali Mansournia. 2015. “Penalization, Bias Reduction, and Default Priors in Logistic and Related Categorical and Survival Regressions.” <em>Statistics in Medicine</em> 34 (23). Wiley-Blackwell: 3133–43. doi:<a href="https://doi.org/10.1002/sim.6537">10.1002/sim.6537</a>.</p>
+</div>
+<div>
+<p>Grün, Bettina, Ioannis Kosmidis, and Achim Zeileis. 2012. “Extended Beta Regression in R: Shaken, Stirred, Mixed, and Partitioned.” <em>Journal of Statistical Software</em> 48 (11). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v048.i11">10.18637/jss.v048.i11</a>.</p>
+</div>
+<div>
+<p>Hahn, P. Richard, and Carlos M. Carvalho. 2015. “Decoupling Shrinkage and Selection in Bayesian Linear Models: A Posterior Summary Perspective.” <em>Journal of the American Statistical Association</em> 110 (509). Informa UK Limited: 435–48. doi:<a href="https://doi.org/10.1080/01621459.2014.993077">10.1080/01621459.2014.993077</a>.</p>
+</div>
+<div>
+<p>Hegre, Håvard, and Nicholas Sambanis. 2006. “Sensitivity Analysis of Empirical Results on Civil War Onset.” <em>Journal of Conflict Resolution</em> 50 (4). SAGE Publications: 508–35. doi:<a href="https://doi.org/10.1177/0022002706289303">10.1177/0022002706289303</a>.</p>
+</div>
+<div>
+<p>Hoerl, Arthur E., and Robert W. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12 (1). Informa UK Limited: 55–67. doi:<a href="https://doi.org/10.1080/00401706.1970.10488634">10.1080/00401706.1970.10488634</a>.</p>
+</div>
+<div>
+<p>Ishwaran, Hemant, and J. Sunil Rao. 2005. “Spike and Slab Variable Selection: Frequentist and Bayesian Strategies.” <em>The Annals of Statistics</em> 33 (2). Institute of Mathematical Statistics: 730–73. doi:<a href="https://doi.org/10.1214/009053604000001147">10.1214/009053604000001147</a>.</p>
+</div>
+<div>
+<p>Ishwaran, Hemant, Udaya B. Kogalur, and J. Sunil Rao. 2010. “spikeslab: Prediction and Variable Selection Using Spike and Slab Regression.” <em>R Journal</em>. <a href="https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf" class="uri">https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf</a>.</p>
+</div>
+<div>
+<p>Jensen, Shane T., Blakeley B. McShane, and Abraham J. Wyner. 2009. “Hierarchical Bayesian Modeling of Hitting Performance in Baseball.” <em>Bayesian Analysis</em> 4 (4). Institute of Mathematical Statistics: 631–52. doi:<a href="https://doi.org/10.1214/09-ba424">10.1214/09-ba424</a>.</p>
+</div>
+<div>
+<p>King, Gary. 1998. <em>Unifying Political Methodology: The Likelihood Theory of Statistical Inference</em>. UNIV OF MICHIGAN PR. <a href="http://www.ebook.de/de/product/8442790/gary_king_unifying_political_methodology_the_likelihood_theory_of_statistical_inference.html" class="uri">http://www.ebook.de/de/product/8442790/gary_king_unifying_political_methodology_the_likelihood_theory_of_statistical_inference.html</a>.</p>
+</div>
+<div>
+<p>King, Gary, and Langche Zeng. 2001a. “Logistic Regression in Rare Events Data.” <em>Political Analysis</em> 9 (2). [Oxford University Press, Society for Political Methodology]: 137–63. <a href="http://www.jstor.org/stable/25791637" class="uri">http://www.jstor.org/stable/25791637</a>.</p>
+</div>
+<div>
+<p>———. 2001b. “Explaining Rare Events in International Relations.” <em>International Organization</em> 55 (3). Cambridge University Press (CUP): 693–715. doi:<a href="https://doi.org/10.1162/00208180152507597">10.1162/00208180152507597</a>.</p>
+</div>
+<div>
+<p>Kruschke, John K. 2013. “Posterior Predictive Checks Can and Should Be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1): 45–56. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02063.x">10.1111/j.2044-8317.2012.02063.x</a>.</p>
+</div>
+<div>
+<p>Leamer, Edward E. 1983. “Let’s Take the Con Out of Econometrics.” <em>The American Economic Review</em> 73 (1). American Economic Association: 31–43. <a href="http://www.jstor.org/stable/1803924" class="uri">http://www.jstor.org/stable/1803924</a>.</p>
+</div>
+<div>
+<p>Ley, Eduardo, and Mark F.J. Steel. 2009. “On the Effect of Prior Assumptions in Bayesian Model Averaging with Applications to Growth Regression.” <em>Journal of Applied Econometrics</em> 24 (4). Wiley-Blackwell: 651–74. doi:<a href="https://doi.org/10.1002/jae.1057">10.1002/jae.1057</a>.</p>
+</div>
+<div>
+<p>———. 2012. “Mixtures of g-Priors for Bayesian Model Averaging with Economic Applications.” <em>Journal of Econometrics</em> 171 (2). Elsevier BV: 251–66. doi:<a href="https://doi.org/10.1016/j.jeconom.2012.06.009">10.1016/j.jeconom.2012.06.009</a>.</p>
+</div>
+<div>
+<p>M., Amini Shahram, and Parmeter Christopher F. 2011. “Bayesian Model Averaging in R.” <em>Journal of Economic and Social Measurement</em> 36 (4). IOS Press: 253–87. doi:<a href="https://doi.org/10.3233/JEM-2011-0350">10.3233/JEM-2011-0350</a>.</p>
+</div>
+<div>
+<p>Makalic, Enes, and Daniel F. Schmidt. 2016. “High-Dimensional Bayesian Regularised Regression with the BayesReg Package,” November. <a href="http://arxiv.org/abs/1611.06649v3" class="uri">http://arxiv.org/abs/1611.06649v3</a>.</p>
+</div>
+<div>
+<p>Martin, Lisa. 1992. <em>Coercive Cooperation: Explaining Multilateral Economic Sanctions</em>. Princeton University Press.</p>
+</div>
+<div>
+<p>McElreath, Richard. 2016. <em>Statistical Rethinking</em>. Apple Academic Press Inc. <a href="http://www.ebook.de/de/product/24465987/richard_mcelreath_statistical_rethinking.html" class="uri">http://www.ebook.de/de/product/24465987/richard_mcelreath_statistical_rethinking.html</a>.</p>
+</div>
+<div>
+<p>Mitchell, T. J., and J. J. Beauchamp. 1988. “Bayesian Variable Selection in Linear Regression.” <em>Journal of the American Statistical Association</em> 83 (404). Informa UK Limited: 1023–32. doi:<a href="https://doi.org/10.1080/01621459.1988.10478694">10.1080/01621459.1988.10478694</a>.</p>
+</div>
+<div>
+<p>Montgomery, Jacob M., and Brendan Nyhan. 2010. “Bayesian Model Averaging: Theoretical Developments and Practical Applications.” <em>Political Analysis</em> 18 (02). Cambridge University Press (CUP): 245–70. doi:<a href="https://doi.org/10.1093/pan/mpq001">10.1093/pan/mpq001</a>.</p>
+</div>
+<div>
+<p>Montgomery, Jacob M., Florian M. Hollenbach, and Michael D. Ward. 2012. “Improving Predictions Using Ensemble Bayesian Model Averaging.” <em>Political Analysis</em> 20 (03). Cambridge University Press (CUP): 271–91. doi:<a href="https://doi.org/10.1093/pan/mps002">10.1093/pan/mps002</a>.</p>
+</div>
+<div>
+<p>Pas, S. L. van der, B. J. K. Kleijn, and A. W. van der Vaart. 2014. “The Horseshoe Estimator: Posterior Concentration Around Nearly Black Vectors.” <em>Electronic Journal of Statistics</em> 8 (2). Institute of Mathematical Statistics: 2585–2618. doi:<a href="https://doi.org/10.1214/14-ejs962">10.1214/14-ejs962</a>.</p>
+</div>
+<div>
+<p>Piironen, Juho, and Aki Vehtari. 2015. “Projection Predictive Model Selection for Gaussian Processes,” October. doi:<a href="https://doi.org/10.1109/MLSP.2016.7738829">10.1109/MLSP.2016.7738829</a>.</p>
+</div>
+<div>
+<p>———. 2016. “On the Hyperprior Choice for the Global Shrinkage Parameter in the Horseshoe Prior,” October. <a href="http://arxiv.org/abs/1610.05559v1" class="uri">http://arxiv.org/abs/1610.05559v1</a>.</p>
+</div>
+<div>
+<p>Polson, Nicholas G., and James G. Scott. 2011. “Shrink Globally, Act Locally: Sparse Bayesian Regularization and Prediction.” In <em>Bayesian Statistics 9</em>, 501–38. Oxford University Press. doi:<a href="https://doi.org/10.1093/acprof:oso/9780199694587.003.0017">10.1093/acprof:oso/9780199694587.003.0017</a>.</p>
+</div>
+<div>
+<p>Raftery, Adrian, Jennifer Hoeting, Chris Volinsky, Ian Painter, and Ka Yee Yeung. 2017. “BMA: Bayesian Model Averaging.” <a href="https://CRAN.R-project.org/package=BMA" class="uri">https://CRAN.R-project.org/package=BMA</a>.</p>
+</div>
+<div>
+<p>Rainey, Carlisle. 2016a. “Dealing with Separation in Logistic Regression Models.” <em>Political Analysis</em> 24 (03). Cambridge University Press (CUP): 339–55. doi:<a href="https://doi.org/10.1093/pan/mpw014">10.1093/pan/mpw014</a>.</p>
+</div>
+<div>
+<p>———. 2016b. “Transformation-Induced Bias: Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest.” <a href="http://www.carlislerainey.com/papers/bias.pdf" class="uri">http://www.carlislerainey.com/papers/bias.pdf</a>.</p>
+</div>
+<div>
+<p>Sala-I-Martin, Xavier X. 1997. “I Just Ran Two Million Regressions.” <em>The American Economic Review</em> 87 (2). American Economic Association: 178–83. <a href="http://www.jstor.org/stable/2950909" class="uri">http://www.jstor.org/stable/2950909</a>.</p>
+</div>
+<div>
+<p>Scott, James G., and James O. Berger. 2010. “Bayes and Empirical-Bayes Multiplicity Adjustment in the Variable-Selection Problem.” <em>The Annals of Statistics</em> 38 (5). Institute of Mathematical Statistics: 2587–2619. doi:<a href="https://doi.org/10.1214/10-aos792">10.1214/10-aos792</a>.</p>
+</div>
+<div>
+<p>Team, Stan Development. 2016. <em>Stan Modeling Language Users Guide and Reference Manual, Version 2.14.0</em>. <a href="https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf" class="uri">https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf</a>.</p>
+</div>
+<div>
+<p>Tibshirani, Robert. 1996. “Regression Shrinkage and Selection via the Lasso.” <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (1). [Royal Statistical Society, Wiley]: 267–88. <a href="http://www.jstor.org/stable/2346178" class="uri">http://www.jstor.org/stable/2346178</a>.</p>
+</div>
+<div>
+<p>Tobias, Justin L., and Mingliang Li. 2004. “Returns to Schooling and Bayesian Model Averaging: A Union of Two Literatures.” <em>Journal of Economic Surveys</em> 18 (2). Wiley-Blackwell: 153–80. doi:<a href="https://doi.org/10.1111/j.0950-0804.2004.00003.x">10.1111/j.0950-0804.2004.00003.x</a>.</p>
+</div>
+<div>
+<p>Volinsky, Chris T., Adrian E. Raftery, David Madigan, and Jennifer A. Hoeting. 1999. “Bayesian Model Averaging: A Tutorial (with Comments by M. Clyde, David Draper and E. I. George, and a Rejoinder by the Authors).” <em>Statistical Science</em> 14 (4). Institute of Mathematical Statistics: 382–417. doi:<a href="https://doi.org/10.1214/ss/1009212519">10.1214/ss/1009212519</a>.</p>
+</div>
+<div>
+<p>Ward, Michael D, Brian D Greenhill, and Kristin M Bakke. 2010. “The Perils of Policy by p-Value: Predicting Civil Conflicts.” <em>Journal of Peace Research</em> 47 (4). SAGE Publications: 363–75. doi:<a href="https://doi.org/10.1177/0022343309356491">10.1177/0022343309356491</a>.</p>
+</div>
+<div>
+<p>West, Mike. 1987. “On Scale Mixtures of Normal Distributions.” <em>Biometrika</em> 74 (3). Oxford University Press (OUP): 646–48. doi:<a href="https://doi.org/10.1093/biomet/74.3.646">10.1093/biomet/74.3.646</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” <em>IEEE Transactions on Visualization and Computer Graphics</em> 16 (6). Institute of Electrical; Electronics Engineers (IEEE): 973–79. doi:<a href="https://doi.org/10.1109/tvcg.2010.161">10.1109/tvcg.2010.161</a>.</p>
+</div>
+<div>
+<p>Yu, Keming, and Jin Zhang. 2005. “A Three-Parameter Asymmetric Laplace Distribution and Its Extension.” <em>Communications in Statistics - Theory and Methods</em> 34 (9-10). Informa UK Limited: 1867–79. doi:<a href="https://doi.org/10.1080/03610920500199018">10.1080/03610920500199018</a>.</p>
+</div>
+<div>
+<p>Zeugner, Stefan. 2011. “Bayesian Model Averaging with BMS for BMS Version 0.3.0.” R package vignette. <a href="https://cran.r-project.org/web/packages/BMS/vignettes/bms.pdf" class="uri">https://cran.r-project.org/web/packages/BMS/vignettes/bms.pdf</a>.</p>
+</div>
+<div>
+<p>Zorn, Christopher. 2005. “A Solution to Separation in Binary Response Models.” <em>Political Analysis</em> 13 (2). [Oxford University Press, Society for Political Methodology]: 157–70. doi:<a href="https://doi.org/10.1093/pan/mpi009">10.1093/pan/mpi009</a>.</p>
 </div>
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="shrinkage-regularization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multilevel-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="notes.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -732,7 +698,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/hierarchical.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/references.Rmd",
 "text": "Edit"
 },
 "download": null,

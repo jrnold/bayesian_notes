@@ -13,7 +13,7 @@
 - i.i.d. models are a special case of exchangeability.
 
 
-## Baseball Hitting
+## Example: Baseball Hits
 
 @EfronMorris1975a analyzed data from 18 players in the 1970 season.
 The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.
@@ -250,7 +250,7 @@ parameters {
 model {
   alpha ~ normal(0., 10.);
   tau ~ normal(0., 1);
-  eta ~ student_t(4., alpha, tau);
+  eta ~ normal(alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {
@@ -273,13 +273,7 @@ Sample from all three models a
 fits <- map(models, sampling, data = bball1970_data,
             refresh = -1) %>%
   set_names(names(models))
-#> The following numerical problems occurred the indicated number of times on chain 1
-#>                                                                                     count
-#> Exception thrown at line 31: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> Warning: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
 #> http://mc-stan.org/misc/warnings.html#bfmi-low
@@ -349,12 +343,12 @@ map2_df(names(fits), fits,
              loo = loo$elpd_loo / bball1970_data$N,
              ll_out = mean(log(colMeans(exp(ll_new)))))
      })
-#> # A tibble: 3 x 3
+#> # A tibble: 3 × 3
 #>     model   loo ll_out
 #>     <chr> <dbl>  <dbl>
 #> 1  nopool -3.20  -4.60
-#> 2    pool -2.58  -4.06
-#> 3 partial -2.59  -4.01
+#> 2    pool -2.58  -4.05
+#> 3 partial -2.59  -3.99
 ```
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.
@@ -404,76 +398,3 @@ References:
 - Rat Tumors - BDA
 - Eight Schools - BDA
 
-
-## Equivalent Models
-
-### Group Varying Intercepts
-
-This is a regression, with a different intercept per group:
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(\alpha_j[i] + \beta x_i, \sigma_y^2) \\
-\end{aligned}
-$$
-The second level model of the group intercepts models them as distributed around a common mean, $\mu_\alpha$, with error:
-$$
-\alpha_j = \mu_\alpha + \eta_j \\
-\eta_j \sim \dnorm(0, \sigma_\alpha^2)
-$$
-
-### Separate local regressions
-
-For each group, run a regression,
-$$
-\begin{aligned}[t]
-y_i \sim \dnorm(\alpha_j + \beta x_i, \sigma_y^2) & \text{for all $i$ in group $j$}
-\end{aligned}
-$$
-And now model the group-level means,
-$$
-\begin{aligned}[t]
-\alpha &= \dgamma u_j + \eta_j \\
-\eta_j &\sim \dnorm(0, \sigma^2_\alpha)
-\end{aligned}
-$$
-
-
-### Modeling the coefficients of a large regression model
-
-Suppose that $X$ includes all predictors and $J$ indicators for the $J$ groups. 
-
-We could also put the constant in the second distribution. The coefficients $\beta$ for the coefficients on the group indicators are centered around a $\mu_\alpha$.
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(x_i \beta, \sigma_y^2) \\
-\beta_j &\sim \dnorm(\mu_{\alpha}, \sigma_{\alpha}^2)
-\end{aligned}
-$$
-
-### Regression with multiple error terms
-
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(x_i \beta + \eta_{j[i]}, \sigma_y^2) \\
-\eta_j &\sim \dnorm(0, \sigma_{\alpha}^2)
-\end{aligned}
-$$
-
-### Regresion with correlated errors
-
-$$
-\begin{aligned}[t]
-y_i &= X_i \beta + \omega_i, & \omega &\sim \dnorm(0, \Sigma)
-\end{aligned}
-$$
-The errors have an $n \times n$ covariance matrix, and are
-equivalent to the sum of individual and group errors.
-$$
-\omega_i = \eta_{j[i]} + \epsilon_i
-$$
-
-The variances and covariances in $\Sigma$ are:
-
-- for unit $i$: $\Sigma_{ii} = \var(\omega_i) = \sigma_y^2 + \sigma_{\alpha}^2$
-- for units $i$, $k$ in same group $j$: $\Sigma_{ik} = \cov(\omega_i, \omega_k) = \sigma_{\alpha}^2$
-- for units $i$, $k$ in the same group $j$: $\Sigma_{ik} = 0$

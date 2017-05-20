@@ -1,5 +1,118 @@
 # Multilevel Models
 
+Multilevel models are commonly used hierarchical model.
+They extend (generalized) linear models to include coefficients that vary by discrete groups.
+
+Suppose that there are $i = 1, dots, n$ observations, and each observation is in one of $j = 1, \dots, J$ groups.
+Let $j[i]$ be the group for 
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma^2) \\
+\begin{pmatrix}
+\alpha_j \\
+\beta_j
+\end{pmatrix} 
+& \sim
+\dnorm
+\left(
+\begin{pmatrix}
+\mu_\alpha \\
+\mu_\beta
+end{pmatrix},
+\Omega
+\right)
+\end{aligned} .
+$$
+
+*Pooled model*: All coefficients are common between groups. This is equivalent to a linear model.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
+\begin{pmatrix}
+\alpha \\
+\betap
+\end{pmatrix} 
+&\sim
+\dnorm
+\left(
+\begin{pmatrix}
+\mu_\alpha \\
+\mu_\beta
+end{pmatrix},
+\Omega
+\right)
+\end{aligned}
+$$
+
+*Pooled model*: All coefficients are common between groups. This is equivalent to a linear model.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
+\end{aligned}
+$$
+*Varying-intercept*: The slope coefficients ($\beta$) are common between groups, but the intercepts ($\alpha_j$) vary by group.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma^2) \\
+\end{aligned}
+$$
+*Varying-slope model*: The groups share a common intercept, $\alpha$, but the slope coefficient ($\beta$), varies between groups. This is less common since it is hard to think of cases when it is appropriate.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
+\end{aligned}
+$$
+These models go by different names in different literatures: *hierarchical (generalized) linear models*, *nested data models*, *mixed models*, *random coefficients*, *random-effects*, *random parameter models*,  *split-plot designs* [^mlm-names].
+
+[^mlm-names]: <https://en.wikipedia.org/wiki/Multilevel_model>
+
+The model can be extended to other cases:
+
+- generalized linear models
+- multiple parameters
+
+One of the difficulties in these models is the prior to the covariance matrix, $\Omega$.
+
+
+```{r echo=FALSE, fig.cap="Visual representation of hierarchical models"}
+n <- 20
+b <- 1
+a <- 0
+Sigma <- matrix(c(1, 0, 0, 1), nrow = 2) * 0.5
+slopes <- mvtnorm::rmvnorm(n, c(a, b), Sigma)  %>%
+  as_tibble() %>%
+  set_names(c("intercept", "slope"))
+
+bind_rows(
+  mutate(slopes, x = -2,
+         xend = 2,
+         y = a + b * x,
+         yend = a + b * xend,
+         type = "No-pooling"),
+  mutate(slopes, x = -2,
+         xend = 2,
+         y = intercept + b * x,
+         yend = intercept + b * xend,
+         type = "Varying intercept"),
+  mutate(slopes, x = -2,
+         xend = 2,
+         y = a + slope * x,
+         yend = a + slope * xend,
+         type = "Varying Slopes"),
+  mutate(slopes,
+         x = -2,
+         xend = 2,
+         y = intercept + slope * x,
+         yend = intercept + slope * xend,
+         type = "Varying slope and intercept")
+) %>%
+  ggplot(aes(x = x, xend = xend, y = y, yend = yend)) +
+  geom_segment() +
+  facet_wrap(~ type, ncol = 2) +
+  theme_void()
+          
+```
+
 
 ## Example: Radon
 
@@ -199,9 +312,10 @@ County-varying intercepts with partial-pooling
 ```{r}
 fit_intercept_partial <- stan_glmer(log_radon ~ (1 | county) + floor, data = radon)
 ```
-Varying slopes with no pooling:
-```{r}
-fit_slope_nopool <- stan_glm(log_radon ~ county * floor, data = radon)
+Varying slopes with no pooling. *There is an error estimating this*
+```{r eval=FALSE}
+fit_slope_nopool <- stan_glm(log_radon ~ -1 + county + county:floor, data = radon,
+                             prior = normal(scale = 1))
 ```
 Varying slopes with partial pooling:
 ```{r}
@@ -216,10 +330,86 @@ fit_slope_partial <- stan_glm(log_radon ~ floor + log_uranium, data = radon)
 ```
 With varying-intercepts
 ```{r}
-fit_slope_partial <- stan_glmr(log_radon ~ (1 | county) + floor + log_uranium, data = radon)
+fit_slope_partial <- stan_glmer(log_radon ~ (1 | county) + floor + log_uranium, data = radon)
 ```
 With varying-intercepts and slopes,
 ```{r}
 fit_slope_partial <- stan_glmer(log_radon ~ (1 + floor | county) +  log_uranium, data = radon)
 ```
 
+## Pooling of Hierarchical Parameters
+
+This is easiest understood in the case of a model of group means,
+$$
+\begin{aligned}[t]
+y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
+\mu_{j} &\sim \dnorm(\gamma, \tau^2) .
+\end{aligned}
+$$
+Each group has size $n_j$.
+
+Sample size, $n_j$               Estimate of $\hat{\mu}_j$
+-------------------------------- ---------------------------------------------------------------
+$n_j = 0$                        $\hat{\mu}_j = \gamma$ (complete pooling)
+$n_j < \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j$ closer to $\gamma$
+$n_j = \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$
+$n_j > \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j$ closer to $\bar{y}_j$
+$n_j = \infty$                   $\hat{\mu}_j = \bar{y}_j$ (no pooling)
+
+If the hyperparameters were known, the posterior of $\mu_j$ is
+$$
+\mu_j | y, \gamma, \sigma, \tau \sim \dnorm(\hat{\mu}_j, V_j)
+$$
+where
+$$
+\begin{aligned}[t]
+\hat{\mu}_j &= \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\tau^2} \gamma}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}} \\
+V_j &= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
+\end{aligned}
+$$
+
+Some crude estimates given $\mu_j$.
+
+The *data variance*, $\sigma^2$, is the residual variance,
+$$
+\E(\sigma^2 | y, \mu)  = \frac{1}{n} \sum_{i = 1}^n (y - \mu_{j[i]})^2 .
+$$
+The global mean is approximately the average of the group-level means,
+$$
+\begin{aligned}[t]
+\E(\gamma | y, \mu) &= \frac{1}{J} \sum_{i = 1}^n \mu_j \\
+\Var(\gamma | y, \mu) &= \frac{1}{J} \tau^2
+\end{aligned}
+$$
+The group level variance is $\tau^2$ is,
+$$
+\E(\tau^ | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
+$$
+
+
+## Extensions
+
+- Including group-level covariates
+- Prior distributions
+- Prediction
+
+    - new obs in existing groups
+    - new group
+    - new obs in new group
+    
+- Modeling correlation between intercept and slopes
+- Non-nested models
+
+## References 
+
+Texts:
+
+- @GelmanHill2007a [Ch. 11-17].
+- @BDA3 [Ch 5] "Hierarchical Models"
+- @BDA3 [Ch 15] "Hierarchical Linear Models"
+
+Other
+
+- Stan models for [ARM](https://github.com/stan-dev/example-models/wiki/ARM-Models)
+- http://mc-stan.org/documentation/case-studies/radon.html
+- https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/
