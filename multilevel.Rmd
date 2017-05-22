@@ -427,7 +427,7 @@ As such, random effects is not much different than fixed effects.
 
 This literature provides many different rules of thumb for the number of groups necessary to be able to use random effects: 8, 10, 30, 50, or 100 [@Stegmueller2013a, p. 749].
 
-@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups. 
+@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelibhood methods for all numbers of groups. 
 ML methods do not suffer severe bias above 10-15 groups.
 Bayesian point estimates are biased for smaller numbers of groups, but less than the ML.
 Additionally, the Bayesian methods have better frequentist coverage than ML methods.

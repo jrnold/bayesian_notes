@@ -180,7 +180,6 @@ generated quantities {
   # hardcoded marginal effectx
   vector[M] dydx;
   dydx = b[idx_b_slavicshare] + b[idx_b_slavicshare_changenonslav] * changenonslav;
-
 }</code>
 </pre>
 
