@@ -1,5 +1,5 @@
 # Multilevel Models
-
+t
 Multilevel models are commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
 
@@ -198,12 +198,13 @@ $$
 for all $j$.
 
 *Partial pooling:* When $\tau$ is a parameter, the amount of shrinkage can be estimated from the data.
-A common prior is $\tau \sim N(0, 2.5)$,
-$$
-\tau \sim N^{+}(0, 2.5) .
-$$
 
-The partial pooling model 
+```{r}
+stan_mo
+```
+
+
+
 
 
 ### Varying Intercept Model
@@ -244,6 +245,8 @@ $$
 \alpha_{j} &\sim  N(\gamma_0 + \gamma_1~\mathtt{log\_uranium}_j, \tau)
 \end{aligned}
 $$
+
+
 
 
 
