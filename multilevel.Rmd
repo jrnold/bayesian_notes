@@ -245,6 +245,8 @@ $$
 \end{aligned}
 $$
 
+
+
 ### lme4
 
 In R, the most widely used package to estimate mixed-effects models is **lme4**. 
@@ -386,6 +388,18 @@ $$
 \E(\tau^ | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
 $$
 
+## ANOVA
+
+**TODO**
+
+## Time-Series Cross Section
+
+**TODO** 
+
+A common application for these models are Time-Series Cross-Section (TSCS) or panel models. 
+In this case, both the time and units can be modeled.
+
+
 
 ## Extensions
 
@@ -400,16 +414,89 @@ $$
 - Modeling correlation between intercept and slopes
 - Non-nested models
 
+
+## Miscellaneous
+
+### How many groups?
+
+In classical discussions of multi-level or hierarchical models,
+a common question is how many groups are required to be able to use random effects vs. fixed effects.
+
+As noted earlier, random effects estimates the variance between group means. If there are few groups, there is not much information available to estimate this variance. 
+As such, random effects is not much different than fixed effects.
+
+This literature provides many different rules of thumb for the number of groups necessary to be able to use random effects: 8, 10, 30, 50, or 100 [@Stegmueller2013a, p. 749].
+
+@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups. 
+ML methods do not suffer severe bias above 10-15 groups.
+Bayesian point estimates are biased for smaller numbers of groups, but less than the ML.
+Additionally, the Bayesian methods have better frequentist coverage than ML methods.
+
+@BeckKatz2007a show that ML random coefficient models are superior in terms of efficiency to many types of pooled and unpooled estimators in small samples.
+
+
+### Correlation between Predictors and Errors
+
+@BafumiGelman2006a analyze this case.
+
+The standard suggestion in frequentist literature is to use a Hausman test where the null hypothesis is that random effects are consistent. However, @ClarkLinzer2014a note that in small samples this is likely to fail to reject random effects; and in large samples, random effects behave like fixed effects anyways.
+
+### Comparison to Other Panel Methods
+
+**TODO** 
+
+- cluster-robust SE
+- panel corrected standard errors
+
+
 ## References 
 
-Texts:
+Texts and chapters on multi-level analysis:
 
-- @GelmanHill2007a [Ch. 11-17].
-- @BDA3 [Ch 5] "Hierarchical Models"
-- @BDA3 [Ch 15] "Hierarchical Linear Models"
+- Bayesian
 
-Other
+    - @GelmanHill2007a [Ch. 11-17].
+    - @BDA3 [Ch 5] "Hierarchical Models"
+    - @BDA3 [Ch 15] "Hierarchical Linear Models"
+    - @Jackman2009a [CHh. 7]
+    - @Draper2008a
+    
+- Frequentist
+
+    - @Goldstein2011a 
+    - @SnijdersBosker2011a
+    - @Rabe-HeskethSkrondal2012a
+    - @Jiang2007a
+
+
+Stan model examples:
 
 - Stan models for [ARM](https://github.com/stan-dev/example-models/wiki/ARM-Models)
 - http://mc-stan.org/documentation/case-studies/radon.html
 - https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/
+
+
+Examples of multilevel models
+
+- @Western1998a: economic growth for OECD countries
+- @GelmanKing1993a: US election polling
+- @ParkGelmanBafumi2004a: multi-level models of opinion polls combined with post-stratification to extrapolate national opinion surveys to regions.
+- @SteenbergenJones2002a: mostly an intro/review of MLM, but uses the cross-country Eurobarometer to model support for the EU
+- @GelmanShorBafumiEtAl2007a: state-level opinion polls
+- @RaudenbushBryk2001a: student performance with student and school-level indicators
+- @Gilardi2010a: policy diffusion
+- @ORourkeSinnott2006a: attitudes toward immigration
+- @AndersenFetner2008a: ethnic and social tolerance
+- @Weldon2006a: ethnic and social tolerance
+- @Arzheimer2009a: right-wing voting
+- @HoogheReeskensStolleEtAl2009a: social and political trust
+- @AndersonSinger2008a: satisfaction with democracy
+- @MeerDethScheepers2009a: politial participation 
+- @IversenRosenbluth2006a: political economy of the gender wage gap
+- @HoogheMarks2004a: support for European integration
+- @LaxPhillips2009a: American politics using states and neighborhoods
+- @Voeten2008a: judicial decision making
+- @FranchinoHoeyland2009a: legislative politics
+- @DenisovaEllerFryeEtAl2009a: politics of economic reforms
+- @AitkinLongford1986a, @GoldsteinYangOmarEtAl2000a, @GoldsteinRasbashYangEtAl1993a: education
+- @GoldsteinYangOmarEtAl2000a: medicine
