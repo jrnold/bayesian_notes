@@ -1,0 +1,169 @@
+---
+title: "Ideal Point"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Ideal Points
+
+An ideal point (in political science) or item-response (in education) model is a latent state model.
+
+In these models, the only observed data are votes, and the analyst wants to 
+model those votes as a function of legislator- ($\theta_i$), and vote-specific ($\alpha_i$, $\lambda_i$) parameters.
+The vote of legislator $i$ on roll-call $j$ ($y_{i,j}$) is a function of a
+the legislator's ideal point ($\theta_i$), the vote's cutpoint ($\alpha_j$), 
+and the vote's discrimination ($\lambda_j$):
+$$
+\begin{aligned}[t]
+y_{i,j} &\sim \mathsf{Binomial}(\pi_i) \\
+\pi_i &= \frac{1}{1 + \exp(-\mu_i)} \\
+\mu_{i,j} &= \alpha_j + \lambda_j \theta_i
+\end{aligned}
+$$
+
+**TODO** More description of these terms, and also discuss with the IRT / test example.
+
+Ideal points (like many latent space models) are unidentified. In particular, 
+there are three types of invariance:
+
+1. Additive Aliasing
+2. Multiplicative Ailising
+3. Rotation (Reflection) Invariance
+
+
+# Example US: Congressional Voting
+
+```{r}
+library("tidyverse")
+library("pscl")
+library("rstan")
+```
+
+This example models the ideology of the 109th U.S. Senate. 
+This data is conveniently included in the `pscl` package:
+```{r}
+data("s109", package = "pscl")
+```
+This is not a data frame, see the documentation for its structure.
+
+In our ideal point model, we will use binary responses, but the `s109` data
+includes multiple [codes](http://voteview.com/senate109.htm) for respones to 
+roll-calls.
+
+---- ----------------------------------------------------------
+0    not a member
+1    Yea
+2    Paired Yea
+3    Announced Yea,
+4    Announced Nay
+5    Paired Nay
+6    Nay
+7    Present (some Congresses, also not used some Congresses)
+8    Present (some Congresses, also not used some Congresses)
+6    Nay
+9    Not Voting
+---- ----------------------------------------------------------
+
+To simplify the analysis, the outcomes will be aggregated to "Yes", "No", and missing values (which will be dropped):
+```{r}
+votes <- s109$votes %>%
+  as.data.frame() %>%
+  rownames_to_column("legislator") %>%
+  gather(rollcall, vote, -legislator) %>%
+  mutate(y = NA,
+         y = if_else(vote %in% c(1, 2, 3), TRUE, y),
+         y = if_else(vote %in% c(4, 5, 6), FALSE, y),
+         legislator = factor(legislator),
+         rollcall = factor(rollcall, levels = colnames(s109$votes))) %>%
+  filter(!is.na(y))
+```
+
+```{r}
+mod_ideal_point <- stan_model("stan/ideal_point.stan")
+```
+```{r results='asis'}
+mod_ideal_point
+```
+
+Identification of latent state models can be challenging.
+Since we \textit{a priori} know, or expect, that the primary ideological dimension is Liberal-Conservative.
+$$
+\begin{aligned}[t]
+\theta[\text{FRIST (R TN)}] & = 1 \\
+\theta[\text{REID (D NV)}] & = -1
+\end{aligned}
+$$
+Otherwise, give a weakly informative prior to the ideal points, and item difficulty and discrimination parameters,
+$$
+\begin{aligned}[t]
+\theta_{k} &\sim \mathsf{Normal}(0, 2.5) \\
+\alpha_{k} &\sim \mathsf{Normal}(0, 10.) \\
+\lambda_{k} &\sim \mathsf{Normal}(0, 2.5.) 
+\end{aligned}
+$$
+
+
+```{r}
+theta <- data_frame(
+  legislator = levels(votes$legislator),
+  value = NA_real_
+  ) %>%
+  mutate(
+    value = if_else(legislator == "FRIST (R TN)", -1, value),
+    value = if_else(legislator == "REID (D NV)", 1, value)    
+  )
+```
+
+```{r}
+data_ideal_point <-
+  within(list(), {
+    y <- as.integer(votes$y)
+    y_idx_leg <- as.integer(votes$legislator)
+    y_idx_vote <- as.integer(votes$rollcall)
+    Y_obs <- length(y)
+    N <- nlevels(votes$legislator)
+    K <- nlevels(votes$rollcall)
+    # values of known ideal points
+    theta_obs_idx <- which(!is.na(theta$value))
+    N_obs <- length(theta_obs_idx)
+    theta_param_idx <- which(is.na(theta$value))
+    N_param <- length(theta_param_idx)
+    theta_obs <- theta$value[theta_obs_idx]
+  })
+```
+
+```{r}
+sampling(mod_ideal_point, data = data_ideal_point)
+```
+
+## Identification
+
+In ideal point model with $d$ dimensions, need $d(d + 1)$ linearly independent *a priori* restrictions:
+
+For example, in two dimensions
+
+- Fix ideal points of three legislators
+- Fix loadings of three bills
+
+Some references on methods to identify (Bayesian) factor, IRT, and ideal point models:
+
+- @EroshevaCurtis2017a for a thorough discussion of identification in Bayesian factor models
+- @BaiWang2014a "Identification and Bayesian Estimation of Dynamic Factor Models"
+- @Quinn2004a
+- Rivers, Douglas. 2003. ``Identification of Multidimensional Spatial Voting Models.'' Technical Report: Political Methodology Working Papers.
+
+A common identification assumption is an upper triangular matrix on the loadings [@AguilarWest2000a]:
+$$
+\begin{bmatrix}
+1             & 0             &         \dots  & 0 \\
+\lambda_{2,1} & 1             &         \dots  & 0 \\
+\vdots        & \vdots        &         \ddots & \vdots \\
+\lambda_{k,1} & \lambda_{k,2} &         \dots  & 1 \\
+\vdots        & \vdots        &         \vdots & \vdots \\
+\lambda_{n,1} & \lambda_{n,2} &          \dots & \lambda_{n,k}
+\end{bmatrix}
+$$
+
+
