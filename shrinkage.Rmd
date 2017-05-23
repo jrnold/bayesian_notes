@@ -931,6 +931,22 @@ $$
 \end{aligned}
 $$
 
+**rstanarm** uses a slightly different parameterization for the Bayeian lasso [^rstanarm-lasso]
+$$
+\begin{aligned}[t]
+\beta_k &\sim b + s \frac{1}{\lambda} \sqrt{2 \omega} \beta_k^*  \\
+\frac{1}{\lambda} &\sim \dchisq(df) \\
+\omega &\sim \dexp(1) \\
+\beta^*_k &\sim \dnorm(0, 1)
+\end{aligned}
+$$
+Apart from the decomponsition into a scale-location family, this is simply putting a $\chi^2$ prior on the penalization parameter, $\frac{1}{\lambda}$.
+
+
+
+[^rstanarm-lasso]: See the source code [here](https://github.com/stan-dev/rstanarm/blob/b78c2b5190db8b62da93f0c686d0c78da4e5bb9b/inst/chunks/tparameters_glm.stan#L22) 
+and [here](https://github.com/stan-dev/rstanarm/blob/b78c2b5190db8b62da93f0c686d0c78da4e5bb9b/inst/chunks/priors_glm.stan#L25).
+
 
 Prior for $\theta_i$               Density for $\lambda_i$                      Density for $\kappa_i$
 ---------------------------------- -------------------------------------------- -------------------------------------------------------------------------------
