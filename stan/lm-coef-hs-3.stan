@@ -8,8 +8,9 @@ data {
   // design matrix X
   matrix [N, K] X;
   // degress of freedom for local and global scales
-  real<lower = 0.> df_local;
-  real<lower = 0.> df_global;
+  real<lower = 0.> local_df;
+  real<lower = 0.> global_df;
+  real<lower = 0.> global_scale;  
 }
 transformed data {
   real<lower = 0.> y_sd;
