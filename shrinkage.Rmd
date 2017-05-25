@@ -985,3 +985,8 @@ in economics and political science has put less emphasis on model-based inferenc
 (all-cause regressions) and more on design-based (causal) inference methods
 As noted earlier, regularization techniques are also applicable in these cases, but 
 need to be adjusted.
+
+For variable selection: 
+
+- @PiironenVehtari2016b compares model selection criteria
+- @BayarriBergerForteEtAl2012a

@@ -135,3 +135,13 @@ $$
 $$
 
 See @EroshevaCurtis2017a for a thorough discussion of identification.
+
+Stan Code Examples
+
+- RobertMyles, [Bayesian Ideal Point IRT Models in R using JAGS and Stan](https://github.com/RobertMyles/R-Scripts-Bayesian-Ideal-Point-IRT). Github repo.
+- @LuoJiao2017a
+- @GrantFurrCarpenterEtAl2015a
+- @Curtis2010a
+- Kruschke. [Bayesian Item Response Theory in JAGS: A Hierarchical Two Parameter Logistic Model](http://doingbayesiandataanalysis.blogspot.com/2015/12/bayesian-item-response-theory-in-jags.html) Dec 22, 2015.
+- Example of [Stan IRT](https://github.com/pablobarbera/quant3materials/blob/master/bayesian/lab14_IRT_issues.R).
+- @Gelfand1998a
