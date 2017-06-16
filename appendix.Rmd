@@ -237,3 +237,112 @@ $$
 
 See @Stan2016a [p. 40, 147, 241, 246]
     
+# Scaled and Unscaled Variables
+
+Though priors shouldn't depend on the data itself, many priors depends 
+
+Suppose $\tilde{Y}$, $\tilde{X}$, $\tilde{\alpha}$, $\tilde{\beta}$, and $\epsilon$ are random variables, such that
+$$
+\tilde{Y} = \tilde{\alpha} + \tilde{\beta} \tilde{X} + \epsilon .
+$$
+These random variables have the following properties:
+$$
+\begin{aligned}
+\tilde{Y} &= \frac{Y - \bar{Y}}{\sigma_Y}, & \E\[\tilde{Y}\] &= 0, & \sigma_Y^2 &= \V\[\tilde{Y}\] = 1 \\
+\tilde{X} &= \frac{X - \bar{X}}{\sigma_X}, &  \E\[\tilde{X}\] &= 0, & \sigma_X^2 &= \V\[\tilde{X}\] = 1 , \\
+&& \E\[\epsilon\] &= 0 & \sigma_{\tilde{\epsilon}}^2 &= \V\[\tilde{\epsilon}\]
+\end{aligned}
+$$
+where 
+$$
+\begin{aligned}[t]
+\bar{X} &= \E\[X\] , & s_X^2 &= \V\[X\] , \\
+\bar{Y} &= \E\[Y\] , & s_Y^2 &= \V\[Y\] . 
+\end{aligned}
+$$
+
+Then via some algebra,
+$$
+\begin{aligned}
+Y &= \underbrace{\sigma_{Y} \tilde{\alpha} + \bar{Y} - \frac{\sigma_Y }{\sigma_X} \tilde{\beta} \bar{X}}_{\alpha} + 
+\underbrace{\frac{\sigma_Y}{\sigma_X} \tilde{\beta}}_{\beta} X + \underbrace{\sigma_Y \tilde{\epsilon}}_{\epsilon} \\ 
+  &= \alpha + \beta X + \epsilon .
+\end{aligned}
+$$
+The primary relationships of interest are those between $\alpha$ and $\tilde{\alpha}$, $\beta$ and $\tilde{\beta}$, and $\epsilon$ and $\tilde{\epsilon}$.
+These can be used to convert between coefficients estimated with standardized data to the coefficients on the data scale, or to adjust scale-free weakly informative priors to the data scale.
+$$
+\begin{aligned}[t]
+\tilde{\alpha} &= \sigma_Y^{-1}\left(\alpha - \bar{Y} + \beta \bar{X} \right) \\
+&= \sigma_Y^{-1}\left(\alpha - \bar{Y} + \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} \right), \\
+\alpha &= \sigma_Y \tilde{\alpha} + \bar{Y} - \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} \\
+       &= \sigma_Y \tilde{\alpha} + \bar{Y} - \beta \bar{X} ,  \\
+\tilde{\beta} &= \frac{\sigma_X}{\sigma_Y} \beta , \\
+\beta &= \frac{\sigma_Y}{\sigma_X} \tilde{\beta} , \\
+\tilde{\epsilon} &= \epsilon / \sigma_Y , \\
+\epsilon &= \sigma_Y \tilde{\epsilon} .
+\end{aligned}
+$$
+This implies the following relationships between their means and variances,
+$$
+\begin{aligned}[t]
+E(\alpha) &= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} , \\
+E(\tilde{\alpha}) &= \frac{E(\alpha) - \bar{Y} + \beta \bar{X} }{\sigma_Y}
+\end{aligned}
+$$
+For example, a weakly informative prior on $\tilde{\alpha}$ implies a prior on $\alpha$,
+$$
+\tilde{\alpha} \sim N(0, 10^2) \to \alpha \sim N \left( \frac{\beta \bar{X} - \bar{Y}}{\sigma_Y}, \sigma_Y^2 10^2 \right) .
+$$
+
+$$
+\begin{aligned}[t]
+E(\beta) &= \frac{\sigma_Y}{\sigma_X} E(\tilde{\beta})  , &
+V(\beta) &= \frac{\sigma_Y^2}{\sigma_X^2} V(\tilde{\beta})  , \\
+E(\tilde{\beta}) &= \frac{\sigma_X}{\sigma_Y} E(\beta)  , &
+V(\tilde{\beta}) &= \frac{\sigma_X^2}{\sigma_Y^2} V(\beta) . 
+\end{aligned}
+$$
+
+For example, a weakly informative prior on $\tilde{\beta}$ implies the following prior on $\beta$,
+$$
+\tilde{\beta} \sim N(0, 2.5^2) \to \beta \sim N\left(0, \frac{\sigma_Y^2}{\sigma_X^2} 2.5^2 \right) .
+$$
+
+
+$$
+\begin{aligned}[t]
+E(\epsilon) &= 0 , & V(\epsilon) &= \sigma_Y^2 V(\tilde{\epsilon}), \\
+E(\tilde{\epsilon}) &= 0 , & V(\tilde{\epsilon}) &= \sigma_Y^{-2}  V(\epsilon) .
+\end{aligned}
+$$
+For example, a weakly informative prior on the variance of $\tilde{\epsilon}}$ implies a weakly informative prior on the variance of $\epsilon$,
+$$
+\sigma_{\tilde{\epsilon}} \sim C^{+}\left(0, 5 \right) \to 
+\sigma_{\epsilon} \sim C^{+}\left(0, \sigma_Y 5 \right) .
+$$
+
+
+All of the above calculations are a little sloppy since I'm treating the other random variables as constants when deriving these (basically assuming $\alpha$ and $\beta$ are independent).
+
+**TODO** handle multivariate case, with whitening transformation
+$$
+\tilde{Y} = \beta' \tilde{X} + \epsilon
+$$
+where 
+$$
+\begin{aligned}[t]
+E(\tilde{Y}) &= 0, & V(\tilde{Y}) &= 1, \\
+E(\tilde{X}) &= 0_k, & V(\tilde{Y}) &= I_k .
+\end{aligned}
+$$
+and
+$$
+\begin{aligned}[t]
+\tilde{Y} &= \sigma_Y^{-1}(Y - \bar{Y}) &, Y &= \sigma_{\tilde{Y}} Y + \bar{Y} \\
+\tilde{X} &= L (X - \bar{X}), & X &= L^{-1} \tilde{X} + \bar{X}
+\end{aligned}
+$$
+where $L$ is a $k \times k$ whitening matrix.
+This is a matrix such that $L' L = V(X)^{-1}$.
+With a sample, $L = chol(X' X)$.
