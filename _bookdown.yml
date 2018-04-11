@@ -1,6 +1,7 @@
 new_session: yes
 output_dir: docs
 rmd_subdir: false
+delete_merged_file: true
 rmd_files:
   - "index.Rmd"
   - "theory.Rmd"
@@ -17,7 +18,6 @@ rmd_files:
   - "binomial.Rmd"
   - "counts.Rmd"
   - "categorical.Rmd"
-  - "ordered.Rmd"
   - "shrinkage.Rmd"
   - "hierarchical.Rmd"
   - "multilevel.Rmd"

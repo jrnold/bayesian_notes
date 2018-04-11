@@ -9,17 +9,17 @@ Let $j[i]$ be the group for
 $$
 \begin{aligned}[t]
 y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma^2) \\
-\begin{pmatrix}
-\alpha_j \\
-\beta_j
-\end{pmatrix} 
+  \begin{bmatrix}
+  \alpha_j \\
+  \beta_j
+  \end{bmatrix} 
 & \sim
 \dnorm
 \left(
-\begin{pmatrix}
-\mu_\alpha \\
-\mu_\beta
-end{pmatrix},
+  \begin{bmatrix}
+  \mu_\alpha \\
+  \mu_\beta
+  \end{bmatrix},
 \Omega
 \right)
 \end{aligned} .
@@ -29,18 +29,18 @@ $$
 $$
 \begin{aligned}[t]
 y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
-\begin{pmatrix}
+\begin{bmatrix}
 \alpha \\
-\betap
-\end{pmatrix} 
+\beta
+\end{bmatrix} 
 &\sim
 \dnorm
 \left(
-\begin{pmatrix}
-\mu_\alpha \\
-\mu_\beta
-end{pmatrix},
-\Omega
+  \begin{bmatrix}
+  \mu_{\alpha} \\
+  \mu_{\beta}
+  \end{bmatrix},
+  \Omega
 \right)
 \end{aligned}
 $$
@@ -83,7 +83,7 @@ One of the difficulties in these models is the prior to the covariance matrix, $
 
 ## Example: Radon
 
-This example models the presence of radon in houess in Minnesota which appears in @GelmanHill2007a and @BDA3.
+This example models the presence of radon in houses in Minnesota which appears in @GelmanHill2007a and @BDA3.
 This is partly derived from a [Stan Case Study](http://mc-stan.org/documentation/case-studies/radon.html), which uses `PyStan` instead of **rstan**.
 
 
@@ -1073,7 +1073,7 @@ $$
 We can put a prior distribution on $\alpha_{j[i]}$,
 $$
 \begin{aligned}[t]
-\alpha_{j} &\sim N(\gamma, \tau) & \text{for $i \in (1, \dots, 85)$}
+\alpha_{j} &\sim N(\gamma, \tau) & \text{for $i \in (1, \dots, 85)}
 \end{aligned}
 $$
 This parameterization nests common cases,
@@ -1092,13 +1092,6 @@ $$
 for all $j$.
 
 *Partial pooling:* When $\tau$ is a parameter, the amount of shrinkage can be estimated from the data.
-A common prior is $\tau \sim N(0, 2.5)$,
-$$
-\tau \sim N^{+}(0, 2.5) .
-$$
-
-The partial pooling model 
-
 
 ### Varying Intercept Model
 
@@ -1141,10 +1134,12 @@ $$
 
 
 
+
+
 ### lme4
 
 In R, the most widely used package to estimate mixed-effects models is **lme4**. 
-This esimates models using maximum likelihood or restricted maximum likelihood methods (REML). 
+This estimates models using maximum likelihood or restricted maximum likelihood methods (REML). 
 This will be faster than using full-Bayesian methods but also underestimate the uncertainty, as well as being a worse approximation of the posterior.
 Additionally, in frequentist inference, the meaning of the random effects is different; they are nuisance parameters and not given standard errors.
 
@@ -1154,6 +1149,12 @@ These are also good introductions to classical approaches to mixed effects model
 
 ```r
 library("lme4")
+#> Loading required package: Matrix
+#> 
+#> Attaching package: 'Matrix'
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     expand
 ```
 
 Complete pooling
@@ -1311,7 +1312,6 @@ A common application for these models are Time-Series Cross-Section (TSCS) or pa
 In this case, both the time and units can be modeled.
 
 
-
 ## Extensions
 
 - Including group-level covariates
@@ -1338,7 +1338,7 @@ As such, random effects is not much different than fixed effects.
 
 This literature provides many different rules of thumb for the number of groups necessary to be able to use random effects: 8, 10, 30, 50, or 100 [@Stegmueller2013a, p. 749].
 
-@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelibhood methods for all numbers of groups. 
+@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups. 
 ML methods do not suffer severe bias above 10-15 groups.
 Bayesian point estimates are biased for smaller numbers of groups, but less than the ML.
 Additionally, the Bayesian methods have better frequentist coverage than ML methods.
@@ -1351,13 +1351,6 @@ Additionally, the Bayesian methods have better frequentist coverage than ML meth
 @BafumiGelman2006a analyze this case.
 
 The standard suggestion in frequentist literature is to use a Hausman test where the null hypothesis is that random effects are consistent. However, @ClarkLinzer2014a note that in small samples this is likely to fail to reject random effects; and in large samples, random effects behave like fixed effects anyways.
-
-### Comparison to Other Panel Methods
-
-**TODO** 
-
-- cluster-robust SE
-- panel corrected standard errors
 
 
 ## References 
@@ -1383,8 +1376,8 @@ Texts and chapters on multi-level analysis:
 Stan model examples:
 
 - Stan models for [ARM](https://github.com/stan-dev/example-models/wiki/ARM-Models)
-- http://mc-stan.org/documentation/case-studies/radon.html
-- https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/
+- <http://mc-stan.org/documentation/case-studies/radon.html>
+- <https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/>
 
 
 Examples of multilevel models
@@ -1402,7 +1395,7 @@ Examples of multilevel models
 - @Arzheimer2009a: right-wing voting
 - @HoogheReeskensStolleEtAl2009a: social and political trust
 - @AndersonSinger2008a: satisfaction with democracy
-- @MeerDethScheepers2009a: politial participation 
+- @MeerDethScheepers2009a: political participation 
 - @IversenRosenbluth2006a: political economy of the gender wage gap
 - @HoogheMarks2004a: support for European integration
 - @LaxPhillips2009a: American politics using states and neighborhoods

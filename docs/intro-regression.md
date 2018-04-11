@@ -12,7 +12,7 @@ Duncan's occupational prestige data is an example dataset used throughout the po
 It is originally from @Duncan1961a consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that 
 
 ```r
-data("Duncan", package = "car")
+data("Duncan", package = "carData")
 ```
 
 ## The Statistical Model
@@ -164,7 +164,7 @@ transformed parameters {
   // mu is the observation fitted/predicted value
   // also called yhat
   vector[n] mu;
-  mu = X * b;
+  mu = a + X * b;
 }
 model {
   // priors
@@ -176,11 +176,8 @@ model {
 generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
-  // log-likelihood posterior
-  vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
-    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }
 ```
@@ -232,11 +229,8 @@ model {
 generated quantities {
   // simulate data from the posterior
   vector[n] y_rep;
-  // log-likelihood posterior
-  vector[n] log_lik;
   for (i in 1:n) {
     y_rep[i] = normal_rng(mu[i], sigma);
-    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }</code>
 </pre>

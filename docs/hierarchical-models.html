@@ -6,9 +6,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Updating: A Set of Bayesian Notes</title>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7.1 and GitBook 2.6.7">
 
   <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
@@ -34,7 +33,6 @@
   
 <link rel="prev" href="shrinkage-regularization.html">
 <link rel="next" href="multilevel-models.html">
-
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -52,108 +50,76 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
 
 <body>
 
-\[
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\Cor}{Cor}
-\DeclareMathOperator{\Bias}{Bias}
-\DeclareMathOperator{\MSE}{MSE}
-\DeclareMathOperator{\RMSE}{RMSE}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\tr}{tr}
-\DeclareMathOperator{\median}{median}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator{\logistic}{Logistic}
-\DeclareMathOperator{\logit}{Logit}
 
-\newcommand{\mat}[1]{\boldsymbol{#1}}
-\newcommand{\vec}[1]{\boldsymbol{#1}}
-\newcommand{\T}{'}
-
-% This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}[1]{t_{#1}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dbin}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
-
-
-
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbb{N}}
-
-\newcommand{\cia}{\perp\!\!\!\perp}
-\DeclareMathOperator*{\plim}{plim}
-\]
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
@@ -247,8 +213,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>8.5</b> Multinomial / Categorical Models</a></li>
 <li class="chapter" data-level="8.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>8.6</b> Gamma Regression</a></li>
 <li class="chapter" data-level="8.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>8.7</b> Beta Regression</a></li>
-<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#ordered-logistic"><i class="fa fa-check"></i><b>8.8</b> Ordered Logistic</a></li>
-<li class="chapter" data-level="8.9" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.9</b> References</a></li>
+<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.8</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>9</b> Binomial Models</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>9.0.1</b> Link Functions {link-function}</a></li>
@@ -278,111 +243,111 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>11</b> Categorical Variables</a><ul>
 <li class="chapter" data-level="11.1" data-path="categorical-variables.html"><a href="categorical-variables.html#example-mexico-vote-choice"><i class="fa fa-check"></i><b>11.1</b> Example: Mexico Vote Choice</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="ordered-categorical-outcomes.html"><a href="ordered-categorical-outcomes.html"><i class="fa fa-check"></i><b>12</b> Ordered Categorical Outcomes</a></li>
-<li class="chapter" data-level="13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html"><i class="fa fa-check"></i><b>13</b> Shrinkage and Regularization</a><ul>
-<li class="chapter" data-level="13.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#normal-linear-regression-model"><i class="fa fa-check"></i><b>13.1</b> Normal Linear Regression Model</a></li>
-<li class="chapter" data-level="13.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#penalized-regression"><i class="fa fa-check"></i><b>13.2</b> Penalized Regression</a><ul>
-<li class="chapter" data-level="13.2.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#ridge-regression"><i class="fa fa-check"></i><b>13.2.1</b> Ridge Regression</a></li>
-<li class="chapter" data-level="13.2.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#lasso"><i class="fa fa-check"></i><b>13.2.2</b> Lasso</a></li>
+<li class="chapter" data-level="12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html"><i class="fa fa-check"></i><b>12</b> Shrinkage and Regularization</a><ul>
+<li class="chapter" data-level="12.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#normal-linear-regression-model"><i class="fa fa-check"></i><b>12.1</b> Normal Linear Regression Model</a></li>
+<li class="chapter" data-level="12.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#penalized-regression"><i class="fa fa-check"></i><b>12.2</b> Penalized Regression</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#ridge-regression"><i class="fa fa-check"></i><b>12.2.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="12.2.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#lasso"><i class="fa fa-check"></i><b>12.2.2</b> Lasso</a></li>
 </ul></li>
-<li class="chapter" data-level="13.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-shrinkage-priors"><i class="fa fa-check"></i><b>13.3</b> Bayesian Shrinkage Priors</a></li>
-<li class="chapter" data-level="13.4" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#differences-between-bayesian-shrinkage-and-penalized-likelihood"><i class="fa fa-check"></i><b>13.4</b> Differences between Bayesian Shrinkage and Penalized Likelihood</a></li>
-<li class="chapter" data-level="13.5" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-shrinkage-priors"><i class="fa fa-check"></i><b>13.5</b> Hierarchical Shrinkage Priors</a></li>
-<li class="chapter" data-level="13.6" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#example-1"><i class="fa fa-check"></i><b>13.6</b> Example</a><ul>
-<li class="chapter" data-level="13.6.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>13.6.1</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="13.6.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>13.6.2</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="13.6.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#comparison"><i class="fa fa-check"></i><b>13.6.3</b> Comparison</a></li>
+<li class="chapter" data-level="12.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-shrinkage-priors"><i class="fa fa-check"></i><b>12.3</b> Bayesian Shrinkage Priors</a></li>
+<li class="chapter" data-level="12.4" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#differences-between-bayesian-shrinkage-and-penalized-likelihood"><i class="fa fa-check"></i><b>12.4</b> Differences between Bayesian Shrinkage and Penalized Likelihood</a></li>
+<li class="chapter" data-level="12.5" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-shrinkage-priors"><i class="fa fa-check"></i><b>12.5</b> Hierarchical Shrinkage Priors</a></li>
+<li class="chapter" data-level="12.6" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#example-1"><i class="fa fa-check"></i><b>12.6</b> Example</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>12.6.1</b> Double Exponential (Laplace) Prior</a></li>
+<li class="chapter" data-level="12.6.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>12.6.2</b> Hierarchical Prior (HS)</a></li>
+<li class="chapter" data-level="12.6.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#comparison"><i class="fa fa-check"></i><b>12.6.3</b> Comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="13.7" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#shrinkage-parameters"><i class="fa fa-check"></i><b>13.7</b> Shrinkage Parameters</a></li>
-<li class="chapter" data-level="13.8" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>13.8</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="13.9" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#r-implementations"><i class="fa fa-check"></i><b>13.9</b> R Implementations</a></li>
-<li class="chapter" data-level="13.10" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>13.10</b> Bayesian Model Averaging</a><ul>
-<li class="chapter" data-level="13.10.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#zellners-g-prior"><i class="fa fa-check"></i><b>13.10.1</b> Zellner’s g-prior</a></li>
+<li class="chapter" data-level="12.7" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#shrinkage-parameters"><i class="fa fa-check"></i><b>12.7</b> Shrinkage Parameters</a></li>
+<li class="chapter" data-level="12.8" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>12.8</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="12.9" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#r-implementations"><i class="fa fa-check"></i><b>12.9</b> R Implementations</a></li>
+<li class="chapter" data-level="12.10" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>12.10</b> Bayesian Model Averaging</a><ul>
+<li class="chapter" data-level="12.10.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#zellners-g-prior"><i class="fa fa-check"></i><b>12.10.1</b> Zellner’s g-prior</a></li>
 </ul></li>
-<li class="chapter" data-level="13.11" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>13.11</b> Slab and Spike Priors</a></li>
-<li class="chapter" data-level="13.12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#technical-notes"><i class="fa fa-check"></i><b>13.12</b> Technical Notes</a></li>
-<li class="chapter" data-level="13.13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>13.13</b> Multiple Comparisons and Thresholding rules</a></li>
-<li class="chapter" data-level="13.14" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>13.14</b> Examples of Applications of Sensitivity Analysis</a></li>
+<li class="chapter" data-level="12.11" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>12.11</b> Slab and Spike Priors</a></li>
+<li class="chapter" data-level="12.12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#technical-notes"><i class="fa fa-check"></i><b>12.12</b> Technical Notes</a></li>
+<li class="chapter" data-level="12.13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>12.13</b> Multiple Comparisons and Thresholding rules</a></li>
+<li class="chapter" data-level="12.14" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>12.14</b> Examples of Applications of Sensitivity Analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>14</b> Hierarchical Models</a><ul>
-<li class="chapter" data-level="14.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>14.1</b> Example: Baseball Hits</a><ul>
-<li class="chapter" data-level="14.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#other-examples"><i class="fa fa-check"></i><b>14.1.1</b> Other Examples</a></li>
+<li class="chapter" data-level="13" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>13</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="13.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>13.1</b> Example: Baseball Hits</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#other-examples"><i class="fa fa-check"></i><b>13.1.1</b> Other Examples</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>15</b> Multilevel Models</a><ul>
-<li class="chapter" data-level="15.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>15.1</b> Example: Radon</a><ul>
-<li class="chapter" data-level="15.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>15.1.1</b> Data</a></li>
-<li class="chapter" data-level="15.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>15.1.2</b> Varying Intercepts Models</a></li>
-<li class="chapter" data-level="15.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>15.1.3</b> Varying Intercept Model</a></li>
-<li class="chapter" data-level="15.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>15.1.4</b> Varying Slope Model</a></li>
-<li class="chapter" data-level="15.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>15.1.5</b> Group Level Predictors</a></li>
-<li class="chapter" data-level="15.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>15.1.6</b> lme4</a></li>
-<li class="chapter" data-level="15.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>15.1.7</b> rstanarm</a></li>
+<li class="chapter" data-level="14" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>14</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="14.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>14.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>14.1.1</b> Data</a></li>
+<li class="chapter" data-level="14.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>14.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="14.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>14.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="14.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>14.1.4</b> Varying Slope Model</a></li>
+<li class="chapter" data-level="14.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>14.1.5</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="14.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>14.1.6</b> lme4</a></li>
+<li class="chapter" data-level="14.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>14.1.7</b> rstanarm</a></li>
 </ul></li>
-<li class="chapter" data-level="15.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>15.2</b> Pooling of Hierarchical Parameters</a></li>
-<li class="chapter" data-level="15.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>15.3</b> ANOVA</a></li>
-<li class="chapter" data-level="15.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>15.4</b> Time-Series Cross Section</a></li>
-<li class="chapter" data-level="15.5" data-path="multilevel-models.html"><a href="multilevel-models.html#extensions"><i class="fa fa-check"></i><b>15.5</b> Extensions</a></li>
-<li class="chapter" data-level="15.6" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>15.6</b> Miscellaneous</a><ul>
-<li class="chapter" data-level="15.6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>15.6.1</b> How many groups?</a></li>
-<li class="chapter" data-level="15.6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>15.6.2</b> Correlation between Predictors and Errors</a></li>
-<li class="chapter" data-level="15.6.3" data-path="multilevel-models.html"><a href="multilevel-models.html#comparison-to-other-panel-methods"><i class="fa fa-check"></i><b>15.6.3</b> Comparison to Other Panel Methods</a></li>
+<li class="chapter" data-level="14.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>14.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="14.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>14.3</b> ANOVA</a></li>
+<li class="chapter" data-level="14.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>14.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="14.5" data-path="multilevel-models.html"><a href="multilevel-models.html#extensions"><i class="fa fa-check"></i><b>14.5</b> Extensions</a></li>
+<li class="chapter" data-level="14.6" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>14.6</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>14.6.1</b> How many groups?</a></li>
+<li class="chapter" data-level="14.6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>14.6.2</b> Correlation between Predictors and Errors</a></li>
 </ul></li>
-<li class="chapter" data-level="15.7" data-path="multilevel-models.html"><a href="multilevel-models.html#references-9"><i class="fa fa-check"></i><b>15.7</b> References</a></li>
+<li class="chapter" data-level="14.7" data-path="multilevel-models.html"><a href="multilevel-models.html#references-9"><i class="fa fa-check"></i><b>14.7</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="15.8" data-path="multilevel-models.html"><a href="multilevel-models.html#parameters"><i class="fa fa-check"></i><b>15.8</b> Parameters</a></li>
-<li class="chapter" data-level="15.9" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>15.9</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="15.9.1" data-path="multilevel-models.html"><a href="multilevel-models.html#location-scale-families"><i class="fa fa-check"></i><b>15.9.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="15.9.2" data-path="multilevel-models.html"><a href="multilevel-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>15.9.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="15.9.3" data-path="multilevel-models.html"><a href="multilevel-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>15.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="15.9.4" data-path="multilevel-models.html"><a href="multilevel-models.html#qr-factorization"><i class="fa fa-check"></i><b>15.9.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="15.9.5" data-path="multilevel-models.html"><a href="multilevel-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>15.9.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="14.8" data-path="multilevel-models.html"><a href="multilevel-models.html#parameters"><i class="fa fa-check"></i><b>14.8</b> Parameters</a></li>
+<li class="chapter" data-level="14.9" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>14.9</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="14.9.1" data-path="multilevel-models.html"><a href="multilevel-models.html#location-scale-families"><i class="fa fa-check"></i><b>14.9.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="14.9.2" data-path="multilevel-models.html"><a href="multilevel-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>14.9.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="14.9.3" data-path="multilevel-models.html"><a href="multilevel-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>14.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="14.9.4" data-path="multilevel-models.html"><a href="multilevel-models.html#qr-factorization"><i class="fa fa-check"></i><b>14.9.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="14.9.5" data-path="multilevel-models.html"><a href="multilevel-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>14.9.5</b> Cholesky Decomposition</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>16</b> Notes</a><ul>
-<li class="chapter" data-level="16.1" data-path="notes.html"><a href="notes.html#syllabi"><i class="fa fa-check"></i><b>16.1</b> Syllabi</a></li>
-<li class="chapter" data-level="16.2" data-path="notes.html"><a href="notes.html#textbooks"><i class="fa fa-check"></i><b>16.2</b> Textbooks</a></li>
-<li class="chapter" data-level="16.3" data-path="notes.html"><a href="notes.html#topics"><i class="fa fa-check"></i><b>16.3</b> Topics</a><ul>
-<li class="chapter" data-level="16.3.1" data-path="notes.html"><a href="notes.html#overviews"><i class="fa fa-check"></i><b>16.3.1</b> Overviews</a></li>
-<li class="chapter" data-level="16.3.2" data-path="notes.html"><a href="notes.html#bayesian-philosophy"><i class="fa fa-check"></i><b>16.3.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="16.3.3" data-path="notes.html"><a href="notes.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>16.3.3</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="16.3.4" data-path="notes.html"><a href="notes.html#categorical"><i class="fa fa-check"></i><b>16.3.4</b> Categorical</a></li>
-<li class="chapter" data-level="16.3.5" data-path="notes.html"><a href="notes.html#identifiability"><i class="fa fa-check"></i><b>16.3.5</b> Identifiability</a></li>
-<li class="chapter" data-level="16.3.6" data-path="notes.html"><a href="notes.html#time-series"><i class="fa fa-check"></i><b>16.3.6</b> Time Series</a></li>
-<li class="chapter" data-level="16.3.7" data-path="notes.html"><a href="notes.html#topic-models"><i class="fa fa-check"></i><b>16.3.7</b> Topic Models</a></li>
-<li class="chapter" data-level="16.3.8" data-path="notes.html"><a href="notes.html#nonparametric-bayesian-methods"><i class="fa fa-check"></i><b>16.3.8</b> Nonparametric Bayesian Methods</a></li>
-<li class="chapter" data-level="16.3.9" data-path="notes.html"><a href="notes.html#prior-elicitation"><i class="fa fa-check"></i><b>16.3.9</b> Prior Elicitation</a></li>
-<li class="chapter" data-level="16.3.10" data-path="notes.html"><a href="notes.html#variable-selection"><i class="fa fa-check"></i><b>16.3.10</b> Variable Selection</a></li>
-<li class="chapter" data-level="16.3.11" data-path="notes.html"><a href="notes.html#shrinkage"><i class="fa fa-check"></i><b>16.3.11</b> Shrinkage</a></li>
-<li class="chapter" data-level="16.3.12" data-path="notes.html"><a href="notes.html#applied-bayes-rule"><i class="fa fa-check"></i><b>16.3.12</b> Applied Bayes Rule</a></li>
+<li class="chapter" data-level="15" data-path="scaled-and-unscaled-variables.html"><a href="scaled-and-unscaled-variables.html"><i class="fa fa-check"></i><b>15</b> Scaled and Unscaled Variables</a></li>
+<li class="chapter" data-level="16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>16</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>16.0.1</b> Textbooks</a></li>
+<li class="chapter" data-level="16.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>16.1</b> Syllabi</a></li>
+<li class="chapter" data-level="16.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>16.2</b> Topics</a></li>
+<li class="chapter" data-level="16.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem"><i class="fa fa-check"></i><b>16.3</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="16.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>16.4</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>16.4.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="16.4.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>16.4.2</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="16.4.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>16.4.3</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="16.4.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>16.4.4</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="16.4.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>16.4.5</b> Categorical</a></li>
+<li class="chapter" data-level="16.4.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>16.4.6</b> Variable Selection</a></li>
+<li class="chapter" data-level="16.4.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>16.4.7</b> Multiple Testing</a></li>
+<li class="chapter" data-level="16.4.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events"><i class="fa fa-check"></i><b>16.4.8</b> Rare Events</a></li>
+<li class="chapter" data-level="16.4.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>16.4.9</b> Identifiability</a></li>
+<li class="chapter" data-level="16.4.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>16.4.10</b> Shrinkage</a></li>
+<li class="chapter" data-level="16.4.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#convergence"><i class="fa fa-check"></i><b>16.4.11</b> Convergence</a></li>
+<li class="chapter" data-level="16.4.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>16.4.12</b> Software</a></li>
+<li class="chapter" data-level="16.4.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-3"><i class="fa fa-check"></i><b>16.4.13</b> Stan</a></li>
+<li class="chapter" data-level="16.4.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>16.4.14</b> Diagrams</a></li>
+<li class="chapter" data-level="16.4.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors"><i class="fa fa-check"></i><b>16.4.15</b> Priors</a></li>
 </ul></li>
-<li class="chapter" data-level="16.4" data-path="notes.html"><a href="notes.html#computation-methods"><i class="fa fa-check"></i><b>16.4</b> Computation Methods</a><ul>
-<li class="chapter" data-level="16.4.1" data-path="notes.html"><a href="notes.html#software"><i class="fa fa-check"></i><b>16.4.1</b> Software</a></li>
-<li class="chapter" data-level="16.4.2" data-path="notes.html"><a href="notes.html#stan-3"><i class="fa fa-check"></i><b>16.4.2</b> Stan</a></li>
-<li class="chapter" data-level="16.4.3" data-path="notes.html"><a href="notes.html#diagrams"><i class="fa fa-check"></i><b>16.4.3</b> Diagrams</a></li>
-<li class="chapter" data-level="16.4.4" data-path="notes.html"><a href="notes.html#political-science-bayesian-works"><i class="fa fa-check"></i><b>16.4.4</b> Political Science Bayesian Works</a></li>
+<li class="chapter" data-level="16.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>16.5</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="16.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>16.6</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="16.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>16.7</b> Mixture Models</a></li>
+<li class="chapter" data-level="16.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>16.8</b> Model Checking</a><ul>
+<li class="chapter" data-level="16.8.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>16.8.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="16.8.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>16.8.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="16.8.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>16.8.3</b> Software Validation</a></li>
 </ul></li>
-<li class="chapter" data-level="16.5" data-path="notes.html"><a href="notes.html#model-checking-1"><i class="fa fa-check"></i><b>16.5</b> Model Checking</a></li>
-<li class="chapter" data-level="16.6" data-path="notes.html"><a href="notes.html#general-applications-and-models"><i class="fa fa-check"></i><b>16.6</b> General Applications and Models</a><ul>
-<li class="chapter" data-level="16.6.1" data-path="notes.html"><a href="notes.html#mixed-methods-and-qualitative-research"><i class="fa fa-check"></i><b>16.6.1</b> Mixed Methods and Qualitative Research</a></li>
+<li class="chapter" data-level="16.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>16.9</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="16.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>16.10</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="16.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>16.11</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="16.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>16.12</b> History of Bayesian Statistics</a></li>
 </ul></li>
-<li class="chapter" data-level="16.7" data-path="notes.html"><a href="notes.html#hierarchical-modeling"><i class="fa fa-check"></i><b>16.7</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="16.8" data-path="notes.html"><a href="notes.html#shrinkageregularization"><i class="fa fa-check"></i><b>16.8</b> Shrinkage/Regularization</a><ul>
-<li class="chapter" data-level="16.8.1" data-path="notes.html"><a href="notes.html#examples"><i class="fa fa-check"></i><b>16.8.1</b> Examples</a></li>
-<li class="chapter" data-level="16.8.2" data-path="notes.html"><a href="notes.html#latent-variable-models"><i class="fa fa-check"></i><b>16.8.2</b> Latent Variable Models</a></li>
+<li class="chapter" data-level="17" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html"><i class="fa fa-check"></i><b>17</b> Sampling Difficulties</a><ul>
+<li class="chapter" data-level="17.1" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>17.1</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="17.2" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#pooling-polls"><i class="fa fa-check"></i><b>17.2</b> Pooling Polls</a></li>
+<li class="chapter" data-level="17.3" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#numerical-analysis"><i class="fa fa-check"></i><b>17.3</b> Numerical Analysis</a></li>
+<li class="chapter" data-level="17.4" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>17.4</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="17.5" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>17.5</b> Bayesian point estimation / Decision</a></li>
 </ul></li>
-<li class="chapter" data-level="16.9" data-path="notes.html"><a href="notes.html#bayes-theorem-examples"><i class="fa fa-check"></i><b>16.9</b> Bayes Theorem Examples</a><ul>
-<li class="chapter" data-level="16.9.1" data-path="notes.html"><a href="notes.html#miscallaneous"><i class="fa fa-check"></i><b>16.9.1</b> Miscallaneous</a></li>
-<li class="chapter" data-level="16.9.2" data-path="notes.html"><a href="notes.html#german-tank-problem"><i class="fa fa-check"></i><b>16.9.2</b> German Tank Problem</a></li>
-</ul></li>
-<li class="chapter" data-level="16.10" data-path="notes.html"><a href="notes.html#good-turing-estimator"><i class="fa fa-check"></i><b>16.10</b> Good-Turing Estimator</a></li>
-<li class="chapter" data-level="16.11" data-path="notes.html"><a href="notes.html#reproducibility"><i class="fa fa-check"></i><b>16.11</b> Reproducibility</a><ul>
-<li class="chapter" data-level="16.11.1" data-path="notes.html"><a href="notes.html#uncategorized"><i class="fa fa-check"></i><b>16.11.1</b> Uncategorized</a></li>
-</ul></li>
-<li class="chapter" data-level="16.12" data-path="notes.html"><a href="notes.html#empirical-bayes"><i class="fa fa-check"></i><b>16.12</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="16.13" data-path="notes.html"><a href="notes.html#things-to-cover"><i class="fa fa-check"></i><b>16.13</b> Things to cover</a></li>
-</ul></li>
+<li class="chapter" data-level="18" data-path="information-theory.html"><a href="information-theory.html"><i class="fa fa-check"></i><b>18</b> Information Theory</a></li>
+<li class="chapter" data-level="19" data-path="stan-modeling-language.html"><a href="stan-modeling-language.html"><i class="fa fa-check"></i><b>19</b> Stan Modeling Language</a></li>
 <li class="chapter" data-level="" data-path="references-10.html"><a href="references-10.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -401,8 +366,69 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\logistic}{Logistic}
+\DeclareMathOperator{\logit}{Logit}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dnorm}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpois}{\mathrm{Poisson}}
+\newcommand{\dbin}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnbinom}{\mathrm{Neg-bin}}
+\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
+
+
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
 <div id="hierarchical-models" class="section level1">
-<h1><span class="header-section-number">14</span> Hierarchical Models</h1>
+<h1><span class="header-section-number">13</span> Hierarchical Models</h1>
 <ul>
 <li><em>Hierarchical models:</em> often groups of parameters, <span class="math inline">\(\{\theta_1, \dots, \theta_J\}\)</span>, are related.</li>
 <li>E.g. countries, states, counties, years, etc. Even the regression coefficients, <span class="math inline">\(\beta_1, \dots, \beta_k\)</span> seen the in the <a href="shrinkage-regularization.html#shrinkage-regularization">Shrinkage and Regularization</a> chapter.</li>
@@ -415,74 +441,85 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>i.i.d. models are a special case of exchangeability.</li>
 </ul>
 <div id="example-baseball-hits" class="section level2">
-<h2><span class="header-section-number">14.1</span> Example: Baseball Hits</h2>
-<p><span class="citation">Efron and Morris (1975)</span> analyzed data from 18 players in the 1970 season. The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.</p>
+<h2><span class="header-section-number">13.1</span> Example: Baseball Hits</h2>
+<p><span class="citation">Efron and Morris (1975)</span> analyzed data from 18 players in the 1970 season.
+The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.</p>
 <p>The following example is based on <span class="citation">Carpenter, Gabry, and Goodrich (2017)</span> and the <strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong> vignette <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/pooling.html">Hierarchical Partial Pooling for Repeated Binary Trials</a>.</p>
 <p>The hitting data used in <span class="citation">Efron and Morris (1975)</span> is included in <strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong> as <a href="https://www.rdocumentation.org/packages/rstanarm/topics/bball1970">rstanarm</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;bball1970&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;rstanarm&quot;</span>)
-bball1970 &lt;-
-<span class="st">  </span><span class="kw">mutate</span>(bball1970,
-         <span class="dt">BatAvg1 =</span> Hits <span class="op">/</span><span class="st"> </span>AB,
-         <span class="dt">BatAvg2 =</span> RemainingHits <span class="op">/</span><span class="st"> </span>RemainingAB)
-bball1970
-<span class="co">#&gt;        Player AB Hits RemainingAB RemainingHits BatAvg1 BatAvg2</span>
-<span class="co">#&gt; 1    Clemente 45   18         367           127   0.400   0.346</span>
-<span class="co">#&gt; 2    Robinson 45   17         426           127   0.378   0.298</span>
-<span class="co">#&gt; 3      Howard 45   16         521           144   0.356   0.276</span>
-<span class="co">#&gt; 4   Johnstone 45   15         275            61   0.333   0.222</span>
-<span class="co">#&gt; 5       Berry 45   14         418           114   0.311   0.273</span>
-<span class="co">#&gt; 6     Spencer 45   14         466           126   0.311   0.270</span>
-<span class="co">#&gt; 7   Kessinger 45   13         586           155   0.289   0.265</span>
-<span class="co">#&gt; 8    Alvarado 45   12         138            29   0.267   0.210</span>
-<span class="co">#&gt; 9       Santo 45   11         510           137   0.244   0.269</span>
-<span class="co">#&gt; 10    Swaboda 45   11         200            46   0.244   0.230</span>
-<span class="co">#&gt; 11 Petrocelli 45   10         538           142   0.222   0.264</span>
-<span class="co">#&gt; 12  Rodriguez 45   10         186            42   0.222   0.226</span>
-<span class="co">#&gt; 13      Scott 45   10         435           132   0.222   0.303</span>
-<span class="co">#&gt; 14      Unser 45   10         277            73   0.222   0.264</span>
-<span class="co">#&gt; 15   Williams 45   10         591           195   0.222   0.330</span>
-<span class="co">#&gt; 16 Campaneris 45    9         558           159   0.200   0.285</span>
-<span class="co">#&gt; 17     Munson 45    8         408           129   0.178   0.316</span>
-<span class="co">#&gt; 18      Alvis 45    7          70            14   0.156   0.200</span></code></pre></div>
-<p>Let <span class="math inline">\(y_i\)</span> be the number of hits in the first 45 at bats for player <span class="math inline">\(i\)</span>, <span class="math display">\[
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;bball1970&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;rstanarm&quot;</span>)</a>
+<a class="sourceLine" id="cb110-2" data-line-number="2">bball1970 &lt;-</a>
+<a class="sourceLine" id="cb110-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(bball1970,</a>
+<a class="sourceLine" id="cb110-4" data-line-number="4">         <span class="dt">BatAvg1 =</span> Hits <span class="op">/</span><span class="st"> </span>AB,</a>
+<a class="sourceLine" id="cb110-5" data-line-number="5">         <span class="dt">BatAvg2 =</span> RemainingHits <span class="op">/</span><span class="st"> </span>RemainingAB)</a>
+<a class="sourceLine" id="cb110-6" data-line-number="6">bball1970</a>
+<a class="sourceLine" id="cb110-7" data-line-number="7"><span class="co">#&gt;        Player AB Hits RemainingAB RemainingHits BatAvg1 BatAvg2</span></a>
+<a class="sourceLine" id="cb110-8" data-line-number="8"><span class="co">#&gt; 1    Clemente 45   18         367           127   0.400   0.346</span></a>
+<a class="sourceLine" id="cb110-9" data-line-number="9"><span class="co">#&gt; 2    Robinson 45   17         426           127   0.378   0.298</span></a>
+<a class="sourceLine" id="cb110-10" data-line-number="10"><span class="co">#&gt; 3      Howard 45   16         521           144   0.356   0.276</span></a>
+<a class="sourceLine" id="cb110-11" data-line-number="11"><span class="co">#&gt; 4   Johnstone 45   15         275            61   0.333   0.222</span></a>
+<a class="sourceLine" id="cb110-12" data-line-number="12"><span class="co">#&gt; 5       Berry 45   14         418           114   0.311   0.273</span></a>
+<a class="sourceLine" id="cb110-13" data-line-number="13"><span class="co">#&gt; 6     Spencer 45   14         466           126   0.311   0.270</span></a>
+<a class="sourceLine" id="cb110-14" data-line-number="14"><span class="co">#&gt; 7   Kessinger 45   13         586           155   0.289   0.265</span></a>
+<a class="sourceLine" id="cb110-15" data-line-number="15"><span class="co">#&gt; 8    Alvarado 45   12         138            29   0.267   0.210</span></a>
+<a class="sourceLine" id="cb110-16" data-line-number="16"><span class="co">#&gt; 9       Santo 45   11         510           137   0.244   0.269</span></a>
+<a class="sourceLine" id="cb110-17" data-line-number="17"><span class="co">#&gt; 10    Swaboda 45   11         200            46   0.244   0.230</span></a>
+<a class="sourceLine" id="cb110-18" data-line-number="18"><span class="co">#&gt; 11 Petrocelli 45   10         538           142   0.222   0.264</span></a>
+<a class="sourceLine" id="cb110-19" data-line-number="19"><span class="co">#&gt; 12  Rodriguez 45   10         186            42   0.222   0.226</span></a>
+<a class="sourceLine" id="cb110-20" data-line-number="20"><span class="co">#&gt; 13      Scott 45   10         435           132   0.222   0.303</span></a>
+<a class="sourceLine" id="cb110-21" data-line-number="21"><span class="co">#&gt; 14      Unser 45   10         277            73   0.222   0.264</span></a>
+<a class="sourceLine" id="cb110-22" data-line-number="22"><span class="co">#&gt; 15   Williams 45   10         591           195   0.222   0.330</span></a>
+<a class="sourceLine" id="cb110-23" data-line-number="23"><span class="co">#&gt; 16 Campaneris 45    9         558           159   0.200   0.285</span></a>
+<a class="sourceLine" id="cb110-24" data-line-number="24"><span class="co">#&gt; 17     Munson 45    8         408           129   0.178   0.316</span></a>
+<a class="sourceLine" id="cb110-25" data-line-number="25"><span class="co">#&gt; 18      Alvis 45    7          70            14   0.156   0.200</span></a></code></pre></div>
+<p>Let <span class="math inline">\(y_i\)</span> be the number of hits in the first 45 at bats for player <span class="math inline">\(i\)</span>,
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp; \sim \dbin(45, \mu_i),
 \end{aligned}
-\]</span> where <span class="math inline">\(\mu_i \in (0, 1)\)</span> is the player-specific batting average. Priors will be placed on the log-odds parameter, <span class="math inline">\(\eta \in \R\)</span>, <span class="math display">\[
+\]</span>
+where <span class="math inline">\(\mu_i \in (0, 1)\)</span> is the player-specific batting average.
+Priors will be placed on the log-odds parameter, <span class="math inline">\(\eta \in \R\)</span>,
+<span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;\sim \frac{1}{1 + \exp(-\eta_i)} . \\
 \end{aligned}
 \]</span></p>
 <p>This example considers three ways of modeling <span class="math inline">\(\mu_i\)</span>:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Complete Pooling:</strong> All players have the same batting average parameter. <span class="math display">\[
-\eta_i = \eta .
-\]</span> The common (log-odds) batting average is given a weakly informative prior, <span class="math display">\[
-\eta \sim \dnorm(0, 2.5)
-\]</span> On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.</p></li>
-<li><p><strong>Non-pooled:</strong> Each players (log-odds) batting average is independent, with each assigned a separate weak prior. <span class="math display">\[
-\begin{aligned}[t]
-\eta_i &amp;\sim \dnorm(0, 2.5)
-\end{aligned}
-\]</span></p></li>
-<li><p><strong>Partial-pooling:</strong> Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution. <span class="math display">\[
-\begin{aligned}[t]
-\eta_i &amp;\sim \dnorm(0, \tau) \\
-\tau &amp;\sim \dnorm(0, 1)
-\end{aligned}
-\]</span></p></li>
+<li><p><strong>Complete Pooling:</strong> All players have the same batting average parameter.
+<span class="math display">\[
+ \eta_i = \eta .
+ \]</span>
+The common (log-odds) batting average is given a weakly informative prior,
+<span class="math display">\[
+ \eta \sim \dnorm(0, 2.5)
+ \]</span>
+On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.</p></li>
+<li><p><strong>Non-pooled:</strong> Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
+<span class="math display">\[
+ \begin{aligned}[t]
+ \eta_i &amp;\sim \dnorm(0, 2.5)
+ \end{aligned}
+ \]</span></p></li>
+<li><p><strong>Partial-pooling:</strong> Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution.
+<span class="math display">\[
+ \begin{aligned}[t]
+ \eta_i &amp;\sim \dnorm(0, \tau) \\
+ \tau &amp;\sim \dnorm(0, 1)
+ \end{aligned}
+ \]</span></p></li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bball1970_data &lt;-<span class="st"> </span><span class="kw">list</span>(
-  <span class="dt">N =</span> <span class="kw">nrow</span>(bball1970),
-  <span class="dt">k =</span> bball1970<span class="op">$</span>AB,
-  <span class="dt">y =</span> bball1970<span class="op">$</span>Hits,
-  <span class="dt">k_new =</span> bball1970<span class="op">$</span>RemainingAB,
-  <span class="dt">y_new =</span> bball1970<span class="op">$</span>RemainingHits
-)</code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1">bball1970_data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb111-2" data-line-number="2">  <span class="dt">N =</span> <span class="kw">nrow</span>(bball1970),</a>
+<a class="sourceLine" id="cb111-3" data-line-number="3">  <span class="dt">k =</span> bball1970<span class="op">$</span>AB,</a>
+<a class="sourceLine" id="cb111-4" data-line-number="4">  <span class="dt">y =</span> bball1970<span class="op">$</span>Hits,</a>
+<a class="sourceLine" id="cb111-5" data-line-number="5">  <span class="dt">k_new =</span> bball1970<span class="op">$</span>RemainingAB,</a>
+<a class="sourceLine" id="cb111-6" data-line-number="6">  <span class="dt">y_new =</span> bball1970<span class="op">$</span>RemainingHits</a>
+<a class="sourceLine" id="cb111-7" data-line-number="7">)</a></code></pre></div>
 <p>Create a list to store models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models &lt;-<span class="st"> </span><span class="kw">list</span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;nopool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-no-pooling.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;nopool&quot;</span>]]</code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1">models &lt;-<span class="st"> </span><span class="kw">list</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1">models[[<span class="st">&quot;nopool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-no-pooling.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1">models[[<span class="st">&quot;nopool&quot;</span>]]</a></code></pre></div>
 <pre>
   <code class="stan">/* Binomial Model (No pooling)
 
@@ -522,8 +559,8 @@ generated quantities {
   }
 }</code>
 </pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;pool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-complete-pooling.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;pool&quot;</span>]]</code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1">models[[<span class="st">&quot;pool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-complete-pooling.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1">models[[<span class="st">&quot;pool&quot;</span>]]</a></code></pre></div>
 <pre>
   <code class="stan">/* Binomial Model
 
@@ -565,8 +602,8 @@ generated quantities {
   }
 }</code>
 </pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling-t.stan&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">models[[<span class="st">&quot;partial&quot;</span>]]</code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling-t.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1">models[[<span class="st">&quot;partial&quot;</span>]]</a></code></pre></div>
 <pre>
   <code class="stan">/* Binomial Model
 
@@ -598,7 +635,7 @@ parameters {
 model {
   alpha ~ normal(0., 10.);
   tau ~ normal(0., 1);
-  eta ~ student_t(4., alpha, tau);
+  eta ~ normal(alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {
@@ -615,84 +652,88 @@ generated quantities {
 }</code>
 </pre>
 <p>Sample from all three models a</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fits &lt;-<span class="st"> </span><span class="kw">map</span>(models, sampling, <span class="dt">data =</span> bball1970_data,
-            <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">set_names</span>(<span class="kw">names</span>(models))
-<span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span>
-<span class="co">#&gt;                                                                                     count</span>
-<span class="co">#&gt; Exception thrown at line 31: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span>
-<span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span>
-<span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span>
-<span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span>
-<span class="co">#&gt; Warning: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
-<span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
-<span class="co">#&gt; Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See</span>
-<span class="co">#&gt; http://mc-stan.org/misc/warnings.html#bfmi-low</span>
-<span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1">fits &lt;-<span class="st"> </span><span class="kw">map</span>(models, sampling, <span class="dt">data =</span> bball1970_data,</a>
+<a class="sourceLine" id="cb119-2" data-line-number="2">            <span class="dt">refresh =</span> <span class="dv">-1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb119-3" data-line-number="3"><span class="st">  </span><span class="kw">set_names</span>(<span class="kw">names</span>(models))</a>
+<a class="sourceLine" id="cb119-4" data-line-number="4"><span class="co">#&gt; Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span></a>
+<a class="sourceLine" id="cb119-5" data-line-number="5"><span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></a>
+<a class="sourceLine" id="cb119-6" data-line-number="6"><span class="co">#&gt; Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See</span></a>
+<a class="sourceLine" id="cb119-7" data-line-number="7"><span class="co">#&gt; http://mc-stan.org/misc/warnings.html#bfmi-low</span></a>
+<a class="sourceLine" id="cb119-8" data-line-number="8"><span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></a></code></pre></div>
 <p>For each model calculate the posterior mean of <span class="math inline">\(\mu\)</span> for each player:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bball1970 &lt;-
-<span class="st">  </span><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, 
-     <span class="cf">function</span>(nm, fit) {
-      mu &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(fit) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;^mu&quot;</span>))
-      <span class="cf">if</span> (<span class="kw">nrow</span>(mu) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {
-        out &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">estimate =</span> <span class="kw">rep</span>(mu<span class="op">$</span>estimate, 18L))
-      } <span class="cf">else</span> {
-        out &lt;-<span class="st"> </span><span class="kw">select</span>(mu, estimate)
-      }
-      out<span class="op">$</span>model &lt;-<span class="st"> </span>nm
-      out<span class="op">$</span>.id &lt;-<span class="st"> </span><span class="kw">seq_len</span>(<span class="kw">nrow</span>(out))
-      out
-     }) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(model, estimate) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_cols</span>(bball1970)</code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1">bball1970 &lt;-</a>
+<a class="sourceLine" id="cb120-2" data-line-number="2"><span class="st">  </span><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, </a>
+<a class="sourceLine" id="cb120-3" data-line-number="3">     <span class="cf">function</span>(nm, fit) {</a>
+<a class="sourceLine" id="cb120-4" data-line-number="4">      mu &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(fit) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;^mu&quot;</span>))</a>
+<a class="sourceLine" id="cb120-5" data-line-number="5">      <span class="cf">if</span> (<span class="kw">nrow</span>(mu) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb120-6" data-line-number="6">        out &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">estimate =</span> <span class="kw">rep</span>(mu<span class="op">$</span>estimate, 18L))</a>
+<a class="sourceLine" id="cb120-7" data-line-number="7">      } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb120-8" data-line-number="8">        out &lt;-<span class="st"> </span><span class="kw">select</span>(mu, estimate)</a>
+<a class="sourceLine" id="cb120-9" data-line-number="9">      }</a>
+<a class="sourceLine" id="cb120-10" data-line-number="10">      out<span class="op">$</span>model &lt;-<span class="st"> </span>nm</a>
+<a class="sourceLine" id="cb120-11" data-line-number="11">      out<span class="op">$</span>.id &lt;-<span class="st"> </span><span class="kw">seq_len</span>(<span class="kw">nrow</span>(out))</a>
+<a class="sourceLine" id="cb120-12" data-line-number="12">      out</a>
+<a class="sourceLine" id="cb120-13" data-line-number="13">     }) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb120-14" data-line-number="14"><span class="st">  </span><span class="kw">spread</span>(model, estimate) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb120-15" data-line-number="15"><span class="st">  </span><span class="kw">bind_cols</span>(bball1970)</a></code></pre></div>
 <p>The partially pooled estiamtes are shrunk towards the overall average, and are between the no-pooling and pooled estimates.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> value, <span class="dt">x =</span> <span class="kw">factor</span>(variable), <span class="dt">group =</span> Player)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="kw">expression</span>(mu))</code></pre></div>
-<p><img src="hierarchical_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /> We can plot the actual batting averages (<code>BatAvg1</code> and <code>BatAvg2</code>) and the model estimates:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Player, <span class="dt">x =</span> value, <span class="dt">colour =</span> variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="kw">expression</span>(mu), <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
-<p><img src="hierarchical_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /> The estimates of the no-pooling model is almost exactly the same as <code>BatAvg1</code>. The out-of-sample batting averages <code>BatAvg2</code> show regression to the mean.</p>
-<p>For these models, compare the overall out-of-sample performance by calculating the actual average out-of-sample log-pointwise predictive density (lppd), and the expected lppd using LOO-PSIS. The LOO-PSIS estimates of the out-of-sample lppd are optimistic. However, they still show the pooling and partial estimates as superior to the no-pooling estimates. The actual out-of-sample average lppd for the partial pooled model is the best fitting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, 
-     <span class="cf">function</span>(nm, fit) {
-      loo &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(fit, <span class="st">&quot;log_lik&quot;</span>))
-      ll_new &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit)[[<span class="st">&quot;log_lik_new&quot;</span>]]
-      <span class="kw">tibble</span>(<span class="dt">model =</span> nm,
-             <span class="dt">loo =</span> loo<span class="op">$</span>elpd_loo <span class="op">/</span><span class="st"> </span>bball1970_data<span class="op">$</span>N,
-             <span class="dt">ll_out =</span> <span class="kw">mean</span>(<span class="kw">log</span>(<span class="kw">colMeans</span>(<span class="kw">exp</span>(ll_new)))))
-     })
-<span class="co">#&gt; # A tibble: 3 x 3</span>
-<span class="co">#&gt;     model   loo ll_out</span>
-<span class="co">#&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1  nopool -3.20  -4.60</span>
-<span class="co">#&gt; 2    pool -2.58  -4.06</span>
-<span class="co">#&gt; 3 partial -2.59  -4.01</span></code></pre></div>
-<p>To see why this is the case, plot the average errors for each observation in- and out-of-sample. In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats—this is regression to the mean. In sample, the partially pooling model shrinks the estimates towards the mean and reducing error. Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">as.integer</span>(<span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player))) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player, <span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">In-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg1,
-         <span class="st">`</span><span class="dt">Out-of-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>), <span class="op">-</span>value) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(sample, error, <span class="op">-</span>variable, <span class="op">-</span>Player) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> error, <span class="dt">x =</span> Player, <span class="dt">colour =</span> variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>sample, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1"><span class="kw">select</span>(bball1970,</a>
+<a class="sourceLine" id="cb121-2" data-line-number="2">       Player, nopool, partial, pool) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb121-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb121-4" data-line-number="4"><span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb121-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> value, <span class="dt">x =</span> <span class="kw">factor</span>(variable), <span class="dt">group =</span> Player)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="kw">expression</span>(mu))</a></code></pre></div>
+<p><img src="hierarchical_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" />
+We can plot the actual batting averages (<code>BatAvg1</code> and <code>BatAvg2</code>) and the model estimates:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1"><span class="kw">select</span>(bball1970,</a>
+<a class="sourceLine" id="cb122-2" data-line-number="2">       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-4" data-line-number="4"><span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Player, <span class="dt">x =</span> value, <span class="dt">colour =</span> variable)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb122-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb122-7" data-line-number="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="kw">expression</span>(mu), <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<p><img src="hierarchical_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" />
+The estimates of the no-pooling model is almost exactly the same as <code>BatAvg1</code>.
+The out-of-sample batting averages <code>BatAvg2</code> show regression to the mean.</p>
+<p>For these models, compare the overall out-of-sample performance by calculating the actual average out-of-sample log-pointwise predictive density (lppd), and the expected lppd using LOO-PSIS.
+The LOO-PSIS estimates of the out-of-sample lppd are optimistic.
+However, they still show the pooling and partial estimates as superior to the no-pooling estimates.
+The actual out-of-sample average lppd for the partial pooled model is the best fitting.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="kw">map2_df</span>(<span class="kw">names</span>(fits), fits, </a>
+<a class="sourceLine" id="cb123-2" data-line-number="2">     <span class="cf">function</span>(nm, fit) {</a>
+<a class="sourceLine" id="cb123-3" data-line-number="3">      loo &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(fit, <span class="st">&quot;log_lik&quot;</span>))</a>
+<a class="sourceLine" id="cb123-4" data-line-number="4">      ll_new &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit)[[<span class="st">&quot;log_lik_new&quot;</span>]]</a>
+<a class="sourceLine" id="cb123-5" data-line-number="5">      <span class="kw">tibble</span>(<span class="dt">model =</span> nm,</a>
+<a class="sourceLine" id="cb123-6" data-line-number="6">             <span class="dt">loo =</span> loo<span class="op">$</span>elpd_loo <span class="op">/</span><span class="st"> </span>bball1970_data<span class="op">$</span>N,</a>
+<a class="sourceLine" id="cb123-7" data-line-number="7">             <span class="dt">ll_out =</span> <span class="kw">mean</span>(<span class="kw">log</span>(<span class="kw">colMeans</span>(<span class="kw">exp</span>(ll_new)))))</a>
+<a class="sourceLine" id="cb123-8" data-line-number="8">     })</a>
+<a class="sourceLine" id="cb123-9" data-line-number="9"><span class="co">#&gt; # A tibble: 3 × 3</span></a>
+<a class="sourceLine" id="cb123-10" data-line-number="10"><span class="co">#&gt;     model   loo ll_out</span></a>
+<a class="sourceLine" id="cb123-11" data-line-number="11"><span class="co">#&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb123-12" data-line-number="12"><span class="co">#&gt; 1  nopool -3.20  -4.60</span></a>
+<a class="sourceLine" id="cb123-13" data-line-number="13"><span class="co">#&gt; 2    pool -2.58  -4.05</span></a>
+<a class="sourceLine" id="cb123-14" data-line-number="14"><span class="co">#&gt; 3 partial -2.59  -3.99</span></a></code></pre></div>
+<p>To see why this is the case, plot the average errors for each observation in- and out-of-sample.
+In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats—this is regression to the mean.
+In sample, the partially pooling model shrinks the estimates towards the mean and
+reducing error.
+Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1"><span class="kw">select</span>(bball1970,</a>
+<a class="sourceLine" id="cb124-2" data-line-number="2">       Player, nopool, partial, pool, BatAvg1, BatAvg2) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb124-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Player =</span> <span class="kw">as.integer</span>(<span class="kw">factor</span>(Player, <span class="dt">levels =</span> Player))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb124-4" data-line-number="4"><span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>Player, <span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb124-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">In-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg1,</a>
+<a class="sourceLine" id="cb124-6" data-line-number="6">         <span class="st">`</span><span class="dt">Out-of-sample Errors</span><span class="st">`</span> =<span class="st"> </span>value <span class="op">-</span><span class="st"> </span>BatAvg2) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb124-7" data-line-number="7"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;BatAvg&quot;</span>), <span class="op">-</span>value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb124-8" data-line-number="8"><span class="st">  </span><span class="kw">gather</span>(sample, error, <span class="op">-</span>variable, <span class="op">-</span>Player) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb124-9" data-line-number="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> error, <span class="dt">x =</span> Player, <span class="dt">colour =</span> variable)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb124-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb124-11" data-line-number="11"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb124-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb124-13" data-line-number="13"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>sample, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb124-14" data-line-number="14"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
 <p><img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Extensions:</p>
 <ul>
@@ -711,7 +752,7 @@ generated quantities {
 <li>See <span class="citation">Jensen, McShane, and Wyner (2009)</span> for an updated hierarchical model of baseball hitting</li>
 </ul>
 <div id="other-examples" class="section level3">
-<h3><span class="header-section-number">14.1.1</span> Other Examples</h3>
+<h3><span class="header-section-number">13.1.1</span> Other Examples</h3>
 <ul>
 <li>Rat Tumors - BDA</li>
 <li>Eight Schools - BDA</li>
@@ -726,8 +767,9 @@ generated quantities {
         </div>
       </div>
 <a href="shrinkage-regularization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multilevel-models.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
-
+<a href="multilevel-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
@@ -736,7 +778,7 @@ generated quantities {
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": false,
 "fontsettings": {
@@ -761,9 +803,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

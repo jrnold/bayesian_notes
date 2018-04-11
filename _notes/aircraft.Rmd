@@ -60,5 +60,5 @@ p(area i is hit | not downed) = (area i is hit) (probability one hit on i wont' 
 
 Suppose that $q(i)$ 
 
-- @MangelSamaniego1984a
-- @Berger1984a
+-   @MangelSamaniego1984a
+-  @Berger1984a

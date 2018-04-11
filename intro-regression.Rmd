@@ -10,7 +10,7 @@ For this section we will use the `duncan` dataset included in the **car** packag
 Duncan's occupational prestige data is an example dataset used throughout the popular Fox regression text, *Applied Regression Analysis and Generalized Linear Models* [@Fox2016a].
 It is originally from @Duncan1961a consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that 
 ```{r}
-data("Duncan", package = "car")
+data("Duncan", package = "carData")
 ```
 
 ## The Statistical Model

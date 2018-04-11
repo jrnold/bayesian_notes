@@ -1,28 +1,22 @@
 # Annotated Bibliography
 
-## Textbooks
+### Textbooks
 
 -   Gelman and Hill (2006) *Data Analysis Using Regression and Multilevel/Hierarchical Models*
 -   Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (2013) *Bayesian Data Analysis* 3rd ed. CRC Press.
-
--   Gill, Jeff. 2008. Bayesian Methods : A Social and Behavioral Sciences Approach. Second. Boca Raton: Chapman & Hall/CRC.
--   Jackman, Simon. 2009. Bayesian Analysis for the Social Sciences. Chichester, UK: Wiley.
--   Kruschke, John. 2010. Doing Bayesian Data Analysis: A Tutorial Introduction with R. Academic Press.
--  Lynch, Scott M. 2007. Introduction to Applied Bayesian Statistics and Estimation for Social Scientists. New York: Springer.
--   McElreath, Richard. 2016. Statistical Rethinking: A Bayesian Course with Examples in R and Stan. Vol. 122. CRC Press.
+-   Jackman, Simon. 2009. *Bayesian Analysis for the Social Sciences*
+-  Lynch, Scott M. 2007. *Introduction to Applied Bayesian Statistics and Estimation for Social Scientists* New York: Springer.
+-   McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course with Examples in R and Stan.*
 
     -   github page for Statistical Rethinking https://github.com/rmcelreath/rethinking
     -   http://xcelab.net/rm/statistical-rethinking/
 
--   Lunn, David, Chris Jackson, Nicky Best, Andrew Thomas, and David Spiegelhalter. 2012. The BUGS Book: A Practical Introduction to Bayesian Analysis. Boca Raton, FL: Chapman; Hall/CRC.
--   Suess, Eric A. and Bruce E. Trumbo. 2010. Introduction to Probability Simulation and
-Gibbs Sampling with R. New York: Springer.
--   Peter Hoff. 2009. A First Course in Bayesian Statistical Methods
--   Jaynes. 2003. Probability Theory: The Logic of Science.
+-   Lunn, David, Chris Jackson, Nicky Best, Andrew Thomas, and David Spiegelhalter. 2012. *The BUGS Book: A Practical Introduction to Bayesian Analysis* Boca Raton, FL: Chapman; Hall/CRC.
+-   Peter Hoff. 2009. *A First Course in Bayesian Statistical Methods*
 -   Congdon. 2014. Applied Bayesian Modeling.
--   Wakefield. 2013. Bayesian and Frequentist Regression Methods
--   Casella and Roberts. 2004. Monte Carlo Statistical Methods
+-   Casella and Roberts. 2004 *Monte Carlo Statistical Methods*
 -   Marin and Roberts. 2014. *Bayesian Essentials with R.* http://www.springer.com/us/book/9781461486862
+-   Robert and Casella. *Introducing Monte Carlo Methods with R*
 
 
 ## Syllabi
@@ -50,10 +44,25 @@ Gibbs Sampling with R. New York: Springer.
 
 ## Article Length Introductions to Bayesian Statistics
 
+-   Stan Modeling 2.17. Ch. 29. "Bayesian Inference"
 -   Michael Clarke [Bayesian Basics](https://m-clark.github.io/docs/IntroBayes.html).
 -   Eddy (2004) "[What is Bayesian Statistics](https://dx.doi.org/10.1038/nbt0904-1177)" *Nature Biotechnology*
 -   Jackman. 2004. Bayesian Analysis for Political Research. *Annual Review of Political Science* DOI: 10.1146/annurev.polisci.7.012003.104706. 
 -   Kruschke, J.K. & Liddell, T.M. Psychon Bull Rev (2017). doi:10.3758/s13423-016-1221-4 -  Kruschke and Liddell (2017) "[Bayesian new statistics: hypothesis testing, estimation, meta-analysis, and power analysis from a Bayesian perspective](https://dx.doi.org/10.3758/s13423-016-1221-4)"
+
+
+### Why Bayesian
+
+- Jim Savage. [Why learn Bayesian Modeling?](http://modernstatisticalworkflow.blogspot.com/2017/04/why-learn-bayesian-modeling.html) April 10, 2017.
+
+
+### Modern Statistical Workflow
+
+- Savage, Jaim. 2017. [A Brief Introduction to Econometrics in Stan](https://khakieconomics.github.io/half_day_course/msw.html)
+
+- Betancourt, Michael. [Robust Staistical Workflow with RStan](http://mc-stan.org/users/documentation/case-studies/rstan_workflow.html)
+- Stan Modeling 2.17. "Model Building as Software Development"
+- Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., Gelman, A. (2018). Visualization in Bayesian workflow. Journal of the Royal Statistical Society Series A, accepted for publication. arXiv preprint: https://arxiv.org/abs/1709.01449
 
 
 
@@ -67,7 +76,7 @@ Gibbs Sampling with R. New York: Springer.
 American Scientist 1988
 -   Efron (2010) "[The Future of Indirect Evidence](https://dx.doi.org/10.1214/09-STS308)"
 
--   Efron (1986) "[Why Isn’t Everyone a Bayesian?](https://dx.doi.org/10.1080/00031305.1986.10475342)" *American Statistician* [@Efron1986a]. See comments @Chernoff1986a, @Lindley1986a, @Morris1986a, @Smith1986a, @Press1986a, @Efron1986.
+-   Efron (1986) "[Why Isn’t Everyone a Bayesian?](https://dx.doi.org/10.1080/00031305.1986.10475342)" *American Statistician* [@Efron1986a]. See comments @Chernoff1986a, @Lindley1986a, @Morris1986a, @Smith1986a, @Press1986a, @Efron1986b.
 
 - Philosophy and the practice of Bayesian statistics in the social sciences. tp://www.stat.columbia.edu/~gelman/research/published/philosophy_chapter.pdf
 - Rubin (1984) Rubin, Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician. Ann. Statist. 12 (1984), no. 4, 1151--1172. doi:10.1214/aos/1176346785. http://projecteuclid.org/euclid.aos/1176346785.
@@ -75,7 +84,7 @@ American Scientist 1988
 - Berger (2013) "[Could Fisher, Jeffreys and Neyman Have Agreed on Testing?](https://dx.doi.org/10.1214/ss/1056397485) *Statistical Science*
 
 
-## Bayesian Hypothesis Testing
+### Bayesian Hypothesis Testing
 
 -    Gross, J. H. (2015) "[Testing What Matters (If You Must Test at All): A Context-Driven Approach to Substantive and Statistical Significance](https://dx.doi.org/10.1111/ajps.12149)" *American Journal of Political Science* [@Gross2014a]
 
@@ -83,7 +92,7 @@ American Scientist 1988
 ### Bayesian Frequentist Debates
 
 - [Bayesians and Frequentists : Models, Assumptions, and Inference](http://www.stat.ufl.edu/archived/casella/Talks/BayesRefresher.pdf)  slides
-- Kasss Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
+- Kass Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
 - Noah Smith [Bayesian vs. Frequentist: Is there any "there" there?](http://noahpinionblog.blogspot.com/2013/01/bayesian-vs-frequentist-is-there-any.html)
 - Kass [Kinds of Bayesians](http://www.stat.cmu.edu/~kass/papers/kinds.pdf)
 - Anthony O'Hagan. Science, Subjectivity and Software (Comments on the articles by Berger and Goldstein)
@@ -102,11 +111,17 @@ American Scientist 1988
 ### Variable Selection
 
 -   @GhoshGhattas2015a Ghosh and Ghattas (2015) "Bayesian Variable Selection Under Colinearity" *American Statistician*
--   Scott and Berger (2011) "[Bayes and empirical-Bayes multiplicity adjustment in the variable-selection problem](https://dx.doi.org/10.1214/10-Aos792)" *Annals of Statistics* [@ScottBerger2010]
+-   Scott and Berger (2011) "[Bayes and empirical-Bayes multiplicity adjustment in the variable-selection problem](https://dx.doi.org/10.1214/10-Aos792)" *Annals of Statistics* [@ScottBerger2010a]
 -   Ishwaran and Rao (2005) "[Spike and slab variable selection: Frequentist and Bayesian strategies](https://dx.doi.org/10.1214/009053604000001147)" *Annalsb of Statistics*
 -   Ishwaran, Kogalur, and Rao (2010) "[spikeslab: prediction and variable selection using spike and slab regression](ttps://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf)" *R Journal*
 -   Piironen and Vehtari (2015) "[Projection predictive variable selection using {Stan}+{R}](http://arxiv.org/pdf/1508.02502v1:PDF)"
 -   Polson and Scott. "[Shrink globally, act locally: sparse Bayesian regularization and prediction](https://dx.doi.org/10.1093/acprof:oso/9780199694587.003.0017)" *Bayesian Statistics*
+- Projection predictive variable selection using Stan+R https://arxiv.org/abs/1508.02502
+- Lasso Meets Horseshoe. https://arxiv.org/pdf/1706.10179.pdf
+- Piironen and Vehtari. Sparsity information and regularization in the horseshoe and other shrinkage priors https://arxiv.org/pdf/1706.10179.pdf
+- DECOUPLING SHRINKAGE AND SELECTION IN BAYESIAN
+LINEAR MODELS: A POSTERIOR SUMMARY PERSPECTIVE. By P. Richard Hahn and Carlos M. Carvalho. https://arxiv.org/pdf/1408.0464.pdf
+- Michael Betancourt [Bayes Sparse Regression](https://betanalpha.github.io/assets/case_studies/bayes_sparse_regression.html)
 
 
 
@@ -131,10 +146,13 @@ American Scientist 1988
 -   Efron and Morris (1975) "[Data Analysis Using Stein's Estimator and its Generalizations](https://dx.doi.org/10.1080/01621459.1975.10479864)" *JASA* [@EfronMorris1975a]
 
 
+### Inference
+
+
 
 #### Gibbs
 
--   @AllisonDunkley2013 [Comparison of sampling techniques for Bayesian parameter estimation](https://arxiv.org/pdf/1308.2675.pdf)
+-   [@AllisonDunkley2013a] [Comparison of sampling techniques for Bayesian parameter estimation](https://arxiv.org/pdf/1308.2675.pdf)
 -   Gelfand et al. (1990) "[Illustration of Bayesian Inference in Normal Data Models Using Gibbs Sampling](https://dx.doi.org/10.1080/01621459.1990.10474968)" *JASA*
 -   Chib and Greenberg "[Understanding the Metropolis-Hastings Algorithm](https://dx.doi.org/10.1080/00031305.1995.10476177)"
 -   Geyer. MCMC: Does it work? How can we tell?http://users.stat.umn.edu/~geyer/jsm09.pdf
@@ -148,7 +166,10 @@ American Scientist 1988
 ### Convergence
 
 -   Gelman, A. and Rubin, D. B. (1992) "[Inference from iterative simulation using multiple sequences](http://www.jstor.org/stable/2246093)" *Statistical Science*
+-   Stan Modeling Language, Ch 30. Markov Chain Monte Carlo Sampling
 -   Gabry, Jonah. [Visual MCMC diagnostics using the bayesplot plackage](http://mc-stan.org/bayesplot/articles/visual-mcmc-diagnostics.html)
+- Gabyr, Jonah. [Plotting MCMC draws using the bayesplot package
+](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html)
 
 
 
@@ -295,9 +316,15 @@ Diagrams in the style of Kruschke's *Doing Bayesian Analysis*
 
 - ImaiTingley2011a: Imai, K. and Tingley, D. (2012) "[A Statistical Method for Empirical Testing of Competing Theories](https://dx.doi.org/10.1111/j.1540-5907.2011.00555.x)" *American Journal of Political Science*
 
+## Inference
+
+### Discussion of Bayesian Inference
+
+- Lindley. The Analysis of Experimental Data: The Appreciation of Tea and Wine
+
+
 
 ## Model Checking
-
 
 
 ### Posterior Predictive Checks
@@ -321,7 +348,9 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 ### Software Validation
 
 -   Cook, Gelman, and Rubin (2006) "[Validation of Software for Bayesian Models Using Posterior Quantiles](https://dx.doi.org/10.1198/106186006X136976)" *J of Comp. and Graphical Stat* 
-
+-   Gelman. Correction https://doi.org/10.1080/10618600.2017.1377082
+-   Savage, Jim. [An easy way to simulate fake data from your Stan model](http://modernstatisticalworkflow.blogspot.com/2017/04/an-easy-way-to-simulate-fake-data-from.html)
+-   [Stan Best Practices](https://github.com/stan-dev/stan/wiki/Stan-Best-Practices)
 
 
 ## Hierarchical Modeling
@@ -376,6 +405,7 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 -   Computerphile (2014) "[Floating point numbers](ttps://www.youtube.com/watch?v=PZRI1IfStY0)" video.
 -   Eisele (2016) "[The log-sum-exp trick in Machine Learning](https://www.xarg.org/2016/06/the-log-sum-exp-trick-in-machine-learning/)" blog.
 -   Carpenter (2016) "[Log Sum of Exponentials for Robust Sums on the Log Scale](http://andrewgelman.com/2016/06/11/log-sum-of-exponentials/)" *Statistical Modeling, Causal Inference, and Social Science* (blog)
+-   Cook [Avoiding underflow in Bayesian computations](https://www.johndcook.com/blog/2012/07/26/avoiding-underflow-in-bayesian-computations/)
 
 
 ## Visualizing MCMC Methods
@@ -395,4 +425,42 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 -   <https://www.youtube.com/watch?v=pHsuIaPbNbY&list=PLqdbxUnkqOw2nKn7VxYqIrKWcqRkQYOsF&index=11>
 -   <http://arogozhnikov.github.io/2016/12/19/markov_chain_monte_carlo.html>
 
-## Bayesian c
+## Bayesian point estimation / Decision 
+
+- Stan Modeling Language. Ch 32. Bayesian Point Estimation.
+- [Modes, Medians and Means: A Unifying Perspective](http://www.johnmyleswhite.com/notebook/2013/03/22/modes-medians-and-means-an-unifying-perspective/). Not explicitly motivated with Bayesian decision theory; nevertheless, it is a good intuitive explanation of these estimators.
+- The Impact of Reparameterization on Point Estimates. http://mc-stan.org/users/documentation/case-studies/mle-params.html
+- Rainey. https://github.com/carlislerainey/transformation-induced-bias
+
+# Information Theory
+
+- Information Theory, Inference, and Learning Algorithms
+David J.C. MacKay. http://www.inference.org.uk/itprnn/book.pdf
+
+# Stan Modeling Language
+
+- Ch 1--8 Introduction. 
+- pay attention to Ch 1, 8. skim the rest. know where to look for help.
+
+- Ch 28. Optimizing Stan Code for Efficiency (Neal's funnel, reparameterization, vectorization)
+
+- Ch 22. Reparameterization and change of variables
+- Ch 23. Customized 
+- Ch 24. User-defined functions
+- Ch 25. problematic posteriors
+
+- Ch 29. Bayesian Data Analysis
+- Ch 30. Markov Chain Monte Carlo Sampling (R hat, ESS, convergence, thinning)
+- Ch 31. Penalized MLE
+- Ch 32. Bayesin Point Estimation
+- Ch 34. Hamiltonian Monte Carlo Sampling
+- Ch 35. Transofrmations of Constrained Variables - changes of variables.
+
+### Lists of Distributions
+
+-   The list on [Probability Distribution](https://en.wikipedia.org/wiki/Probability_distribution) is sufficient for most purposes
+-   Refence at end of BDA 3
+-   [Diagram of distribution relationships](https://www.johndcook.com/blog/distribution_chart/)
+
+
+

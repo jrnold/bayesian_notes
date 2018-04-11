@@ -199,14 +199,6 @@ for all $j$.
 
 *Partial pooling:* When $\tau$ is a parameter, the amount of shrinkage can be estimated from the data.
 
-```{r}
-stan_mo
-```
-
-
-
-
-
 ### Varying Intercept Model
 
 
