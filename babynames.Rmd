@@ -1,0 +1,305 @@
+---
+title: "Predict your age from you name, and other such questions"
+author: "Jeffrey B. Arnold"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Statement of the problem
+
+Suppose I know your sex and name, can I guess you age?
+
+The probability of an age given a name and sex,
+$$
+P(\text{age} | \text{name}, \text{sex}) \propto P(\text{name} | \text{age}, \text{sex}) P(\text{age} | \text{sex})
+$$
+
+
+## Data Wrangling
+
+The source of our data is the **babynames** package in R.
+
+```{r}
+YEAR <- 2015
+```
+We'll consider a single year in our analysis `r YEAR`, whcih is the last year in the `babynames` package.
+
+The lifetables are only provided for decades 1900, ..., 2010. We need to fill in the full lifetable for all birthyears.
+For years between 1900 and 2010, we will linearly impute the probability of being alive at each age for non-decadal birth-years.
+We'll use 2010 for all birth-years after 2010.
+```{r life_table}
+life_table <- babynames::lifetables %>%
+  group_by(year) %>%
+  mutate(px = lx / 1e+05) %>%
+  rename(age = x) %>%
+  select(year, age, sex, p_alive = px) %>%
+  ungroup() %>%
+  complete(sex, year = seq(min(year), YEAR, by = 1), age) %>%
+  rename(birthyear = year) %>%
+  group_by(sex, age) %>%
+  arrange(sex, age, birthyear) %>%
+  mutate(p_alive = zoo::na.approx(p_alive, na.rm = FALSE)) %>%
+  fill(p_alive, .direction = "down") %>%
+  ungroup() %>%
+  arrange(sex, age, birthyear)
+```
+
+For this analysis, we only need the age distribution in `r YEAR`.
+```{r age_distr}
+age_distr <- life_table %>%
+  mutate(year = birthyear + age, 
+         # convert sex to character to avoid join warning
+         sex = as.character(sex)) %>%
+  filter(year == YEAR) %>%
+  select(-year)
+```
+```{r}
+glimpse(lifetable_full)
+```
+However, the `p_alive` column of `age_distr` only provides the probability of being alive in `r YEAR` conditional on having been born in a given year (and sex),
+```{r fig.cap="Probability of "}
+ggplot(age_distr,
+       aes(x = birthyear, y = p_alive, color = sex)) +
+  geom_point() +
+  geom_line() +
+  labs(y = expression(paste("P", group("(", paste(alive, "|", year), ")"))),
+       x = "Year of Birth")
+```
+We need the number born each year to be able to calculate the number alive in each year, and the age distribution. 
+Suppose that the number born in each year was equal, the age distribution would be:
+```{r}
+age_distr %>%
+  group_by(sex) %>%
+  mutate(p = p_alive / sum(p_alive)) %>%
+ggplot(aes(x = age, y = p, color = sex)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Age", y = "P(age)") +
+  theme(legend.pos = "bottom")
+```
+
+As a proxy for the number born each year we'll use the proportion of Social Security applicants each year, provided by the `babynames::applicants`.
+Since the baby-name information will also come from the Social Security data this is no less restrictive.
+```{r fig.caption="Number of Social Security Applicants per year."}
+ggplot(babynames::applicants, aes(x = year, y = n_all / 1e6, color = sex)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "", y = "SSA Applicants (mn)") +
+  theme(legend.pos = "bottom")  
+```
+Clearly, the number of births is not constant per year.
+
+Join the SSA applicant numbers and calculate the probability of each age by sex in `r YEAR`.
+```{r age_distr_2}
+age_distr <- left_join(age_distr,
+                       rename(babynames::applicants, n_apps = n_all),
+                       by = c("sex", "birthyear" = "year")) %>%
+  mutate(n_alive = p_alive * n_apps) %>%
+  group_by(sex) %>%
+  mutate(p_age = n_alive / sum(n_alive)) %>%
+  ungroup() %>%
+  arrange(sex, age)
+                 
+```
+
+After accounting for different numbers of births in each year, the
+age distribution is different.
+```{r}
+ggplot(age_distr, aes(x = age, y = p_age, color = sex)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Age", y = "P(age)") +
+  theme(legend.pos = "bottom")
+```
+
+The `babynames` dataset has the number in each sex born each year with a given name (and registered by the SSA).
+```{r}
+glimpse(babynames)
+```
+The column `prop` is the proportion of people of that gender with that name born in each year, $P(\text{name} | \text{age}, \text{sex})$.
+
+```{r babynames}
+baby_names <- babynames::babynames
+```
+Also, since the SSA only releases names with > 5 individuals in a year, add
+an additional entry for each year for babies born and given rare names.
+```{r babynames_other}
+babynames_other <- baby_names %>%
+  group_by(sex, year) %>%
+  summarise(p_named = sum(prop), n_named = sum(n)) %>%
+  mutate(prop = 1 - p_named, n = n_named / p_named * prop,
+         name = "OTHER")
+```
+```{r babynames2}
+baby_names <- bind_rows(baby_names, babynames_other)
+```
+
+
+## Proabability of age given name and sex
+
+Consider someone with the name of "Emma" and sex is "female".
+What is the posterior distribution of their age,
+$$
+p(\text{age} | \text{name} = \text{"Emma"}, \text{sex} = \text{"F"}) = 
+p(\text{name} = \text{"Emma"} | \text{age}, \text{sex} = \text{"F"}) p(\text{age} | \text{sex} = \text{"F"}) .
+$$
+
+
+```{r}
+name <- "Emma"
+sex <- "F"
+```
+Filter `babynames` to only include observations for the name "`r name`" and sex "`r name`":
+```{r p_name_age}
+p_name_age <- baby_names %>%
+  filter(name == !!name, sex == !!sex) %>%
+  select(-sex, -name) %>%
+  mutate(age = YEAR - year)
+```
+
+```{r plot_name_age,fig.caption=glue("Proportion of babies in year with name of {name} and sex {sex}."}
+ggplot(p_name_age, aes(x = year, y = prop)) +
+  geom_line() +
+  labs(x = "", y = "Proportion births")
+```
+The popularity of the name Emma first declined, then increased.
+However, very few of those born when Emma was first popular are likely to still be alive.
+
+```{r posterior}
+posterior <-
+  left_join(p_name_age, 
+            select(filter(age_distr, sex == !!sex), birthyear, prior = p_age),
+            by = c(year = "birthyear")) %>%
+  rename(likelihood = prop) %>%
+  # fill in missing values with 0
+  mutate(prior = if_else(is.na(prior), 0, prior),
+         # postrior
+         post = likelihood * prior,
+         # normalize posterior to sum to 1
+         post = post / sum(post))
+```
+
+Let's plot the prior ($P(age)$), likelihood ($P(name | age)$),  and posterior ($P(name | age)$).
+```{r plot_posterior}
+posterior %>%
+  select(age, post, likelihood, prior) %>%
+  gather(variable, value, -age) %>%
+  mutate(variable = recode(variable, post = "P(age | name)",
+                           likelihood = "P(name | age)", prior = "P(age)"),
+         variable = factor(variable, 
+                           levels = c("P(age)", "P(name | age)", 
+                                      "P(age | name)"))) %>%
+  ggplot(aes(y = value, x = age)) +
+  geom_line() +
+  facet_wrap(~ variable, ncol = 1, scales = "free_y")
+
+```
+
+Alternatively, instead of calculating $p(age | name, sex)$ from Bayes' Theorem,
+we can calculate it directly from the joint distribution of name, age, and sex.
+$$
+p(age | name, sex) = p(age, name, sex) / p(name, sex)
+$$
+
+
+Now calculate the probability of 
+```{r}
+baby_names_joint <- baby_names %>%
+  # add probability alive
+  left_join(select(age_distr, age, sex, birthyear, p_alive), 
+            by = c("sex", year = "birthyear")) %>%
+  # update probabilities, 
+  mutate(prop = p_alive * prop,
+         prop = if_else(is.na(prop), 0, prop),
+         n = n * p_alive) %>%
+  select(-n_alive, -p_alive) %>%
+```
+
+```{r}
+baby_names_joint %>% 
+  group_by()
+```
+
+
+
+### Questions
+
+1. Consider a rare name - what is the probability on days in years in which there is no sample. How would you alter it?
+2. Consider what would happen if sex was unknown? 
+3. Which name provides the most information about a person's age?
+4. Consider a name like "Jordan", "Jessie", "Dakota", "Marion"
+
+
+### References
+
+The [How to Tell Someone’s Age When All You Know Is Her Name](https://fivethirtyeight.com/features/how-to-tell-someones-age-when-all-you-know-is-her-name/) is 
+
+
+## Information Theory
+
+The *information* or *surprisal* of an outcome of random variable is the log inverse of its probability of occuring:
+$$
+I(X = x) = -\log(\Pr(X = x)) = \log \left( \frac{1}{\Pr(X = x)} \right)
+$$
+The more surprising an event is, the more information it contains.
+
+The *entropy* of a discrete random variable ($X$) is the expected information of the random variable.
+Suppose $X$ takes values $x_1, ..., x_n$, then its entropy is,
+$$
+H(X) = E_X(I(X)) = E_X(-\log(\Pr(X))) = - \sum_{i = 1}^n \Pr(X = x_i) \log \Pr(X = X_i)
+$$
+
+Examples. The entropy of a Bernoulli distribution with $p = 0.5$ is
+```{r}
+x <- c(0.5, 0.5)
+-sum(x * log(x))
+```
+*Q:* Will the entropy of Bernoulli distribution with $p = 0.1$ be lower or higher than when $p = 0.5$?
+```{r}
+x <- c(0.9, 0.1)
+-sum(x * log(x))
+```
+It is less, because there is less information when $p = 0.9$.
+For a discrete distribution, the uniform distribution maximizes the entropy.
+
+The *mutual information* of two discrete random variables $X$ and $Y$ is
+$$
+I(X; Y) = \sum_{y \in Y} \sum_{x \in X} p_{XY}(x, y)(x, y) \log \left( \frac{p_{XY}(x, y)}{p_X(x) p_Y(y)} \right)
+$$
+where $p_X$, $p_Y$ are the marginal distributions of $X$ and $Y$ respectively.
+
+Suppose $X$ and $Y$ are independent? What is the mutual independence of $X$ and $Y$?
+$$
+\log\left( \frac{p_{XY}(x, y)}{p_X(x) p_Y(y)} \right) = \log\left( \frac{p_{X}(x) p_{Y}(y)}{p_X(x) p_Y(y)} \right) =  \log 1 = 0
+$$
+where the second term comes from independence.
+
+- non-negative: $I(X; Y) \geq 0$
+- symmetric: $I(X; Y) \geq I(Y; X)$
+- $I(X; Y) = 0$ if and only if $X$ and $Y$ are independent random variables
+- $I(X; X) = H(X)$
+
+
+Kullback-Leibler divergence is used to measure the "distance" between distribution.
+The divergence between probability distributions $P$ and $Q$ is
+$$
+D_{KL}(P(i) || Q(i)) = - \sum_i P(i) \log \left(\frac{Q(i)}{P(i)}\right) = \sum_i P(i) \log \left( \frac{P(i)}{Q(i)} \right)
+$$
+Note that the KL divergence is not symmetric,
+$$
+D_{KL}(P || Q) \neq D_{KL}(Q || P) ,
+$$
+and thus not a distance metric.
+
+
+Some properties of KL divergence
+
+- non-negative: $D_{KL}(P || Q) \geq 0$. Also $D_{KL}(P || Q)$ if and only if $P = Q$ almost everywhere.
+- invariant to parameter transformations
+
+

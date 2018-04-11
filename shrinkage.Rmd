@@ -980,29 +980,9 @@ $\beta \neq 0$ when $E(\kappa_j) < 0.5$ where $\kappa_j$ is a shrinkage paramete
 
 ## Examples of Applications of Sensitivity Analysis
 
-These are a few applied papers based on sensitivity or model analysis meaning primarily problem, rather than methodologically driven.
+The memorably titled "Let's Take the Con Out of Econometrics" [@Leamer1983a] argues that economic models fail to account for model uncertainty. It prposes using an ensemble-like method called extreme-bounds. On economic growth: (confidence bounds) @Sala-I-Martin1997a, (Bayesian model averaging) @FernandezLeySteel2001a, @LeySteel2009a, @EicherPapageorgiouRaftery2009a, @BrockDurlaufWest2003a. Wars: @HegreSambanis2006a use extreme bounds for civil war onset. @WardGreenhillBakke2010a use model comparison and a step-wise method, but are focused on the difference between p-values and prediction; @Goenner2004a use BMA for inter-state wars (democratic peace). @MontgomeryHollenbachWard2012a and @MontgomeryNyhan2010a apply BMA to multiple political science issues including voting, presidential elections, and civil war onset. @TobiasLi2004a use BMA with returns to schooling. See @FragosoNeto2015a for a recent(ish) and comprehensive review of BMA applications across a variety of domains.
 
-The memorably titled "Let's Take the Con Out of Econometrics" [@Leamer1983a],
-that economic models fail to account for model uncertainty and suggests using 
-an ensemble-like method called extreme-bounds.
+Also, not that many of these analyses are slightly older as empirical research in economics and political science has been moving to place less emphasis on model-based inference 
+(all-cause regressions) and more on design-based (causal) inference methods. As noted earlier, regularization techniques are also applicable in these cases, but is different.
 
-On economic growth: (confidence bounds) @Sala-I-Martin1997a, (Bayesian model averaging) @FernandezLeySteel2001a, @LeySteel2009a, @EicherPapageorgiouRaftery2009a, @BrockDurlaufWest2003a
-
-Wars: @HegreSambanis2006a use extreme bounds for civil war onset. @WardGreenhillBakke2010a use model comparison and a step-wise method, but are focused on the difference between note the difference between p-values and prediction; @Goenner2004a use BMA for inter-state wars (democratic peace). 
-
-@MontgomeryHollenbachWard2012a and @MontgomeryNyhan2010a apply BMA to multiple political science issues including voting, presidential elections, and civil war onset.
-
-@TobiasLi2004a Returns to Schooling
-
-See @FragosoNeto2015a for a recent(ish) review of BMA applications.
-
-Also, not that many of these analyses are slightly older as empirical research 
-in economics and political science has put less emphasis on model-based inference 
-(all-cause regressions) and more on design-based (causal) inference methods
-As noted earlier, regularization techniques are also applicable in these cases, but 
-need to be adjusted.
-
-For variable selection: 
-
-- @PiironenVehtari2016b compares model selection criteria
-- @BayarriBergerForteEtAl2012a
+**Variable selection:**  See @PiironenVehtari2016b and  @BayarriBergerForteEtAl2012a.

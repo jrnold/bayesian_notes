@@ -28,7 +28,7 @@ A GLM consists of three components:
     The link function ($g$) and its inverse ($g^{-1}) translate $\eta$ from $(\-infty, +\infty)$ to the proper range for the probability distribution and back again.
 
 These models are often estimated with MLE, as with the function `r rdoc("stats", "glm")`. 
-However, these are also easily estimated in a Bayesian setting.
+These are also easily estimated in a Bayesian setting.
 
 See the help for `r rdoc("stats", "family")` for common probability distributions, `r rdoc("stats", "make.link")` for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
 See the function `r rpkg("VGAM")` for even more examples of link functions and probability distributions.
@@ -266,20 +266,9 @@ See:
 - **rstanarm** documentation [Modeling Rates/Proportions using Beta Regression with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html)
 
 
-## Ordered Logistic
-
-See **rstanarm** function `r rdoc("rstasnarm", "stan_polr")`
-
-- @GelmanHill2007a [Ch 6.5]
-- *rstanarm** vignette [Estimating Ordinal Regression Models with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/polr.html)
 
 ## References
 
-Texts:
+@BDA3 [Ch 16], @GelmanHill2007a [Ch. 5-6], @McElreath2016a [Ch. 9]. @King1998a discusses MLE estimation of many common GLM models.
 
-- @BDA3 [Ch 16]
-- @GelmanHill2007a [Ch. 5-6]
-- @McElreath2016a [Ch. 9]
-- @King1998a discusses MLE estimation of many common GLM models
-- Many econometrics/statistics textbooks, e.g. @Fox2016a, discuss GLMs. Though
-    they are not derived from a Bayesian context, they can easily transferred.
+Many econometrics/statistics textbooks, e.g. @Fox2016a, discuss GLMs. Though they are not derived from a Bayesian context, they can easily transferred.

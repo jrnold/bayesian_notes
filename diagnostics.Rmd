@@ -18,7 +18,7 @@ Also see the `r rpkg("bayesplot")` vignette [Visual MCMC diagnostics using the b
 
 ## Convergence Diagnostics
 
-Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilbrium.
+Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilibrium.
 However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.
 
 In general there is no way to prove that the sampler has converged [^converge].
@@ -36,7 +36,7 @@ Additionally, the split $\hat{R}$ tests for convergence by splitting the chain i
 
 See @Stan2016a [Sec 28.2] for the equations to calculate these.
 
-**TODO:** Examples of passing and non-passing Rhat chains using fake data generated from known functions with a given autocorrelation.
+**TODO:** Examples of passing and non-passing $\hat{R}$ chains using fake data generated from known functions with a given autocorrelation.
 
 
 **Rule of Thumb:** The rule of thumb is that R-hat values for all less than 1.1 [source](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html).
@@ -47,7 +47,7 @@ This is a necessary but not sufficient condition for convergence.
 ### References
 
 - @BDA3 [p. 267]
-- @Stan2016a [Ch 28.] for how Stan calculates Rhat, autocorrelations, and ESS.
+- @Stan2016a [Ch 28.] for how Stan calculates Hat, autocorrelations, and ESS.
 - @GelmanRubin1992a introduce the R-hat statistic
 
 ## Autocorrelation, Effective Sample Size, and MCSE
@@ -67,7 +67,7 @@ $$
 **TODO** show that if $\rho_t = 1$ for all $t$ then $N_eff = 1$, and if $\rho_t = 0$ for all $t$ then $N_eff = N$
 
 Computing the effective sample size requires calculating an autocorrelation.
-A multichain estimate of the autocorrelation is found by computing the *variogram* with the correlations for all lags,
+A multi-chain estimate of the autocorrelation is found by computing the *variogram* with the correlations for all lags,
 $$
 V_t = \frac{1}{m(n - t)} \sum_{j = 1}^m \sum_{i = t + 1}^n (\psi_{i,j} - \psi_{i - t,j})^2
 $$
@@ -121,7 +121,7 @@ ggplot(sims, aes(x = x, y = y)) +
 Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved.
 Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.
 
-Both of these will produce 1,000 samples from the poserior, but effective sample size of $B$ will be greater than the effective sample size of $A$, since after thinnin g the autocorrelation in $B$ will be lower.
+Both of these will produce 1,000 samples from the posterior, but effective sample size of $B$ will be greater than the effective sample size of $A$, since after thinning g the autocorrelation in $B$ will be lower.
 
 - *A* Generating 1,000 samples after convergence and save all of them
 - *B* Generating 10,000 samples after convergence and save every 10th sample
@@ -168,14 +168,14 @@ map_df(c(1, 2, 4, 8, 16, 32), thin_ess,
 
 ### Traceplots
 
-Trace plots are a timeseries of sampler iterations, e.g. as produced by `r rdoc("bayesplot", "mcmc_trace")`.
+Trace plots are a time series of sampler iterations, e.g. as produced by `r rdoc("bayesplot", "mcmc_trace")`.
 
 These can, but **should not**, be used to assess convergence,
 
 - such visual inspection is 'notoriously unreliable' [@BDA3, p. 285]
 - it cannot scale to many parameters
 
-Traceplots may be useful for diagnosing convergence problems *after* $\hat{R}$ or or $n_eff$ indicates problems. Some possible issues to check in these plots are
+Trace plots may be useful for diagnosing convergence problems *after* $\hat{R}$ or or $n_eff$ indicates problems. Some possible issues to check in these plots are
 
 - multimodality (the traceplot jumps between different distributions)
 - wide posterior tails (the traceplot shows regions where the sampler will reach and have difficulty returning to the main distribution)
@@ -206,7 +206,7 @@ $$
 MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 $$
 
-See @FlegalHaranJones2008a and the `r rpkg("mcmcse")` for methods to calculate MCMC standard errors for means and quantiles using subsampling methods. 
+See @FlegalHaranJones2008a and the `r rpkg("mcmcse")` for methods to calculate MCMC standard errors for means and quantiles using sub-sampling methods. 
 
 @FlegalHaranJones2008a argues for using ESS as a stopping rule and convergence diagnostic for Bayesian inference.
 
@@ -233,7 +233,7 @@ The general way to fix these issues is the manually adjust the HMC-NUTS sampler 
 1. Stepsize: Length of the steps to take
 2. Treedepth: Number of steps to take
 
-During the warmup perion, Stan tunes these values, however these auto-tuned parameters may not always be optimal. 
+During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal. 
 The other alternative is to reparameterize the models.
 
 

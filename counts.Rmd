@@ -216,9 +216,4 @@ loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
 
 ### References
 
-For general references on count models see
-
-- @GelmanHill2007a [p. 109-116]
-- @McElreath2016a [Ch 10]
-- @Fox2016a [Ch. 14]
-- @BDA3 [Ch. 16]
+For general references on count models see @GelmanHill2007a [p. 109-116], @McElreath2016a [Ch 10], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].

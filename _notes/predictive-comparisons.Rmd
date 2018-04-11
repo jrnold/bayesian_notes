@@ -17,17 +17,17 @@ Several methods to estimate expected log posterior predictive density (elpd)
 
 What should you use? 
 
-- Use the Pareto Smoothed Importance Sampling LOO [@VehtariGelmanGabry2015a] implemented in the `r rpkg("loo")` package:
+-   Use the Pareto Smoothed Importance Sampling LOO [@VehtariGelmanGabry2015a] implemented in the `r rpkg("loo")` package:
 
-    - It is computationally efficient as it doesn't require completely re-fitting the model, unlike actual cross-validation
-    - it is fully Bayesian, unlike AIC and DIC
-    - it seems to perform better than WAIC
-    - it provides indicators for when it is a poor approximation (unlike AIC, DIC, and WAIC)
-    - next best approximation would be the WAIC. No reason to use AIC or DIC ever.
+    -   It is computationally efficient as it doesn't require completely re-fitting the model, unlike actual cross-validation
+    -   it is fully Bayesian, unlike AIC and DIC
+    -   it seems to perform better than WAIC
+    -   it provides indicators for when it is a poor approximation (unlike AIC, DIC, and WAIC)
+    -   next best approximation would be the WAIC. No reason to use AIC or DIC ever.
     
-- For observations which the PSIS-LOO has $\hat{k} > 0.7$ (the estimator has infinite variance) and there aren't too many, use LOO-CV.
-- If PSIS-LOO has many observations with with $k > 0.7$, then use LOO-CV or k-fold CV
-- If the likelihood doesn't easily partition into observations or LOO is not an appropriate prediction task, use the appropriate CV method (block k-fold, partitioned k-fold, time-series k-fold, rolling forecasts, etc.)
+-   For observations which the PSIS-LOO has $\hat{k} > 0.7$ (the estimator has infinite variance) and there aren't too many, use LOO-CV.
+-   If PSIS-LOO has many observations with with $k > 0.7$, then use LOO-CV or k-fold CV
+-   If the likelihood doesn't easily partition into observations or LOO is not an appropriate prediction task, use the appropriate CV method (block k-fold, partitioned k-fold, time-series k-fold, rolling forecasts, etc.)
 
 
 ### Expected Log Predictive Density
@@ -36,7 +36,7 @@ Let $f$ be the true model, $y$ be the observed data, and $\tilde{y}$ be future d
 The out-of-sample predictive fit for new data is
 $$
 \log p_{post}(\tilde{y}_i) = -\log \E_{post}(p(\tilde{y}_i)) = \log \int p(\tilde{y}_i | \theta) p_{post}(\theta) d\,\theta
-$$
+$$ 
 where $p_{post}(\tilde{y}_i)$ is the predictive density for $\tilde{y}_i$ from $p_{post}(\theta)$. $\E_{post}$ is an expectation that averages over the values posterior distribution of $\theta$.
 
 Since the future data $\tilde{y}_i$ are unknown, the **expected out-of- sample log predictive density** (elpd) is,
@@ -100,9 +100,9 @@ Other notes:
 
 Methods of estimating measures of predictive accuracy [@GelmanHwangVehtari2013a]
 
-1. **Within-sample predictive accuracy**: biased, overly optimistic
-2. **Adjusted within-sample predictive accuracy**: correct within-sample predictive accuracy for the bias. Examples include AIC, DIC, and WAIC. These are start with lppd and subtract a correction for the number of parameters. These are approximations, work in many situations, but best in expectation, not any particular case.
-3. **Cross-validation**: Non-parametric method to estimate out-of-sample predictive accuracy using holdout sets. Computationally expensive; requires many partitions.
+1.  **Within-sample predictive accuracy**: biased, overly optimistic
+2.  **Adjusted within-sample predictive accuracy**: correct within-sample predictive accuracy for the bias. Examples include AIC, DIC, and WAIC. These are start with lppd and subtract a correction for the number of parameters. These are approximations, work in many situations, but best in expectation, not any particular case.
+3.  **Cross-validation**: Non-parametric method to estimate out-of-sample predictive accuracy using holdout sets. Computationally expensive; requires many partitions.
 
 
 ### Akaike Information Criterion (AIC)
@@ -116,9 +116,9 @@ AIC = - \log p(y | \hat{\theta}_{MLE}) + 2 k
 $$
 Problems with AIC
 
-- doesn't make sense outside linear models with flat priors
-- hard to define the number of parameters, $k$, in Bayesian models
-- uses a point estimate of $\theta$, does not average over uncertainty in $\theta$
+-   doesn't make sense outside linear models with flat priors
+-   hard to define the number of parameters, $k$, in Bayesian models
+-   uses a point estimate of $\theta$, does not average over uncertainty in $\theta$
 
 ### Deviance Information Criterion (DIC)
 
@@ -139,10 +139,10 @@ $$
 p_{DIC-alt} = 2 \var_{post}(\log p(y | \theta)) .
 $$
 
-- gives correct answer in limit of fixed model and large $n$
-- $p_{DIC}$ is more numerically stable than $p_{DIC-alt}$
-- $p_{DIC-alt}$ is always positive
-- $p_{DIC}$ can be negative if posterior mean is far from the posterior mode
+-   gives correct answer in limit of fixed model and large $n$
+-   $p_{DIC}$ is more numerically stable than $p_{DIC-alt}$
+-   $p_{DIC-alt}$ is always positive
+-   $p_{DIC}$ can be negative if posterior mean is far from the posterior mode
 
 The DIC is on the deviance scale,
 $$
@@ -153,8 +153,8 @@ $$
 
 Proposed in @Watanabe2010a. Originally called the widely applicable information criterion (WAIC). 
 
-- similar to DIC, but fully Bayesian and doesn't rely on a point estimate $\hat{\theta}$.
-- unlike AIC and DIC it works for singular models where MLE doesn't exist
+-   similar to DIC, but fully Bayesian and doesn't rely on a point estimate $\hat{\theta}$.
+-   unlike AIC and DIC it works for singular models where MLE doesn't exist
 
 There are two derivations of the effective parameter size for WAIC.
 $$
@@ -190,8 +190,8 @@ It depends on both the prior and the observed data (p. 10).
 
 These information criteria (AIC, DIC, WAIC) are fundamentally different than the Bayesian Information Criteria (BIC). 
 
-- AIC, DIC, WAIC are approximations of the expected posterior predictive accuracy, $p(\tilde{y} | \theta)$.
-- BIC is an approximation of the marginal likelihood: $p(y)$.
+-   AIC, DIC, WAIC are approximations of the expected posterior predictive accuracy, $p(\tilde{y} | \theta)$.
+-   BIC is an approximation of the marginal likelihood: $p(y)$.
 
 See @KassRaftery1995a for more discussion of BIC and Bayes Factors.
 
@@ -204,6 +204,7 @@ $$
 \begin{aligned}[t]
 \log p_{train} (y_{holdout}) &= \log \int p_{pred} (y_{holdout} |\theta) p_{train}(\theta) \, d\theta \\
 &= \frac{1}{S} \sum_{s = 1}^S p(y_{holdout} | \theta^s)
+\end{aligned}
 $$
 
 For Bayesian LOO-CV the estimate of out-of-sample predictive fits is,
@@ -255,9 +256,9 @@ They call it Pareto Smoothed Importance Sampling Leave-one-Out cross-validation 
 
 The estimated shape parameter the Pareto distribution fit to the raw importance sampling weights of the observations, $\hat{k}_i$, provides a diagnostic for when this is an appropriate approximation. When $\hat{k} > 0.7$, the importance weights have infinite variance, and the LOO approximation does not work. In those cases
 
-- use LOO-CV for the problematic observations
-- use k-fold CV instead
-- use a robust model - since it suggests that certain observations are poorly fit and have too much influence over the model fit
+-   use LOO-CV for the problematic observations
+-   use k-fold CV instead
+-   use a robust model - since it suggests that certain observations are poorly fit and have too much influence over the model fit
 
 
 ### Evaluating Predictive Error Comparisons
@@ -276,13 +277,13 @@ $$
 
 @Ripley1996a asymptotic theory suggests sampling variance of avg. predictive error is of order 1. This means that differences in IC less than 1 can be ignored. However, this approx doesn't work well in finite samples or non-nested criteria (p. 26)
 
-- For practical significance
+-   For practical significance
 
-    - compare model to a baseline/reference model.
-    - better to compare predictive criteria directly related to the substantive problem
+    -   compare model to a baseline/reference model.
+    -   better to compare predictive criteria directly related to the substantive problem
     
-- if predictive criteria are used for model selection, then the *selected* model is *biased*. This bias increases with the number of models compared or variables selected among when the doing variable selection.
-- @VehtariOjanen2012 consider many different scenarios for future data, i.e. when $p(\tilde{x}) \neq p(x)$.
+-   if predictive criteria are used for model selection, then the *selected* model is *biased*. This bias increases with the number of models compared or variables selected among when the doing variable selection.
+-   @VehtariOjanen2012 consider many different scenarios for future data, i.e. when $p(\tilde{x}) \neq p(x)$.
 
 
 ## More Information

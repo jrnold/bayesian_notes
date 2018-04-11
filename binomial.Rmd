@@ -28,7 +28,7 @@ Depending on the [link function](#link-functions), these are  logit and probit m
 
 The parameter $\pi \in (0, 1)$ is often modeled with a link function is and a linear predictor.
 $$
-\pi_i = g^{-1}(\vec{x}_i \vec{\beta}})
+\pi_i = g^{-1}(\vec{x}_i \vec{\beta})
 $$
 
 There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
@@ -134,14 +134,14 @@ This is related and similar to identification in MLE and multicollinearity in OL
 
 The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.
 
-Using a weakly informatin prior such as those suggested by is sufficient to solve separation,
+Using a weakly informative prior such as those suggested by is sufficient to solve separation,
 $$
 \beta_k \sim \dnorm(0, 2.5)
 $$
 where all the columns of $\code{x}$ are assumed to mean zero, unit variance (or otherwise standardized).
 The half-Cauchy prior, $\dhalfcauchy(0, 2.5)$, suggested in @GelmanJakulinPittauEtAl2008a is insufficiently informative to  to deal with separation [@GhoshLiMitra2015a], but finite-variance weakly informative Student-t or Normal distributions will work.
 
-These are the priors suggested by [Stan](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and used by default in rstanarm `r rdoc("rstanarm", "stan_glm")`.
+These are the priors suggested by [Stan](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and used by default in **rstanarm** `r rdoc("rstanarm", "stan_glm")`.
 
 @Rainey2016a provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values.
 Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).
@@ -213,14 +213,14 @@ If some data are costly to gather, it may be cost efficient to get data for conf
 The sample will no longer be representative, but the estimates can be corrected.
 
 The reason this works well, is that if there are very few 1's, additional 0's have little influence on the estimation (@KingZeng2001a).
-This should hold more generally will unbalanaced classes; in some sense, the amount of effective observations is not much more than the number in the lowest category.
+This should hold more generally will unbalanced classes; in some sense, the amount of effective observations is not much more than the number in the lowest category.
 
 @KingZeng2001a propose two corrections: 
 
-1. Correcting the intercept (prior correctio)
+1. Correcting the intercept (prior correction)
 2. Weighting observations
 
-The *prior correction* ntoes that
+The *prior correction* notes that
 $$
 \pi_i = \frac{1}{1 + \exp(-\mat{X} \vec{beta})}
 $$
@@ -288,11 +288,5 @@ See the example for [Zelig-relogit](http://docs.zeligproject.org/en/latest/zelig
 
 ### References
 
-For general references on binomial models see
-
-- @Stan2016a [Sec. 8.5]
-- @McElreath2016a [Ch 10]
-- @GelmanHill2007a [Ch. 5; Sec 6.4-6.5]
-- @Fox2016a [Ch. 14]
-- @BDA3 [Ch. 16]
+For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].
 

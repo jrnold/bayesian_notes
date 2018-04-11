@@ -24,7 +24,7 @@ $$
 $$
 and the estimation error is governed by the CLT,
 $$
-| \mu - \hat{\mu} | \propto \frac{1}{\sqrt{N}}
+| \mu - \hat{\mu} | \propto \frac{\sigma}{\sqrt{N}}
 $$
 
 **Example** The mean of $Y = X^2$ where $X \sim \dnorm(0, 1)$.

@@ -3,18 +3,19 @@
 ## Why check models? 
 
 - In theory---Bayesian model should include all relevant substantive knowledge and subsume all possible theories.
-- In practice---It won't. Need to check how the model fits data.
+- In practice---It won't. We need to check how the model fits data.
 
-The question is not whether a model is "true"; it isn't [@Box1976a].
-But is it good enough for the purposes of the analysis.
+The question is not whether a model is "true"; it isn't [@Box1976a]. 
+The question is whether it is good enough for the purposes of the analysis.
+The problem is how we can specify "good enough" criteria, and how we can check those criteria.
 
-See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6], @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a
-for more discussion of the motivation and use of posterior predictive checks.
+
+See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6], @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a for more discussion of the motivation and use of posterior predictive checks.
 
 
 ## Posterior Predictive Checks
 
-One way to evaluate the fit of a model is **posterior predictive checks**
+One method evaluate the fit of a model is to use **posterior predictive checks**
 
 - Fit the model to the data to get the posterior distribution of the parameters: $p(\theta | D)$
 - Simulate data from the fitted model: $p(\tilde{D} | \theta, D)$
