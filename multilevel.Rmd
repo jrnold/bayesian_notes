@@ -1,17 +1,24 @@
 # Multilevel Models
 
+```{r message=FALSE}
+library("rstan")
+library("rstanarm")
+library("tidyverse")
+```
+
+
 Multilevel models are commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
 
 Suppose that there are $i = 1, dots, n$ observations, and each observation is in one of $j = 1, \dots, J$ groups.
-Let $j[i]$ be the group for 
+Let $j[i]$ be the group for
 $$
 \begin{aligned}[t]
 y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma^2) \\
   \begin{bmatrix}
   \alpha_j \\
   \beta_j
-  \end{bmatrix} 
+  \end{bmatrix}
 & \sim
 \dnorm
 \left(
@@ -31,7 +38,7 @@ y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
 \begin{bmatrix}
 \alpha \\
 \beta
-\end{bmatrix} 
+\end{bmatrix}
 &\sim
 \dnorm
 \left(
@@ -73,7 +80,6 @@ The model can be extended to other cases:
 
 One of the difficulties in these models is the prior to the covariance matrix, $\Omega$.
 
-
 ```{r echo=FALSE, fig.cap="Visual representation of hierarchical models"}
 n <- 20
 b <- 1
@@ -110,31 +116,29 @@ bind_rows(
   geom_segment() +
   facet_wrap(~ type, ncol = 2) +
   theme_void()
-          
-```
 
+```
 
 ## Example: Radon
 
 This example models the presence of radon in houses in Minnesota which appears in @GelmanHill2007a and @BDA3.
 This is partly derived from a [Stan Case Study](http://mc-stan.org/documentation/case-studies/radon.html), which uses `PyStan` instead of **rstan**.
 
-
 ### Data
 
-The `r rdoc("rstanarm", "radon")` data is included in the `r rpkg("rstanarm")` package.
+The `r rdoc("radon", "rstanarm")` data is included in the `r rpkg("rstanarm")` package.
 ```{r}
 data("radon", package = "rstanarm")
-radon
+glimpse(radon)
 ```
 
 The data consist of `r nrow(radon)`  observations of radon levels of houses from `r nlevels(radon$county)` counties.
 
-```{r}
+```{r radon_county}
 radon_county <- radon %>%
   group_by(county) %>%
   summarise(log_radon_mean = mean(log_radon),
-            log_radon_sd = sd(log_radon), 
+            log_radon_sd = sd(log_radon),
             log_uranium = mean(log_uranium),
             n = length(county))
 
@@ -143,17 +147,19 @@ radon_county <- radon %>%
 ```{r fig.asp=2}
 ggplot() +
   geom_point(data = radon,
-             mapping = aes(y = log_radon, x = fct_reorder(county, log_radon, mean))) +
+             mapping = aes(y = log_radon,
+                           x = fct_reorder(county, log_radon, mean))) +
   geom_point(data = radon_county,
-             mapping = aes(x = fct_reorder(county, log_radon_mean), y = log_radon_mean),
+             mapping = aes(x = fct_reorder(county, log_radon_mean),
+                           y = log_radon_mean),
              colour = "red") +
-  coord_flip() + 
+  coord_flip() +
   labs(y = "log(radon)", x = "")
 ```
 
 Relationship between mean and sample size
 ```{r}
-ggplot(radon_county, aes(y = log_radon_mean, x = log2(n))) + 
+ggplot(radon_county, aes(y = log_radon_mean, x = log2(n))) +
   geom_point()
 ```
 
@@ -212,12 +218,11 @@ $$
 \end{aligned}
 $$
 
-
 ### Group Level Predictors
 
 The `radon` dataset also contains the county-level measurements of `uranium`.
 
-One way to include county level measurements is to model the county-level intercepts. 
+One way to include county level measurements is to model the county-level intercepts.
 The values of each county intercept is a function of the county-level uranium.
 $$
 \begin{aligned}
@@ -228,7 +233,7 @@ $$
 $$
 
 
-Alternatively, we can model model the county-level intercepts. 
+Alternatively, we can model model the county-level intercepts.
 The values of each county intercept is a function of the county-level uranium.
 $$
 \begin{aligned}
@@ -238,21 +243,17 @@ $$
 \end{aligned}
 $$
 
-
-
-
-
 ### lme4
 
-In R, the most widely used package to estimate mixed-effects models is **lme4**. 
-This estimates models using maximum likelihood or restricted maximum likelihood methods (REML). 
+In R, the most widely used package to estimate mixed-effects models is **lme4**.
+This estimates models using maximum likelihood or restricted maximum likelihood methods (REML).
 This will be faster than using full-Bayesian methods but also underestimate the uncertainty, as well as being a worse approximation of the posterior.
 Additionally, in frequentist inference, the meaning of the random effects is different; they are nuisance parameters and not given standard errors.
 
 See @Bates2010a and @BatesMaechlerBolkerEtAl2014a for introductions to mixed-effects models with **lme4**.
 These are also good introductions to classical approaches to mixed effects models.
 
-```{r}
+```{r message=FALSE}
 library("lme4")
 ```
 
@@ -285,11 +286,13 @@ fit_slope_partial <- lm(log_radon ~ floor + log_uranium, data = radon)
 ```
 With varying-intercepts
 ```{r}
-fit_slope_partial <- lmer(log_radon ~ (1 | county) + floor + log_uranium, data = radon)
+fit_slope_partial <- lmer(log_radon ~ (1 | county) + floor + log_uranium,
+                          data = radon)
 ```
 With varying-intercepts and slopes,
 ```{r}
-fit_slope_partial <- lmer(log_radon ~ (1 + floor | county) +  log_uranium, data = radon)
+fit_slope_partial <- lmer(log_radon ~ (1 + floor | county) +  log_uranium,
+                          data = radon)
 ```
 
 ### rstanarm
@@ -307,11 +310,13 @@ fit_intercept_nopool <- stan_glm(log_radon ~ floor, data = radon)
 ```
 County-varying intercepts with partial-pooling
 ```{r}
-fit_intercept_partial <- stan_glmer(log_radon ~ (1 | county) + floor, data = radon)
+fit_intercept_partial <- stan_glmer(log_radon ~ (1 | county) + floor,
+                                    data = radon)
 ```
 Varying slopes with no pooling. *There is an error estimating this*
 ```{r eval=FALSE}
-fit_slope_nopool <- stan_glm(log_radon ~ -1 + county + county:floor, data = radon,
+fit_slope_nopool <- stan_glm(log_radon ~ -1 + county + county:floor,
+                             data = radon,
                              prior = normal(scale = 1))
 ```
 Varying slopes with partial pooling:
@@ -327,11 +332,15 @@ fit_slope_partial <- stan_glm(log_radon ~ floor + log_uranium, data = radon)
 ```
 With varying-intercepts
 ```{r}
-fit_slope_partial <- stan_glmer(log_radon ~ (1 | county) + floor + log_uranium, data = radon)
+fit_slope_partial <-
+  stan_glmer(log_radon ~ (1 | county) + floor + log_uranium,
+             data = radon)
 ```
 With varying-intercepts and slopes,
 ```{r}
-fit_slope_partial <- stan_glmer(log_radon ~ (1 + floor | county) +  log_uranium, data = radon)
+fit_slope_partial <-
+  stan_glmer(log_radon ~ (1 + floor | county) +  log_uranium,
+             data = radon)
 ```
 
 ## Pooling of Hierarchical Parameters
@@ -389,9 +398,9 @@ $$
 
 ## Time-Series Cross Section
 
-**TODO** 
+**TODO**
 
-A common application for these models are Time-Series Cross-Section (TSCS) or panel models. 
+A common application for these models are Time-Series Cross-Section (TSCS) or panel models.
 In this case, both the time and units can be modeled.
 
 
@@ -404,7 +413,7 @@ In this case, both the time and units can be modeled.
     - new obs in existing groups
     - new group
     - new obs in new group
-    
+
 - Modeling correlation between intercept and slopes
 - Non-nested models
 
@@ -416,17 +425,17 @@ In this case, both the time and units can be modeled.
 In classical discussions of multi-level or hierarchical models,
 a common question is how many groups are required to be able to use random effects vs. fixed effects.
 
-As noted earlier, random effects estimates the variance between group means. If there are few groups, there is not much information available to estimate this variance. 
+As noted earlier, random effects estimates the variance between group means. If there are few groups, there is not much information available to estimate this variance.
 As such, random effects is not much different than fixed effects.
 
 This literature provides many different rules of thumb for the number of groups necessary to be able to use random effects: 8, 10, 30, 50, or 100 [@Stegmueller2013a, p. 749].
 
-@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups. 
+@Stegmueller2013a finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups.
 ML methods do not suffer severe bias above 10-15 groups.
 Bayesian point estimates are biased for smaller numbers of groups, but less than the ML.
 Additionally, the Bayesian methods have better frequentist coverage than ML methods.
 
-@BeckKatz2007a show that ML random coefficient models are superior in terms of efficiency to many types of pooled and unpooled estimators in small samples.
+@BeckKatz2007a show that ML random coefficient models are superior in terms of efficiency to many types of pooled and un-pooled estimators in small samples.
 
 
 ### Correlation between Predictors and Errors
@@ -436,7 +445,7 @@ Additionally, the Bayesian methods have better frequentist coverage than ML meth
 The standard suggestion in frequentist literature is to use a Hausman test where the null hypothesis is that random effects are consistent. However, @ClarkLinzer2014a note that in small samples this is likely to fail to reject random effects; and in large samples, random effects behave like fixed effects anyways.
 
 
-## References 
+## References
 
 Texts and chapters on multi-level analysis:
 
@@ -447,10 +456,10 @@ Texts and chapters on multi-level analysis:
     - @BDA3 [Ch 15] "Hierarchical Linear Models"
     - @Jackman2009a [CHh. 7]
     - @Draper2008a
-    
+
 - Frequentist
 
-    - @Goldstein2011a 
+    - @Goldstein2011a
     - @SnijdersBosker2011a
     - @Rabe-HeskethSkrondal2012a
     - @Jiang2007a
@@ -478,7 +487,7 @@ Examples of multilevel models
 - @Arzheimer2009a: right-wing voting
 - @HoogheReeskensStolleEtAl2009a: social and political trust
 - @AndersonSinger2008a: satisfaction with democracy
-- @MeerDethScheepers2009a: political participation 
+- @MeerDethScheepers2009a: political participation
 - @IversenRosenbluth2006a: political economy of the gender wage gap
 - @HoogheMarks2004a: support for European integration
 - @LaxPhillips2009a: American politics using states and neighborhoods

@@ -1,5 +1,14 @@
 # Binomial Models
 
+```{r setup,message=FALSE}
+library("rstan")
+library("rstanarm")
+library("tidyverse")
+library("rubbish")
+library("bayz")
+```
+
+
 Binomial models are used to an outcome that is a bounded integer,
 $$
 y_i \in 0, 1, 2, \dots, n .
@@ -33,19 +42,18 @@ $$
 
 There are several common link functions, but they all have to map $R \to (0, 1)$.[^binomialcdf]
 
-- **Logit:** The logistic function,
+-   **Logit:** The logistic function,
     $$
     \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
     $$
     Stan function `r stanfunc("softmax")`.
-- **Probit:** The CDF of the normal distribution.
+-   **Probit:** The CDF of the normal distribution.
     $$
     \pi_i = \Phi(x_i\T \beta)
     $$
     Stan function `r stanfunc("normal_cdf")`.
-
-- **cauchit**: The CDF of the Cauchy distribution. Stan function `r stanfunc("cauchy_cdf")`.
-- **cloglog**: The inverse of the conditional log-log function (cloglog) is
+-   **cauchit**: The CDF of the Cauchy distribution. Stan function `r stanfunc("cauchy_cdf")`.
+-   **cloglog**: The inverse of the conditional log-log function (cloglog) is
     $$
     \pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
     $$
@@ -54,7 +62,7 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
 [^binomialcdf]: Since the cumulative distribution function of a distribution maps reals to $(0, 1)$, any CDF can be used as a link function.
 
 Of these link functions, the probit has the narrowest tails (sensitivity to outliers), followed by the logit, and cauchit.
-The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model#Complementary_log-log_.28cloglog.29) function is different in that it is asymmetric.[^cloglog]
+The [cloglog](https://en.wikipedia.org/wiki/Generalized_linear_model) function is different in that it is asymmetric.[^cloglog]
 At zero its value is above 0.5, whereas the cauchit, logit, and probit links all equal 0.5 at 0,
 ```{r}
 make.link("cloglog")$linkinv(0)
@@ -79,8 +87,8 @@ map_df(
 
 In Stan, the Binomial distribution has two implementations:
 
-- `r stanfunc("binomial_lpdf")`
-- `r stanfunc("binomial_logit_lpdf")`.
+-   `r stanfunc("binomial_lpdf")`
+-   `r stanfunc("binomial_logit_lpdf")`.
 
 The later implementation is for numeric stability.
 Taking an exponential of a value can be numerically unstable, and `binomial_logit_lpdf` input is on the logit scale:
@@ -125,10 +133,10 @@ mod1_fit
 
 ### Separation
 
-*[Separation](https://en.wikipedia.org/wiki/Separation_(statistics)* is when a predictor perfectly predicts a binary response variable [@Rainey2016a, @Zorn2005a]
+Separation is when a predictor perfectly predicts a binary response variable [@Rainey2016a, @Zorn2005a].
 
-- *complete separation:* the predictor perfectly predicts both 0's and 1's.
-- *quasi-complete separation:* the predictor perfectly predicts either 0's or 1's.
+-   *complete separation*: the predictor perfectly predicts both 0's and 1's.
+-   *quasi-complete separation*: the predictor perfectly predicts either 0's or 1's.
 
 This is related and similar to identification in MLE and multicollinearity in OLS.
 
@@ -161,12 +169,10 @@ This is the Jeffreys invariant prior. This was also recommended @Zorn2005a.
 
 @GreenlandMansournia2015a suggest a log-F prior distribution which has an intuitive interpretation related to the number of observations.
 
-
 #### Example: Support of ACA Medicaid Expansion
 
 This example is from @Rainey2016a from the original paper @BarrilleauxRainey2014a
 with replication code [here](https://github.com/carlislerainey/separation).
-
 
 ```{r}
 library("rstan")
@@ -201,7 +207,6 @@ fit1 <- stan_glm(f, data = br, family = "binomial")
 fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 ```
 
-
 ## Rare Events Logit
 
 ## Case Control
@@ -233,7 +238,8 @@ In an MLE setting, this can be applied after estimation, but used in any predict
 In a Bayesian setting, this correct should be applied within the model by adding the offset to the estimation.
 
 In a Stan model, this could be implemented by directly incrementing these values
-```
+
+``` stan
 data {
   int N;
   int y[N];
@@ -253,6 +259,7 @@ transformed parameters {
   alpha <- alpha0 - offset;
 }
 ```
+
 If there was uncertainty about $\tau$, then $\tau$ could be modeled as a parameter.
 It may also be okay to only correct the intercept in a generated quantities block? (not sure).
 
@@ -268,7 +275,8 @@ $$
 
 In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation.
 For example, something like this,
-```
+
+``` stan
 if (y[i]) {
   target += w * binomial_lpdf(1, pi[i])
 } else {
@@ -276,7 +284,7 @@ if (y[i]) {
 }
 ```
 
-See the example for [Zelig-relogit](http://docs.zeligproject.org/en/latest/zelig-relogit.html)
+See the example for [`Zelig-relogit`](http://docs.zeligproject.org/en/latest/zelig-relogit.html)
 
 #### References
 
@@ -289,4 +297,3 @@ See the example for [Zelig-relogit](http://docs.zeligproject.org/en/latest/zelig
 ### References
 
 For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].
-

@@ -1,14 +1,41 @@
 # Numerical Stability
 
-Stan includes several functions for numeric stability. These are to avoid arithmetic [underflow]( https://en.wikipedia.org/wiki/Arithmetic_underflow) and overflow.
+Probabilities are in $[0, 1]$ and arithmetic and multiplying small numbers requires care.
+It is easy to achieve arithmetic [underflow]( https://en.wikipedia.org/wiki/Arithmetic_underflow).
+Often 
 
-- separate functions for the CDF and complement of the CDF (CCDF). This is to avoid cases where the $CDF \approx 1$, and $1 - CDF$ could round up to 1.
-- `log_sum_exp`: `log_sum_exp(a, b) = log(exp(a) + exp(b))`
-- `log1p`: safely calculates $log(1 + x)$
-- `exp1m`: safely calculates $exp(x) - 1$
-- Most of the other function in @Stan2016a [Sec 39.14] "Composed Functions".
-- Several distributions include a special form to avoid having to calculate the logit or log link function. These are for numerical stability as well as convenience.
+## Stan Functions
+
+Stan includes multiple functions for numerical stability.
+
+-   Provides separate functions for the cumulative distribution function (CDF) and the complement of the CDF (CCDF). This ensures that in cases where the $\text{CDF} \approx 1$, the calculation $1 - \text{CDF}$ is not rounded up to 1.
+-   Most of the functions in the "composed functions" section of the Stan references are provided for reasons of numerical stability.
+-   `log_sum_exp`: Implements the log-sum-exp trick to calculate $\log(\exp(a) + \exp(b))$.
+-   `log1p`: calculates $\log(1 + x)$
+-   `exp1m`: calculate $\exp(x) - 1$
+-   Several distributions include a special form to avoid having to calculate the logit or log link function. These are for numerical stability as well as convenience.
 
   - `binomial_logit`
   - `poisson_log`
   - `categorical_logit`
+  
+## Log-sum-exp trick
+
+While log probabilities are often used, some equations will requiring summing probabilities, for example  the denominator of Bayes' Theorem.
+The log-sum-exp trick is a numerically stable method to sum probabilities and then convert to the log scale.
+$$
+\log \left[\sum_i \exp(x_i) \right] = a + \log\left[\sum_i \exp(x_i - a) \right]
+$$
+where $a = \max_i x_i$. 
+
+See these references for more details on the log-sump-exp trick.
+
+-   Eisele (2016) "[The log-sum-exp trick in Machine Learning](https://www.xarg.org/2016/06/the-log-sum-exp-trick-in-machine-learning/)" blog.
+-   Carpenter (2016) "[Log Sum of Exponentials for Robust Sums on the Log Scale](http://andrewgelman.com/2016/06/11/log-sum-of-exponentials/)" *Statistical Modeling, Causal Inference, and Social Science* (blog)
+-   Cook [Avoiding underflow in Bayesian computations](https://www.johndcook.com/blog/2012/07/26/avoiding-underflow-in-bayesian-computations/)
+
+
+## References
+
+-   Goldberg (1991) "[What every computer scientist should know about floating-point arithmetic](https://dx.doi.org/10.1145/103162.103163)" [@Goldberg1991]
+-   Computerphile (2014) "[Floating point numbers](https://www.youtube.com/watch?v=PZRI1IfStY0)" [@Computerphile2014a]

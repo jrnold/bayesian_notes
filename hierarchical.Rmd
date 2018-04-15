@@ -1,16 +1,22 @@
 # Hierarchical Models
 
-- *Hierarchical models:* often groups of parameters, $\{\theta_1, \dots, \theta_J\}$, are related.
-- E.g. countries, states, counties, years, etc. Even the regression coefficients, $\beta_1, \dots, \beta_k$ seen the in the [Shrinkage and Regularization] chapter.
-- We can treat those $\theta_j$ as drawn from a *population distribution*, $\theta_j \sim p(\theta)$.
-- The prior distribution $p(\theta)$ is called a *hyperprior* and its parameters are *hyperparameters*
-
+-   *Hierarchical models:* often groups of parameters, $\{\theta_1, \dots, \theta_J\}$, are related.
+-   E.g. countries, states, counties, years, etc. Even the regression coefficients, $\beta_1, \dots, \beta_k$ seen the in the [Shrinkage and Regularization] chapter.
+-   We can treat those $\theta_j$ as drawn from a *population distribution*, $\theta_j \sim p(\theta)$.
+-   The prior distribution $p(\theta)$ is called a *hyperprior* and its parameters are *hyperparameters*
 
 *Exchangeability:*
 
-- parameters $(\theta_1, \dots, \theta_J)$ are *exchangeable* if $p(\theta_1, \dots, \theta_J)$ don't depend on the indexes.
-- i.i.d. models are a special case of exchangeability.
+-   parameters $(\theta_1, \dots, \theta_J)$ are *exchangeable* if $p(\theta_1, \dots, \theta_J)$ don't depend on the indexes.
+-   i.i.d. models are a special case of exchangeability.
 
+## Prerequisites {-}
+
+```{r setup,message=FALSE}
+library("tidyverse")
+library("rstan")
+library("loo")
+```
 
 ## Example: Baseball Hits
 
@@ -18,7 +24,6 @@
 The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.
 
 The following example is based on @CarpenterGabryGoodrich2017a and the `r rpkg("rstanarm")` vignette [Hierarchical Partial Pooling for Repeated Binary Trials](https://cran.r-project.org/web/packages/rstanarm/vignettes/pooling.html).
-
 
 The hitting data used in @EfronMorris1975a is included in `r rpkg("rstanarm")` as `r rdoc("rstanarm", "bball1970")`:
 ```{r}
@@ -47,7 +52,7 @@ $$
 This example considers three ways of modeling $\mu_i$:
 
 
-1. **Complete Pooling:** All players have the same batting average parameter.
+1.  **Complete Pooling:** All players have the same batting average parameter.
     $$
     \eta_i = \eta .
     $$
@@ -56,15 +61,15 @@ This example considers three ways of modeling $\mu_i$:
     \eta \sim \dnorm(0, 2.5)
     $$
     On the log odds scale, this places 95% of the probability mass between `r round(plogis(-5) * 100, 1)` and `r round(plogis(5) * 100, 1)` on the proportion scale.
-    
-2. **Non-pooled:** Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
+
+2.  **Non-pooled:** Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
     $$
     \begin{aligned}[t]
     \eta_i &\sim \dnorm(0, 2.5)
     \end{aligned}
     $$
 
-3. **Partial-pooling:** Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution.
+3.  **Partial-pooling:** Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution.
     $$
     \begin{aligned}[t]
     \eta_i &\sim \dnorm(0, \tau) \\
@@ -93,7 +98,6 @@ models[["nopool"]] <- stan_model("stan/binomial-no-pooling.stan")
 models[["nopool"]]
 ```
 
-
 ```{r results='hide'}
 models[["pool"]] <- stan_model("stan/binomial-complete-pooling.stan")
 ```
@@ -118,7 +122,7 @@ fits <- map(models, sampling, data = bball1970_data,
 For each model calculate the posterior mean of $\mu$ for each player:
 ```{r}
 bball1970 <-
-  map2_df(names(fits), fits, 
+  map2_df(names(fits), fits,
      function(nm, fit) {
       mu <- broom::tidy(fit) %>% filter(str_detect(term, "^mu"))
       if (nrow(mu) == 1) {
@@ -133,10 +137,10 @@ bball1970 <-
   spread(model, estimate) %>%
   bind_cols(bball1970)
 ```
-The partially pooled estiamtes are shrunk towards the overall average, and are between the no-pooling and pooled estimates.
+The partially pooled estimates are shrunk towards the overall average, and are between the no-pooling and pooled estimates.
 ```{r}
 select(bball1970,
-       Player, nopool, partial, pool) %>% 
+       Player, nopool, partial, pool) %>%
   mutate(Player = factor(Player, levels = Player)) %>%
   gather(variable, value, -Player) %>%
   ggplot(aes(y = value, x = factor(variable), group = Player)) +
@@ -162,7 +166,7 @@ The LOO-PSIS estimates of the out-of-sample lppd are optimistic.
 However, they still show the pooling and partial estimates as superior to the no-pooling estimates.
 The actual out-of-sample average lppd for the partial pooled model is the best fitting.
 ```{r warning=FALSE,message=FALSE}
-map2_df(names(fits), fits, 
+map2_df(names(fits), fits,
      function(nm, fit) {
       loo <- loo(extract_log_lik(fit, "log_lik"))
       ll_new <- rstan::extract(fit)[["log_lik_new"]]
@@ -174,12 +178,12 @@ map2_df(names(fits), fits,
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.
 In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats---this is regression to the mean.
-In sample, the partially pooling model shrinks the estimates towards the mean and 
+In sample, the partially pooling model shrinks the estimates towards the mean and
 reducing error.
 Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.
 ```{r}
 select(bball1970,
-       Player, nopool, partial, pool, BatAvg1, BatAvg2) %>% 
+       Player, nopool, partial, pool, BatAvg1, BatAvg2) %>%
   mutate(Player = as.integer(factor(Player, levels = Player))) %>%
   gather(variable, value, -Player, -matches("BatAvg")) %>%
   mutate(`In-sample Errors` = value - BatAvg1,
@@ -196,23 +200,16 @@ select(bball1970,
 
 Extensions:
 
-- Redo this analysis with the `r rdoc("rstanarm", "bball2006")` dataset with hits and at-bats for the entire 2006 AL season of MLB.
-- Use a beta distribution for the prior of $\mu_i$. How would you specify the prior beta distribution so that it is uniformative?
-- If you used the beta distribution, how would you specify the beta distribution as a function of the mean?
-- The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribuiton.
-- There may be some truly exceptional players. Model this by replacing the normal prior for $\eta$ with a wide tailed distribution.
-- The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.
+-   Redo this analysis with the `r rdoc("rstanarm", "bball2006")` dataset with hits and at-bats for the entire 2006 AL season of MLB.
+-   Use a beta distribution for the prior of $\mu_i$. How would you specify the prior beta distribution so that it is uninformative?
+-   If you used the beta distribution, how would you specify the beta distribution as a function of the mean?
+-   The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribution.
+-   There may be some truly exceptional players. Model this by replacing the normal prior for $\eta$ with a wide tailed distribution.
+-   The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.
 
+### References
 
-References:
-
-- Albert, Jim. [Revisiting Efron and Morris’s Baseball Study](https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/) Feb 15, 2016
-- Bob Carpenter. [Hierarchical Bayesian Batting Ability, with Multiple Comparisons](https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/). November 4, 2009.
-- John Kruschke. [Shrinkage in multi-level hierarchical models](http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html). November 27, 2012.
-- See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting
-
-### Other Examples
-
-- Rat Tumors - BDA
-- Eight Schools - BDA
-
+-   Albert, Jim. [Revisiting Efron and Morris’s Baseball Study](https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/) Feb 15, 2016
+-   Bob Carpenter. [Hierarchical Bayesian Batting Ability, with Multiple Comparisons](https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/). November 4, 2009.
+-   John Kruschke. [Shrinkage in multi-level hierarchical models](http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html). November 27, 2012.
+-   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting

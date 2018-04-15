@@ -1,0 +1,163 @@
+# Bayesian Computation
+
+Bayesian inference requires calculating the posterior distribution,
+$$
+p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int_{\theta' \in \Theta} p(y | \theta') p(\theta')\, d\theta' } .
+$$
+However, calculating this quantity is difficult.
+The denominator (marginal likelihood) is an integral.
+Additionally, and function of the distribution, e.g. the mean is $\int \theta p(\theta | y) \,d\theta$ also requires calculating an integral.
+
+In general there are several strategies for this.
+
+1.  Symbolic/Analytic: in a few cases, the posterior distribution can be derived symbolically and has a closed-form solution that corresponds distribution that can be sampled from. *Conjugate priors* are the most common case of this.
+1.  Functional: find a function that approximates the true posterior. e.g. maximum a posteriori, Laplace/quadratic approximation. 
+1.  Grid/Quadrature. approximate the posterior with a discrete distribution evaluated at a fixed set of points.
+1.  Sampling. draw a sample from the posterior.
+
+Additionally, methods an incorporate and combine various parts of these approaches. 
+
+## Water Model
+
+Water makes up 71% of Earth's surface. 
+Suppose that we take a sample of `WLWWWLWLW`.
+What is our estimate about the proportion of the earth's surface that is water? 
+
+```{r}
+smpls <- c("L", "W", "L", "L", "L", "L", "L", "L", "L", "W")
+y <- sum(y_cat == "W")
+n <- length(smpls)
+```
+
+$$
+y \sim \dBinom(n, \theta) \\
+\theta \sim \dbeta(a, b)
+$$
+Suppose we use 
+$$
+\theta \sim \dbeta(1, 1)
+$$
+```{r}
+prior <- list(a = 1, b = 1)
+```
+
+
+Conjugate prior
+$$
+\theta | y \sim \dbeta(a + y, b + n - y)
+$$
+So the mean is
+```{r}
+posterior <- list(a = prior$a + y,  b = prior$b + n - y)
+```
+
+## Quadrature
+
+### Grid approximation
+
+TLDR: Approximate the posterior distribution by taking a grid of points in $\theta$ and calculating $p(\theta|y)$. 
+Doesn't work well in large dimensions, or if the grid does not include many points in the area with high posterior density.
+
+```{r}
+library("tidyverse")
+grid <- tibble(
+  theta = seq(0, 1, length.out = 10),
+  prior = dbeta(theta, shape1 = prior$a, shape2 = prior$b),
+  likelihood = dbinom(y, size = n, prob = theta)) %>%
+  mutate(posterior_unst = prior * likelihood,
+         posterior = posterior_unst / sum(posterior_unst))
+
+```
+
+See @BDA [Sec 10.1]
+
+## Functional Approximations
+
+See @BDA3 [Sec 10.3, 13.3]
+
+### Maximum A Posteriori 
+
+TLDR: approximate the posterior distribution with a point mass at the 
+
+Maximum a posteriori estimation finds value of $\theta$ that maximizes the posterior distribution,
+$$
+\hat{\theta} = \arg\max_{\theta} p(\theta |y) .
+$$
+
+The MAP is best thought of a Bayesian point estimate of the mode of the posterior distribution.
+However, unlike (most?) other point estimates it does not require first computing the posterior distribution.
+
+However, we can consider it a functional approximation of the posterior distribution, in which the approximating distribution is a point mass at $\hat{\theta}$.
+
+Notes:
+
+-   often the maximum of the posterior is much easier to calculate than the entire posterior distribution
+-   when the prior is improper, $p(\theta | y) \propto p(y | theta)$ and the MAP and maximum likelihood (MLE) estimators produce the same point estimate.
+)
+
+### Laplace Approximation
+
+TLDR: approximate the posterior distribution with a normal distribution centered at the maximum.
+
+The Laplace or quadratic approximation to the posterior distribution uses a normal approximation to the posterior distribution.
+
+1.  Find maximum of $p(\theta | y)$.
+2.  Take the Taylor expansion around the maximum $\hat{\theta}$,
+
+$$
+\begin{aligned}[t]
+p(\theta | y) &
+\approx p(\widehat{\theta}) + (\theta - \widehat{\theta}) \left[ \frac{d}{d \theta} p(\theta | y) \right]_{\theta = \hat{\theta}} + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
+&= p(\widehat{\theta}) + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
+\end{aligned}
+$$
+
+# Markov Chain Monte Carlo
+
+## Monte Carlo Sampling
+
+Monte Carlo methods are used to numerically approximate integrals, when the integral function is not tractable but the function being integrated is.
+
+In Bayesian stats, the mean of a probability density $p(\theta)$ is 
+$$
+\mu = \int_{\Theta} \theta p(\theta) \, d \theta .
+$$
+Except for cases in which the distribution $p(\theta)$ has a known form (not the case for most applied models) for functional form of the integral isn't known, but $p(\theta)$ is 
+
+The Monte Carlo estimate of $\mu$ is.
+
+-   Draw $N$ independent samples, $\theta^{(1)}, \dots, \theta^{(N)}$, from $p(\theta)$.
+-   Estimate $\hat{\mu}$ with
+    $$
+    \hat{\mu} = \frac{1}{N} \sum_{n = 1}^N \theta^{(N)} .
+    $$
+
+If $p(\theta)$ has finite mean and variance, the law of large numbers ensures that the Monte Carlo estimate converges to the true value 
+$$
+\lim_{N \to \infty} \hat\mu \to \mu
+$$
+and the estimation error is governed by the CLT,
+$$
+| \mu - \hat{\mu} | \propto \frac{\sigma}{\sqrt{N}}
+$$
+
+**Example:** The mean of $Y = X^2$ where $X \sim \dnorm(0, 1)$.
+Draw a sample from $Y$,
+```{r}
+x <- rnorm(1024, 0, 1) ^ 2
+```
+The Monte Carlo estimates of the mean is
+```{r}
+mean(x)
+```
+with standard error,
+```{r}
+sd(x) / sqrt(length(x))
+```
+
+## Markov Chain Monte Carlo Sampling
+
+**Problem:** Monte Carlo sampling requires the samples to be **independent**. But what if you cannot draw independent samples? 
+
+**Solution:** Markov Chain Monte Carlo are a class of algorithms to sample from a distribution when independent samples cannot be drawn.
+However, the samples in MCMC will be **dependent**.

@@ -80,7 +80,7 @@ $$
 $$
 where $z_i$ is a vector of control variables.
 
-- `xenovote`: Xenophobic voting. Share of vote for the Zhironovsky Bloc.
+- `xenovote`: Xenophobic voting. Share of vote for the [Zhirinovsky Bloc](https://en.wikipedia.org/wiki/Vladimir_Zhirinovsky).
 - `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
 - `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proprotion of non-Slavic groups in the region.
 

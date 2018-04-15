@@ -1,6 +1,6 @@
 # Generalized Linear Models
 
-Generalized linear models (GLMs) are a class of commonly used models.[^glm-r]
+Generalized linear models (GLMs) are a class of commonly used models.
 In GLMs, the mean is specified as a function of a linear model of predictors,
 $$
 E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta}) .

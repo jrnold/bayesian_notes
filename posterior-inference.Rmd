@@ -1,6 +1,6 @@
 # Posterior Inference
 
-## Prerequisites 
+## Prerequisites
 
 The `r rpkg("haven")` package is used to read Stata `.dta` files.
 ```{r}
@@ -23,7 +23,7 @@ Common statistics used to summarize the posterior distribution:
 
     - central credible interval: the interval between the p/2% and 1 - p/2% quantiles
     - highest posterior density interval: the narrowest interval containing p% of distribution
-    
+
 - marginal densities
 
 ## Functions of the Posterior Distribution
@@ -48,11 +48,11 @@ This is not easy for methods like MLE that produce point estimates:
 $$
 Y = \beta_0 + \beta_x X + \beta_z Z + \beta_{xz} X Z + \epsilon
 $$
-In this case, the hypothesis of interest involves the marginal effect of $X$ on $Y$, 
+In this case, the hypothesis of interest involves the marginal effect of $X$ on $Y$,
 $$
 \frac{\partial \E(Y|.)}{\partial X} = \beta_z + \beta_{xz} Z
 $$
-Since there is an interaction, the marginal effect of $X$ is not simply 
+Since there is an interaction, the marginal effect of $X$ is not simply
 the coefficient $\beta_z$, but is a function of another predictor, $Z$.
 Point estimates of the marginal effects with interactions are relatively easy to construct, but confidence intervals for the MLE estimates quickly involve multiple terms and either the Delta method approximation or bootstrapping to calculate.
 
@@ -69,17 +69,17 @@ One claim of @Alexseev2006a was that support for anti-immigrant parties depends 
 To test that hypothesis, @Alexseev2006a estimates the following model,
 $$
 \begin{multline}
-\mathtt{xenovote}_i = \beta_0 + \beta_s \mathtt{slavicshare}_i + 
+\mathtt{xenovote}_i = \beta_0 + \beta_s \mathtt{slavicshare}_i +
 \beta_{n} \mathtt{changenonslav} + \\
-\beta_{sn} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) + 
+\beta_{sn} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) +
 \gamma z_{i} + \epsilon_{i},
 \end{multline}
 $$
 where $z_i$ is a vector of control variables.
 
-- `xenovote`: Xenophobic voting. Share of vote for the Zhironovsky Bloc.
-- `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
-- `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proprotion of non-Slavic groups in the region.
+-   `xenovote`: Xenophobic voting. Share of vote for the [Zhirinovsky Bloc](https://en.wikipedia.org/wiki/Vladimir_Zhirinovsky).
+-   `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
+-   `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proportion of non-Slavic groups in the region.
 
 The model was estimated by OLS,[^alexseev2]
 ```{r}
@@ -98,10 +98,11 @@ mod_data <- within(mod_data, {
   n <- nrow(X)
   k <- ncol(X)
   M <- 100
-  changenonslav <- seq(min(X[ , "changenonslav"]),                               max(X[ , "changenonslav"]),
+  changenonslav <- seq(min(X[, "changenonslav"]),
+                       max(X[, "changenonslav"]),
                        length.out = M)
   idx_b_slavicshare <- which(colnames(X) == "slavicshare")
-  idx_b_slavicshare_changenonslav <-
+  idx_b_slavicshare_changenonslav <-  # nolint
     which(colnames(X) == "slavicshare:changenonslav")
   b_loc <- 0
   # data appropriate prior
@@ -122,7 +123,7 @@ mod_fit
 ```
 
 
-The function `r rdoc("rstan", "extract")` extracts parameters from 
+The function `r rdoc("rstan", "extract")` extracts parameters from
 the `r rdoc("rstan", "stanfit")` object as a list with an element for each parameter.
 ```{r}
 dydx_all <-
@@ -160,15 +161,15 @@ dydx_summary <-
   summarise(mean = mean(value),
             q5 = quantile(value, 0.05),
             q25 = quantile(value, 0.25),
-            q75 = quantile(value, 0.75),            
+            q75 = quantile(value, 0.75),
             q95 = quantile(value, 0.95))
 ggplot() +
   modelr::geom_ref_line(h = 0) +
   geom_ribbon(data = dydx_summary,
               mapping = aes(x = changenonslav, ymin = q5, ymax = q95),
-              alpha = 0.2) +  
+              alpha = 0.2) +
   geom_ribbon(data = dydx_summary,
-              mapping = aes(x = changenonslav, ymin = q25, ymax = q75), 
+              mapping = aes(x = changenonslav, ymin = q25, ymax = q75),
               alpha = 0.2) +
   geom_line(data = dydx_summary,
             mapping = aes(x = changenonslav, y = mean),
@@ -176,13 +177,12 @@ ggplot() +
   geom_rug(data = alexseev, mapping = aes(x = changenonslav), sides = "b") +
   ylab("Marginal effect of slavic share") +
   xlab(expression(paste(Delta, "non-Slavic Share")))
-
 ```
 The plot above also includes a rug with the observed values of `changenonslav` in the sample.
 
-- **Q:** For each value of `changenonslav`, what is the probability that the marginal effect of `slavicshare` is greater than 0? 
-- **Q:** Reestimate the model, but calculate the marginal effect of `slavicshare` for all observed values of `changenonslav` in the sample. For each observation, calculate the probability that the marginal effect is greater than 0. What proporation of observations is the probability that the marginal effect is greater than zero.
-- **Q:** Suppose you want to calculate the expected probability that the marginal effect of `slavicshare` is greater than zero in the sample. Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare` on the `xenovote`. Consider these two calculations:
+-  **Q:** For each value of `changenonslav`, what is the probability that the marginal effect of `slavicshare` is greater than 0?
+-  **Q:** Re-estimate the model, but calculate the marginal effect of `slavicshare` for all observed values of `changenonslav` in the sample. For each observation, calculate the probability that the marginal effect is greater than 0. What proportion of observations is the probability that the marginal effect is greater than zero.
+-  **Q:** Suppose you want to calculate the expected probability that the marginal effect of `slavicshare` is greater than zero in the sample. Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare` on the `xenovote`. Consider these two calculations:
     $$
     \frac{1}{N} \sum_{i = 1}^n \left( \frac{1}{S} \sum_{s = 1}^S I(\theta^{(s)}_i > 0) \right)
     $$
@@ -191,4 +191,4 @@ The plot above also includes a rug with the observed values of `changenonslav` i
     \frac{1}{S} \sum_{s = 1}^S \left( \frac{1}{N} \sum_{i = 1}^N I(\theta^{(s)}_i > 0) \right) .
     $$
     Are they the same? What are their substantive interpretations?
-- **Q:** Construct the same plot but for Figure 5(b) in @BerryGolderMilton2012a, which displays the marginaleffects of $\Delta$ *non-Slavic* on *Xenophobic* voting.
+-   **Q:** Construct the same plot but for Figure 5(b) in @BerryGolderMilton2012a, which displays the marginal effects of $\Delta$ *non-Slavic* on *Xenophobic* voting.

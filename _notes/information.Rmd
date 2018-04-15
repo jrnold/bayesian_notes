@@ -33,13 +33,13 @@ $$
 $$
 that has the following properties:
 
-1. **continuity:** the measure is continuous (derivatives with respect to all $p_i$ exist)
-2. **symmetry:** $H_n(p_1, p_2, \dots) = H_n(p_2, p_1, \dots)$. Invariant to ordering of outcomes.
-3. **maximum** occurs when all events are equally likely,
+1.   **continuity:** the measure is continuous (derivatives with respect to all $p_i$ exist)
+2  . **symmetry:** $H_n(p_1, p_2, \dots) = H_n(p_2, p_1, \dots)$. Invariant to ordering of outcomes.
+3.   **maximum** occurs when all events are equally likely,
     $$
     H_n(p_1, \dots, p_n) \leq H_n \left(\frac{1}{n}, \dots, \frac{1}{n} \right) = \log_b(n)
     $$
-4. **additivity** Amount of entropy is independent of how the process is divided into parts
+4.   **additivity** Amount of entropy is independent of how the process is divided into parts
 
 The logarithmic function encodes information,
 $$

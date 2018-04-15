@@ -46,6 +46,10 @@
 
 
 
+<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/viz-0.3/viz.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
 
 
 
@@ -132,222 +136,172 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="part"><span><b>I Theory</b></span></li>
-<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a></li>
-<li class="part"><span><b>II Computation</b></span></li>
-<li class="chapter" data-level="2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>2</b> Markov Chain Monte Carlo</a><ul>
-<li class="chapter" data-level="2.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>2.1</b> Monte Carlo Sampling</a></li>
-<li class="chapter" data-level="2.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo-sampling"><i class="fa fa-check"></i><b>2.2</b> Markov Chain Monte Carlo Sampling</a></li>
-<li class="chapter" data-level="2.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#references"><i class="fa fa-check"></i><b>2.3</b> References</a></li>
+<li class="chapter" data-level="1" data-path="priors.html"><a href="priors.html"><i class="fa fa-check"></i><b>1</b> Priors</a><ul>
+<li class="chapter" data-level="1.1" data-path="priors.html"><a href="priors.html#conjugate-priors"><i class="fa fa-check"></i><b>1.1</b> Conjugate Priors</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="priors.html"><a href="priors.html#binomial-beta"><i class="fa fa-check"></i><b>1.1.1</b> Binomial-Beta</a></li>
+<li class="chapter" data-level="1.1.2" data-path="priors.html"><a href="priors.html#categorical-dirichlet"><i class="fa fa-check"></i><b>1.1.2</b> Categorical-Dirichlet</a></li>
+<li class="chapter" data-level="1.1.3" data-path="priors.html"><a href="priors.html#poisson-gamma"><i class="fa fa-check"></i><b>1.1.3</b> Poisson-Gamma</a></li>
+<li class="chapter" data-level="1.1.4" data-path="priors.html"><a href="priors.html#normal-with-known-variance"><i class="fa fa-check"></i><b>1.1.4</b> Normal with known variance</a></li>
+<li class="chapter" data-level="1.1.5" data-path="priors.html"><a href="priors.html#exponential-family"><i class="fa fa-check"></i><b>1.1.5</b> Exponential Family</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>3</b> MCMC Diagnostics</a><ul>
-<li class="chapter" data-level="3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#reparameterize-models"><i class="fa fa-check"></i><b>3.1</b> Reparameterize Models</a></li>
-<li class="chapter" data-level="3.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>3.2</b> Convergence Diagnostics</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>3.2.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
-<li class="chapter" data-level="3.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>3.2.2</b> References</a></li>
+<li class="chapter" data-level="1.2" data-path="priors.html"><a href="priors.html#improper-priors"><i class="fa fa-check"></i><b>1.2</b> Improper Priors</a></li>
+<li class="chapter" data-level="1.3" data-path="priors.html"><a href="priors.html#references"><i class="fa fa-check"></i><b>1.3</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>3.3</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#effective-sample-size"><i class="fa fa-check"></i><b>3.3.1</b> Effective Sample Size</a></li>
+<li class="chapter" data-level="2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>2</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#reparameterize-models"><i class="fa fa-check"></i><b>2.1</b> Reparameterize Models</a></li>
+<li class="chapter" data-level="2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>2.2</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>2.2.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+<li class="chapter" data-level="2.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>2.2.2</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#thinning"><i class="fa fa-check"></i><b>3.4</b> Thinning</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#traceplots"><i class="fa fa-check"></i><b>3.4.1</b> Traceplots</a></li>
-<li class="chapter" data-level="3.4.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>3.4.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+<li class="chapter" data-level="2.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>2.3</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#effective-sample-size"><i class="fa fa-check"></i><b>2.3.1</b> Effective Sample Size</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-nut-specific-diagnostics"><i class="fa fa-check"></i><b>3.5</b> HMC-NUT Specific Diagnostics</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>3.5.1</b> Divergent transitions</a></li>
-<li class="chapter" data-level="3.5.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-treedepth"><i class="fa fa-check"></i><b>3.5.2</b> Maximum Treedepth</a></li>
-<li class="chapter" data-level="3.5.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#bayesian-fraction-of-missing-information"><i class="fa fa-check"></i><b>3.5.3</b> Bayesian Fraction of Missing Information</a></li>
+<li class="chapter" data-level="2.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#thinning"><i class="fa fa-check"></i><b>2.4</b> Thinning</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#traceplots"><i class="fa fa-check"></i><b>2.4.1</b> Traceplots</a></li>
+<li class="chapter" data-level="2.4.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>2.4.2</b> Monte Carlo Standard Error (MCSE)</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="posterior-inference.html"><a href="posterior-inference.html"><i class="fa fa-check"></i><b>4</b> Posterior Inference</a><ul>
-<li class="chapter" data-level="4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#prerequisites"><i class="fa fa-check"></i><b>4.1</b> Prerequisites</a></li>
-<li class="chapter" data-level="4.2" data-path="posterior-inference.html"><a href="posterior-inference.html#introduction"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
-<li class="chapter" data-level="4.3" data-path="posterior-inference.html"><a href="posterior-inference.html#functions-of-the-posterior-distribution"><i class="fa fa-check"></i><b>4.3</b> Functions of the Posterior Distribution</a></li>
-<li class="chapter" data-level="4.4" data-path="posterior-inference.html"><a href="posterior-inference.html#marginal-effects"><i class="fa fa-check"></i><b>4.4</b> Marginal Effects</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="posterior-inference.html"><a href="posterior-inference.html#example-marginal-effect-plot-for-x"><i class="fa fa-check"></i><b>4.4.1</b> Example: Marginal Effect Plot for X</a></li>
+<li class="chapter" data-level="2.5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-nut-specific-diagnostics"><i class="fa fa-check"></i><b>2.5</b> HMC-NUT Specific Diagnostics</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>2.5.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="2.5.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-tree-depth"><i class="fa fa-check"></i><b>2.5.2</b> Maximum Tree-depth</a></li>
+<li class="chapter" data-level="2.5.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#bayesian-fraction-of-missing-information"><i class="fa fa-check"></i><b>2.5.3</b> Bayesian Fraction of Missing Information</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
-<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>5.1</b> Why check models?</a></li>
-<li class="chapter" data-level="5.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2</b> Posterior Predictive Checks</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>5.2.1</b> Bayesian p-values</a></li>
-<li class="chapter" data-level="5.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>5.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="5.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>5.2.3</b> p-values vs. u-values</a></li>
-<li class="chapter" data-level="5.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>5.2.4</b> Marginal predictive checks</a></li>
-<li class="chapter" data-level="5.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>5.2.5</b> Outliers</a></li>
-<li class="chapter" data-level="5.2.6" data-path="model-checking.html"><a href="model-checking.html#grapical-posterior-predictive-checks"><i class="fa fa-check"></i><b>5.2.6</b> Grapical Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="3" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>3</b> Model Checking</a><ul>
+<li class="chapter" data-level="3.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>3.1</b> Why check models?</a></li>
+<li class="chapter" data-level="3.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>3.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="3.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>3.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="3.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>3.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="3.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>3.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="3.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>3.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="3.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>3.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="model-checking.html"><a href="model-checking.html#sources"><i class="fa fa-check"></i><b>5.3</b> Sources</a></li>
+<li class="chapter" data-level="3.3" data-path="model-checking.html"><a href="model-checking.html#references-2"><i class="fa fa-check"></i><b>3.3</b> References</a></li>
 </ul></li>
-<li class="part"><span><b>III Models</b></span></li>
-<li class="chapter" data-level="6" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Introduction to Stan and Linear Regression</a><ul>
-<li class="chapter" data-level="6.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequites"><i class="fa fa-check"></i><b>6.1</b> Prerequites</a></li>
-<li class="chapter" data-level="6.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#the-statistical-model"><i class="fa fa-check"></i><b>6.2</b> The Statistical Model</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>6.2.1</b> Sampling</a></li>
-<li class="chapter" data-level="6.2.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>6.2.2</b> Convergence Diagnostics and Model Fit</a></li>
+<li class="part"><span><b>II Models</b></span></li>
+<li class="chapter" data-level="4" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequisites-1"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="4.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#ols-and-mle-linear-regression"><i class="fa fa-check"></i><b>4.1</b> OLS and MLE Linear Regression</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#bayesian-model-with-improper-priors"><i class="fa fa-check"></i><b>4.1.1</b> Bayesian Model with Improper priors</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>7</b> Heteroskedasticity and Robust Regression</a><ul>
-<li class="chapter" data-level="7.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-1"><i class="fa fa-check"></i><b>7.1</b> Prerequisites</a></li>
-<li class="chapter" data-level="7.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>7.2</b> Linear Regression with Student t distributed errors</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#double-exponential-laplace-errors"><i class="fa fa-check"></i><b>7.2.1</b> Double Exponential (Laplace) Errors</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>7.3</b> Heteroskedasticity</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>7.3.1</b> Covariates</a></li>
-<li class="chapter" data-level="7.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>7.3.2</b> Student-t Error</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-2"><i class="fa fa-check"></i><b>7.4</b> References</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>7.4.1</b> Robust regression</a></li>
-<li class="chapter" data-level="7.4.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>7.4.2</b> Heteroskedasticity</a></li>
-<li class="chapter" data-level="7.4.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#qunatile-regression"><i class="fa fa-check"></i><b>7.4.3</b> Qunatile regression</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#stan-model"><i class="fa fa-check"></i><b>4.2</b> Stan Model</a></li>
+<li class="chapter" data-level="4.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling-model-with-stan"><i class="fa fa-check"></i><b>4.3</b> Sampling Model with Stan</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>4.3.1</b> Sampling</a></li>
+<li class="chapter" data-level="4.3.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>4.3.2</b> Convergence Diagnostics and Model Fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>8</b> Generalized Linear Models</a><ul>
-<li class="chapter" data-level="8.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>8.1</b> Generalized Linear Models</a></li>
-<li class="chapter" data-level="8.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>8.2</b> Count Models</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>8.2.1</b> Poisson</a></li>
+<li class="chapter" data-level="5" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>5</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-2"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="5.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>5.1</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="5.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>5.2</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>5.2.1</b> Covariates</a></li>
+<li class="chapter" data-level="5.2.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>5.2.2</b> Student-t Error</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example"><i class="fa fa-check"></i><b>8.3</b> Example</a></li>
-<li class="chapter" data-level="8.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>8.4</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-3"><i class="fa fa-check"></i><b>8.4.1</b> References</a></li>
-</ul></li>
-<li class="chapter" data-level="8.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>8.5</b> Multinomial / Categorical Models</a></li>
-<li class="chapter" data-level="8.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>8.6</b> Gamma Regression</a></li>
-<li class="chapter" data-level="8.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>8.7</b> Beta Regression</a></li>
-<li class="chapter" data-level="8.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>8.8</b> References</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>9</b> Binomial Models</a><ul>
-<li class="chapter" data-level="9.0.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>9.0.1</b> Link Functions {link-function}</a></li>
-<li class="chapter" data-level="9.0.2" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>9.0.2</b> Stan</a></li>
-<li class="chapter" data-level="9.0.3" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>9.0.3</b> Example: Vote Turnout</a></li>
-<li class="chapter" data-level="9.0.4" data-path="binomial-models.html"><a href="binomial-models.html#separation"><i class="fa fa-check"></i><b>9.0.4</b> Separation</a></li>
-<li class="chapter" data-level="9.1" data-path="binomial-models.html"><a href="binomial-models.html#rare-events-logit"><i class="fa fa-check"></i><b>9.1</b> Rare Events Logit</a></li>
-<li class="chapter" data-level="9.2" data-path="binomial-models.html"><a href="binomial-models.html#case-control"><i class="fa fa-check"></i><b>9.2</b> Case Control</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="binomial-models.html"><a href="binomial-models.html#references-6"><i class="fa fa-check"></i><b>9.2.1</b> References</a></li>
+<li class="chapter" data-level="5.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-3"><i class="fa fa-check"></i><b>5.3</b> References</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#robust-regression"><i class="fa fa-check"></i><b>5.3.1</b> Robust regression</a></li>
+<li class="chapter" data-level="5.3.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity-1"><i class="fa fa-check"></i><b>5.3.2</b> Heteroskedasticity</a></li>
+<li class="chapter" data-level="5.3.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>5.3.3</b> Quantile regression</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html"><i class="fa fa-check"></i><b>10</b> Unbounded Count Models</a><ul>
-<li class="chapter" data-level="10.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#poisson-1"><i class="fa fa-check"></i><b>10.1</b> Poisson</a></li>
-<li class="chapter" data-level="10.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-1"><i class="fa fa-check"></i><b>10.2</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-1"><i class="fa fa-check"></i><b>10.2.1</b> Stan</a></li>
-<li class="chapter" data-level="10.2.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-number-of-number-o"><i class="fa fa-check"></i><b>10.2.2</b> Example: Number of Number o</a></li>
-<li class="chapter" data-level="10.2.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-7"><i class="fa fa-check"></i><b>10.2.3</b> References</a></li>
-<li class="chapter" data-level="10.2.4" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#link-functions"><i class="fa fa-check"></i><b>10.2.4</b> Link functions</a></li>
-<li class="chapter" data-level="10.2.5" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#stan-2"><i class="fa fa-check"></i><b>10.2.5</b> Stan</a></li>
+<li class="chapter" data-level="6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>6</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="6.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#generalized-linear-models-1"><i class="fa fa-check"></i><b>6.1</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="6.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>6.2</b> Count Models</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>6.2.1</b> Poisson</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-bilateral-sanctions"><i class="fa fa-check"></i><b>10.3</b> Example: Bilateral Sanctions</a></li>
-<li class="chapter" data-level="10.4" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#negative-binomial-2"><i class="fa fa-check"></i><b>10.4</b> Negative Binomial</a><ul>
-<li class="chapter" data-level="10.4.1" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#example-economic-sanctions-ii-ex-econ-sanctions-2"><i class="fa fa-check"></i><b>10.4.1</b> Example: Economic Sanctions II {ex-econ-sanctions-2}</a></li>
-<li class="chapter" data-level="10.4.2" data-path="unbounded-count-models.html"><a href="unbounded-count-models.html#references-8"><i class="fa fa-check"></i><b>10.4.2</b> References</a></li>
+<li class="chapter" data-level="6.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example"><i class="fa fa-check"></i><b>6.3</b> Example</a></li>
+<li class="chapter" data-level="6.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>6.4</b> Negative Binomial</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>6.4.1</b> References</a></li>
 </ul></li>
+<li class="chapter" data-level="6.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>6.5</b> Multinomial / Categorical Models</a></li>
+<li class="chapter" data-level="6.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>6.6</b> Gamma Regression</a></li>
+<li class="chapter" data-level="6.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>6.7</b> Beta Regression</a></li>
+<li class="chapter" data-level="6.8" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-5"><i class="fa fa-check"></i><b>6.8</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>11</b> Categorical Variables</a><ul>
-<li class="chapter" data-level="11.1" data-path="categorical-variables.html"><a href="categorical-variables.html#example-mexico-vote-choice"><i class="fa fa-check"></i><b>11.1</b> Example: Mexico Vote Choice</a></li>
-</ul></li>
-<li class="chapter" data-level="12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html"><i class="fa fa-check"></i><b>12</b> Shrinkage and Regularization</a><ul>
-<li class="chapter" data-level="12.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#normal-linear-regression-model"><i class="fa fa-check"></i><b>12.1</b> Normal Linear Regression Model</a></li>
-<li class="chapter" data-level="12.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#penalized-regression"><i class="fa fa-check"></i><b>12.2</b> Penalized Regression</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#ridge-regression"><i class="fa fa-check"></i><b>12.2.1</b> Ridge Regression</a></li>
-<li class="chapter" data-level="12.2.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#lasso"><i class="fa fa-check"></i><b>12.2.2</b> Lasso</a></li>
-</ul></li>
-<li class="chapter" data-level="12.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-shrinkage-priors"><i class="fa fa-check"></i><b>12.3</b> Bayesian Shrinkage Priors</a></li>
-<li class="chapter" data-level="12.4" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#differences-between-bayesian-shrinkage-and-penalized-likelihood"><i class="fa fa-check"></i><b>12.4</b> Differences between Bayesian Shrinkage and Penalized Likelihood</a></li>
-<li class="chapter" data-level="12.5" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-shrinkage-priors"><i class="fa fa-check"></i><b>12.5</b> Hierarchical Shrinkage Priors</a></li>
-<li class="chapter" data-level="12.6" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#example-1"><i class="fa fa-check"></i><b>12.6</b> Example</a><ul>
-<li class="chapter" data-level="12.6.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#double-exponential-laplace-prior"><i class="fa fa-check"></i><b>12.6.1</b> Double Exponential (Laplace) Prior</a></li>
-<li class="chapter" data-level="12.6.2" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#hierarchical-prior-hs"><i class="fa fa-check"></i><b>12.6.2</b> Hierarchical Prior (HS)</a></li>
-<li class="chapter" data-level="12.6.3" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#comparison"><i class="fa fa-check"></i><b>12.6.3</b> Comparison</a></li>
-</ul></li>
-<li class="chapter" data-level="12.7" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#shrinkage-parameters"><i class="fa fa-check"></i><b>12.7</b> Shrinkage Parameters</a></li>
-<li class="chapter" data-level="12.8" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>12.8</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="12.9" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#r-implementations"><i class="fa fa-check"></i><b>12.9</b> R Implementations</a></li>
-<li class="chapter" data-level="12.10" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>12.10</b> Bayesian Model Averaging</a><ul>
-<li class="chapter" data-level="12.10.1" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#zellners-g-prior"><i class="fa fa-check"></i><b>12.10.1</b> Zellner’s g-prior</a></li>
-</ul></li>
-<li class="chapter" data-level="12.11" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#slab-and-spike-priors"><i class="fa fa-check"></i><b>12.11</b> Slab and Spike Priors</a></li>
-<li class="chapter" data-level="12.12" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#technical-notes"><i class="fa fa-check"></i><b>12.12</b> Technical Notes</a></li>
-<li class="chapter" data-level="12.13" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#multiple-comparisons-and-thresholding-rules"><i class="fa fa-check"></i><b>12.13</b> Multiple Comparisons and Thresholding rules</a></li>
-<li class="chapter" data-level="12.14" data-path="shrinkage-regularization.html"><a href="shrinkage-regularization.html#examples-of-applications-of-sensitivity-analysis"><i class="fa fa-check"></i><b>12.14</b> Examples of Applications of Sensitivity Analysis</a></li>
-</ul></li>
-<li class="chapter" data-level="13" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>13</b> Hierarchical Models</a><ul>
-<li class="chapter" data-level="13.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>13.1</b> Example: Baseball Hits</a><ul>
-<li class="chapter" data-level="13.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#other-examples"><i class="fa fa-check"></i><b>13.1.1</b> Other Examples</a></li>
+<li class="chapter" data-level="7" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>7</b> Binomial Models</a><ul>
+<li class="chapter" data-level="7.0.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>7.0.1</b> Link Functions {link-function}</a></li>
+<li class="chapter" data-level="7.0.2" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>7.0.2</b> Stan</a></li>
+<li class="chapter" data-level="7.0.3" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>7.0.3</b> Example: Vote Turnout</a></li>
+<li class="chapter" data-level="7.0.4" data-path="binomial-models.html"><a href="binomial-models.html#separation"><i class="fa fa-check"></i><b>7.0.4</b> Separation</a></li>
+<li class="chapter" data-level="7.1" data-path="binomial-models.html"><a href="binomial-models.html#rare-events-logit"><i class="fa fa-check"></i><b>7.1</b> Rare Events Logit</a></li>
+<li class="chapter" data-level="7.2" data-path="binomial-models.html"><a href="binomial-models.html#case-control"><i class="fa fa-check"></i><b>7.2</b> Case Control</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>7.2.1</b> References</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>14</b> Multilevel Models</a><ul>
-<li class="chapter" data-level="14.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>14.1</b> Example: Radon</a><ul>
-<li class="chapter" data-level="14.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>14.1.1</b> Data</a></li>
-<li class="chapter" data-level="14.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>14.1.2</b> Varying Intercepts Models</a></li>
-<li class="chapter" data-level="14.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>14.1.3</b> Varying Intercept Model</a></li>
-<li class="chapter" data-level="14.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>14.1.4</b> Varying Slope Model</a></li>
-<li class="chapter" data-level="14.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>14.1.5</b> Group Level Predictors</a></li>
-<li class="chapter" data-level="14.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>14.1.6</b> lme4</a></li>
-<li class="chapter" data-level="14.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>14.1.7</b> rstanarm</a></li>
-</ul></li>
-<li class="chapter" data-level="14.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>14.2</b> Pooling of Hierarchical Parameters</a></li>
-<li class="chapter" data-level="14.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>14.3</b> ANOVA</a></li>
-<li class="chapter" data-level="14.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>14.4</b> Time-Series Cross Section</a></li>
-<li class="chapter" data-level="14.5" data-path="multilevel-models.html"><a href="multilevel-models.html#extensions"><i class="fa fa-check"></i><b>14.5</b> Extensions</a></li>
-<li class="chapter" data-level="14.6" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>14.6</b> Miscellaneous</a><ul>
-<li class="chapter" data-level="14.6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>14.6.1</b> How many groups?</a></li>
-<li class="chapter" data-level="14.6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>14.6.2</b> Correlation between Predictors and Errors</a></li>
-</ul></li>
-<li class="chapter" data-level="14.7" data-path="multilevel-models.html"><a href="multilevel-models.html#references-9"><i class="fa fa-check"></i><b>14.7</b> References</a></li>
-</ul></li>
-<li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="14.8" data-path="multilevel-models.html"><a href="multilevel-models.html#parameters"><i class="fa fa-check"></i><b>14.8</b> Parameters</a></li>
-<li class="chapter" data-level="14.9" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>14.9</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="14.9.1" data-path="multilevel-models.html"><a href="multilevel-models.html#location-scale-families"><i class="fa fa-check"></i><b>14.9.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="14.9.2" data-path="multilevel-models.html"><a href="multilevel-models.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>14.9.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="14.9.3" data-path="multilevel-models.html"><a href="multilevel-models.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>14.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="14.9.4" data-path="multilevel-models.html"><a href="multilevel-models.html#qr-factorization"><i class="fa fa-check"></i><b>14.9.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="14.9.5" data-path="multilevel-models.html"><a href="multilevel-models.html#cholesky-decomposition"><i class="fa fa-check"></i><b>14.9.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="8" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>8</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="" data-path="hierarchical-models.html"><a href="hierarchical-models.html#prerequisites-3"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="8.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>8.1</b> Example: Baseball Hits</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#references-8"><i class="fa fa-check"></i><b>8.1.1</b> References</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="scaled-and-unscaled-variables.html"><a href="scaled-and-unscaled-variables.html"><i class="fa fa-check"></i><b>15</b> Scaled and Unscaled Variables</a></li>
-<li class="chapter" data-level="16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>16</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="16.0.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>16.0.1</b> Textbooks</a></li>
-<li class="chapter" data-level="16.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>16.1</b> Syllabi</a></li>
-<li class="chapter" data-level="16.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>16.2</b> Topics</a></li>
-<li class="chapter" data-level="16.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem"><i class="fa fa-check"></i><b>16.3</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="16.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>16.4</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="16.4.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>16.4.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="16.4.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>16.4.2</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="16.4.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>16.4.3</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="16.4.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>16.4.4</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="16.4.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>16.4.5</b> Categorical</a></li>
-<li class="chapter" data-level="16.4.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>16.4.6</b> Variable Selection</a></li>
-<li class="chapter" data-level="16.4.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>16.4.7</b> Multiple Testing</a></li>
-<li class="chapter" data-level="16.4.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events"><i class="fa fa-check"></i><b>16.4.8</b> Rare Events</a></li>
-<li class="chapter" data-level="16.4.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>16.4.9</b> Identifiability</a></li>
-<li class="chapter" data-level="16.4.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>16.4.10</b> Shrinkage</a></li>
-<li class="chapter" data-level="16.4.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#convergence"><i class="fa fa-check"></i><b>16.4.11</b> Convergence</a></li>
-<li class="chapter" data-level="16.4.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>16.4.12</b> Software</a></li>
-<li class="chapter" data-level="16.4.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-3"><i class="fa fa-check"></i><b>16.4.13</b> Stan</a></li>
-<li class="chapter" data-level="16.4.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>16.4.14</b> Diagrams</a></li>
-<li class="chapter" data-level="16.4.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors"><i class="fa fa-check"></i><b>16.4.15</b> Priors</a></li>
+<li class="chapter" data-level="9" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>9</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>9.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>9.1.1</b> Data</a></li>
+<li class="chapter" data-level="9.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>9.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="9.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>9.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="9.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>9.1.4</b> Varying Slope Model</a></li>
+<li class="chapter" data-level="9.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>9.1.5</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="9.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>9.1.6</b> lme4</a></li>
+<li class="chapter" data-level="9.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>9.1.7</b> rstanarm</a></li>
 </ul></li>
-<li class="chapter" data-level="16.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>16.5</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="16.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>16.6</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="16.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>16.7</b> Mixture Models</a></li>
-<li class="chapter" data-level="16.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>16.8</b> Model Checking</a><ul>
-<li class="chapter" data-level="16.8.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>16.8.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="16.8.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>16.8.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="16.8.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>16.8.3</b> Software Validation</a></li>
+<li class="chapter" data-level="9.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>9.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="9.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>9.3</b> ANOVA</a></li>
+<li class="chapter" data-level="9.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>9.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="9.5" data-path="multilevel-models.html"><a href="multilevel-models.html#extensions"><i class="fa fa-check"></i><b>9.5</b> Extensions</a></li>
+<li class="chapter" data-level="9.6" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>9.6</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>9.6.1</b> How many groups?</a></li>
+<li class="chapter" data-level="9.6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>9.6.2</b> Correlation between Predictors and Errors</a></li>
 </ul></li>
-<li class="chapter" data-level="16.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>16.9</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="16.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>16.10</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="16.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>16.11</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="16.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>16.12</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="9.7" data-path="multilevel-models.html"><a href="multilevel-models.html#references-9"><i class="fa fa-check"></i><b>9.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html"><i class="fa fa-check"></i><b>17</b> Sampling Difficulties</a><ul>
-<li class="chapter" data-level="17.1" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>17.1</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="17.2" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#pooling-polls"><i class="fa fa-check"></i><b>17.2</b> Pooling Polls</a></li>
-<li class="chapter" data-level="17.3" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#numerical-analysis"><i class="fa fa-check"></i><b>17.3</b> Numerical Analysis</a></li>
-<li class="chapter" data-level="17.4" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>17.4</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="17.5" data-path="sampling-difficulties.html"><a href="sampling-difficulties.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>17.5</b> Bayesian point estimation / Decision</a></li>
+<li class="part"><span><b>III Appendix</b></span></li>
+<li class="chapter" data-level="10" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>10</b> Distributions</a></li>
+<li class="chapter" data-level="11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>11</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>11.1</b> Textbooks</a></li>
+<li class="chapter" data-level="11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>11.2</b> Syllabi</a></li>
+<li class="chapter" data-level="11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>11.3</b> Topics</a></li>
+<li class="chapter" data-level="11.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem"><i class="fa fa-check"></i><b>11.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="11.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>11.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="11.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>11.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="11.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>11.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="11.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>11.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="11.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>11.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="11.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>11.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="11.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>11.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="11.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>11.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="11.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>11.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="11.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events"><i class="fa fa-check"></i><b>11.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="11.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>11.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="11.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>11.5.11</b> Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="information-theory.html"><a href="information-theory.html"><i class="fa fa-check"></i><b>18</b> Information Theory</a></li>
-<li class="chapter" data-level="19" data-path="stan-modeling-language.html"><a href="stan-modeling-language.html"><i class="fa fa-check"></i><b>19</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="11.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>11.6</b> Software</a><ul>
+<li class="chapter" data-level="11.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-1"><i class="fa fa-check"></i><b>11.6.1</b> Stan</a></li>
+<li class="chapter" data-level="11.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>11.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="11.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>11.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>11.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="11.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>11.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="11.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>11.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="11.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>11.10</b> Inference</a><ul>
+<li class="chapter" data-level="11.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>11.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="11.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>11.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="11.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>11.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="11.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>11.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="11.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>11.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>11.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="11.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>11.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="11.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>11.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="11.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>11.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="11.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>11.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="11.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>11.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="11.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>11.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="11.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>11.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="11.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>11.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="11.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>11.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="11.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>11.22</b> Bayes Factors</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references-10.html"><a href="references-10.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -410,7 +364,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\dlogistic}{\mathrm{Logistic}}
 \newcommand{\dllogistic}{\mathrm{Log-logistic}}
 \newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dbin}{\mathrm{Bin}}
+\newcommand{\dBinom}{\mathrm{Bin}}
 \newcommand{\dmultinom}{\mathrm{Multinom}}
 \newcommand{\dnbinom}{\mathrm{Neg-bin}}
 \newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
@@ -419,491 +373,115 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
 \newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
 
-
-
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\Reals}{\R}
+\newcommand{\RealPos}{\R^{+}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\Nats}{\N}
 
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
 <div id="heteroskedasticity-and-robust-regression" class="section level1">
-<h1><span class="header-section-number">7</span> Heteroskedasticity and Robust Regression</h1>
-<div id="prerequisites-1" class="section level2">
-<h2><span class="header-section-number">7.1</span> Prerequisites</h2>
-<p><strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> is needed for the Laplace distribution.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;VGAM&quot;</span>)</a></code></pre></div>
+<h1><span class="header-section-number">5</span> Heteroskedasticity and Robust Regression</h1>
+<div id="prerequisites-2" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">library</span>(<span class="st">&quot;rubbish&quot;</span>)</a></code></pre></div>
 </div>
 <div id="linear-regression-with-student-t-distributed-errors" class="section level2">
-<h2><span class="header-section-number">7.2</span> Linear Regression with Student t distributed errors</h2>
+<h2><span class="header-section-number">5.1</span> Linear Regression with Student t distributed errors</h2>
 <p>Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
 The normal distribution has narrow tail probabilities.</p>
 <p>This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point.
 Higher surprise is a lower log-likelihood.
-Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>
 This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),</a>
-<a class="sourceLine" id="cb31-6" data-line-number="6">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb31-7" data-line-number="7">         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb31-8" data-line-number="8">         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),</a>
-<a class="sourceLine" id="cb31-9" data-line-number="9">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb31-10" data-line-number="10">         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb31-11" data-line-number="11">         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-13" data-line-number="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> <span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span>, <span class="dt">colour =</span> distr)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_line</span>()</a>
-<a class="sourceLine" id="cb31-15" data-line-number="15">      </a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),</a>
+<a class="sourceLine" id="cb19-9" data-line-number="9">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb19-10" data-line-number="10">         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb19-11" data-line-number="11">         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> <span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span>, <span class="dt">colour =</span> distr)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<p><img src="robust_files/figure-html/unnamed-chunk-2-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),</a>
+<a class="sourceLine" id="cb20-9" data-line-number="9">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb20-10" data-line-number="10">         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb20-11" data-line-number="11">         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-13" data-line-number="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> p, <span class="dt">colour =</span> distr)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5">         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),</a>
-<a class="sourceLine" id="cb32-6" data-line-number="6">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb32-7" data-line-number="7">         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb32-8" data-line-number="8">         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),</a>
-<a class="sourceLine" id="cb32-9" data-line-number="9">  <span class="kw">tibble</span>(<span class="dt">z =</span> z,</a>
-<a class="sourceLine" id="cb32-10" data-line-number="10">         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb32-11" data-line-number="11">         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb32-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb32-13" data-line-number="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> p, <span class="dt">colour =</span> distr)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_line</span>()</a>
-<a class="sourceLine" id="cb32-15" data-line-number="15">      </a></code></pre></div>
-<p><img src="robust_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">mod_t</a></code></pre></div>
-<pre>
-  <code class="stan">data {
-  // number of observations
-  int n;
-  // response vector
-  vector[n] y;
-  // number of columns in the design matrix X
-  int k;
-  // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
-}
-parameters {
-  // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-  real<lower = 1.0> nu;
-}
-transformed parameters {
-  // mu is the observation fitted/predicted value
-  // also called yhat
-  vector[n] mu;
-  mu = X * b;
-}
-model {
-  // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  nu ~ gamma(2, 0.1);
-  // likelihood
-  y ~ student_t(nu, mu, sigma);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood values
-  vector[n] log_lik;
-  for (i in 1:n) {
-    y_rep[i] = student_t_rng(nu, mu[i], sigma);
-    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
-  }
-
-}</code>
-</pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">unionization &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/western1995/unionization.tsv&quot;</span>,</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">         <span class="dt">col_types =</span> <span class="kw">cols</span>(</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">              <span class="dt">country =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb34-4" data-line-number="4">              <span class="dt">union_density =</span> <span class="kw">col_double</span>(),</a>
-<a class="sourceLine" id="cb34-5" data-line-number="5">              <span class="dt">left_government =</span> <span class="kw">col_double</span>(),</a>
-<a class="sourceLine" id="cb34-6" data-line-number="6">              <span class="dt">labor_force_size =</span> <span class="kw">col_number</span>(),</a>
-<a class="sourceLine" id="cb34-7" data-line-number="7">              <span class="dt">econ_conc =</span> <span class="kw">col_double</span>()</a>
-<a class="sourceLine" id="cb34-8" data-line-number="8">            ))</a>
-<a class="sourceLine" id="cb34-9" data-line-number="9">mod_data &lt;-<span class="st"> </span><span class="kw">lm_preprocess</span>(union_density <span class="op">~</span><span class="st"> </span>left_government <span class="op">+</span><span class="st"> </span><span class="kw">log</span>(labor_force_size) <span class="op">+</span><span class="st"> </span>econ_conc, <span class="dt">data =</span> unionization)</a>
-<a class="sourceLine" id="cb34-10" data-line-number="10">                                   </a>
-<a class="sourceLine" id="cb34-11" data-line-number="11">mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, {</a>
-<a class="sourceLine" id="cb34-12" data-line-number="12">  b_loc &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb34-13" data-line-number="13">  b_scale &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb34-14" data-line-number="14">  sigma_scale &lt;-<span class="st"> </span><span class="kw">sd</span>(y)</a>
-<a class="sourceLine" id="cb34-15" data-line-number="15">})</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">mod_t</a></code></pre></div>
+<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// beta priorreal b_loc;real&lt;lower = 0.0&gt; b_scale;// sigma priorreal sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// simulate data from the posteriorvector[n] y_rep;// log-likelihood valuesvector[n] log_lik;for (i in 1:n) {y_rep[i] = student_t_rng(nu, mu[i], sigma);log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);}}”)))</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">unionization &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/western1995/unionization.tsv&quot;</span>,</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">         <span class="dt">col_types =</span> <span class="kw">cols</span>(</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">              <span class="dt">country =</span> <span class="kw">col_character</span>(),</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">              <span class="dt">union_density =</span> <span class="kw">col_double</span>(),</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">              <span class="dt">left_government =</span> <span class="kw">col_double</span>(),</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">              <span class="dt">labor_force_size =</span> <span class="kw">col_number</span>(),</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7">              <span class="dt">econ_conc =</span> <span class="kw">col_double</span>()</a>
+<a class="sourceLine" id="cb22-8" data-line-number="8">            ))</a>
+<a class="sourceLine" id="cb22-9" data-line-number="9">mod_data &lt;-</a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="st">  </span><span class="kw">lm_preprocess</span>(union_density <span class="op">~</span><span class="st"> </span>left_government <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="st">                  </span><span class="kw">log</span>(labor_force_size) <span class="op">+</span><span class="st"> </span>econ_conc,</a>
+<a class="sourceLine" id="cb22-12" data-line-number="12">                <span class="dt">data =</span> unionization)</a>
+<a class="sourceLine" id="cb22-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb22-14" data-line-number="14">mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, {</a>
+<a class="sourceLine" id="cb22-15" data-line-number="15">  b_loc &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb22-16" data-line-number="16">  b_scale &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb22-17" data-line-number="17">  sigma_scale &lt;-<span class="st"> </span><span class="kw">sd</span>(y)</a>
+<a class="sourceLine" id="cb22-18" data-line-number="18">})</a></code></pre></div>
 <p>The <code>max_treedepth</code> parameter needed to be increased because in some runs it was hitting the maximum tree depth.
 This is likely due to the wide tails of the Student t distribution.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">mod_t_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_t, <span class="dt">data =</span> mod_data, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">max_treedepth =</span> <span class="dv">11</span>))</a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 1).</span></a>
-<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co">#&gt; Gradient evaluation took 3.9e-05 seconds</span></a>
-<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.</span></a>
-<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-10" data-line-number="10"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-11" data-line-number="11"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-12" data-line-number="12"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-13" data-line-number="13"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-14" data-line-number="14"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-15" data-line-number="15"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-16" data-line-number="16"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-17" data-line-number="17"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-18" data-line-number="18"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-19" data-line-number="19"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-20" data-line-number="20"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-21" data-line-number="21"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-23" data-line-number="23"><span class="co">#&gt;  Elapsed Time: 0.924295 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb35-24" data-line-number="24"><span class="co">#&gt;                0.797333 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb35-25" data-line-number="25"><span class="co">#&gt;                1.72163 seconds (Total)</span></a>
-<a class="sourceLine" id="cb35-26" data-line-number="26"><span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 1</span></a>
-<a class="sourceLine" id="cb35-27" data-line-number="27"><span class="co">#&gt;                                                                                          count</span></a>
-<a class="sourceLine" id="cb35-28" data-line-number="28"><span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span></a>
-<a class="sourceLine" id="cb35-29" data-line-number="29"><span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span></a>
-<a class="sourceLine" id="cb35-30" data-line-number="30"><span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span></a>
-<a class="sourceLine" id="cb35-31" data-line-number="31"><span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></a>
-<a class="sourceLine" id="cb35-32" data-line-number="32"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-33" data-line-number="33"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 2).</span></a>
-<a class="sourceLine" id="cb35-34" data-line-number="34"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-35" data-line-number="35"><span class="co">#&gt; Gradient evaluation took 1.3e-05 seconds</span></a>
-<a class="sourceLine" id="cb35-36" data-line-number="36"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span></a>
-<a class="sourceLine" id="cb35-37" data-line-number="37"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb35-38" data-line-number="38"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-39" data-line-number="39"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-40" data-line-number="40"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-41" data-line-number="41"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-42" data-line-number="42"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-43" data-line-number="43"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-44" data-line-number="44"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-45" data-line-number="45"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-46" data-line-number="46"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-47" data-line-number="47"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-48" data-line-number="48"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-49" data-line-number="49"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-50" data-line-number="50"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-51" data-line-number="51"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-52" data-line-number="52"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-53" data-line-number="53"><span class="co">#&gt;  Elapsed Time: 0.912943 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb35-54" data-line-number="54"><span class="co">#&gt;                0.842836 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb35-55" data-line-number="55"><span class="co">#&gt;                1.75578 seconds (Total)</span></a>
-<a class="sourceLine" id="cb35-56" data-line-number="56"><span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 2</span></a>
-<a class="sourceLine" id="cb35-57" data-line-number="57"><span class="co">#&gt;                                                                                          count</span></a>
-<a class="sourceLine" id="cb35-58" data-line-number="58"><span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span></a>
-<a class="sourceLine" id="cb35-59" data-line-number="59"><span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span></a>
-<a class="sourceLine" id="cb35-60" data-line-number="60"><span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span></a>
-<a class="sourceLine" id="cb35-61" data-line-number="61"><span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></a>
-<a class="sourceLine" id="cb35-62" data-line-number="62"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-63" data-line-number="63"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 3).</span></a>
-<a class="sourceLine" id="cb35-64" data-line-number="64"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-65" data-line-number="65"><span class="co">#&gt; Gradient evaluation took 1.5e-05 seconds</span></a>
-<a class="sourceLine" id="cb35-66" data-line-number="66"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.</span></a>
-<a class="sourceLine" id="cb35-67" data-line-number="67"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb35-68" data-line-number="68"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-69" data-line-number="69"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-70" data-line-number="70"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-71" data-line-number="71"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-72" data-line-number="72"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-73" data-line-number="73"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-74" data-line-number="74"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-75" data-line-number="75"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-76" data-line-number="76"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-77" data-line-number="77"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-78" data-line-number="78"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-79" data-line-number="79"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-80" data-line-number="80"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-81" data-line-number="81"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-82" data-line-number="82"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-83" data-line-number="83"><span class="co">#&gt;  Elapsed Time: 0.978823 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb35-84" data-line-number="84"><span class="co">#&gt;                0.815824 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb35-85" data-line-number="85"><span class="co">#&gt;                1.79465 seconds (Total)</span></a>
-<a class="sourceLine" id="cb35-86" data-line-number="86"><span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 3</span></a>
-<a class="sourceLine" id="cb35-87" data-line-number="87"><span class="co">#&gt;                                                                                     count</span></a>
-<a class="sourceLine" id="cb35-88" data-line-number="88"><span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be &gt; 0!     1</span></a>
-<a class="sourceLine" id="cb35-89" data-line-number="89"><span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span></a>
-<a class="sourceLine" id="cb35-90" data-line-number="90"><span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span></a>
-<a class="sourceLine" id="cb35-91" data-line-number="91"><span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></a>
-<a class="sourceLine" id="cb35-92" data-line-number="92"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-93" data-line-number="93"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm_student_t&#39; NOW (CHAIN 4).</span></a>
-<a class="sourceLine" id="cb35-94" data-line-number="94"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-95" data-line-number="95"><span class="co">#&gt; Gradient evaluation took 2.5e-05 seconds</span></a>
-<a class="sourceLine" id="cb35-96" data-line-number="96"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.</span></a>
-<a class="sourceLine" id="cb35-97" data-line-number="97"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb35-98" data-line-number="98"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-99" data-line-number="99"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-100" data-line-number="100"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-101" data-line-number="101"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-102" data-line-number="102"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-103" data-line-number="103"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-104" data-line-number="104"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-105" data-line-number="105"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb35-106" data-line-number="106"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-107" data-line-number="107"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-108" data-line-number="108"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-109" data-line-number="109"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-110" data-line-number="110"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-111" data-line-number="111"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb35-112" data-line-number="112"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb35-113" data-line-number="113"><span class="co">#&gt;  Elapsed Time: 0.903471 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb35-114" data-line-number="114"><span class="co">#&gt;                0.748265 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb35-115" data-line-number="115"><span class="co">#&gt;                1.65174 seconds (Total)</span></a>
-<a class="sourceLine" id="cb35-116" data-line-number="116"><span class="co">#&gt; The following numerical problems occurred the indicated number of times on chain 4</span></a>
-<a class="sourceLine" id="cb35-117" data-line-number="117"><span class="co">#&gt;                                                                                          count</span></a>
-<a class="sourceLine" id="cb35-118" data-line-number="118"><span class="co">#&gt; Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1</span></a>
-<a class="sourceLine" id="cb35-119" data-line-number="119"><span class="co">#&gt; When a numerical problem occurs, the Hamiltonian proposal gets rejected.</span></a>
-<a class="sourceLine" id="cb35-120" data-line-number="120"><span class="co">#&gt; See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected</span></a>
-<a class="sourceLine" id="cb35-121" data-line-number="121"><span class="co">#&gt; If the number in the &#39;count&#39; column is small, there is no need to ask about this message on stan-users.</span></a></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">summary</span>(mod_t_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="co">#&gt;        mean se_mean     sd    2.5%    25%    50%     75%  97.5% n_eff Rhat</span></a>
-<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="co">#&gt; b[1] 90.924 2.19841 66.781 -44.196  47.81 91.762 133.164 223.22   923    1</span></a>
-<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="co">#&gt; b[2]  0.273 0.00162  0.083   0.103   0.22  0.275   0.328   0.43  2626    1</span></a>
-<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="co">#&gt; b[3] -6.082 0.13953  4.322 -14.791  -8.92 -6.101  -3.263   2.57   959    1</span></a>
-<a class="sourceLine" id="cb36-6" data-line-number="6"><span class="co">#&gt; b[4]  2.763 0.74224 22.668 -43.434 -11.60  2.445  17.292  48.50   933    1</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">mod_t_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_t, <span class="dt">data =</span> mod_data,</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">                      <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">max_treedepth =</span> <span class="dv">11</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">summary</span>(mod_t_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co">#&gt;        mean se_mean      sd    2.5%     25%    50%     75%   97.5% n_eff</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">#&gt; b[1] 89.656 1.96521 67.2067 -41.182  46.908 89.599 134.636 217.195  1170</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#&gt; b[2]  0.276 0.00164  0.0819   0.118   0.222  0.275   0.328   0.445  2488</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="co">#&gt; b[3] -5.991 0.12507  4.3510 -14.187  -8.863 -5.928  -3.186   2.628  1210</span></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co">#&gt; b[4]  3.080 0.66199 22.7704 -40.144 -12.161  3.213  17.466  48.781  1183</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co">#&gt;      Rhat</span></a>
+<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">#&gt; b[1]    1</span></a>
+<a class="sourceLine" id="cb24-9" data-line-number="9"><span class="co">#&gt; b[2]    1</span></a>
+<a class="sourceLine" id="cb24-10" data-line-number="10"><span class="co">#&gt; b[3]    1</span></a>
+<a class="sourceLine" id="cb24-11" data-line-number="11"><span class="co">#&gt; b[4]    1</span></a></code></pre></div>
 <p>Compare those results when using a model with</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">mod_normal</a></code></pre></div>
-<pre>
-  <code class="stan">data {
-  // number of observations
-  int n;
-  // response vector
-  vector[n] y;
-  // number of columns in the design matrix X
-  int k;
-  // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
-}
-parameters {
-  // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-}
-transformed parameters {
-  // mu is the observation fitted/predicted value
-  // also called yhat
-  vector[n] mu;
-  mu = X * b;
-}
-model {
-  // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  // likelihood
-  y ~ normal(mu, sigma);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood posterior
-  vector[n] log_lik;
-  for (i in 1:n) {
-    y_rep[i] = normal_rng(mu[i], sigma);
-    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
-  }
-}</code>
-</pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">mod_normal_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_normal, <span class="dt">data =</span> mod_data)</a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 1).</span></a>
-<a class="sourceLine" id="cb38-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-5" data-line-number="5"><span class="co">#&gt; Gradient evaluation took 2.9e-05 seconds</span></a>
-<a class="sourceLine" id="cb38-6" data-line-number="6"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.29 seconds.</span></a>
-<a class="sourceLine" id="cb38-7" data-line-number="7"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb38-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-10" data-line-number="10"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-11" data-line-number="11"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-12" data-line-number="12"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-13" data-line-number="13"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-14" data-line-number="14"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-15" data-line-number="15"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-16" data-line-number="16"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-17" data-line-number="17"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-18" data-line-number="18"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-19" data-line-number="19"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-20" data-line-number="20"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-21" data-line-number="21"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-23" data-line-number="23"><span class="co">#&gt;  Elapsed Time: 0.551241 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb38-24" data-line-number="24"><span class="co">#&gt;                0.482792 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb38-25" data-line-number="25"><span class="co">#&gt;                1.03403 seconds (Total)</span></a>
-<a class="sourceLine" id="cb38-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-27" data-line-number="27"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-28" data-line-number="28"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 2).</span></a>
-<a class="sourceLine" id="cb38-29" data-line-number="29"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-30" data-line-number="30"><span class="co">#&gt; Gradient evaluation took 9e-06 seconds</span></a>
-<a class="sourceLine" id="cb38-31" data-line-number="31"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.</span></a>
-<a class="sourceLine" id="cb38-32" data-line-number="32"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb38-33" data-line-number="33"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-34" data-line-number="34"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-35" data-line-number="35"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-36" data-line-number="36"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-37" data-line-number="37"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-38" data-line-number="38"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-39" data-line-number="39"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-40" data-line-number="40"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-41" data-line-number="41"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-42" data-line-number="42"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-43" data-line-number="43"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-44" data-line-number="44"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-45" data-line-number="45"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-46" data-line-number="46"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-47" data-line-number="47"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-48" data-line-number="48"><span class="co">#&gt;  Elapsed Time: 0.507048 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb38-49" data-line-number="49"><span class="co">#&gt;                0.455422 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb38-50" data-line-number="50"><span class="co">#&gt;                0.96247 seconds (Total)</span></a>
-<a class="sourceLine" id="cb38-51" data-line-number="51"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-52" data-line-number="52"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-53" data-line-number="53"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 3).</span></a>
-<a class="sourceLine" id="cb38-54" data-line-number="54"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-55" data-line-number="55"><span class="co">#&gt; Gradient evaluation took 1.6e-05 seconds</span></a>
-<a class="sourceLine" id="cb38-56" data-line-number="56"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.</span></a>
-<a class="sourceLine" id="cb38-57" data-line-number="57"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb38-58" data-line-number="58"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-59" data-line-number="59"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-60" data-line-number="60"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-61" data-line-number="61"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-62" data-line-number="62"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-63" data-line-number="63"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-64" data-line-number="64"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-65" data-line-number="65"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-66" data-line-number="66"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-67" data-line-number="67"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-68" data-line-number="68"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-69" data-line-number="69"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-70" data-line-number="70"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-71" data-line-number="71"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-72" data-line-number="72"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-73" data-line-number="73"><span class="co">#&gt;  Elapsed Time: 0.493311 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb38-74" data-line-number="74"><span class="co">#&gt;                0.568471 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb38-75" data-line-number="75"><span class="co">#&gt;                1.06178 seconds (Total)</span></a>
-<a class="sourceLine" id="cb38-76" data-line-number="76"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-77" data-line-number="77"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-78" data-line-number="78"><span class="co">#&gt; SAMPLING FOR MODEL &#39;lm&#39; NOW (CHAIN 4).</span></a>
-<a class="sourceLine" id="cb38-79" data-line-number="79"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-80" data-line-number="80"><span class="co">#&gt; Gradient evaluation took 9e-06 seconds</span></a>
-<a class="sourceLine" id="cb38-81" data-line-number="81"><span class="co">#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.</span></a>
-<a class="sourceLine" id="cb38-82" data-line-number="82"><span class="co">#&gt; Adjust your expectations accordingly!</span></a>
-<a class="sourceLine" id="cb38-83" data-line-number="83"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-84" data-line-number="84"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-85" data-line-number="85"><span class="co">#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-86" data-line-number="86"><span class="co">#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-87" data-line-number="87"><span class="co">#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-88" data-line-number="88"><span class="co">#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-89" data-line-number="89"><span class="co">#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-90" data-line-number="90"><span class="co">#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></a>
-<a class="sourceLine" id="cb38-91" data-line-number="91"><span class="co">#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-92" data-line-number="92"><span class="co">#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-93" data-line-number="93"><span class="co">#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-94" data-line-number="94"><span class="co">#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-95" data-line-number="95"><span class="co">#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-96" data-line-number="96"><span class="co">#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)</span></a>
-<a class="sourceLine" id="cb38-97" data-line-number="97"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb38-98" data-line-number="98"><span class="co">#&gt;  Elapsed Time: 0.511245 seconds (Warm-up)</span></a>
-<a class="sourceLine" id="cb38-99" data-line-number="99"><span class="co">#&gt;                0.405449 seconds (Sampling)</span></a>
-<a class="sourceLine" id="cb38-100" data-line-number="100"><span class="co">#&gt;                0.916694 seconds (Total)</span></a></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">summary</span>(mod_normal_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary</a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="co">#&gt;        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff</span></a>
-<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="co">#&gt; b[1] 95.987 2.41105 63.9174 -27.7095  53.147 95.592 137.966 223.008   703</span></a>
-<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="co">#&gt; b[2]  0.270 0.00194  0.0842   0.0979   0.217  0.273   0.326   0.434  1891</span></a>
-<a class="sourceLine" id="cb39-5" data-line-number="5"><span class="co">#&gt; b[3] -6.356 0.15521  4.2031 -14.8646  -9.116 -6.339  -3.532   1.768   733</span></a>
-<a class="sourceLine" id="cb39-6" data-line-number="6"><span class="co">#&gt; b[4]  0.858 0.80219 21.5103 -41.1619 -13.309  0.972  15.252  43.658   719</span></a>
-<a class="sourceLine" id="cb39-7" data-line-number="7"><span class="co">#&gt;      Rhat</span></a>
-<a class="sourceLine" id="cb39-8" data-line-number="8"><span class="co">#&gt; b[1] 1.01</span></a>
-<a class="sourceLine" id="cb39-9" data-line-number="9"><span class="co">#&gt; b[2] 1.00</span></a>
-<a class="sourceLine" id="cb39-10" data-line-number="10"><span class="co">#&gt; b[3] 1.01</span></a>
-<a class="sourceLine" id="cb39-11" data-line-number="11"><span class="co">#&gt; b[4] 1.01</span></a></code></pre></div>
-<div id="double-exponential-laplace-errors" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Double Exponential (Laplace) Errors</h3>
-<p>An alternative form of “robust” regression is to use the Double Exponential (Laplace) distributions for the errors.</p>
-<p>This is the equivalent to least median regression, where the regression line is the median (50% quantile)</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">mod_dbl_exp</a></code></pre></div>
-<pre>
-  <code class="stan">data {
-  // number of observations
-  int n;
-  // response vector
-  vector[n] y;
-  // number of columns in the design matrix X
-  int k;
-  // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
-}
-parameters {
-  // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-}
-transformed parameters {
-  // mu is the observation fitted/predicted value
-  vector[n] mu;
-  // tau are obs-level scale params
-  mu = X * b;
-}
-model {
-  // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  // likelihood
-  y ~ double_exponential(mu, sigma);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood values
-  vector[n] log_lik;
-  // use a single loop since both y_rep and log_lik are elementwise
-  for (i in 1:n) {
-    y_rep[i] = double_exponential_rng(mu[i], sigma);
-    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);
-  }
-
-}</code>
-</pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">summary</span>(mod_dbl_exp_fit, <span class="dt">par =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="co">#&gt;        mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff</span></a>
-<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="co">#&gt; b[1] 60.671 2.58294 72.5324 -84.418 15.896 56.321 105.938 207.022   789</span></a>
-<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="co">#&gt; b[2]  0.298 0.00217  0.0815   0.126  0.248  0.304   0.354   0.442  1415</span></a>
-<a class="sourceLine" id="cb41-5" data-line-number="5"><span class="co">#&gt; b[3] -4.303 0.15685  4.4911 -13.482 -7.160 -4.100  -1.555   4.641   820</span></a>
-<a class="sourceLine" id="cb41-6" data-line-number="6"><span class="co">#&gt; b[4] 13.381 0.91373 25.6984 -38.570 -2.215 14.588  29.270  64.348   791</span></a>
-<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="co">#&gt;      Rhat</span></a>
-<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="co">#&gt; b[1]    1</span></a>
-<a class="sourceLine" id="cb41-9" data-line-number="9"><span class="co">#&gt; b[2]    1</span></a>
-<a class="sourceLine" id="cb41-10" data-line-number="10"><span class="co">#&gt; b[3]    1</span></a>
-<a class="sourceLine" id="cb41-11" data-line-number="11"><span class="co">#&gt; b[4]    1</span></a></code></pre></div>
-<p>Model comparison</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">loo_t &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_normal_fit, <span class="st">&quot;log_lik&quot;</span>))</a>
-<a class="sourceLine" id="cb42-2" data-line-number="2"><span class="co">#&gt; Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-</span></a>
-<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="co">#&gt; diagnostic&#39;) for details.</span></a>
-<a class="sourceLine" id="cb42-4" data-line-number="4">loo_normal &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_t_fit, <span class="st">&quot;log_lik&quot;</span>))</a>
-<a class="sourceLine" id="cb42-5" data-line-number="5"><span class="co">#&gt; Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-</span></a>
-<a class="sourceLine" id="cb42-6" data-line-number="6"><span class="co">#&gt; diagnostic&#39;) for details.</span></a>
-<a class="sourceLine" id="cb42-7" data-line-number="7">loo_dbl_exp &lt;-<span class="st"> </span><span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_dbl_exp_fit, <span class="st">&quot;log_lik&quot;</span>))</a></code></pre></div>
-</div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">mod_normal</a></code></pre></div>
+<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// // beta prior// real b_loc;// real&lt;lower = 0.0&gt; b_scale;// // sigma prior// real sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// // simulate data from the posterior// vector[n] y_rep;// // log-likelihood posterior// vector[n] log_lik;// for (i in 1:n) {// y_rep[i] = normal_rng(mu[i], sigma);// log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);// }}”)))</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">mod_normal_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_normal, <span class="dt">data =</span> mod_data)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">summary</span>(mod_normal_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="co">#&gt;        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff</span></a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="co">#&gt; b[1] 96.906 2.06260 63.1921 -25.1126  55.553 95.214 137.380 228.769   939</span></a>
+<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="co">#&gt; b[2]  0.270 0.00209  0.0848   0.0986   0.214  0.269   0.327   0.435  1643</span></a>
+<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="co">#&gt; b[3] -6.412 0.13431  4.1895 -14.9459  -9.154 -6.350  -3.588   1.752   973</span></a>
+<a class="sourceLine" id="cb27-6" data-line-number="6"><span class="co">#&gt; b[4]  0.582 0.68171 21.1558 -42.5470 -12.443  0.907  14.464  40.923   963</span></a>
+<a class="sourceLine" id="cb27-7" data-line-number="7"><span class="co">#&gt;      Rhat</span></a>
+<a class="sourceLine" id="cb27-8" data-line-number="8"><span class="co">#&gt; b[1] 1.01</span></a>
+<a class="sourceLine" id="cb27-9" data-line-number="9"><span class="co">#&gt; b[2] 1.00</span></a>
+<a class="sourceLine" id="cb27-10" data-line-number="10"><span class="co">#&gt; b[3] 1.01</span></a>
+<a class="sourceLine" id="cb27-11" data-line-number="11"><span class="co">#&gt; b[4] 1.01</span></a></code></pre></div>
 </div>
 <div id="heteroskedasticity" class="section level2">
-<h2><span class="header-section-number">7.3</span> Heteroskedasticity</h2>
-<p>In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.</p>
+<h2><span class="header-section-number">5.2</span> Heteroskedasticity</h2>
+<p>In applied regression, heteroskedasticity consistent or robust standard errors are often used.</p>
 <p>However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals.
 Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.</p>
 <p>In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, <span class="math inline">\(\sigma_i\)</span>,
@@ -918,7 +496,7 @@ In fact, you can think of homoskedasticity as the simplest such model; assuming 
 A more general model of <span class="math inline">\(\sigma_i\)</span> should encode any information the analyst has about the scale terms.
 This can be a distribution or functions of covariates for how we think observations may have different values.</p>
 <div id="covariates" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Covariates</h3>
+<h3><span class="header-section-number">5.2.1</span> Covariates</h3>
 <p>A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into <span class="math inline">\(k = 1, \dots, K\)</span> groups, and <span class="math inline">\(k[i]\)</span> is the group of observation <span class="math inline">\(i\)</span>,
 <span class="math display">\[
 \sigma_i = \sigma_{k[i]}
@@ -929,9 +507,9 @@ This can be a distribution or functions of covariates for how we think observati
 \]</span></p>
 </div>
 <div id="student-t-error" class="section level3">
-<h3><span class="header-section-number">7.3.2</span> Student-t Error</h3>
+<h3><span class="header-section-number">5.2.2</span> Student-t Error</h3>
 <p>The Student-t distribution of error terms from the <a href="heteroskedasticity-and-robust-regression.html#robust-regression">Robust Regression</a> chapter is also model of heteroskedasticity.</p>
-<p>A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters, <span class="math inline">\(\lambda_i\)</span>,[^globalmixture]
+<p>A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters, <span class="math inline">\(\lambda_i\)</span>,<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
 <span class="math display">\[
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
 \]</span>
@@ -943,7 +521,6 @@ then the above is equivalent to a regression with errors distributed Student-t e
 <span class="math display">\[
 y_i \sim \dt{\nu}(X \beta, \sigma) .
 \]</span></p>
-<p>[^globalmixture] See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a> for a visualization of a Student-t distribution a mixture of Normal distributions, and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.</p>
 <p><strong>Example:</strong> Simulate Student-t distribution with <span class="math inline">\(\nu\)</span> degrees of freedom as a scale mixture of normal. For *s in 1:S$,</p>
 <ol style="list-style-type: decimal">
 <li>Simulate <span class="math inline">\(z_s \sim \dgamma(\nu / 2, \nu / 2)\)</span></li>
@@ -952,24 +529,24 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 <p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
 </div>
 </div>
-<div id="references-2" class="section level2">
-<h2><span class="header-section-number">7.4</span> References</h2>
+<div id="references-3" class="section level2">
+<h2><span class="header-section-number">5.3</span> References</h2>
 <div id="robust-regression" class="section level3">
-<h3><span class="header-section-number">7.4.1</span> Robust regression</h3>
+<h3><span class="header-section-number">5.3.1</span> Robust regression</h3>
 <ul>
 <li>See <span class="citation">Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span></li>
 <li><span class="citation">Stan Development Team (2016 Sec 8.4)</span> for the Stan example using a Student-t distribution</li>
 </ul>
 </div>
 <div id="heteroskedasticity-1" class="section level3">
-<h3><span class="header-section-number">7.4.2</span> Heteroskedasticity</h3>
+<h3><span class="header-section-number">5.3.2</span> Heteroskedasticity</h3>
 <ul>
 <li><span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.</li>
 <li><span class="citation">Stan Development Team (2016)</span> reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.</li>
 </ul>
 </div>
-<div id="qunatile-regression" class="section level3">
-<h3><span class="header-section-number">7.4.3</span> Qunatile regression</h3>
+<div id="quantile-regression" class="section level3">
+<h3><span class="header-section-number">5.3.3</span> Quantile regression</h3>
 <ul>
 <li><span class="citation">Benoit and Poel (2017)</span></li>
 <li><span class="citation">Yu and Zhang (2005)</span> for the three-parameter asymmetric Laplace distribution</li>
@@ -980,8 +557,9 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 </div>
 <div class="footnotes">
 <hr />
-<ol start="3">
-<li id="fn3"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref3" class="footnote-back">↩</a></p></li>
+<ol start="4">
+<li id="fn4"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a> for a visualization of a Student-t distribution a mixture of Normal distributions, and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.<a href="heteroskedasticity-and-robust-regression.html#fnref5" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

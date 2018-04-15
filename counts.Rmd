@@ -5,12 +5,12 @@ $$
 y_i = 0, 1, \dots, \infty .
 $$
 
-The two distributions most commonly used to model this are 
+The two distributions most commonly used to model this are
 
 - Poisson
 - Negative Binomial
 
-## Poisson 
+## Poisson
 
 The [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution):
 $$
@@ -33,7 +33,7 @@ $$
 y_i \sim \dbin(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
@@ -43,21 +43,21 @@ $$
 
 
 **Important** The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
 $$
 y_i \sim \dnbinalt(\mu_i, \phi)
 $$
 with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
 \end{aligned}
 $$
 
-### Stan 
+### Stan
 
-In Stan, there are multiple parameterizations of the 
+In Stan, there are multiple parameterizations of the
 
 - `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
 - `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
@@ -111,7 +111,7 @@ The Poisson with a log link. This is for numeric stability.
 
 In **rstanarm** use `r rdoc("rstanarm", "stan_glm")` for a Poisson GLM.
 
-- **rstanarm** vignette on [counte models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
+- **rstanarm** vignette on [count models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
 ## Example: Bilateral Sanctions
 
@@ -125,7 +125,7 @@ mod_poisson1 <- stan_model("stan/poisson1.stan")
 ```{r}
 data("sanction", package = "Zelig")
 
-f <- num ~ coop + target -1L
+f <- num ~ coop + target - 1
 reg_model_data <- lm_preprocess(f, data = sanction)
 
 sanction_data <-
@@ -155,7 +155,7 @@ $$
 y_i \sim \dnegbinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
@@ -165,19 +165,19 @@ $$
 
 
 **Important** The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
 $$
 y_i \sim \dnbinomalt(\mu_i, \phi)
 $$
 with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
 \end{aligned}
 $$
 
-In Stan, there are multiple parameterizations of the 
+In Stan, there are multiple parameterizations of the
 
 - `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
 - `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
@@ -196,14 +196,15 @@ mod_negbin1 <- stan_model("stan/negbin1.stan")
 
 
 ```{r result='hide'}
-fit_sanction_nb <- sampling(mod_negbin1, data = sanction_data, control = list(adapt_delta  = 0.95))
+fit_sanction_nb <- sampling(mod_negbin1, data = sanction_data,
+                            control = list(adapt_delta  = 0.95))
 ```
 
 ```{r}
 summary(fit_sanction_nb, par = c("a", "b", "phi"))$summary
 ```
 
-We can compare the 
+We can compare the
 ```{r message=FALSE}
 loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
 # loo_sanction_nb <- loo(extract_log_lik(fit_sanction_nb, "log_lik"))
@@ -212,7 +213,6 @@ loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
 ```{r}
 # loo::compare(loo_sanction_pois, loo_sanction_nb)
 ```
-
 
 ### References
 

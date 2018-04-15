@@ -1,9 +1,9 @@
 
 # Generalized Linear Models
 
-## Generalized Linear Models 
+## Generalized Linear Models
 
-Generalized linear models (GLMs) are a class of commonly used models.[^glm-r]
+Generalized linear models (GLMs) are a class of commonly used models.
 In GLMs, the mean is specified as a function of a linear model of predictors,
 $$
 E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta}) .
@@ -28,7 +28,7 @@ A GLM consists of three components:
     $$
     The link function ($g$) and its inverse ($g^{-1}) translate $\eta$ from $(\-infty, +\infty)$ to the proper range for the probability distribution and back again.
 
-These models are often estimated with MLE, as with the function [stats](https://www.rdocumentation.org/packages/stats/topics/glm). 
+These models are often estimated with MLE, as with the function [stats](https://www.rdocumentation.org/packages/stats/topics/glm).
 These are also easily estimated in a Bayesian setting.
 
 See the help for [stats](https://www.rdocumentation.org/packages/stats/topics/family) for common probability distributions, [stats](https://www.rdocumentation.org/packages/stats/topics/make.link) for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
@@ -59,7 +59,7 @@ Inverse-Gaussian       Inverse-squared real: $(0, +\infty)$                     
 Bernoulli              Logit           integer: $\{0, 1\}$                                                   probit, cauchit, log, cloglog
 Binomial               Logit           integer: $0, 1, \dots, n_i$                                           probit, cauchit, log, cloglog
 Poisson                Log             integer: $0, 1, 2, \dots$                                             identity, sqrt
-Categorical            Logit           $0, 1, \dots, K$                                                      
+Categorical            Logit           $0, 1, \dots, K$
 Multinomial            Logit           K-vector of integers, $\{x_1, \dots, x_K\}$ s.t. $\sum_k x_k = N$.
 
 Table: Common distributions and link functions. Table derived from @Fox2016a [p. 421],  [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model), and [stats](https://www.rdocumentation.org/packages/stats/topics/glm).
@@ -67,7 +67,7 @@ Table: Common distributions and link functions. Table derived from @Fox2016a [p.
 
 ## Count Models
 
-### Poisson 
+### Poisson
 
 The Poisson model is used for unbounded count data,
 $$
@@ -89,14 +89,14 @@ $$
 
 In Stan, the Poisson distribution has two implementations:
 
-- `poisson_lpdf`
-- `poisson_log_lpdf`: Poisson with a log link. This is for numeric stability.
+-   `poisson_lpdf`
+-   `poisson_log_lpdf`: Poisson with a log link. This is for numeric stability.
 
 Also, `rstanarm` supports the [Poisson](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
 ## Example
 
-A regression model of bilateral sanctions for the period 1939 to 1983. 
+A regression model of bilateral sanctions for the period 1939 to 1983.
 The outcome variable is the number of countries imposing sanctions.
 
 ```r
@@ -107,7 +107,23 @@ data("sanction", package = "Zelig")
 
 ```r
 library("rstan")
+#> Loading required package: ggplot2
+#> Loading required package: StanHeaders
+#> rstan (Version 2.17.3, GitRev: 2e1f913d3ca3)
+#> For execution on a local, multicore CPU with excess RAM we recommend calling
+#> options(mc.cores = parallel::detectCores()).
+#> To avoid recompilation of unchanged Stan programs, we recommend calling
+#> rstan_options(auto_write = TRUE)
 library("tidyverse")
+#> ── Attaching packages ───────── tidyverse 1.2.1 ──
+#> ✔ tibble  1.4.2     ✔ purrr   0.2.4
+#> ✔ tidyr   0.8.0     ✔ dplyr   0.7.4
+#> ✔ readr   1.1.1     ✔ stringr 1.3.0
+#> ✔ tibble  1.4.2     ✔ forcats 0.3.0
+#> ── Conflicts ──────────── tidyverse_conflicts() ──
+#> ✖ tidyr::extract() masks rstan::extract()
+#> ✖ dplyr::filter()  masks stats::filter()
+#> ✖ dplyr::lag()     masks stats::lag()
 library("magrittr")
 #> 
 #> Attaching package: 'magrittr'
@@ -121,7 +137,7 @@ library("magrittr")
 #> 
 #>     extract
 
-URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv"
+URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv" # nolint
 
 autoscale <- function(x, center = TRUE, scale = TRUE) {
   nvals <- length(unique(x))
@@ -144,8 +160,8 @@ autoscale <- function(x, center = TRUE, scale = TRUE) {
 }
 
 
-f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg + percent_uninsured +
-      income + percent_nonwhite + percent_metro)
+f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg +
+        percent_uninsured + income + percent_nonwhite + percent_metro)
 
 br <- read_csv(URL) %>%
   mutate(oppose_expansion = 1 - support_expansion,
@@ -211,212 +227,19 @@ glm(f, data = br, family = "binomial") %>% summary()
 #> Number of Fisher Scoring iterations: 5
 
 library("rstanarm")
+#> Loading required package: Rcpp
+#> Loading required package: methods
+#> rstanarm (Version 2.17.3, packaged: 2018-02-17 05:11:16 UTC)
+#> - Do not expect the default priors to remain the same in future rstanarm versions.
+#> Thus, R scripts should specify priors explicitly, even if they are just the defaults.
+#> - For execution on a local, multicore CPU with excess RAM we recommend calling
+#> options(mc.cores = parallel::detectCores())
+#> - Plotting theme set to bayesplot::theme_default().
 
 fit1 <- stan_glm(f, data = br, family = "binomial")
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 7.6e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.76 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.227826 seconds (Warm-up)
-#>                0.216907 seconds (Sampling)
-#>                0.444733 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.2258 seconds (Warm-up)
-#>                0.234074 seconds (Sampling)
-#>                0.459874 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.232678 seconds (Warm-up)
-#>                0.224351 seconds (Sampling)
-#>                0.457029 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.221657 seconds (Warm-up)
-#>                0.224032 seconds (Sampling)
-#>                0.445689 seconds (Total)
 
 fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.56167 seconds (Warm-up)
-#>                0.243438 seconds (Sampling)
-#>                1.80511 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.37833 seconds (Warm-up)
-#>                0.208435 seconds (Sampling)
-#>                1.58676 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.8e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.06808 seconds (Warm-up)
-#>                0.245541 seconds (Sampling)
-#>                1.31363 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 2.3e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 1.21401 seconds (Warm-up)
-#>                0.217275 seconds (Sampling)
-#>                1.43128 seconds (Total)
 ```
-
-
-
 
 ## Negative Binomial
 
@@ -432,7 +255,7 @@ $$
 y_i \sim \dbinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
@@ -442,48 +265,48 @@ $$
 
 
 **Important** The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. 
+An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
 $$
 y_i \sim \dnbinomalt(\mu_i, \phi)
 $$
 with location parameter $\mu \in \R^{+}$ and over-dispersion parameter $\phi \in \R^{+}$, and $\E(y) = \mu_i$ and $\Var(Y) = \mu_i  + \frac{\mu_i^2}{\phi}$.
-Then the mean can be modeled and transformed to the 
+Then the mean can be modeled and transformed to the
 $$
 \begin{aligned}[t]
 \mu_i &= \log( \vec{x}_i \vec{\gamma} ) \\
 \end{aligned}
 $$
 
-In Stan, there are multiple parameterizations of the 
+In Stan, there are multiple parameterizations of the
 
-- `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
-- `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
-- `neg_binomial_2_log_lpdf(y | eta, phi)` with log-mean `eta` and over-dispersion parameter `phi`
+-   `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
+-   `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
+-   `neg_binomial_2_log_lpdf(y | eta, phi)` with log-mean `eta` and over-dispersion parameter `phi`
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
-- @BDA3 [Ch 16]
+-   @BDA3 [Ch 16]
 
 ### References
 
 For general references on count models see
 
-- @GelmanHill2007a [p. 109-116]
-- @McElreath2016a [Ch 10]
-- @Fox2016a [Ch. 14]
-- @BDA3 [Ch. 16]
+-   @GelmanHill2007a [p. 109-116]
+-   @McElreath2016a [Ch 10]
+-   @Fox2016a [Ch. 14]
+-   @BDA3 [Ch. 16]
 
 
 ## Multinomial / Categorical Models
 
 ## Gamma Regression
 
-The response variable is continuous and positive. 
+The response variable is continuous and positive.
 In gamma regression, the coefficient of variation is constant rather than the variance.
 $$
 y_i \sim \dgamma(\alpha_i, \beta)
 $$
-and 
+and
 $$
 \begin{aligned}[t]
 \alpha_i &= \mu_i / \beta \\
@@ -493,7 +316,7 @@ $$
 
 In Stan,
 
-- `gamma(y | alpha, beta)` with shape parameter $\alpha > 0$ and inverse scale parameter $\beta > 0$. Then $\E(Y) = \alpha / \beta$ and $\Var(Y) = \alpha / \beta^2$.
+-   `gamma(y | alpha, beta)` with shape parameter $\alpha > 0$ and inverse scale parameter $\beta > 0$. Then $\E(Y) = \alpha / \beta$ and $\Var(Y) = \alpha / \beta^2$.
 
 ## Beta Regression
 
@@ -506,23 +329,21 @@ $$
 \begin{aligned}[t]
 \mu_i &= g^{-1}(\vec{x}_i' \vec{\gamma}) \\
 \alpha_i &= \mu_i \phi \\
-\beta_i &= (1 - \mu_i) \phi 
+\beta_i &= (1 - \mu_i) \phi
 \end{aligned}
 $$
 Additionally, the $\phi$ parameter could also be modeled.
 
 In Stan:
 
-- `beta(y | alpha, beta)` with positive prior successes plus one, $\alpha > 0$, and negative prior failures plus one, $\beta > 0$. Then $\E(Y) = \alpha / (\alpha + \beta)$ and $\Var(Y) = \alpha\beta / ((\alpha + \beta)^2 (\alpha + \beta + 1))$.
+-   `beta(y | alpha, beta)` with positive prior successes plus one, $\alpha > 0$, and negative prior failures plus one, $\beta > 0$. Then $\E(Y) = \alpha / (\alpha + \beta)$ and $\Var(Y) = \alpha\beta / ((\alpha + \beta)^2 (\alpha + \beta + 1))$.
 
 **rstanarm** function [rstasnarm](https://www.rdocumentation.org/packages/rstasnarm/topics/stan_betareg)
 
 See:
 
-- @FerrariCribari-Neto2004a, @Cribari-NetoZeileis2010a, and @GruenKosmidisZeileis2012a on beta regression.
-- **rstanarm** documentation [Modeling Rates/Proportions using Beta Regression with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html)
-
-
+-   @FerrariCribari-Neto2004a, @Cribari-NetoZeileis2010a, and @GruenKosmidisZeileis2012a on beta regression.
+-   **rstanarm** documentation [Modeling Rates/Proportions using Beta Regression with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html)
 
 ## References
 

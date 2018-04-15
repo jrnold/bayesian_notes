@@ -1,23 +1,50 @@
 
 # Annotated Bibliography
 
-### Textbooks
+This is less an annotated and more of a citation and link dump while I move the references into the main text.
 
--   Gelman and Hill (2006) *Data Analysis Using Regression and Multilevel/Hierarchical Models*
--   Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (2013) *Bayesian Data Analysis* 3rd ed. CRC Press.
--   Jackman, Simon. 2009. *Bayesian Analysis for the Social Sciences*
--  Lynch, Scott M. 2007. *Introduction to Applied Bayesian Statistics and Estimation for Social Scientists* New York: Springer.
--   McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course with Examples in R and Stan.*
+## Textbooks
 
-    -   github page for Statistical Rethinking https://github.com/rmcelreath/rethinking
-    -   http://xcelab.net/rm/statistical-rethinking/
+-   Kruschke (2015) *Doing Bayesian data analysis* [@Kruschke2015a] Another accessible introduction aimed at psych. [Website](https://sites.google.com/site/doingbayesiandataanalysis/) with additional material.
+-   McElreath (2016) *Statistical rethinking* [@McElreath2016a] An accessible introduction to Bayesian stats; effectively an intro-stats/linear models course taught from a Bayesian perspective.
+[Website](http://xcelab.net/rm/statistical-rethinking/) with lectures and slides.
 
--   Lunn, David, Chris Jackson, Nicky Best, Andrew Thomas, and David Spiegelhalter. 2012. *The BUGS Book: A Practical Introduction to Bayesian Analysis* Boca Raton, FL: Chapman; Hall/CRC.
--   Peter Hoff. 2009. *A First Course in Bayesian Statistical Methods*
+-   Lee (2012) *Bayesian Statistics : An Introduction* [@Lee2012a]
+-   Marin and Robert (2015) *Bayesian Essentials with R* [@MarinRobert2014a]
+
+    -   Marin and Robert (2015) *Bayesian Essentials with R: The complete solution manual* [URL](https://arxiv.org/pdf/1503.04662.pdf)
+
+-   Robert and Casella. 2009. *Introducing Monte Carlo Methods with R* [@RobertCasella2009a]
+-   Robert and Casella. 2004. *Monte Carlo statistical methods* [@RobertCasella2004a]
+-   Albert (2009) *Bayesian Computation with R* [@Albert2009a]
+
+-   Jackman (2009) *Bayesian Analysis for the Social Sciences* [@Jackman2009a] Covers commonly used models in the social sciences. Largely covers Gibbs sampling methods and
+
+-   Hoff (2009) *A First Course in Bayesian Statistical Methods* [@Hoff2009a]
+-   Gelman, Carlin, Stern, Dunson, and Vehtari (2013) *Bayesian data analysis* (3rd Edition) [@BDA3]
+
+-   Gelman, and Hill (2007) *Data analysis using regression and multilevel/hierarchical models* [@GelmanHill2007a] An accessible introduction to to linear models and multilevel models.
+
+-   Efron and Hastie (2016) *Computer Age Statistical Inference: Algorithms, Evidence, and Data Science* This is a unique work that blends an overview of statistical methods with a history of statistics. [@EfronHastie2016a]
+
+-   Robert (2007) *The Bayesian Choice* A statistics grad level book on Bayesian statistics.
+-   Berger (1993) *Statistical Decision Theory and Bayesian Analysis* [@Berger1993a] The classic book on Bayesian inference and decision theory. The underlying statistical theory is still relevant even if its date makes the computational aspects less so.
+-   Murphy (2012) *Machine Learning: A Probabilistic Perspective* [@Murphy2012a] A machine learning book with a heavy Bayesian influence.
+-   MacKay (2003) *Information Theory, Inference, and Learning Algorithms* [URL](https://www.ece.uvic.ca/~agullive/Mackay.pdf). [@MacKay2003a] On information theory, but combines it with Bayesian statistics, and is ultimately about learning and evidence. Lectures from the course are available [here](http://videolectures.net/course_information_theory_pattern_recognition/).
+
+-   Gelman and Hill (2007) *Data Analysis Using Regression and Multilevel/Hierarchical Models* [@GelmanHill2007a]
+-   Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (2013) *Bayesian Data Analysis* 3rd ed.
+-   Jackman, Simon. 2009. *Bayesian Analysis for the Social Sciences* [@Jackman2009a]
+-   Lynch, Scott M. 2007. *Introduction to Applied Bayesian Statistics and Estimation for Social Scientists*
+-   McElreath, Richard. 2016. *Statistical Rethinking: A Bayesian Course with Examples in R and Stan.* 
+    -   [GitHub page](https://github.com/rmcelreath/rethinking)
+    -   [Course page](http://xcelab.net/rm/statistical-rethinking/)
+
+-   Lunn, Jackson, Best, Thomas, and Spiegelhalter (2012) *The BUGS Book: A Practical Introduction to Bayesian Analysis* [@LunnEtAl2012a]
+-   Peter Hoff. 2009. *A First Course in Bayesian Statistical Methods* [@Hoff2009a]
 -   Congdon. 2014. Applied Bayesian Modeling.
--   Casella and Roberts. 2004 *Monte Carlo Statistical Methods*
--   Marin and Roberts. 2014. *Bayesian Essentials with R.* http://www.springer.com/us/book/9781461486862
--   Robert and Casella. *Introducing Monte Carlo Methods with R*
+-   Marin and Roberts. 2014. [Bayesian Essentials with R.](http://www.springer.com/us/book/9781461486862)
+-   Robert and Casella. *Introducing Monte Carlo Methods with R* [@RobertCasella2009a]
 
 
 ## Syllabi
@@ -45,31 +72,39 @@
 
 ## Article Length Introductions to Bayesian Statistics
 
+-   Stan Modeling 2.17. Ch. 29. "Bayesian Inference"
 -   Michael Clarke [Bayesian Basics](https://m-clark.github.io/docs/IntroBayes.html).
 -   Eddy (2004) "[What is Bayesian Statistics](https://dx.doi.org/10.1038/nbt0904-1177)" *Nature Biotechnology*
--   Jackman. 2004. Bayesian Analysis for Political Research. *Annual Review of Political Science* DOI: 10.1146/annurev.polisci.7.012003.104706. 
+-   Jackman. 2004. Bayesian Analysis for Political Research. *Annual Review of Political Science* DOI:10.1146/annurev.polisci.7.012003.104706.
 -   Kruschke, J.K. & Liddell, T.M. Psychon Bull Rev (2017). doi:10.3758/s13423-016-1221-4 -  Kruschke and Liddell (2017) "[Bayesian new statistics: hypothesis testing, estimation, meta-analysis, and power analysis from a Bayesian perspective](https://dx.doi.org/10.3758/s13423-016-1221-4)"
 
 
 ### Why Bayesian
 
-- Jim Savage. [Why learn Bayesian Modeling?](http://modernstatisticalworkflow.blogspot.com/2017/04/why-learn-bayesian-modeling.html) April 10, 2017.
+-   Jim Savage. [Why learn Bayesian Modeling?](http://modernstatisticalworkflow.blogspot.com/2017/04/why-learn-bayesian-modeling.html) April 10, 2017.
 
+
+### Modern Statistical Workflow
+
+-   Savage, Jaim. 2017. [A Brief Introduction to Econometrics in Stan](https://khakieconomics.github.io/half_day_course/msw.html)
+
+- Betancourt, Michael. [Robust Statistical Workflow with RStan](http://mc-stan.org/users/documentation/case-studies/rstan_workflow.html)
+- Stan Modeling Guide "Model Building as Software Development"
+- Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., Gelman, A. (2018). [Visualization in Bayesian workflow](https://arxiv.org/abs/1709.01449)
 
 ### Bayesian Philosophy
 
 -   Gelman (2008) "[Objections to Bayesian Statistics](https://dx.doi.org/10.1214/08-ba318)" *Bayesian Analysis*
 -   Gelman and Shalizi (2012) "[Philosophy and the practice of Bayesian statistics](https://dx.doi.org/10.1111/j.2044-8317.2011.02037.x)" *British Journal of Mathematical and Statistical Psychology*
--   Borsboom and Haig (2012) "[How to practise Bayesian statistics outside the Bayesian church: What philosophy for Bayesian statistical modelling?](10.1111/j.2044-8317.2012.02062.x)" *British Journal of Mathematical and Statistical Psychology*
-  journaltitle = {
+-   Borsboom and Haig (2012) "[How to practice Bayesian statistics outside the Bayesian church: What philosophy for Bayesian statistical modelling?](10.1111/j.2044-8317.2012.02062.x)" *British Journal of Mathematical and Statistical Psychology*
 -   Berger and Berry (1988) "[Statistical Analysis and the Illusion of Objectivity](http://www.jstor.org/stable/27855070)" *American Scientist*
 American Scientist 1988
 -   Efron (2010) "[The Future of Indirect Evidence](https://dx.doi.org/10.1214/09-STS308)"
 
--   Efron (1986) "[Why Isn’t Everyone a Bayesian?](https://dx.doi.org/10.1080/00031305.1986.10475342)" *American Statistician* [@Efron1986a]. See comments @Chernoff1986a, @Lindley1986a, @Morris1986a, @Smith1986a, @Press1986a, @Efron1986.
+-   Efron (1986) "[Why Isn’t Everyone a Bayesian?](https://dx.doi.org/10.1080/00031305.1986.10475342)" *American Statistician* [@Efron1986a]. See comments @Chernoff1986a, @Lindley1986a, @Morris1986a, @Smith1986a, @Press1986a, @Efron1986b.
 
-- Philosophy and the practice of Bayesian statistics in the social sciences. tp://www.stat.columbia.edu/~gelman/research/published/philosophy_chapter.pdf
-- Rubin (1984) Rubin, Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician. Ann. Statist. 12 (1984), no. 4, 1151--1172. doi:10.1214/aos/1176346785. http://projecteuclid.org/euclid.aos/1176346785.
+- Philosophy and the practice of Bayesian statistics in the social sciences. <http://www.stat.columbia.edu/~gelman/research/published/philosophy_chapter.pdf>
+- Rubin (1984) Rubin, [Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician](http://projecteuclid.org/euclid.aos/1176346785)
 - Andrew Gelman Induction and Deduction in Bayesian Data Analysis
 - Berger (2013) "[Could Fisher, Jeffreys and Neyman Have Agreed on Testing?](https://dx.doi.org/10.1214/ss/1056397485) *Statistical Science*
 
@@ -81,31 +116,34 @@ American Scientist 1988
 
 ### Bayesian Frequentist Debates
 
-- [Bayesians and Frequentists : Models, Assumptions, and Inference](http://www.stat.ufl.edu/archived/casella/Talks/BayesRefresher.pdf)  slides
-- Kasss Statitsical Inference: The Big Picture https://arxiv.org/pdf/1106.2895v2.pdf
+- [Bayesians and Frequentists : Models, Assumptions, and Inference](http://www.stat.ufl.edu/archived/casella/Talks/BayesRefresher.pdf) (slides)
+- Kass [Statistical Inference: The Big Picture](https://arxiv.org/pdf/1106.2895v2.pdf)
 - Noah Smith [Bayesian vs. Frequentist: Is there any "there" there?](http://noahpinionblog.blogspot.com/2013/01/bayesian-vs-frequentist-is-there-any.html)
 - Kass [Kinds of Bayesians](http://www.stat.cmu.edu/~kass/papers/kinds.pdf)
 - Anthony O'Hagan. Science, Subjectivity and Software (Comments on the articles by Berger and Goldstein)
-
+- VanderPlas (2014) Frequentism and Bayesianism: A Python-driven Primer. [posts](http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/)
 
 ### Categorical
 
-- Agresti. Bayesian Inference for Categorical Data Analysis.  http://www.stat.ufl.edu/~aa/cda2/bayes.pdf
+-   Agresti. Bayesian Inference for Categorical Data Analysis.  http://www.stat.ufl.edu/~aa/cda2/bayes.pdf
 
-- **Perfect Separation**
-
-    -   Gelman. 2008. "A weakly informative default prior distribution for logistic and other regression models" *Ann Applied Stat* doi:10.1214/08-AOAS191
+-   **Perfect Separation**
+-   Gelman. 2008. "A weakly informative default prior distribution for logistic and other regression models" *Annal Applied Statistics* 
 - Rainey. 2016. "Dealing with Separation in Logistic Regression Models" *Political Analysis*
-- @WechslerIzbickiEsteves2013a "A Bayesian look at nonidentifiability: a simple example""
+-   @WechslerIzbickiEsteves2013a "A Bayesian look at nonidentifiability: a simple example""
 
 ### Variable Selection
 
--   @GhoshGhattas2015a Ghosh and Ghattas (2015) "Bayesian Variable Selection Under Colinearity" *American Statistician*
--   Scott and Berger (2011) "[Bayes and empirical-Bayes multiplicity adjustment in the variable-selection problem](https://dx.doi.org/10.1214/10-Aos792)" *Annals of Statistics* [@ScottBerger2010]
--   Ishwaran and Rao (2005) "[Spike and slab variable selection: Frequentist and Bayesian strategies](https://dx.doi.org/10.1214/009053604000001147)" *Annalsb of Statistics*
+-   @GhoshGhattas2015a Ghosh and Ghattas (2015) "Bayesian Variable Selection Under Collinearity" *American Statistician*
+-   Scott and Berger (2011) "[Bayes and empirical-Bayes multiplicity adjustment in the variable-selection problem](https://dx.doi.org/10.1214/10-Aos792)" *Annals of Statistics* [@ScottBerger2010a]
+-   Ishwaran and Rao (2005) "[Spike and slab variable selection: Frequentist and Bayesian strategies](https://dx.doi.org/10.1214/009053604000001147)" *Annals of Statistics*
 -   Ishwaran, Kogalur, and Rao (2010) "[spikeslab: prediction and variable selection using spike and slab regression](ttps://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf)" *R Journal*
--   Piironen and Vehtari (2015) "[Projection predictive variable selection using {Stan}+{R}](http://arxiv.org/pdf/1508.02502v1:PDF)"
 -   Polson and Scott. "[Shrink globally, act locally: sparse Bayesian regularization and prediction](https://dx.doi.org/10.1093/acprof:oso/9780199694587.003.0017)" *Bayesian Statistics*
+-  [Projection predictive variable selection using Stan + R](https://arxiv.org/abs/1508.02502)
+-  [Lasso Meets Horseshoe](https://arxiv.org/pdf/1706.10179.pdf)
+-  Piironen and Vehtari, [Sparsity information and regularization in the horseshoe and other shrinkage priors](https://arxiv.org/pdf/1706.10179.pdf)
+-  P. Richard Hahn and Carlos M. Carvalho. [Decoupling Shrinkage And Selection In Bayesian Linear Models: A Posterior Summary Perspective](https://arxiv.org/pdf/1408.0464.pdf)
+-   Michael Betancourt [Bayes Sparse Regression](https://betanalpha.github.io/assets/case_studies/bayes_sparse_regression.html)
 
 
 
@@ -129,77 +167,36 @@ American Scientist 1988
 
 -   Efron and Morris (1975) "[Data Analysis Using Stein's Estimator and its Generalizations](https://dx.doi.org/10.1080/01621459.1975.10479864)" *JASA* [@EfronMorris1975a]
 
+## Software
 
+Software for general purpose Bayesian computation are called [probabilistic programming languages](https://en.wikipedia.org/wiki/Probabilistic_programming_language).
 
-#### Gibbs
+-   [Stan](http://mc-stan.org/)
 
--   @AllisonDunkley2013 [Comparison of sampling techniques for Bayesian parameter estimation](https://arxiv.org/pdf/1308.2675.pdf)
--   Gelfand et al. (1990) "[Illustration of Bayesian Inference in Normal Data Models Using Gibbs Sampling](https://dx.doi.org/10.1080/01621459.1990.10474968)" *JASA*
--   Chib and Greenberg "[Understanding the Metropolis-Hastings Algorithm](https://dx.doi.org/10.1080/00031305.1995.10476177)"
--   Geyer. MCMC: Does it work? How can we tell?http://users.stat.umn.edu/~geyer/jsm09.pdf
+    -   Joseph Rickert. 2016. [R Stan and Statistics](https://www.r-bloggers.com/r-stan-and-bayesian-statistics/)
 
+-   BUGS modeling language. Models are specified in a different language.
 
-#### HMC
-
--   Neal (2011) [MCMC using Hamiltonian dynamics](https://arxiv.org/pdf/1206.1901.pdf) in *Handbook of Markov Chain Monte Carlo*.
--   Betancourt, M. (2017). A conceptual introduction to Hamiltonian Monte Carlo. https://arxiv.org/abs/1701.02434
-
-### Convergence
-
--   Gelman, A. and Rubin, D. B. (1992) "[Inference from iterative simulation using multiple sequences](http://www.jstor.org/stable/2246093)" *Statistical Science*
--   Gabry, Jonah. [Visual MCMC diagnostics using the bayesplot plackage](http://mc-stan.org/bayesplot/articles/visual-mcmc-diagnostics.html)
-
-
-
-
-#### Variational
-
--   Grimmer (2011) "[An Introduction to Bayesian Inference via Variational Approximations](https://dx.doi.org/10.1093/pan/mpq027)" *Political Analysis* [@Grimmer2011a]
--   Raganath et al. (2015) "[Black Box Variational Inference](https://arxiv.org/abs/1401.0118)" [@RanganathGerrishBlei2014a]
-
-#### Expectation Propogation
-
--   Gelman et. al. 2017. "[Expectation propagation as a way of life: A framework for Bayesian inference on partitioned data](https://arxiv.org/pdf/1412.4869.pdf)"
-
-#### Importance Resampling
-
--   Smith and Gelfand (1992) "[Bayesian Statistics without Tears: A Sampling–Resampling Perspective](https://dx.doi.or/10.1080/00031305.1992.10475856)" *American Statistician* [@SmithGelfand1992a]
--   Gelfand and Smith. "[Sampling-Based Approaches to Calculating Marginal Densities](https://dx.doi.org/10.1080/01621459.1990.10476213)" *JASA* 
--   Lopes, Polson, and Carvalho. "[Bayesian Statistics with a Smile: A Resampling-sampling Perspective](http://www.jstor.org/stable/43601224)" *Brazilian Journal of Probability and Statistics* []
-
-
-
-### Software
-
-Sofware for general purpose Bayesian computation is called [probablistic programming](https://en.wikipedia.org/wiki/Probabilistic_programming_language), though the term is used in CS and not so much in stats, or social science.
-
-- [Stan](http://mc-stan.org/)
-
-    - Joseph Rickert. 2016. [R Stan and Statistics](https://www.r-bloggers.com/r-stan-and-bayesian-statistics/)
-
-- BUGS modeling language. Models are specified in a different language.
-
-    - [NIMBLE](https://r-nimble.org/) A very new BUGS-like lanugage that works with R.
-    - [JAGS](http://mcmc-jags.sourceforge.net/) Gibbs/MCMC based
-    - [WinBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/the-bugs-project-winbugs/) Gibbs and MCMC based software. It was
+    -   [NIMBLE](https://r-nimble.org/) A very new BUGS-like language that works with R.
+    -   [JAGS](http://mcmc-jags.sourceforge.net/) Gibbs/MCMC based
+    -   [WinBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/the-bugs-project-winbugs/) Gibbs and MCMC based software. It was
         one of the first but is now obsolete and unmaintained. Use JAGS or Stan instead.
-    - [OpenBUGS](http://www.openbugs.net/w/FrontPage) The continuation of the WinBUGS project. Also no longer well maintained.
-        Use JAGS or Stan instead.
+    -   [OpenBUGS](http://www.openbugs.net/w/FrontPage) The continuation of the WinBUGS project. Also no longer well maintained. Use JAGS or Stan instead.
 
-- R has multiple packages that implement some Bayesian methods. See the [Bayesian Task View](https://cran.r-project.org/web/views/Bayesian.html)
+-   R has multiple packages that implement some Bayesian methods. See the [Bayesian Task View](https://cran.r-project.org/web/views/Bayesian.html)
 
-    - [LearnBayes](https://cran.r-project.org/web/packages/LearnBayes/index.html)
-    - [TeachBayes](https://cran.r-project.org/web/packages/TeachBayes/index.html)
+    -   [LearnBayes](https://cran.r-project.org/web/packages/LearnBayes/index.html)
+    -   [TeachBayes](https://cran.r-project.org/web/packages/TeachBayes/index.html)
 
-- Python
+-   Python
 
-    - [PyMC](https://pymc-devs.github.io/pymc3/) Very complete general-purpose Python package for Bayesian Analysis
-    - The various Machine learning packages like [SciKit]
+    -   [PyMC](https://pymc-devs.github.io/pymc3/) Very complete general-purpose Python package for Bayesian Analysis
+    -   The various Machine learning packages like [scikit-learn](http://scikit-learn.org/stable/).
 
-- [Edward](https://github.com/blei-lab/edward). By David Blei. Deep generative models, variational inference. Runs
-    on Tensorflow. Implements variational and HMC methods, as well as optimization.
-- Church and others. Lisp-based inference programs. These are from the CS side.
-- Stata: Since [Stata 14](http://www.stata.com/new-in-stata/bayesian-analysis/) it has some Bayesian capabilities. It mostly uses Metropolis-Hastings with Gibbs for a few models.
+-   [Edward](https://github.com/blei-lab/edward). By David Blei. Deep generative models, variational inference. Runs
+    on TensorFlow. Implements variational and HMC methods, as well as optimization.
+-   [Church](http://projects.csail.mit.edu/church/wiki/Church) and [Anglican](http://www.robots.ox.ac.uk/~fwood/anglican/literature/index.html) are Lisp-based inference programs. 
+-   Stata: Since [version 14](http://www.stata.com/new-in-stata/bayesian-analysis/) it can estimate some Bayesian models. It uses Metropolis-Hastings and Gibbs methods.
 
 - Julia
 
@@ -208,20 +205,18 @@ Sofware for general purpose Bayesian computation is called [probablistic program
 
 ### Stan
 
-Some R packages.
+Official Stan-dev R packages:
 
-Official `stan-dev` packages:
-
-- [rstan](https://cran.r-project.org/web/packages/rstan/index.html)
-- [rstanarm](https://cran.r-project.org/web/packages/rstanarm/index.html)
-- [bayesplot](https://cran.r-project.org/web/packages/bayesplot/index.html)
-- [ShinyStan](https://cran.r-project.org/web/packages/shinystan/index.html)
-- [loo](https://github.com/stan-dev/loo)
+-   [rstan](https://cran.r-project.org/web/packages/rstan/index.html)
+-   [rstanarm](https://cran.r-project.org/web/packages/rstanarm/index.html)
+-   [bayesplot](https://cran.r-project.org/web/packages/bayesplot/index.html)
+-   [ShinyStan](https://cran.r-project.org/web/packages/shinystan/index.html)
+-   [loo](https://github.com/stan-dev/loo)
 
 Others:
 
-- [brms](https://github.com/paul-buerkner/brms) Bayesian generalized non-linear multilevel models using Stan
-- [ggmcmc](https://cran.r-project.org/web/packages/ggmcmc/index.html)
+-   [brms](https://github.com/paul-buerkner/brms) Bayesian generalized non-linear multilevel models using Stan
+-   [ggmcmc](https://cran.r-project.org/web/packages/ggmcmc/index.html)
 
 
 
@@ -231,28 +226,28 @@ Others:
 
 See [Plate notation](https://en.wikipedia.org/wiki/Plate_notation)
 
-- [tikz-bayesnet](https://github.com/jluttine/tikz-bayesnet) A TiKZ library for drawing Bayesian networks
-- [Daf](http://daft-pgm.org/) A python package to draw DAGs
-- Relevant Stackoverflow questions:
+-    [tikz-bayesnet](https://github.com/jluttine/tikz-bayesnet) A TikZ library for drawing Bayesian networks
+-    [Daf](http://daft-pgm.org/) A python package to draw DAGs
+-    Relevant Stack Overflow questions:
 
-    - [Software for drawing bayesian networks (graphical models)] (http://stats.stackexchange.com/questions/16750/software-for-drawing-bayesian-networks-graphical-models) Stackoverflow.
-    - [Tikz Example](http://www.texample.net/tikz/examples/bayes/)
-    - [how to draw plate indices in graphical model by tikz](http://tex.stackexchange.com/questions/199734/how-to-draw-plate-indices-in-graphical-model-by-tikz) Stackexchange
-    - [Can I have automatically adjusted plates in a graphical model?](http://tex.stackexchange.com/questions/11751/can-i-have-automatically-adjusted-plates-in-a-graphical-model?rq=1)
+    -    [Software for drawing Bayesian networks](http://stats.stackexchange.com/questions/16750/software-for-drawing-bayesian-networks-graphical-models) Stack Overflow.
+    -    [TikZ Example](http://www.texample.net/tikz/examples/bayes/)
+    -    [how to draw plate indices in graphical model by tikz](http://tex.stackexchange.com/questions/199734/how-to-draw-plate-indices-in-graphical-model-by-tikz) Stackexchange
+    -    [Can I have automatically adjusted plates in a graphical model?](http://tex.stackexchange.com/questions/11751/can-i-have-automatically-adjusted-plates-in-a-graphical-model?rq=1)
 
 #### Kruschke Diagrams
 
-Diagrams in the style of Kruschke's *Doing Bayesian Analysis*
+Diagrams in the style of Kruschke's *Doing Bayesian Analysis*:
 
-- LibreOffice Draw Templates: http://www.sumsar.net/blog/2013/10/diy-kruschke-style-diagrams/
+- [LibreOffice Draw Templates](http://www.sumsar.net/blog/2013/10/diy-kruschke-style-diagrams/)
 - Blog posts
 
-    - http://doingbayesiandataanalysis.blogspot.se/2012/05/graphical-model-diagrams-in-doing.html
-    - http://doingbayesiandataanalysis.blogspot.se/2012/05/hierarchical-diagrams-read-bottom-to.html
-    - http://doingbayesiandataanalysis.blogspot.se/2013/10/diagrams-for-hierarchical-models-we.html
+    -   <http://doingbayesiandataanalysis.blogspot.se/2012/05/graphical-model-diagrams-in-doing.html>
+    -   <http://doingbayesiandataanalysis.blogspot.se/2012/05/hierarchical-diagrams-read-bottom-to.html>
+    -   <http://doingbayesiandataanalysis.blogspot.se/2013/10/diagrams-for-hierarchical-models-we.html>
 
-- R scripts: https://github.com/rasmusab/distribution_diagrams
-- Tikz scripts: https://github.com/yozw/bayesdiagram
+- [R scripts](https://github.com/rasmusab/distribution_diagrams)
+- [TikZ scripts](https://github.com/yozw/bayesdiagram)
 
 #### Venn Diagrams/Eikosograms
 
@@ -292,48 +287,53 @@ Diagrams in the style of Kruschke's *Doing Bayesian Analysis*
 
 ## Mixture Models
 
-- ImaiTingley2011a: Imai, K. and Tingley, D. (2012) "[A Statistical Method for Empirical Testing of Competing Theories](https://dx.doi.org/10.1111/j.1540-5907.2011.00555.x)" *American Journal of Political Science*
+- Imai, K. and Tingley, D. (2012) "[A Statistical Method for Empirical Testing of Competing Theories](https://dx.doi.org/10.1111/j.1540-5907.2011.00555.x)" *AJPS*
+
+## Inference
+
+### Discussion of Bayesian Inference
+
+- Lindley. The Analysis of Experimental Data: The Appreciation of Tea and Wine
+
 
 
 ## Model Checking
 
 
-
 ### Posterior Predictive Checks
 
 -   Gelman, Andrew (2007) "[A Bayesian Formulation of Exploratory Data Analysis and Goodness-of-fit Testing](10.1111/j.1751-5823.2003.tb00203.x)" *International Statistical Review*
--   Gelman, Meng, Stern. POSTERIOR PREDICTIVE ASSESSMENT OF MODEL
-FITNESS VIA REALIZED DISCREPANCIES. 1996. 
--   Krushke. Posterior predictive checks can and should be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the practice of Bayesian statistics
+-   Gelman, Meng, Stern (1996) "Posterior Predictive Fitness Via Realized Discrepencies"
+-   Kruschke. Posterior predictive checks can and should be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the practice of Bayesian statistics
 -   [Confusions about posterior predictive checks](http://andrewgelman.com/2009/02/07/confusions_abou/)
 -   Gabry, Jonah. [Graphical posterior predictive checks using the bayesplot package](https://cran.r-project.org/web/packages/bayesplot/vignettes/graphical-ppcs.html)
 
 
 ### Prediction Criteria
 
--   Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2014. “Understanding Predictive Information Criteria for Bayesian Models.” Statistics and Computing 24 (6). Springer: 997–1016.
--   Vehtari, Gelman, and Gabry. Practical Bayesian model evaluation using leave-one-out cross-validation and
-WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.pdf
+-   Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2014. “Understanding Predictive Information Criteria for Bayesian Models.” *Statistics and Computing*
+-   Vehtari, Gelman, and Gabry. 2016 [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.pdf)
 -   Vehtari and Lampinen (2002) [Bayesian model assessment and comparison using cross-validation predictive densities](https://doi.org/10.1162/08997660260293292)
 -   Vehtari and Ojanen (2012) "[A survey of Bayesian predictive methods for model assessment, selection and comparison](https://dx.doi.org/10.1214/12-SS102)"
 
 ### Software Validation
 
--   Cook, Gelman, and Rubin (2006) "[Validation of Software for Bayesian Models Using Posterior Quantiles](https://dx.doi.org/10.1198/106186006X136976)" *J of Comp. and Graphical Stat* 
-
+-   Cook, Gelman, and Rubin (2006) "[Validation of Software for Bayesian Models Using Posterior Quantiles](https://dx.doi.org/10.1198/106186006X136976)" *J of Comp. and Graphical Stat*
+-   Gelman. Correction https://doi.org/10.1080/10618600.2017.1377082
+-   Savage, Jim. [An easy way to simulate fake data from your Stan model](http://modernstatisticalworkflow.blogspot.com/2017/04/an-easy-way-to-simulate-fake-data-from.html)
+-   [Stan Best Practices](https://github.com/stan-dev/stan/wiki/Stan-Best-Practices)
 
 
 ## Hierarchical Modeling
 
 - Kruschke and Vanpaeml "Bayesian Estimation in Hierarchical Models" http://www.indiana.edu/~kruschke/articles/KruschkeVanpaemel2015.pdf
--   Park, Gelman, and  Bafumi (2004) "[Bayesian Multilevel Estimation with Poststratification: State-Level Estimates from National Polls](https://dx.doi.org/10.1093/pan/mph024)" *Political Analysis* 
+-   Park, Gelman, and  Bafumi (2004) "[Bayesian Multilevel Estimation with Poststratification: State-Level Estimates from National Polls](https://dx.doi.org/10.1093/pan/mph024)" *Political Analysis*
 -   Lax and Phillips. 2009. "How Should We Estimate Public Opinion in the States?" *AJPS*
 
 ## Shrinkage/Regularization
 
 -   Piironen and Vehtari. 2016. [On the Hyperprior Choice for the Global Shrinkage Parameter in the Horseshoe Prior](https://arxiv.org/abs/1610.05559)
 -   Lopes. 2015. [Bayesian Regularization](http://hedibert.org/wp-content/uploads/2015/12/BayesianRegularization.pdf) slides.
-
 
 
 ## Empirical Bayes
@@ -349,7 +349,7 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 -   Stigler (1983) "[Who discovered Bayes's theorem?](http://www.jstor.org/stable/2682766)" *American Statistician* [@Stigler1983a]
 -   Fienberg (2006) "[When did Bayesian Inference Become "Bayesian"?](https://doi.org/10.1214/06-BA101)" *Bayesian Analysis* [@Fienberg2006a]
 
-# Sampling Difficulties
+## Sampling Difficulties
 
 -   Carpenter (2017) "[Typical sets and the curse of dimensionality](http://mc-stan.org/users/documentation/case-studies/curse-dims.html)" *Stan Case Studies*
 -   Betancourt (2017) "[Diagnosing biased inference with divergences](http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html)" *Stan Case Studies*
@@ -369,13 +369,6 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 
 
 
-## Numerical Analysis
-
--   Goldberg (1991) "[What every computer scientist should know about floating-point arithmetic](https://dx.doi.org/10.1145/103162.103163)"
--   Computerphile (2014) "[Floating point numbers](ttps://www.youtube.com/watch?v=PZRI1IfStY0)" video.
--   Eisele (2016) "[The log-sum-exp trick in Machine Learning](https://www.xarg.org/2016/06/the-log-sum-exp-trick-in-machine-learning/)" blog.
--   Carpenter (2016) "[Log Sum of Exponentials for Robust Sums on the Log Scale](http://andrewgelman.com/2016/06/11/log-sum-of-exponentials/)" *Statistical Modeling, Causal Inference, and Social Science* (blog)
-
 
 ## Visualizing MCMC Methods
 
@@ -394,36 +387,34 @@ WAIC. 2016. http://www.stat.columbia.edu/~gelman/research/unpublished/loo_stan.p
 -   <https://www.youtube.com/watch?v=pHsuIaPbNbY&list=PLqdbxUnkqOw2nKn7VxYqIrKWcqRkQYOsF&index=11>
 -   <http://arogozhnikov.github.io/2016/12/19/markov_chain_monte_carlo.html>
 
-## Bayesian point estimation / Decision 
+## Bayesian point estimation / Decision
 
-- Stan Modeling Language. Ch 32. Bayesian Point Estimation.
-- [Modes, Medians and Means: A Unifying Perspective](http://www.johnmyleswhite.com/notebook/2013/03/22/modes-medians-and-means-an-unifying-perspective/). Not explicitly motivated with Bayesian decision theory; nevertheless, it is a good intuitive explanation of these estimators.
+-   Stan Modeling Language. Ch 32. Bayesian Point Estimation.
+-   [Modes, Medians and Means: A Unifying Perspective](http://www.johnmyleswhite.com/notebook/2013/03/22/modes-medians-and-means-an-unifying-perspective/). Not explicitly motivated with Bayesian decision theory; nevertheless, it is a good intuitive explanation of these estimators.
+-   The Impact of Reparameterization on Point Estimates. http://mc-stan.org/users/documentation/case-studies/mle-params.html
+-   Rainey. https://github.com/carlislerainey/transformation-induced-bias
 
-# Information Theory
+## Stan Modeling Language
 
-- Information Theory, Inference, and Learning Algorithms
-David J.C. MacKay. http://www.inference.org.uk/itprnn/book.pdf
+-   Ch 1--8 Introduction.
+-   pay attention to Ch 1, 8. skim the rest. know where to look for help.
 
-# Stan Modeling Language
+-   Ch 28. Optimizing Stan Code for Efficiency (Neal's funnel, reparameterization, vectorization)
 
-- Ch 1--8 Introduction. 
-- pay attention to Ch 1, 8. skim the rest. know where to look for help.
+-   Ch 22. Reparameterization and change of variables
+-   Ch 23. Customized
+-   Ch 24. User-defined functions
+-   Ch 25. problematic posteriors
+-   Ch 29. Bayesian Data Analysis
+-   Ch 30. Markov Chain Monte Carlo Sampling (R hat, ESS, convergence, thinning)
+-   Ch 31. Penalized MLE
+-   Ch 32. Bayesian Point Estimation
+-   Ch 34. Hamiltonian Monte Carlo Sampling
+-   Ch 35. Transformations of Constrained Variables - changes of variables.
 
-- Ch 28. Optimizing Stan Code for Efficiency (Neal's funnel, reparameterization, vectorization)
+## Bayes Factors
 
-- Ch 22. Reparameterization and change of variables
-- Ch 23. Customized 
-- Ch 24. User-defined functions
-- Ch 25. problematic posteriors
-
-- Ch 29. Bayesian Data Analysis
-- Ch 30. Markov Chain Monte Carlo Sampling (R hat, ESS, convergence, thinning)
-- Ch 31. Penalized MLE
-- Ch 32. Bayesin Point Estimation
-- Ch 34. Hamiltonian Monte Carlo Sampling
-- Ch 35. Transofrmations of Constrained Variables - changes of variables.
-
-
-
-
-
+-   [Lindley's Paradox](https://en.wikipedia.org/wiki/Lindley%27s_paradox)
+-   [Bayes' Factors](https://en.wikipedia.org/wiki/Bayes_factor)
+-   Robert (2016) [The expected demise of the Bayes factor](https://arxiv.org/pdf/1506.08292.pdf) [@Robert2016a].
+-   Kass and Raftery (1995) "Bayes factors" [@KassRaftery1995a]

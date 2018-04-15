@@ -5946,8 +5946,8 @@ As $\tau \to 0$, then $\bar{\beta} \to 0$, and as $\tau \to \infty$, then $\bar{
 Note that for these distributions:
 
 - Normal: prior puts weight only on a single point
-- HS for df = 0: prior on shrinkage parameter puts weight on either completely shrunk ($\kappa = 1$) or unshrunk ($\kappa = 0$)
-- HS for df = 3: prior on shrinkage parameter puts a lo of weight on it being completely shrunk ($\kappa = 1$), but truncates the density for completely unshrunk.
+- HS for df = 0: prior on shrinkage parameter puts weight on either completely shrunk ($\kappa = 1$) or un-shrunk ($\kappa = 0$)
+- HS for df = 3: prior on shrinkage parameter puts a lo of weight on it being completely shrunk ($\kappa = 1$), but truncates the density for completely un-shrunk.
 
 
 ## Choice of Hyperparameter on $\tau$

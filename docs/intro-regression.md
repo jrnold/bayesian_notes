@@ -5,9 +5,15 @@ This chapter is an introduction to writing and running a Stan model in R.
 Also see the **rstan** [vignette](https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html) for similar content.
 
 
-## Prerequites
+## Prerequisites {-}
 
-For this section we will use the `duncan` dataset included in the **car** package.
+
+```r
+library("rstan")
+library("tidyverse")
+```
+
+For this section we will use the `duncan` dataset included in the **carData** package.
 Duncan's occupational prestige data is an example dataset used throughout the popular Fox regression text, *Applied Regression Analysis and Generalized Linear Models* [@Fox2016a].
 It is originally from @Duncan1961a consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that 
 
@@ -15,11 +21,13 @@ It is originally from @Duncan1961a consists of survey data on the prestige of oc
 data("Duncan", package = "carData")
 ```
 
-## The Statistical Model
+## OLS and MLE Linear Regression
 
 The first step in running a Stan model is defining the Bayesian statistical model that will be used for inference.
 
-Let's run the regression of occupational prestige on the type of occupation, income, and education:
+We will model `prestige` of each occupation as a function of its `education`, `occupation`, and `type`.
+
+A standard way to do this is with the OLS estimator:
 $$
 \begin{multline}
 y_i = \beta_0 + \beta_1 I(\mathtt{type} = \mathtt{"prof"}) + \beta_2 I(\mathtt{type} = \mathtt{"wc"}) \\
@@ -28,39 +36,56 @@ y_i = \beta_0 + \beta_1 I(\mathtt{type} = \mathtt{"prof"}) + \beta_2 I(\mathtt{t
 $$
 
 ```r
-duncan_lm <- lm(prestige ~ type + income + education,
-   data = Duncan)
-duncan_lm
-#> 
-#> Call:
-#> lm(formula = prestige ~ type + income + education, data = Duncan)
-#> 
-#> Coefficients:
-#> (Intercept)     typeprof       typewc       income    education  
-#>      -0.185       16.658      -14.661        0.598        0.345
+duncan_lm <- lm(prestige ~ type + income + education, data = Duncan)
 ```
 
+$$
+y_i = x_i' \beta + \epsilon_i
+$$
+OLS finds $\hat{\beta}_{OLS}$ by minimizing the squared errors,
+$$
+\hat{\beta}_{\text{OLS}} = \arg \min_{b} \sum_{i = 1}^n (y_i - x_i' b)^2 .
+$$
+OLS is an estimator of the (linear approximation of) the conditional expectation function,
+$$
+\mathrm{CEF}(y_i | x_i) = E(y_i, x_i' \beta) .
+$$
 
-There are $n = 45$ observations in the dataset.
-Let $y$ be a $n \times 1$ vector of the values of `prestige`.
-Let $X$ be the $n \times k$ design matrix of the regression.
-In this case, $k = 5$, 
-$$
-X = \begin{bmatrix}
-1 & \mathtt{typeprof} & \mathtt{typewc} & \mathtt{income} & \mathtt{education}
-\end{bmatrix}
-$$
-
-In OLS, we get the frequentist estimates of $\hat{\beta}$ by minimizing the squared errors,
-$$
-\hat{\beta}_{OLS} = \argmin_{\beta} \sum_{i = 1}^n (y_i - \beta' x_i)^2 = \argmin \sum_{i = 1}^n \hat{\epsilon}_i
-$$
 For valid inference we need to make assumptions about $\epsilon_i$, namely that they are uncorrelated with $X$, $\Cov(\epsilon, X) = 0$, and that they are i.i.d, $\Cov(\epsilon_i, \epsilon_j) = 0$, $\Var(\epsilon_i) = \sigma^2$ for all $i$.
-However, no specific distributional form is or needs to be assumed for $\epsilon$ since CLT results show that, asymptotically, the sampling distribution of $\beta$ is distributed normal.
+However, no specific distributional form is or needs to be assumed for $\epsilon$ since CLT results show that, asymptotically the sampling distribution of $\beta$ approaches the normal.
 Additionally, although $\hat\sigma^2 = \sum_{i = 1}^n \epsilon_i / (n - k - 1)$ is a estimator of $\sigma^2$, standard errors of the standard error of the regression are not directly provided.
 
+However, the OLS estimator is also the same as the MLE estimator for $\beta$ (but not $\sigma$):
+$$
+\begin{aligned}[t]
+p(y_1, \dots, y_n | \beta, \sigma, x_1, \dots, x_n) &= \prod_{i = 1}^n p(y_i | \beta, x_i) \\
+&= \prod_{i = 1}^n N(y_i | x_i' \beta) \\
+&= \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2 \pi}} \left( \frac{-(y_i - x_i' \beta)}{2 \sigma^2} \right)
+\end{aligned}
+$$
+so,
+$$
+\hat{\beta}_{MLE}, \hat{\sigma}_{MLE} = \arg\max_{b,s} \prod_{i = 1}^n N(y_i | x_i' b, s^2)  .
+$$
+And $\hat{\beta}_{MLE} = \hat{\beta}_{OLS}$.
+
+Note that the OLS estimator is equivalent to the MLE estimator of $\beta$,
+$$
+\begin{aligned}[t]
+\hat{\beta}_{MLE} &= \arg \max_{b} \prod_{i = 1}^n N(y_i | x_i' b, \sigma^2) \\
+&=  \arg \max_{b} \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2 \pi}} \exp \left( \frac{-(y_i - x_i' \beta)^2}{2 \sigma^2} \right) \\
+&= \arg \max_{b} \log \left( \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2 \pi}} \exp \left( \frac{-(y_i - x_i' \beta)}{2 \sigma^2} \right) \right) \\
+&= \arg \max_{b} \sum_{i = 1}^n - \log \sigma - \frac{1}{2} \log 2 \pi + \frac{-(y_i - x_i' \beta)^2}{2 \sigma^2} \\
+&= \arg \max_{b} \sum_{i = 1}^n  -(y_i - x_i' \beta)^2 \\
+&= \arg \min_{b} \sum_{i = 1}^n  (y_i - x_i' \beta)^2  \\
+&= \hat{\beta}_{OLS}
+\end{aligned}
+$$
+However, the estimator of $\sigma^2_{MLE} \neq \sigma^2_{OLS}$.
+
+### Bayesian Model with Improper priors
+
 In Bayesian inference, our target is the posterior distribution of the parameters, $\beta$ and $\sigma$:  $p(\beta, \sigma^2 | y, X)$.
-Since all uncertainty in Bayesian inference is provided via probability, we will need to explicitly provide parametric distributions for the likelihood and parameters.
 
 $$
 p(\beta, \sigma | y, X) \propto p(y | \beta, \sigma) p(\beta, \sigma)
@@ -75,42 +100,47 @@ $$
 
 **Priors:** The model needs to specify a prior distribution for the parameters $(\beta, \sigma)$.
 Rather than specify a single distribution for $\beta$ and $\sigma$, it will be easier to specify independent (separate) distributions for $\beta$ and $\sigma$.
-The Stan manual and ... provide 
-For the normal distribution, assume i.i.d. normal distributions for each element of $\beta$:
+
+We will use what are called an *improper uniform priors*. 
+An improper prior is,
 $$
-\beta_k \sim \dnorm(b, s)
+p(\theta) \propto C
 $$
-For the scale parameter of the normal distribution, $\sigma$, we will use a half-Cauchy.
-The Cauchy distribution is a special case of the Student t distribution when the degrees of freedom is 1.
-In Bayesian stats, it has the property that it concentrates probability mass around its median (zero), but has very wide tails, so if the prior distribution guess is wrong, the parameter can still adapt to data.
-A half-Cauchy distribution is a Cauchy distribution but with support of $(0, \infty)$ instead of the entire real line.
+where $C$ is some constants.
+This function puts an equal density on all values of the support of $\theta$.
+This function is not a proper probability density function since $\int_{\theta \in \Theta} C d \theta = \infty$.
+However, for some Bayesian models, the prior does not need to be a proper probability function for the posterior to be a probability function.
+In this example we will put improper prior distributions on $\beta$ and $\sigma$.
 $$
-\sigma \sim \dhalfcauchy(0, w)
+p(\beta, \sigma) = C
 $$
 
-Combining all the previous equations, our statistical model for linear regression is,
 $$
-\begin{aligned}[t]
-y &\sim \dnorm(\mu, \sigma) \\
-\mu &= X \beta \\
-\beta &\sim \dnorm(b, s) \\
-\sigma &\sim \dhalfcauchy(0, w)
+\begin{aligned}
+p(\beta, \sigma | x, y) &\propto p(y| \beta, \sigma, x) p(\beta, \sigma, x) \\
+&= \prod_{i = 1}^n N(y_i | x_i' \beta, \sigma^2) \cdot C \\
+&\propto \prod_{i = 1}^n N(y_i | x_i' \beta, \sigma^2) 
 \end{aligned}
 $$
-This defines a Bayesian model gives us
+
+Note that under the improper priors, the posterior is proportional to the likelihood,
 $$
-p(\beta, \sigma | y, X, b, s, w) \propto p(y | X, \beta) p(\beta | b, s) p(\sigma | w)
+p(\beta, \sigma | x, y) \propto p(y | x, \beta, \sigma)
 $$
-The targets of inference in this model are the two parameters: $\beta$ (regression coefficients), and  $\sigma$ (standard deviation of the regression).
-This is conditional on the observed or assumed quantities, which including both the data $y$ (response) and $X$ (predictors), as well the values defining the prior distributions: $b$, $s$, and $w$.
+Thus the MAP (maximum a posterior) estimator is the same as the MLE,
+$$
+\hat{\beta}_{MAP}, \hat{\sigma}_{MAP} = \arg\max_{\beta, \sigma} p(\beta, \sigma | x, y) = \arg \max_{\beta, \sigma} p(y | x, \beta, \sigma) = \hat{\beta}_{MLE}, \hat{\sigma}_{MLE}
+$$
 
+## Stan Model
 
-Now that we've defined a statistical model, we can write it as a Stan model.
-
+Let's write and estimate our model in Stan.
 Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.
 
 A Stan model consists of *blocks* which contain declarations of variables and/or statements.
 Each block has a specific purpose in the model.
+
+## Sampling Model with Stan
 
 ```
 functions {
@@ -136,7 +166,7 @@ generated quantities {
 }
 ```
 
-The file `lm.stan` is a Stan model for the linear regression model previously defined.
+The file `lm0.stan` is a Stan model for the linear regression model previously defined.
 
 ```
 data {
@@ -148,64 +178,11 @@ data {
   int k;
   // design matrix X
   matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
-}
-parameters {
-  // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-}
-transformed parameters {
-  // mu is the observation fitted/predicted value
-  // also called yhat
-  vector[n] mu;
-  mu = a + X * b;
-}
-model {
-  // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  // likelihood
-  y ~ normal(mu, sigma);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  for (i in 1:n) {
-    y_rep[i] = normal_rng(mu[i], sigma);
-  }
-}
-```
-
-
-```r
-mod1 <- stan_model("stan/lm.stan")
-```
-
-```r
-mod1
-```
-
-<pre>
-  <code class="stan">data {
-  // number of observations
-  int n;
-  // response vector
-  vector[n] y;
-  // number of columns in the design matrix X
-  int k;
-  // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
+  // // beta prior
+  // real b_loc;
+  // real<lower = 0.0> b_scale;
+  // // sigma prior
+  // real sigma_scale;
 }
 parameters {
   // regression coefficient vector
@@ -221,23 +198,42 @@ transformed parameters {
 }
 model {
   // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
+  // b ~ normal(b_loc, b_scale);
+  // sigma ~ cauchy(0, sigma_scale);
   // likelihood
   y ~ normal(mu, sigma);
+  // the ~ is a shortcut
+  // target += normal_lpdf(y | mu, sigma);
+  // for (i in 1:n) {
+  //   y[i] ~ normal(mu[i], sigma)
+  // }
 }
 generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  for (i in 1:n) {
-    y_rep[i] = normal_rng(mu[i], sigma);
-  }
-}</code>
-</pre>
+  // // simulate data from the posterior
+  // vector[n] y_rep;
+  // // log-likelihood posterior
+  // vector[n] log_lik;
+  // for (i in 1:n) {
+  //   y_rep[i] = normal_rng(mu[i], sigma);
+  //   log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+  // }
+}
+```
+
+
+```r
+library("rstan")
+mod1 <- stan_model("stan/lm.stan")
+```
+
+```r
+mod1
+```
+
+prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // // beta prior\n  // real b_loc;\n  // real<lower = 0.0> b_scale;\n  // // sigma prior\n  // real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  // b ~ normal(b_loc, b_scale);\n  // sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n  // the ~ is a shortcut\n  // target += normal_lpdf(y | mu, sigma);\n  // for (i in 1:n) {\n  //   y[i] ~ normal(mu[i], sigma)\n  // }\n}\ngenerated quantities {\n  // // simulate data from the posterior\n  // vector[n] y_rep;\n  // // log-likelihood posterior\n  // vector[n] log_lik;\n  // for (i in 1:n) {\n  //   y_rep[i] = normal_rng(mu[i], sigma);\n  //   log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);\n  // }\n}")))
 
 
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.
-
 
 **Note**Since a Stan model compiles to C++ code, you may receive some warning messages such as
 ```
@@ -286,8 +282,8 @@ $$
 
 
 ```r
-mod1_data$b_loc <- 0
-mod1_data$b_scale <- 1000
+# mod1_data$b_loc <- 0
+# mod1_data$b_scale <- 1000
 ```
 
 For prior of the regression scale parameter $\sigma$, use a half-Cauchy distribution with a large scale parameter, which is a good choice for the priors of scale parameters.
@@ -300,7 +296,7 @@ $$
 $$
 
 ```r
-mod1_data$sigma_scale <- 50
+# mod1_data$sigma_scale <- 50
 ```
 
 Now, sample from the posterior, using the function `sampling`:

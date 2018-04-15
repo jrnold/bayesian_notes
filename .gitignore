@@ -9,3 +9,7 @@ _main.rds
 *_cache
 /*.rds
 /*_files/
+node_modules
+*.rds
+*.knit.md
+*.utf8.md

@@ -1,8 +1,14 @@
 # Hanmer Example
 
-```{r}
+## Prerequisites {-}
+
+```{r message=FALSE}
+library("rstan")
+library("tidyverse")
 library("haven")
+library("rubbish")
 ```
+
 ```{r}
 HanmerKalkan <- read_dta("data/Hanmer Kalkan AJPS NES example.dta") %>%
   mutate_if(is.labelled, haven::as_factor) %>%
@@ -12,41 +18,13 @@ HanmerKalkan <- read_dta("data/Hanmer Kalkan AJPS NES example.dta") %>%
 ```
 
 ```{r}
-mod_formula <- bush_vote ~ retecon + white + female + age + educ1_7 + income + partyid + bushiraq
+mod_formula <- bush_vote ~ retecon + white + female + age + educ1_7 +
+  income + partyid + bushiraq
 glm(mod_formula, data = HanmerKalkan)
 ```
 
 ```{r}
-library("R6")
-# Rescaler <- R6Class("Rescaler",
-#   public = list(
-#     loc = 0,
-#     scale = 1,
-#     nvals = 0,
-#     initialize = function(x) {
-#       self$nvals = length(unique(x, na.rm = TRUE))
-#       if (self$nvals <= 1) {
-#         self$loc <- 0
-#         self$scale <- 1
-#       } else if (self$nvals == 2) {
-#         self$loc <- min(x, na.rm = TRUE)
-#         self$scale <- max(x, na.rm = TRUE) - self$min
-#       } else {
-#         self$loc <- mean(x, na.rm = TRUE)
-#         self$scale <- sd(x, na.rm = TRUE)           }
-#       self
-#     },
-#     scale = function(x) {
-#       (x - self$loc) / self$scale
-#     },
-#     unscale = function(x) {
-#       self$loc + self$scale * x      
-#     }
-#   )
-# )
-
-
-X <- lm_preprocess(update(mod_formula, . ~ . -1), data = HanmerKalkan)
+X <- lm_preprocess(update(mod_formula, . ~ . - 1), data = HanmerKalkan)
 ```
 
 ```{r}
