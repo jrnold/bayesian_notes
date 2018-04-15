@@ -2,12 +2,12 @@
 
 ## Gamma Regression
 
-The response variable is continuous and positive. 
+The response variable is continuous and positive.
 In gamma regression, the coefficient of variation is constant rather than the variance.
 $$
 y_i \sim \dgamma(\alpha_i, \beta)
 $$
-and 
+and
 $$
 \begin{aligned}[t]
 \alpha_i &= \mu_i / \beta \\
@@ -17,4 +17,6 @@ $$
 
 In Stan,
 
-- `gamma(y | alpha, beta)` with shape parameter $\alpha > 0$ and inverse scale parameter $\beta > 0$. Then $\E(Y) = \alpha / \beta$ and $\Var(Y) = \alpha / \beta^2$.
+-   `gamma(y | alpha, beta)` with shape parameter $\alpha > 0$ and inverse
+    scale parameter $\beta > 0$. Then $\E(Y) = \alpha / \beta$ and
+    $\Var(Y) = \alpha / \beta^2$.

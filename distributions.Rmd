@@ -11,8 +11,8 @@ The [Probability Distributions](https://cran.r-project.org/web/views/Distributio
 
 There are a few variations of this chart online:
 
-- [Univariate Distribution Relationships](http://www.math.wm.edu/~leemis/chart/UDR/UDR.html)
-- [Diagram of distribution relationships](https://www.johndcook.com/blog/distribution_chart/)
+-   [Univariate Distribution Relationships](http://www.math.wm.edu/~leemis/chart/UDR/UDR.html)
+-   [Diagram of distribution relationships](https://www.johndcook.com/blog/distribution_chart/)
 
 <!--
 ### Beta Distribution
@@ -66,7 +66,7 @@ Shape $k > 0$ and scale $\theta > 0$,
 $$
 \dgamma(x | k, \theta) = \frac{1}{\Gamma(k) \theta^k}x^{k - 1}\exp(- x / \theta) .
 $$
-with 
+with
 $$
 \begin{aligned}[t]
 \mu = \E[X] &= k \theta \\

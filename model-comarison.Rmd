@@ -1,0 +1,28 @@
+# Model Selection and Comparison
+
+There are several ways to do model comparison and selection, but in general,
+in Bayesian methods, the preference is to combine multiple models so as to not ignore model uncertainty.
+
+1.  Model Selection: choose the best model among discrete alternatives
+1.  Model Averaging: average discrete alternatives
+1.  Continuous Model Expansion (@BDA3) If possible, nest models in a single super-model and estimate simultaneously
+
+The first one, "model selection", is suboptimal since it ignores model uncertainty.
+
+The later two are preferred:
+
+-   Specifying a "super-model" if possible is better, since
+    information can be shared between models at estimation time.
+
+-   Model averaging is a computationally appealing approximation. The models
+    can be estimated in parallel, and it can work in cases where specifying a
+    super-model is difficult.
+
+For cases where the different models are cases of "variable selection", using
+a spike and slab prior or sparse shrinkage priors is an alternative [@CarvalhoPolsonScott2010a].
+
+## Bayesian Model Averaging
+
+See @VolinskyRafteryMadiganEtAl1999a, @MontgomeryNyhan2010a, @MontgomeryHollenbachWard2012a, and @FragosoNeto2015a.
+
+@McElreath2016a suggests. weighting by WAIC.

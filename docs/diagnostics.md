@@ -4,6 +4,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 # MCMC Diagnostics
 
 There are two parts of checking a Bayesian model:
@@ -286,3 +287,26 @@ The sampler is still exploring the posterior distribution, but the exploration w
 ### Bayesian Fraction of Missing Information
 
 This is rather technical. See @Betancourt2016a.
+
+# Debugging Bayesian Computating
+
+See @BDA3 [p. 270], ...
+
+1.  Pick a reasonable value for the "true" parameter vector $\theta^* \sim p(\theta)$. This should be a random draw from the prior, but if $\theta$ is uniformative, then any reaonsable value of $\theta$ should work.
+2.  Draw all other parameters that are conditional on $\theta^*$.
+3.  Simulate a large fake dataset $y^{fake}$ from the data distribution $p(y | \theta^*)$
+4.  Calculate the posterior $p(\theta | y^{rep})$.
+5.  Compare the posterior distribution $p(\theta | y)$ to its true value $\theta^*$. For example there should be a 50% probability that the 50% posterior interval of $p(\theta | y)$ contains $\theta^*$.
+
+Notes
+
+-   for large number of parameters: calculate the proportion of 50% credible intervals that contain the true value.
+-   residual plot: for all scalar parameters $\theta_j$, calculate the residual $\E[\theta_j] - \theta^*$. The residuals should have mean 0.
+-   for models with few parameters, perform many fake data simulations.
+-   convergence and posterior predictive tests may also indicate issues with the model.
+
+    -   it could be either a problem with the model, or a problem in computation.
+    -   simplify the model by removing parameters or setting them to fixed values
+
+-   Start with a simple model and build complexity. This is useful both because the simple model may be "good enough" for your purposes, and because adding one part at a time makes it easier to catch and fix bugs.
+    

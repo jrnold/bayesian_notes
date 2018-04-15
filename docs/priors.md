@@ -1,18 +1,15 @@
 
 # Priors
 
-Priors for coefficients and scales 
+Priors for coefficients and scales.
 
--   Improper uniform priors $(-\infty, +\infty)$ or $(0, +\infty)$.
--   Uninformative Proper Priors such as $\sigma^2 \sim \dinvgamma(0.001, 0.001)$.
--   Weakly Informative Priors
--   Bounded Priors
--   Informative Priors
--   Conjugate priors
--   Hyperparameters - "priors on priors" These are usually specified in models.
-    They should be specified to ensure that the posterior is proper and not
-    sensitive statistically or computationally to wide tails in the priors.
--   Boundary avoiding priors - In MAP, priors can be specified to keep parameters away from boundaries, e.g. 0 in a scale model.
+## Levels of Priors
+
+1.  Flat prior
+1.  Vague but proper prior, e.g. $\dnorm(. | 0, 1e6)$
+1.  Weakly informative prior, but very weak $\dnorm(0, 10)$
+1.  Generic weakly informative prior: $\dnorm(0, 1)$
+1.  Specific informative prior
 
 ## Conjugate Priors
 
@@ -115,7 +112,6 @@ p(\lambda | n, \alpha, \beta) &= \dgamma(\lambda | \alpha + n, \beta + 1)
 \end{aligned}
 $$
 
-
 ### Normal with known variance
 
 $$
@@ -141,6 +137,52 @@ If prior distributions are given an [improper uniform prior](https://en.wikipedi
 $$
 p(\theta | y) \propto p(y | \theta) p(\theta) \propto p(y | \theta)
 $$
+
+
+## Cromwell's Rule
+
+The use of priors should placing a probability of 0 or 1 on events be avoided except where those events are excluded by logical impossibility.
+If a prior places probabilities of 0 or 1 on an event, then no amount of data can update that prior.
+
+The name, Cromwell's Rule, comes from a quote of Oliver Cromwell,
+
+> I beseech you, in the bowels of Christ, think it possible that you may be mistaken.
+
+Lindley (1991) describes it as
+
+> Leave a little probability for the moon being made of green cheese; it can be as small as 1 in a million, but have it there since otherwise an army of astronauts returning with samples of the said cheese will leave you unmoved.
+
+If $p(\theta = x) = 0$, then for a value of $x$, then the posterior distribution is always zero.
+$$
+p(\theta = x | y) \propto p(y | \theta = x) p(\theta = x) = 0
+$$
+
+
+
+## Asymptotics
+
+As the sample size increases, the Bayesian distribution converges to a normal distribution centered on the true vaue of the parameter.
+
+Suppose data $y_1, \dots, y_n \sim$ are an iid sample from the distribution $f(y)$.
+Suppose that the data are modeled with a parameteric family $p(y | \theta)$ and a prior distribution $p(\theta)$.
+
+If the data distribution is included in the parametric family, meaning that there exists a $\theta_0$ such that $p(y | \theta_0) = f(y)$, then the posterior distribution is *consistent* in that it converges to the true parameter value $\theta_0$ as $n \to \infty$.
+
+Otherwise, the posterior convergences to the distribution $p(y | \theta)$ closes to the true distribution.
+
+As $n \to infty$, the likleihood dominates the posterior distribution.
+
+There are cases in which the normal approximation is incorrect.
+
+1.  parameters are non-identified
+1.  the number of parameters increases with sample size
+1.  aliasing or non-identified parameters due to label switching
+1.  unbounded likelihoods. This can happen if variance parameters go to zero.
+1.  improper posterior distributions
+1.  prior distributions that exclude the point of convergence. See Cromwell's Rule.
+1.  convergence to the edge of the parameter space
+1.  tails of the distribution can be inaccurate even if the normal approximation converges to the correct value; e.g. the normal approximation will still place a non-zero density on negative values of a non-negative parameter.
+
 
 ## References
 

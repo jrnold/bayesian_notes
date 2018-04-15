@@ -1,17 +1,14 @@
 # Priors
 
-Priors for coefficients and scales 
+Priors for coefficients and scales.
 
--   Improper uniform priors $(-\infty, +\infty)$ or $(0, +\infty)$.
--   Uninformative Proper Priors such as $\sigma^2 \sim \dinvgamma(0.001, 0.001)$.
--   Weakly Informative Priors
--   Bounded Priors
--   Informative Priors
--   Conjugate priors
--   Hyperparameters - "priors on priors" These are usually specified in models.
-    They should be specified to ensure that the posterior is proper and not
-    sensitive statistically or computationally to wide tails in the priors.
--   Boundary avoiding priors - In MAP, priors can be specified to keep parameters away from boundaries, e.g. 0 in a scale model.
+## Levels of Priors
+
+1.  Flat prior
+1.  Vague but proper prior, e.g. $\dnorm(. | 0, 1e6)$
+1.  Weakly informative prior, but very weak $\dnorm(0, 10)$
+1.  Generic weakly informative prior: $\dnorm(0, 1)$
+1.  Specific informative prior
 
 ## Conjugate Priors
 
@@ -20,7 +17,7 @@ $$
 p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int p(y | \theta') p(\theta') d\theta'},
 $$
 has a [closed-form solution](https://en.wikipedia.org/wiki/Closed-form_expression) and can be calculated exactly.
-In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used. 
+In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used.
 Unfortunately, these cases are few.
 
 Most of those cases involve **conjugate priors**.
@@ -35,13 +32,13 @@ DiagrammeR::grViz("diagrams/conjugate_beta.gv")
 
 [^conjugate]: Based on John Cook's a [Diagram of Conjugate Prior distributions](https://www.johndcook.com/blog/conjugate_prior_diagram/).
 
-The table in the Wikipedia page for [Conjugate priors](https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4) is as complete as any out there. 
+The table in the Wikipedia page for [Conjugate priors](https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4) is as complete as any out there.
 @Fink1997a for a compendium of references.
 Also see [Distributions] for more information about probability distributions.
 
 ### Binomial-Beta
 
-Binomial distribution: If $N \in \Nats$ (number of trials), $\theta \in (0, 1)$ (success probability in each trial), 
+Binomial distribution: If $N \in \Nats$ (number of trials), $\theta \in (0, 1)$ (success probability in each trial),
 then for $n \in \{0, \dots, N\}$,
 $$
 \dBinom(n | N, \theta) = \binom{N}{n} \theta^{n} (1 - \theta)^{N - n} .
@@ -49,7 +46,7 @@ $$
 
 Beta distribution: If $\alpha \in \RealPos$ (shape) and $\beta \in \RealPos$ (shape), then for $\theta \in (0, 1)$,
 $$
-\dbeta(\theta | \alpha, \beta) = \frac{1}{\mathrm{B}(\alpha, \beta)} \theta^{\alpha - 1} (1 - \theta)^{\beta - 1}, 
+\dbeta(\theta | \alpha, \beta) = \frac{1}{\mathrm{B}(\alpha, \beta)} \theta^{\alpha - 1} (1 - \theta)^{\beta - 1},
 $$
 where $\mathrm{B}$ is the beta function,
 $$
@@ -92,14 +89,13 @@ p(\theta | y, \alpha) &= \ddirichlet(\theta | \alpha + y) && \text{Dirichlet pos
 \end{aligned}
 $$
 
-
 ### Poisson-Gamma
 
 Let $\lamba$ be the rate parameter of the Poisson distribution.
 
 If $\lambda \in \R^+$ (rate parameter), then for $n \in \N$,
 $$
-\dpois(n|\lambda) = \frac{1}{n!} \lambda^n \exp(-\lambda) 
+\dpois(n|\lambda) = \frac{1}{n!} \lambda^n \exp(-\lambda)
 $$
 If $\alpha \in \R^{+}$ (shape parameter), $\beta \in \R^{+}$ (inverse scale parameter), then for $y \in \R^{+}$,
 $$
@@ -115,7 +111,6 @@ p(\lambda | n, \alpha, \beta) &= \dgamma(\lambda | \alpha + n, \beta + 1)
 \end{aligned}
 $$
 
-
 ### Normal with known variance
 
 $$
@@ -128,12 +123,9 @@ p(\mu | y, \mu, \sigma^2, \mu_0, \sigma_0^2) &= \dbeta(\mu | \tilde{\mu}, \tilde
 \end{aligned}
 $$
 
-
 ### Exponential Family
 
 Likelihood functions in the [exponential family](https://en.wikipedia.org/wiki/Exponential_family) have conjugate priors, often also in the exponential family.[^expconj]
-
-[^expconj]: <https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions>
 
 ## Improper Priors
 
@@ -141,6 +133,48 @@ If prior distributions are given an [improper uniform prior](https://en.wikipedi
 $$
 p(\theta | y) \propto p(y | \theta) p(\theta) \propto p(y | \theta)
 $$
+
+## Cromwell's Rule
+
+The use of priors should placing a probability of 0 or 1 on events be avoided except where those events are excluded by logical impossibility.
+If a prior places probabilities of 0 or 1 on an event, then no amount of data can update that prior.
+
+The name, Cromwell's Rule, comes from a quote of Oliver Cromwell,
+
+> I beseech you, in the bowels of Christ, think it possible that you may be mistaken.
+
+Lindley (1991) describes it as
+
+> Leave a little probability for the moon being made of green cheese; it can be as small as 1 in a million, but have it there since otherwise an army of astronauts returning with samples of the said cheese will leave you unmoved.
+
+If $p(\theta = x) = 0$, then for a value of $x$, then the posterior distribution is always zero.
+$$
+p(\theta = x | y) \propto p(y | \theta = x) p(\theta = x) = 0
+$$
+
+## Asymptotics
+
+As the sample size increases, the Bayesian distribution converges to a normal distribution centered on the true vaue of the parameter.
+
+Suppose data $y_1, \dots, y_n \sim$ are an iid sample from the distribution $f(y)$.
+Suppose that the data are modeled with a parameteric family $p(y | \theta)$ and a prior distribution $p(\theta)$.
+
+If the data distribution is included in the parametric family, meaning that there exists a $\theta_0$ such that $p(y | \theta_0) = f(y)$, then the posterior distribution is *consistent* in that it converges to the true parameter value $\theta_0$ as $n \to \infty$.
+
+Otherwise, the posterior convergences to the distribution $p(y | \theta)$ closes to the true distribution.
+
+As $n \to infty$, the likleihood dominates the posterior distribution.
+
+There are cases in which the normal approximation is incorrect.
+
+1.  parameters are non-identified
+1.  the number of parameters increases with sample size
+1.  aliasing or non-identified parameters due to label switching
+1.  unbounded likelihoods. This can happen if variance parameters go to zero.
+1.  improper posterior distributions
+1.  prior distributions that exclude the point of convergence. See Cromwell's Rule.
+1.  convergence to the edge of the parameter space
+1.  tails of the distribution can be inaccurate even if the normal approximation converges to the correct value; e.g. the normal approximation will still place a non-zero density on negative values of a non-negative parameter.
 
 ## References
 
@@ -151,3 +185,5 @@ $$
 -   @GelmanJakulinPittauEtAl2008a discusses using Cauchy(0, 2.5) for prior distributions
 -   @Gelman2006a provides a prior distribution on variance parameters in hierarchical models.
 -   @PolsonScott2012a on using Half-Cauchy priors for scale parameters
+
+[^expconj]: <https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions>

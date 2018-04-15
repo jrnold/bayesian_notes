@@ -12,19 +12,23 @@ library("haven")
 
 The posterior distribution is the probability distribution $\Pr(\theta | y)$.
 
-One we have the posterior distribution, or more often a sample from the posterior distribution, it is relatively easy to perform inference on any function of the posterior.
+One we have the posterior distribution, or more often a sample from the posterior
+distribution, it is relatively easy to perform inference on any function of the posterior.
 
 Common statistics used to summarize the posterior distribution:
 
-- mean: $\E(p(\theta | y)) \approx \frac{1}{S} \sum_{i = 1}^S \theta^{(s)}$
-- median: $\median(p(\theta | y)) \approx \median \theta^{(s)}$
-- quantiles: 2.5%, 5%, 25%, 50%, 75%, 95%, 97.5%
-- credible interval:
+-   mean: $\E(p(\theta | y)) \approx \frac{1}{S} \sum_{i = 1}^S \theta^{(s)}$
 
-    - central credible interval: the interval between the p/2% and 1 - p/2% quantiles
-    - highest posterior density interval: the narrowest interval containing p% of distribution
+-   median: $\median(p(\theta | y)) \approx \median \theta^{(s)}$
 
-- marginal densities
+-   quantiles: 2.5%, 5%, 25%, 50%, 75%, 95%, 97.5%
+
+-   credible interval:
+
+    -   central credible interval: the interval between the $p/2%$ and $1 - p/2%$ quantiles
+    -   highest posterior density interval: the narrowest interval containing $p%$ of distribution
+
+-   marginal densities
 
 ## Functions of the Posterior Distribution
 
@@ -35,10 +39,10 @@ $f(\theta^{(1)}), \dots, f(\theta^{(S)})$ are a sample from $p(f(\theta) | y)$.
 
 This is not easy for methods like MLE that produce point estimates:
 
-- Even in OLS, non-linear functions coefficients generally require either the Delta method or bootstrapping to calculate confidence intervals.
-- @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals
-- See @Rainey2016b on "transformation induced bias"
-- See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code
+-   Even in OLS, non-linear functions coefficients generally require either the Delta method or bootstrapping to calculate confidence intervals.
+-   @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals
+-   See @Rainey2016b on "transformation induced bias"
+-   See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code
 
 ## Marginal Effects
 
@@ -122,7 +126,6 @@ mod_fit <- sampling(mod, data = mod_data)
 mod_fit
 ```
 
-
 The function `r rdoc("rstan", "extract")` extracts parameters from
 the `r rdoc("rstan", "stanfit")` object as a list with an element for each parameter.
 ```{r}
@@ -180,9 +183,19 @@ ggplot() +
 ```
 The plot above also includes a rug with the observed values of `changenonslav` in the sample.
 
--  **Q:** For each value of `changenonslav`, what is the probability that the marginal effect of `slavicshare` is greater than 0?
--  **Q:** Re-estimate the model, but calculate the marginal effect of `slavicshare` for all observed values of `changenonslav` in the sample. For each observation, calculate the probability that the marginal effect is greater than 0. What proportion of observations is the probability that the marginal effect is greater than zero.
--  **Q:** Suppose you want to calculate the expected probability that the marginal effect of `slavicshare` is greater than zero in the sample. Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare` on the `xenovote`. Consider these two calculations:
+-   **Q:** For each value of `changenonslav`, what is the probability that the
+   marginal effect of `slavicshare` is greater than 0?
+
+-   **Q:** Re-estimate the model, but calculate the marginal effect of
+    `slavicshare` for all observed values of `changenonslav` in the sample. For
+    each observation, calculate the probability that the marginal effect is
+    greater than 0. What proportion of observations is the probability that the
+    marginal effect is greater than zero.
+
+-   **Q:** Suppose you want to calculate the expected probability that the
+    marginal effect of `slavicshare` is greater than zero in the sample.
+    Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare`
+    on the `xenovote`. Consider these two calculations:
     $$
     \frac{1}{N} \sum_{i = 1}^n \left( \frac{1}{S} \sum_{s = 1}^S I(\theta^{(s)}_i > 0) \right)
     $$
@@ -191,4 +204,7 @@ The plot above also includes a rug with the observed values of `changenonslav` i
     \frac{1}{S} \sum_{s = 1}^S \left( \frac{1}{N} \sum_{i = 1}^N I(\theta^{(s)}_i > 0) \right) .
     $$
     Are they the same? What are their substantive interpretations?
--   **Q:** Construct the same plot but for Figure 5(b) in @BerryGolderMilton2012a, which displays the marginal effects of $\Delta$ *non-Slavic* on *Xenophobic* voting.
+
+-   **Q:** Construct the same plot but for Figure 5(b) in
+    @BerryGolderMilton2012a, which displays the marginal effects
+    of $\Delta$ *non-Slavic* on *Xenophobic* voting.

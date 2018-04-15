@@ -1,11 +1,17 @@
 # Shrinkage and Regularization {#shrinkage-regularization}
 
-*Shrinkage estimation* deliberately introduces biases into the model to improve overall performance, often at the cost of individual estimates [@EfronHastie2016a, p. 91].
+*Shrinkage estimation* deliberately introduces biases into the model to improve
+*overall performance, often at the cost of individual estimates
+*[@EfronHastie2016a, p. 91].
 
-This is opposed to MLE, which produces unbiased estimates (asymptotically, given certain regularity conditions). Likewise, the Bayesian estimates with non- or weakly-informative priors will produce estimates similar to the MLE.
-With shrinkage, the priors are used to produce estimates *different* than the MLE case.
+This is opposed to MLE, which produces unbiased estimates (asymptotically,
+given certain regularity conditions). Likewise, the Bayesian estimates with
+non- or weakly-informative priors will produce estimates similar to the MLE.
+With shrinkage, the priors are used to produce estimates *different* than the
+MLE case.
 
-*Regularization* describes any method that reduces variability in high dimensional estimation or prediction problems [@EfronHastie2016a].
+*Regularization* describes any method that reduces variability in high
+dimensional estimation or prediction problems [@EfronHastie2016a].
 
 ## Normal Linear Regression Model
 
@@ -19,13 +25,22 @@ where $\vec{x}$ is a $k$-vector of predictors, and $\vec{\beta}$ are the coeffic
 
 What priors do we put on $\beta$?
 
--   **Improper priors:** $\beta_k \propto 1$ This produces the equivalent of MLE estimates.
--   **Non-informative priors:** These are priors which have such wide variance that they have little influence on the posterior, e.g. $\beta_k \sim \dnorm(0, 1e6)$. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.
+-   **Improper priors:** $\beta_k \propto 1$ This produces the equivalent of
+    MLE estimates.
+
+-   **Non-informative priors:** These are priors which have such wide variance
+    that they have little influence on the posterior, e.g.
+    $\beta_k \sim \dnorm(0, 1e6)$. The primary reason for these (as opposed to
+    simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling
+    as used in JAGS or BUGS, require proper prior distributions for all parameters.
 
 **Shrinkage priors** have a couple characteristics
 
-- they push $\beta_k \to 0$
-- while in the other cases, the scale of the prior on $\beta$ is fixed, in shrinkage priors there is often a hyperprior on it. E.g. $\beta_k \sim \dnorm(0, \tau)$, where $\tau$ is also a parameter to be estimated.
+-   they push $\beta_k \to 0$
+
+-   while in the other cases, the scale of the prior on $\beta$ is fixed, in
+    shrinkage priors there is often a hyperprior on it, e.g.,
+    $\beta_k \sim \dnorm(0, \tau)$, where $\tau$ is also a parameter to be estimated.
 
 ## Penalized Regression
 
@@ -37,8 +52,8 @@ where $f$ is some sort of penalty function on $\beta$ that penalizes larger (in 
 
 Two common forms
 
-- Ridge: uses an $\ell_2$ penalty: $\vec{beta}^2$
-- Lasso: uses an $\ell_1$ penalty: $|\vec{\beta}|$
+-   Ridge: uses an $\ell_2$ penalty: $\vec{beta}^2$
+-   Lasso: uses an $\ell_1$ penalty: $|\vec{\beta}|$
 
 ### Ridge Regression
 
@@ -61,19 +76,29 @@ where $d_j$ are the singular values of $X$
 
 Some implications:
 
-- $\hat{\vec{\beta}}$ exists even if $\hat{\vec{\beta}}_{\text{OLS}}$ ($(\mat{X}\T\mat{X})^{-1}$), i.e. cases of $n > p$ and collinearity, does not exist.
-- If $\mat{X}$ is orthogonal (mean 0, unit variance, zero correlation), $\mat{X}\T \mat{X} = n \mat{I}_p$ then
-  $$
-  \hat{\vec{\beta}}_{\text{ridge}} = \frac{n}{n + \lambda} \hat{\vec{\beta}}_{\text{ols}}
-  $$
-  meaning
-  $$
-  |\hat{\vec{\beta}}_{\text{ols}}| >
-  |\hat{\vec{\beta}}_{\text{ridge}}| \geq 0
-  $$
-- Ridge does not produce sparse estimates, since $(n / (n + \lambda)) \vec{\vec{\beta}}_{ols} = 0$ iff $\vec{\vec{\beta}}_{ols} = 0$
-- $\lambda = 0$, then there is no shrinkage
-- $\lambda \to \infty$, then there is complete shrinkage and all coefficients are tend to 0.
+-   $\hat{\vec{\beta}}$ exists even if $\hat{\vec{\beta}}_{\text{OLS}}$
+    ($(\mat{X}\T\mat{X})^{-1}$), i.e. cases of $n > p$ and collinearity, does
+    not exist.
+
+-   If $\mat{X}$ is orthogonal (mean 0, unit variance, zero correlation),
+    $\mat{X}\T \mat{X} = n \mat{I}_p$ then
+    $$
+    \hat{\vec{\beta}}_{\text{ridge}} = \frac{n}{n + \lambda}
+    \hat{\vec{\beta}}_{\text{ols}}
+    $$
+    meaning,
+    $$
+    |\hat{\vec{\beta}}_{\text{ols}}| >
+    |\hat{\vec{\beta}}_{\text{ridge}}| \geq 0
+    $$
+
+-   Ridge does not produce sparse estimates, since
+    $(n / (n + \lambda)) \vec{\vec{\beta}}_{ols} = 0$ iff $\vec{\vec{\beta}}_{ols} = 0$
+
+-   $\lambda = 0$, then there is no shrinkage
+
+-   $\lambda \to \infty$, then there is complete shrinkage and all
+    coefficients are tend to 0.
 
 ### Lasso
 
@@ -83,13 +108,15 @@ $$
 $$
 The absolute value penalty will put some $\hat{\beta}_k = 0$, producing a "sparse" solution.
 
-
 Properties:
 
-- Unlike ridge regression, it sets some coefficients to exactly 0
-- If variables are perfectly correlated, there is no unique solution (unlike the ridge regression)
-- Used as the best convex approximation of the "best subset selection" regression problem, which finds the number of nonzero entries in a vector.
+-   Unlike ridge regression, it sets some coefficients to exactly 0
 
+-   If variables are perfectly correlated, there is no unique solution
+    (unlike the ridge regression)
+
+-   Used as the best convex approximation of the "best subset selection"
+    regression problem, which finds the number of nonzero entries in a vector.
 
 ## Bayesian Shrinkage Priors
 
@@ -120,24 +147,25 @@ $$
 \beta_k \sim \dlaplace(0, \tau)
 $$
 
-## Differences between Bayesian Shrinkage and Penalized Likelihood
+## Penalized Likelihood
 
-There are several differences between Bayesian approaches to shrinkage and penalized ML approaches.
+There are several differences between Bayesian approaches to shrinkage and
+penalized ML approaches.
 
 The point estimates:
 
-- ML: mode
-- Bayesian: posterior mean (or median)
+-   ML: mode
+-   Bayesian: posterior mean (or median)
 
 In Lasso
 
-- ML: the mode produces exact zeros and sparsity
-- Bayesian: posterior mean is not sparse (zero)
+-   ML: the mode produces exact zeros and sparsity
+-   Bayesian: posterior mean is not sparse (zero)
 
 Choosing the shrinkage penalty:
 
-- ML: cross-validation
-- Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.
+-   ML: cross-validation
+-   Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.
 
 ## Hierarchical Shrinkage Priors
 
@@ -162,7 +190,6 @@ $$
 This induces even more shrinkage towards zero than the
 
 If $\nu = 1$, then this is the Horseshoe+ prior as introduced by @BhadraDattaPolsonEtAl2015a.
-
 
 In linear regression
 $$
@@ -261,8 +288,6 @@ f_\kappa(\kappa_j) &= f_{\lambda^2}(\lambda_j^2(\kappa_j)) \left| \frac{\partial
 \end{aligned}
 $$
 
-
-
 I may also be useful to consider the distribution of $\kappa$ given the distribution of $\tau$.
 Note that
 $$
@@ -285,7 +310,9 @@ f_\kappa(\kappa_j) &= f_\tau(\tau(\kappa_j)) \left| \frac{\partial \tau(\kappa_j
 \end{aligned}
 $$
 
-- Allan Riddell. [Epistemology of the corral: regression and variable selection with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html) March 10, 2014.
+-   Allan Riddell. [Epistemology of the corral: regression and variable selection
+    with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html)
+    March 10, 2014.
 
 ## Example
 
@@ -391,7 +418,6 @@ plot_coefpaths <- function(coefpaths, stat = "mean") {
 plot_coefpaths(coefpath_normal)
 ```
 
-
 ```{r plot_coefpath_loo}
 plot_coefpath_loo <- function(x) {
   map_df(x,
@@ -411,7 +437,6 @@ plot_coefpath_loo <- function(x) {
 ```{r}
 plot_coefpath_loo(coefpath_normal)
 ```
-
 
 Which is the "best" $tau$?
 ```{r get_best_tau}
@@ -446,7 +471,6 @@ summary(fit_normal, "tau")$summary
 ```{r}
 loo(extract_log_lik(fit_normal))
 ```
-
 
 ```{r}
 mcmc_dens(as.array(fit_normal), "tau")
@@ -612,8 +636,6 @@ ggplot(all_coefpaths, aes(x = log2(tau), y = mean, colour = model)) +
   facet_wrap(~ parameter)
 ```
 
-
-
 ## Shrinkage Parameters
 
 Given the linear Gaussian regression model
@@ -735,7 +757,6 @@ Note that for these distributions:
 -   HS for $df = 0$: prior on shrinkage parameter puts weight on either completely shrunk ($\kappa = 1$) or un-shrunk ($\kappa = 0$)
 -   HS for $df = 3$: prior on shrinkage parameter puts a lot of weight on the parameter being completely shrunk ($\kappa = 1$), but truncates the density for completely un-shrunk.
 
-
 ## Choice of Hyperparameter on $\tau$
 
 The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
@@ -751,11 +772,11 @@ $$
 
 @PasKleijnVaart2014a suggest
 $$
-\tau \sim \dhalfcauchy(0, p^* / n)
+\tau \sim \dhalfcauchy(0, p^{*} / n)
 $$
 where $p^*$ is the true number of non-zero parameters,
 and $n$ is the number of observations.
-They suggest $\tau = p^* / n$ or $\tau p^*  / n \sqrt{log(n / p^*)}$.
+They suggest $\tau = p^{*} / n$ or $\tau p^{*}  / n \sqrt{log(n / p^{*})}$.
 Additionally, they suggest restricting $\tau$ to $[0, 1]$.
 
 @PiironenVehtari2016a understand the choice of the prior on $\tau$ as the implied prior on the number of effective parameters.
@@ -836,18 +857,17 @@ $$
 \end{aligned}
 $$
 
-
 Why is BMA difficult?
 
-- The posterior is sensitive to the model prior, $p(M_k)$.
-- Calculating the model evidence, $p(y | M_k)$, is computationally difficult, except in special cases
-- The model space can be very large. In regression, it is $2^K$. This means that it may be impossible to compute model probabilities for the full set of models. Thus, it may require sampling from the (discrete) model space.
+-   The posterior is sensitive to the model prior, $p(M_k)$.
+-   Calculating the model evidence, $p(y | M_k)$, is computationally difficult, except in special cases
+-   The model space can be very large. In regression, it is $2^K$. This means that it may be impossible to compute model probabilities for the full set of models. Thus, it may require sampling from the (discrete) model space.
 
 Uses of BMA:
 
-1. model selection or choice: select the most likely model
-2. average posterior estimates
-3. average prediction. Generally predictions from models using BMA have lower risk (Raftery)
+1.  model selection or choice: select the most likely model
+1.  average posterior estimates
+1.  average prediction. Generally predictions from models using BMA have lower risk (Raftery)
 
 For the common case of linear regression,
 $$
@@ -864,10 +884,10 @@ See @FragosoNeto2015a for a recent review. See @VolinskyRafteryMadiganEtAl1999a 
 
 There are several R packages that implement BMA. See @AminiShahramParmeterChristopher2011a for a review of R packages.
 
-- `r rpkg("BAS")` See its vignette @Zeugner2011a.
-- `r rpkg("BMA")` See its vignette @RafteryHoetingVolinskyEtAl2017a.
-- `r rpkg("BMS")` See its vignette @Clyde2017a.
-- `r rpkg("ensembleBMA")` uses *BMA* to generates ensemble BMA forecasts
+-   `r rpkg("BAS")` See its vignette @Zeugner2011a.
+-   `r rpkg("BMA")` See its vignette @RafteryHoetingVolinskyEtAl2017a.
+-   `r rpkg("BMS")` See its vignette @Clyde2017a.
+-   `r rpkg("ensembleBMA")` uses *BMA* to generates ensemble BMA forecasts
 
 ### Zellner's g-prior
 
@@ -893,10 +913,12 @@ or putting a hyperprior on $g$.
 
 See @LeySteel2012a for a recent overview of g-priors.
 
-
 ## Slab and Spike Priors
 
-In the case of the linear regression, an alternative to BMA is to use a spike-and-slab prior [@MitchellBeauchamp1988a, @GeorgeMcCulloch1993a, @IshwaranRao2005a], which is a prior that is a discrete mixture of a point mass at 0 and a non-informative distribution. The weight over these who alternatives is similar to a
+In the case of the linear regression, an alternative to BMA is to use a
+spike-and-slab prior [@MitchellBeauchamp1988a, @GeorgeMcCulloch1993a, @IshwaranRao2005a],
+which is a prior that is a discrete mixture of a point mass at 0 and a
+non-informative distribution.
 
 The spike and slab prior is a "two-group" solution
 
@@ -911,6 +933,8 @@ See the R package `r rpkg("spikeslab")` and he accompanying article [@IshwaranKo
 
 ## Technical Notes
 
+<!-- lint disable emphasis-marker -->
+
 Marginal density of the horseshoe+ prior @CarvalhoPolsonScott2010a has no closed form but some bounds
 are available.
 If $\tau^2 = 1$, then the marginal density of the horseshoe+ prior has the following properties:
@@ -921,6 +945,8 @@ $$
 \end{aligned}
 $$
 where $K = 1 / \sqrt{2 \pi^3}$.
+
+<!-- lint enable emphasis-marker -->
 
 Marginal density of the horseshoe+ prior @BhadraDattaPolsonEtAl2015a:
 If $\tau^2 = 1$, then the marginal density of the horseshoe+ prior has the following properties:
@@ -934,7 +960,7 @@ $$
 **rstanarm** uses a slightly different parameterization for the Bayesian lasso.[^rstanarm-lasso]
 $$
 \begin{aligned}[t]
-\beta_k &\sim b + s \frac{1}{\lambda} \sqrt{2 \omega} \beta_k^*  \\
+\beta_k &\sim b + s \frac{1}{\lambda} \sqrt{2 \omega} \beta_k^{*}  \\
 \frac{1}{\lambda} &\sim \dchisq(df) \\
 \omega &\sim \dexp(1) \\
 \beta^*_k &\sim \dnorm(0, 1)
@@ -945,19 +971,16 @@ Apart from the decomposition into a scale-location family, this is simply puttin
 [^rstanarm-lasso]: See the source code [here](https://github.com/stan-dev/rstanarm/blob/b78c2b5190db8b62da93f0c686d0c78da4e5bb9b/inst/chunks/tparameters_glm.stan#L22)
 and [here](https://github.com/stan-dev/rstanarm/blob/b78c2b5190db8b62da93f0c686d0c78da4e5bb9b/inst/chunks/priors_glm.stan#L25).
 
+| Prior for $\theta_i$      | Density for $\lambda_i$                       | Density for $\kappa_i$                                                                                       |
+| ------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Double-exponential        | $\lambda_i \exp(\lambda_i^2 / 2)              | $\kappa_i^{-2} \exp\left( \frac{- 1}{2 \kappa_i} \right)$                                                    |
+| Cauchy                    | $\lambda_i^{-2} \exp(-1 / \lambda_i^2)$       | $\kappa_i^{-\frac{1}{2}} (1 - \kappa_i)^{- \frac{3}{2}} \exp \left(\frac{\kappa_i}{2 (1 - \kappa_i)}\right)$ |
+| Strawderman-Berger        | $\lambda_i (1 + \lambda_i^2)^{-\frac{3}{2}}$  | $\kappa_i^{-\frac{1}{2}}$                                                                                    |
+| Normal-exponential-gamma  | $\lambda_i (1 + \lambda_i^2)^{-(c + 1)}$      | $\kappa_i^{c - 1}$                                                                                           |
+| Normal-Jeffreys           |  $1 / \lambda_i$                              | $\kappa_i^{-1} (1 - \kappa_i)^{-1}$                                                                          |
+| Horseshoe                 | $(1 + \lambda_i^2)^{-1}$                      | $\kappa_i^{-1/2} (1 - \kappa_i)^{-1/2}$                                                                      |
 
----------------------------------- -------------------------------------------- -------------------------------------------------------------------------------
-Prior for $\theta_i$               Density for $\lambda_i$                      Density for $\kappa_i$
----------------------------------- -------------------------------------------- -------------------------------------------------------------------------------
-Double-exponential                 $\lambda_i \exp(\lambda_i^2 / 2)             $\kappa_i^{-2} \exp\left( \frac{- 1}{2 \kappa_i} \right)$
-Cauchy                             $\lambda_i^{-2} \exp(-1 / \lambda_i^2)$      $\kappa_i^{-\frac{1}{2}} (1 - \kappa_i)^{- \frac{3}{2}} \exp \left(\frac{\kappa_i}{2 (1 - \kappa_i)}\right)$
-Strawderman-Berger                 $\lambda_i (1 + \lambda_i^2)^{-\frac{3}{2}}$ $\kappa_i^{-\frac{1}{2}}$
-Normal-exponential-gamma           $\lambda_i (1 + \lambda_i^2)^{-(c + 1)}$     $\kappa_i^{c - 1}$
-Normal-Jeffreys                    $1 / \lambda_i$                              $\kappa_i^{-1} (1 - \kappa_i)^{-1}$
-Horseshoe                           $(1 + \lambda_i^2)^{-1}$                     $\kappa_i^{-1/2} (1 - \kappa_i)^{-1/2}$
----------------------------------- -------------------------------------------- -------------------------------------------------------------------------------
-
-Thresh-holding. The horseshoe has an implicit threshold of $|T_\tau(y) - y| < \sqrt{2 \sigma ^ 2 \log (1 / \tau))$ [@PasKleijnVaart2014a].
+Thresholding: The horseshoe has an implicit threshold of $|T_\tau(y) - y| < \sqrt{2 \sigma ^ 2 \log (1 / \tau))$ [@PasKleijnVaart2014a].
 
 ## Multiple Comparisons and Thresholding rules
 
@@ -970,16 +993,20 @@ Although discussing hierarchical models, @GelmanHillYajima2012a compares the shr
 Another (related) issue is sparsification. The decision rule as to whether a variable
 is 0 (included), or not.
 
--   The sparse-shrinkage priors from @CarvalhoPolsonScott2010a are motivated by a two-group
-model (either $\beta = 0$ or $\beta \neq 0$). They suggest a decision rule of considering
-$\beta \neq 0$ when $E(\kappa_j) < 0.5$ where $\kappa_j$ is a shrinkage parameter described in the paper.
--   @HahnCarvalho2015a propose estimating the posterior distribution via shrinkage, and then summarizing the posterior distribution.
--   @PiironenVehtari2015a propose something similar in spirit, in which a second step projects the initial shrinkage model to a sparse model
+-   The sparse-shrinkage priors from @CarvalhoPolsonScott2010a are motivated
+    by a two-group model (either $\beta = 0$ or $\beta \neq 0$). They suggest
+    a decision rule of considering $\beta \neq 0$ when $E(\kappa_j) < 0.5$ where $\kappa_j$ is a shrinkage parameter described in the paper.
+
+-   @HahnCarvalho2015a propose estimating the posterior distribution via
+    shrinkage, and then summarizing the posterior distribution.
+
+-   @PiironenVehtari2015a propose something similar in spirit, in which a
+    second step projects the initial shrinkage model to a sparse model
 
 ## Examples of Applications of Sensitivity Analysis
 
 The memorably titled "Let's Take the Con Out of Econometrics" [@Leamer1983a] argues that economic models fail to account for model uncertainty.
-It proposes using an ensemble-like method called extreme-bounds. 
+It proposes using an ensemble-like method called extreme-bounds.
 On economic growth: (confidence bounds) @Sala-I-Martin1997a, (Bayesian model averaging) @FernandezLeySteel2001a, @LeySteel2009a, @EicherPapageorgiouRaftery2009a, @BrockDurlaufWest2003a. Wars: @HegreSambanis2006a use extreme bounds for civil war onset.
 @WardGreenhillBakke2010a use model comparison and a step-wise method, but are focused on the difference between p-values and prediction; @Goenner2004a use BMA for inter-state wars (democratic peace).
 @MontgomeryHollenbachWard2012a and @MontgomeryNyhan2010a apply BMA to multiple political science issues including voting, presidential elections, and civil war onset.
