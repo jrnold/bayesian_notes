@@ -32,7 +32,7 @@ bball1970 <-
   mutate(bball1970,
          BatAvg1 = Hits / AB,
          BatAvg2 = RemainingHits / RemainingAB)
-bball1970
+head(bball1970)
 ```
 
 Let $y_i$ be the number of hits in the first 45 at bats for player $i$,
@@ -87,32 +87,32 @@ bball1970_data <- list(
 ```
 Create a list to store models:
 ```{r}
-models <- list()
+# models <- list()
 ```
 
 ```{r results='hide'}
 models[["nopool"]] <- stan_model("stan/binomial-no-pooling.stan")
 ```
 ```{r}
-models[["nopool"]]
+# models[["nopool"]]
 ```
 
 ```{r results='hide'}
 models[["pool"]] <- stan_model("stan/binomial-complete-pooling.stan")
 ```
 ```{r}
-models[["pool"]]
+# models[["pool"]]
 ```
 
 ```{r results='hide'}
 models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
 ```
 ```{r}
-models[["partial"]]
+# models[["partial"]]
 ```
 
 Sample from all three models a
-```{r results='hide'}
+```{r results='hide', message=FALSE, warning=FALSE}
 fits <- map(models, sampling, data = bball1970_data,
             refresh = -1) %>%
   set_names(names(models))

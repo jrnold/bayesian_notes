@@ -188,9 +188,9 @@ for all $j$.
 
 ### Varying Intercept Model
 
- ### Varying Slope Model
+### Varying Slope Model
 
- $$
+$$
 \begin{aligned}
 \mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
 \mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{basement}_i
@@ -211,7 +211,7 @@ $$
 \end{aligned}
 $$
 
- Alternatively, we can model model the county-level intercepts.
+Alternatively, we can model model the county-level intercepts.
 The values of each county intercept is a function of the county-level uranium.
 $$
 \begin{aligned}
@@ -433,7 +433,7 @@ Additionally, the Bayesian methods have better frequentist coverage than ML meth
 
 @BeckKatz2007a show that ML random coefficient models are superior in terms of efficiency to many types of pooled and un-pooled estimators in small samples.
 
- ### Correlation between Predictors and Errors
+### Correlation between Predictors and Errors
 
 @BafumiGelman2006a analyze this case.
 
