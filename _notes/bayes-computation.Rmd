@@ -34,7 +34,7 @@ How to calculate a posterior distribution?
     2.  Variational Bayes
     3.  Expectation propogation
   
-See [@BDA Sec 10.4]
+See [@BDA3 Sec 10.4]
   
 ## How many simulation draws are needed?
 

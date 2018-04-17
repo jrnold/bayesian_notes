@@ -109,4 +109,4 @@ spell_check_pandoc <- function(path, ignore = character(), lang = "en_US") {
 files <- c(dir(here::here(), pattern = "\\.(Rmd)"),
            here::here("README.md"))
 ignore <- readLines(here::here("WORDLIST"))
-foo <- spell_check_pandoc(files, ignore = ignore)
+print(spell_check_pandoc(files, ignore = ignore), n = 100)

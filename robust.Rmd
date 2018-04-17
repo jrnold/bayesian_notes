@@ -16,7 +16,10 @@ library("rubbish")
 ## Linear Regression with Student t distributed errors
 
 Like OLS, Bayesian linear regression with normally distributed errors is
-sensitive to outliers. The normal distribution has narrow tail probabilities.
+sensitive to outliers. 
+This is because the normal distribution has narrow tail probabilities, 
+with 99.8% of the probability within three standard deviations.
+Thus, if we estimate 
 
 This plots the normal, Double Exponential (Laplace), and Student-t ($df = 4$)
 distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.

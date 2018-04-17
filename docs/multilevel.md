@@ -8,7 +8,6 @@ library("rstanarm")
 library("tidyverse")
 ```
 
-
 Multilevel models are commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
 
@@ -71,14 +70,15 @@ $$
 y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
 \end{aligned}
 $$
-These models go by different names in different literatures: *hierarchical (generalized) linear models*, *nested data models*, *mixed models*, *random coefficients*, *random-effects*, *random parameter models*,  *split-plot designs* [^mlm-names].
-
-[^mlm-names]: <https://en.wikipedia.org/wiki/Multilevel_model>
+These models go by different names in different literatures:
+*hierarchical (generalized) linear models*, *nested data models*,
+*mixed models*, *random coefficients*, *random-effects*,
+*random parameter models*,  *split-plot designs* [^mlm-names].
 
 The model can be extended to other cases:
 
-- generalized linear models
-- multiple parameters
+-   generalized linear models
+-   multiple parameters
 
 One of the difficulties in these models is the prior to the covariance matrix, $\Omega$.
 
@@ -188,11 +188,9 @@ for all $j$.
 
 ### Varying Intercept Model
 
+ ### Varying Slope Model
 
-### Varying Slope Model
-
-
-$$
+ $$
 \begin{aligned}
 \mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
 \mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{basement}_i
@@ -213,8 +211,7 @@ $$
 \end{aligned}
 $$
 
-
-Alternatively, we can model model the county-level intercepts.
+ Alternatively, we can model model the county-level intercepts.
 The values of each county intercept is a function of the county-level uranium.
 $$
 \begin{aligned}
@@ -352,13 +349,13 @@ y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
 $$
 Each group has size $n_j$.
 
-Sample size, $n_j$               Estimate of $\hat{\mu}_j$
--------------------------------- ---------------------------------------------------------------
-$n_j = 0$                        $\hat{\mu}_j = \gamma$ (complete pooling)
-$n_j < \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j$ closer to $\gamma$
-$n_j = \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$
-$n_j > \frac{\sigma^2}{\tau^2}$  $\hat{\mu}_j$ closer to $\bar{y}_j$
-$n_j = \infty$                   $\hat{\mu}_j = \bar{y}_j$ (no pooling)
+| Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
+| ------------------------------- | --------------------------------------------------------------- |
+| $n_j = 0$                       | $\hat{\mu}_j = \gamma$ (complete pooling)                       |
+| $n_j < \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\gamma$                                |
+| $n_j = \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$      |
+| $n_j > \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\bar{y}_j$                             |
+| $n_j = \infty$                  | $\hat{\mu}_j = \bar{y}_j$ (no pooling)                          |
 
 If the hyperparameters were known, the posterior of $\mu_j$ is
 $$
@@ -401,20 +398,21 @@ $$
 A common application for these models are Time-Series Cross-Section (TSCS) or panel models.
 In this case, both the time and units can be modeled.
 
+ ## Extensions
 
-## Extensions
+-   Including group-level covariates
 
-- Including group-level covariates
-- Prior distributions
-- Prediction
+-   Prior distributions
 
-    - new obs in existing groups
-    - new group
-    - new obs in new group
+-   Prediction
 
-- Modeling correlation between intercept and slopes
-- Non-nested models
+    -   new obs in existing groups
+    -   new group
+    -   new obs in new group
 
+-   Modeling correlation between intercept and slopes
+
+-   Non-nested models
 
 ## Miscellaneous
 
@@ -435,62 +433,87 @@ Additionally, the Bayesian methods have better frequentist coverage than ML meth
 
 @BeckKatz2007a show that ML random coefficient models are superior in terms of efficiency to many types of pooled and un-pooled estimators in small samples.
 
-
-### Correlation between Predictors and Errors
+ ### Correlation between Predictors and Errors
 
 @BafumiGelman2006a analyze this case.
 
-The standard suggestion in frequentist literature is to use a Hausman test where the null hypothesis is that random effects are consistent. However, @ClarkLinzer2014a note that in small samples this is likely to fail to reject random effects; and in large samples, random effects behave like fixed effects anyways.
+The standard suggestion in frequentist literature is to use a Hausman test
+where the null hypothesis is that random effects are consistent. However,
+@ClarkLinzer2014a note that in small samples this is likely to fail to reject
+random effects; and in large samples, random effects behave like fixed effects
+anyways.
 
-
-## References
+ ## References
 
 Texts and chapters on multi-level analysis:
 
-- Bayesian
+-   Bayesian
 
-    - @GelmanHill2007a [Ch. 11-17].
-    - @BDA3 [Ch 5] "Hierarchical Models"
-    - @BDA3 [Ch 15] "Hierarchical Linear Models"
-    - @Jackman2009a [CHh. 7]
-    - @Draper2008a
+    -   @GelmanHill2007a [Ch. 11-17].
+    -   @BDA3 [Ch 5] "Hierarchical Models"
+    -   @BDA3 [Ch 15] "Hierarchical Linear Models"
+    -   @Jackman2009a [CHh. 7]
+    -   @Draper2008a
 
-- Frequentist
+-   Frequentist
 
-    - @Goldstein2011a
-    - @SnijdersBosker2011a
-    - @Rabe-HeskethSkrondal2012a
-    - @Jiang2007a
-
+    -   @Goldstein2011a
+    -   @SnijdersBosker2011a
+    -   @Rabe-HeskethSkrondal2012a
+    -   @Jiang2007a
 
 Stan model examples:
 
-- Stan models for [ARM](https://github.com/stan-dev/example-models/wiki/ARM-Models)
-- <http://mc-stan.org/documentation/case-studies/radon.html>
-- <https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/>
-
+-   Stan models for [ARM](https://github.com/stan-dev/example-models/wiki/ARM-Models)
+-   <http://mc-stan.org/documentation/case-studies/radon.html>
+-   <https://biologyforfun.wordpress.com/2016/12/08/crossed-and-nested-hierarchical-models-with-stan-and-r/>
 
 Examples of multilevel models
 
-- @Western1998a: economic growth for OECD countries
-- @GelmanKing1993a: US election polling
-- @ParkGelmanBafumi2004a: multi-level models of opinion polls combined with post-stratification to extrapolate national opinion surveys to regions.
-- @SteenbergenJones2002a: mostly an intro/review of MLM, but uses the cross-country Eurobarometer to model support for the EU
-- @GelmanShorBafumiEtAl2007a: state-level opinion polls
-- @RaudenbushBryk2001a: student performance with student and school-level indicators
-- @Gilardi2010a: policy diffusion
-- @ORourkeSinnott2006a: attitudes toward immigration
-- @AndersenFetner2008a: ethnic and social tolerance
-- @Weldon2006a: ethnic and social tolerance
-- @Arzheimer2009a: right-wing voting
-- @HoogheReeskensStolleEtAl2009a: social and political trust
-- @AndersonSinger2008a: satisfaction with democracy
-- @MeerDethScheepers2009a: political participation
-- @IversenRosenbluth2006a: political economy of the gender wage gap
-- @HoogheMarks2004a: support for European integration
-- @LaxPhillips2009a: American politics using states and neighborhoods
-- @Voeten2008a: judicial decision making
-- @FranchinoHoeyland2009a: legislative politics
-- @DenisovaEllerFryeEtAl2009a: politics of economic reforms
-- @AitkinLongford1986a, @GoldsteinYangOmarEtAl2000a, @GoldsteinRasbashYangEtAl1993a: education
-- @GoldsteinYangOmarEtAl2000a: medicine
+-   @Western1998a: economic growth for OECD countries
+
+-   @GelmanKing1993a: US election polling
+
+-   @ParkGelmanBafumi2004a: multi-level models of opinion polls combined with post-stratification to extrapolate national opinion surveys to regions.
+
+-   @SteenbergenJones2002a: mostly an intro/review of MLM, but uses the
+    cross-country Eurobarometer to model support for the EU
+
+-   @GelmanShorBafumiEtAl2007a: state-level opinion polls
+
+-   @RaudenbushBryk2001a: student performance with student and school-level indicators
+
+-   @Gilardi2010a: policy diffusion
+
+-   @ORourkeSinnott2006a: attitudes toward immigration
+
+-   @AndersenFetner2008a: ethnic and social tolerance
+
+-   @Weldon2006a: ethnic and social tolerance
+
+-   @Arzheimer2009a: right-wing voting
+
+-   @HoogheReeskensStolleEtAl2009a: social and political trust
+
+-   @AndersonSinger2008a: satisfaction with democracy
+
+-   @MeerDethScheepers2009a: political participation
+
+-   @IversenRosenbluth2006a: political economy of the gender wage gap
+
+-   @HoogheMarks2004a: support for European integration
+
+-   @LaxPhillips2009a: American politics using states and neighborhoods
+
+-   @Voeten2008a: judicial decision making
+
+-   @FranchinoHoeyland2009a: legislative politics
+
+-   @DenisovaEllerFryeEtAl2009a: politics of economic reforms
+
+-   @AitkinLongford1986a, @GoldsteinYangOmarEtAl2000a,
+    @GoldsteinRasbashYangEtAl1993a: education
+
+-   @GoldsteinYangOmarEtAl2000a: medicine
+
+[^mlm-names]: <https://en.wikipedia.org/wiki/Multilevel_model>

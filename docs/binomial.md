@@ -10,7 +10,6 @@ library("rubbish")
 library("bayz")
 ```
 
-
 Binomial models are used to an outcome that is a bounded integer,
 $$
 y_i \in 0, 1, 2, \dots, n .
@@ -35,7 +34,7 @@ $$
 
 Depending on the [link function](#link-functions), these are  logit and probit models that appear in the literature.
 
-### Link Functions {link-function}
+## Link Functions {link-function}
 
 The parameter $\pi \in (0, 1)$ is often modeled with a link function is and a linear predictor.
 $$
@@ -49,12 +48,15 @@ There are several common link functions, but they all have to map $R \to (0, 1)$
     \pi_i = \logistic(x_i\T \beta) = \frac{1}{1 + \exp(- x_i\T\beta)} .
     $$
     Stan function `softmax`.
+
 -   **Probit:** The CDF of the normal distribution.
     $$
     \pi_i = \Phi(x_i\T \beta)
     $$
     Stan function `normal_cdf`.
+
 -   **cauchit**: The CDF of the Cauchy distribution. Stan function `cauchy_cdf`.
+
 -   **cloglog**: The inverse of the conditional log-log function (cloglog) is
     $$
     \pi_i = 1 - \exp(-\exp(x_i\T \beta)) .
@@ -107,7 +109,6 @@ the following is true,
 $$
 y_i \sim \mathsf{binomial\_logit}(x_i \beta)
 $$
-
 
 ### Example: Vote Turnout
 
@@ -277,7 +278,7 @@ fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
 
 ## Case Control
 
-In binary outcome variables, sometimes it is useful to sample on the dependent variable. 
+In binary outcome variables, sometimes it is useful to sample on the dependent variable.
 For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.
 For most country-pairs, for most years, there is no conflict.
 If some data are costly to gather, it may be cost efficient to get data for conflicts and then randomly select a smaller number of non-conflicts on which to gather data.
@@ -286,10 +287,10 @@ The sample will no longer be representative, but the estimates can be corrected.
 The reason this works well, is that if there are very few 1's, additional 0's have little influence on the estimation (@KingZeng2001a).
 This should hold more generally will unbalanced classes; in some sense, the amount of effective observations is not much more than the number in the lowest category.
 
-@KingZeng2001a propose two corrections: 
+@KingZeng2001a propose two corrections:
 
-1. Correcting the intercept (prior correction)
-2. Weighting observations
+1.  Correcting the intercept (prior correction)
+1.  Weighting observations
 
 The *prior correction* notes that
 $$
@@ -331,8 +332,8 @@ It may also be okay to only correct the intercept in a generated quantities bloc
 
 An alternative approach is to use a *weighted likelihood*:
 
-- ones are weighted by $\tau / \bar{y}$
-- zeros are weighted by $(1 - \tau) / \bar{1 - \bar{y}}$
+-   ones are weighted by $\tau / \bar{y}$
+-   zeros are weighted by $(1 - \tau) / \bar{1 - \bar{y}}$
 
 The log likelihood would then be
 $$
@@ -352,14 +353,12 @@ if (y[i]) {
 
 See the example for [`Zelig-relogit`](http://docs.zeligproject.org/en/latest/zelig-relogit.html)
 
-#### References
-
-- @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
-- @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
-- @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
-- @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
-- @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
-
 ### References
+
+-   @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
+-   @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
+-   @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
+-   @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
+-   @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
 
 For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].

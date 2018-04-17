@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown 0.7.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
+  
+  
+  <meta name="github-repo" content="jrnold/bayesian_notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:site" content="@jrnld" />
+  
+  
+
+<meta name="author" content="Jeffrey B. Arnold">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="estimation.html">
+<link rel="next" href="mcmc-diagnostics.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/d3-3.3.8/d3.min.js"></script>
+<script src="libs/dagre-0.4.0/dagre-d3.min.js"></script>
+<link href="libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
+<script src="libs/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/chromatography-0.1/chromatography.js"></script>
+<script src="libs/DiagrammeR-binding-1.0.0/DiagrammeR.js"></script>
+<script src="libs/viz-0.3/viz.js"></script>
+<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a><ul>
+<li class="chapter" data-level="1.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-analysis"><i class="fa fa-check"></i><b>1.1</b> Bayesian Analysis</a></li>
+<li class="chapter" data-level="1.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>1.2</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="2" data-path="priors.html"><a href="priors.html"><i class="fa fa-check"></i><b>2</b> Priors</a><ul>
+<li class="chapter" data-level="2.1" data-path="priors.html"><a href="priors.html#levels-of-priors"><i class="fa fa-check"></i><b>2.1</b> Levels of Priors</a></li>
+<li class="chapter" data-level="2.2" data-path="priors.html"><a href="priors.html#conjugate-priors"><i class="fa fa-check"></i><b>2.2</b> Conjugate Priors</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="priors.html"><a href="priors.html#binomial-beta"><i class="fa fa-check"></i><b>2.2.1</b> Binomial-Beta</a></li>
+<li class="chapter" data-level="2.2.2" data-path="priors.html"><a href="priors.html#categorical-dirichlet"><i class="fa fa-check"></i><b>2.2.2</b> Categorical-Dirichlet</a></li>
+<li class="chapter" data-level="2.2.3" data-path="priors.html"><a href="priors.html#poisson-gamma"><i class="fa fa-check"></i><b>2.2.3</b> Poisson-Gamma</a></li>
+<li class="chapter" data-level="2.2.4" data-path="priors.html"><a href="priors.html#normal-with-known-variance"><i class="fa fa-check"></i><b>2.2.4</b> Normal with known variance</a></li>
+<li class="chapter" data-level="2.2.5" data-path="priors.html"><a href="priors.html#exponential-family"><i class="fa fa-check"></i><b>2.2.5</b> Exponential Family</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="priors.html"><a href="priors.html#improper-priors"><i class="fa fa-check"></i><b>2.3</b> Improper Priors</a></li>
+<li class="chapter" data-level="2.4" data-path="priors.html"><a href="priors.html#cromwells-rule"><i class="fa fa-check"></i><b>2.4</b> Cromwell’s Rule</a></li>
+<li class="chapter" data-level="2.5" data-path="priors.html"><a href="priors.html#asymptotics"><i class="fa fa-check"></i><b>2.5</b> Asymptotics</a></li>
+<li class="chapter" data-level="2.6" data-path="priors.html"><a href="priors.html#proper-and-improper-priors"><i class="fa fa-check"></i><b>2.6</b> Proper and Improper Priors</a></li>
+<li class="chapter" data-level="2.7" data-path="priors.html"><a href="priors.html#hyperpriors-and-hyperparameters"><i class="fa fa-check"></i><b>2.7</b> Hyperpriors and Hyperparameters</a></li>
+<li class="chapter" data-level="2.8" data-path="priors.html"><a href="priors.html#references"><i class="fa fa-check"></i><b>2.8</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>3</b> Estimation</a><ul>
+<li class="chapter" data-level="3.1" data-path="estimation.html"><a href="estimation.html#point-estimates"><i class="fa fa-check"></i><b>3.1</b> Point Estimates</a></li>
+<li class="chapter" data-level="3.2" data-path="estimation.html"><a href="estimation.html#credible-intervals"><i class="fa fa-check"></i><b>3.2</b> Credible Intervals</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="estimation.html"><a href="estimation.html#compared-to-confidence-intervals"><i class="fa fa-check"></i><b>3.2.1</b> Compared to confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="estimation.html"><a href="estimation.html#bayesian-decision-theory"><i class="fa fa-check"></i><b>3.3</b> Bayesian Decision Theory</a></li>
+</ul></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="4" data-path="bayesian-computation.html"><a href="bayesian-computation.html"><i class="fa fa-check"></i><b>4</b> Bayesian Computation</a><ul>
+<li class="chapter" data-level="4.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#how-to-calculate-a-posterior"><i class="fa fa-check"></i><b>4.1</b> How to calculate a posterior?</a></li>
+<li class="chapter" data-level="4.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#example-globe-tossing-model"><i class="fa fa-check"></i><b>4.2</b> Example: Globe-tossing model</a></li>
+<li class="chapter" data-level="4.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#quadrature"><i class="fa fa-check"></i><b>4.3</b> Quadrature</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#grid-approximation"><i class="fa fa-check"></i><b>4.3.1</b> Grid approximation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="bayesian-computation.html"><a href="bayesian-computation.html#functional-approximations"><i class="fa fa-check"></i><b>4.4</b> Functional Approximations</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#maximum-a-posteriori"><i class="fa fa-check"></i><b>4.4.1</b> Maximum A Posteriori</a></li>
+<li class="chapter" data-level="4.4.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#laplace-approximation"><i class="fa fa-check"></i><b>4.4.2</b> Laplace Approximation</a></li>
+<li class="chapter" data-level="4.4.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#example"><i class="fa fa-check"></i><b>4.4.3</b> Example</a></li>
+<li class="chapter" data-level="4.4.4" data-path="bayesian-computation.html"><a href="bayesian-computation.html#variational-inference"><i class="fa fa-check"></i><b>4.4.4</b> Variational Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="bayesian-computation.html"><a href="bayesian-computation.html#sampling-methods"><i class="fa fa-check"></i><b>4.5</b> Sampling Methods</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#numerical-integration"><i class="fa fa-check"></i><b>4.5.1</b> Numerical Integration</a></li>
+<li class="chapter" data-level="4.5.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>4.5.2</b> Inverse transform sampling</a></li>
+<li class="chapter" data-level="4.5.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#direct-approximation"><i class="fa fa-check"></i><b>4.5.3</b> Direct approximation</a></li>
+<li class="chapter" data-level="4.5.4" data-path="bayesian-computation.html"><a href="bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>4.5.4</b> Rejection sampling</a></li>
+<li class="chapter" data-level="4.5.5" data-path="bayesian-computation.html"><a href="bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>4.5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="4.5.6" data-path="bayesian-computation.html"><a href="bayesian-computation.html#example-2"><i class="fa fa-check"></i><b>4.5.6</b> Example</a></li>
+<li class="chapter" data-level="4.5.7" data-path="bayesian-computation.html"><a href="bayesian-computation.html#mcmc-methods"><i class="fa fa-check"></i><b>4.5.7</b> MCMC Methods</a></li>
+<li class="chapter" data-level="4.5.8" data-path="bayesian-computation.html"><a href="bayesian-computation.html#discarding-early-iterations"><i class="fa fa-check"></i><b>4.5.8</b> Discarding early iterations</a></li>
+<li class="chapter" data-level="4.5.9" data-path="bayesian-computation.html"><a href="bayesian-computation.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>4.5.9</b> Monte Carlo Sampling</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>5</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="5.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#reparameterize-models"><i class="fa fa-check"></i><b>5.1</b> Reparameterize Models</a></li>
+<li class="chapter" data-level="5.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>5.2</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>5.2.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+<li class="chapter" data-level="5.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-1"><i class="fa fa-check"></i><b>5.2.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>5.3</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#effective-sample-size"><i class="fa fa-check"></i><b>5.3.1</b> Effective Sample Size</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#thinning"><i class="fa fa-check"></i><b>5.4</b> Thinning</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#traceplots"><i class="fa fa-check"></i><b>5.4.1</b> Traceplots</a></li>
+<li class="chapter" data-level="5.4.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>5.4.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-nut-specific-diagnostics"><i class="fa fa-check"></i><b>5.5</b> HMC-NUT Specific Diagnostics</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>5.5.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="5.5.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-tree-depth"><i class="fa fa-check"></i><b>5.5.2</b> Maximum Tree-depth</a></li>
+<li class="chapter" data-level="5.5.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#bayesian-fraction-of-missing-information"><i class="fa fa-check"></i><b>5.5.3</b> Bayesian Fraction of Missing Information</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#debugging-bayesian-computing"><i class="fa fa-check"></i><b>5.6</b> Debugging Bayesian Computing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a><ul>
+<li class="chapter" data-level="6.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>6.1</b> Why check models?</a></li>
+<li class="chapter" data-level="6.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>6.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>6.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="6.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>6.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="6.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>6.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="6.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>6.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="6.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>6.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="6.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>6.2.6</b> Graphical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="model-checking.html"><a href="model-checking.html#references-2"><i class="fa fa-check"></i><b>6.3</b> References</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="7" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequisites-1"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="7.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#ols-and-mle-linear-regression"><i class="fa fa-check"></i><b>7.1</b> OLS and MLE Linear Regression</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#bayesian-model-with-improper-priors"><i class="fa fa-check"></i><b>7.1.1</b> Bayesian Model with Improper priors</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#stan-model"><i class="fa fa-check"></i><b>7.2</b> Stan Model</a></li>
+<li class="chapter" data-level="7.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling-model-with-stan"><i class="fa fa-check"></i><b>7.3</b> Sampling Model with Stan</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>7.3.1</b> Sampling</a></li>
+<li class="chapter" data-level="7.3.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>8</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-2"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="8.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>8.1</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="8.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>8.2</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>8.2.1</b> Covariates</a></li>
+<li class="chapter" data-level="8.2.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>8.2.2</b> Student-t Error</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-3"><i class="fa fa-check"></i><b>8.3</b> References</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>8.3.1</b> Quantile regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>9</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>9.1</b> Count Models</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>9.1.1</b> Poisson</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-3"><i class="fa fa-check"></i><b>9.2</b> Example</a></li>
+<li class="chapter" data-level="9.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>9.3</b> Negative Binomial</a></li>
+<li class="chapter" data-level="9.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>9.4</b> Multinomial / Categorical Models</a></li>
+<li class="chapter" data-level="9.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>9.5</b> Gamma Regression</a></li>
+<li class="chapter" data-level="9.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>9.6</b> Beta Regression</a></li>
+<li class="chapter" data-level="9.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-4"><i class="fa fa-check"></i><b>9.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>10</b> Binomial Models</a><ul>
+<li class="chapter" data-level="10.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>10.1</b> Link Functions {link-function}</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>10.1.1</b> Stan</a></li>
+<li class="chapter" data-level="10.1.2" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>10.1.2</b> Example: Vote Turnout</a></li>
+<li class="chapter" data-level="10.1.3" data-path="binomial-models.html"><a href="binomial-models.html#separation"><i class="fa fa-check"></i><b>10.1.3</b> Separation</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="binomial-models.html"><a href="binomial-models.html#rare-events-logit"><i class="fa fa-check"></i><b>10.2</b> Rare Events Logit</a></li>
+<li class="chapter" data-level="10.3" data-path="binomial-models.html"><a href="binomial-models.html#case-control"><i class="fa fa-check"></i><b>10.3</b> Case Control</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="binomial-models.html"><a href="binomial-models.html#references-5"><i class="fa fa-check"></i><b>10.3.1</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>11</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="" data-path="hierarchical-models.html"><a href="hierarchical-models.html#prerequisites-3"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="11.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>11.1</b> Example: Baseball Hits</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#references-6"><i class="fa fa-check"></i><b>11.1.1</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>12</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>12.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>12.1.1</b> Data</a></li>
+<li class="chapter" data-level="12.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>12.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="12.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>12.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="12.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>12.1.4</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="12.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>12.1.5</b> lme4</a></li>
+<li class="chapter" data-level="12.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>12.1.6</b> rstanarm</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>12.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="12.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>12.3</b> ANOVA</a></li>
+<li class="chapter" data-level="12.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>12.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="12.5" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>12.5</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>12.5.1</b> How many groups?</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="13" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>13</b> Distributions</a></li>
+<li class="chapter" data-level="14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>14</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="14.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>14.1</b> Textbooks</a></li>
+<li class="chapter" data-level="14.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>14.2</b> Syllabi</a></li>
+<li class="chapter" data-level="14.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>14.3</b> Topics</a></li>
+<li class="chapter" data-level="14.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem"><i class="fa fa-check"></i><b>14.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="14.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>14.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="14.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>14.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="14.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>14.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="14.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>14.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="14.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>14.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="14.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>14.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="14.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>14.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="14.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>14.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="14.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>14.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="14.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events"><i class="fa fa-check"></i><b>14.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="14.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>14.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="14.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>14.5.11</b> Shrinkage</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>14.6</b> Software</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-1"><i class="fa fa-check"></i><b>14.6.1</b> Stan</a></li>
+<li class="chapter" data-level="14.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>14.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="14.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>14.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>14.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="14.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>14.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="14.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>14.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="14.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>14.10</b> Inference</a><ul>
+<li class="chapter" data-level="14.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>14.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="14.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>14.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="14.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>14.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="14.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>14.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="14.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>14.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>14.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="14.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>14.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="14.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>14.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="14.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>14.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="14.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>14.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="14.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>14.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="14.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>14.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="14.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>14.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="14.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>14.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="14.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>14.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="14.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>14.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-7.html"><a href="references-7.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\logistic}{Logistic}
+\DeclareMathOperator{\logit}{Logit}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dnorm}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpois}{\mathrm{Poisson}}
+\newcommand{\dBinom}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnbinom}{\mathrm{Neg-bin}}
+\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Reals}{\R}
+\newcommand{\RealPos}{\R^{+}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nats}{\N}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
+<div id="bayesian-computation" class="section level1">
+<h1><span class="header-section-number">4</span> Bayesian Computation</h1>
+<blockquote>
+<p>This is a very complicated case Maude. You know, a lotta ins, a lotta outs, lotta what-have-yous.” — The Dude (<em>The Big Lebowski</em>)</p>
+</blockquote>
+<div id="how-to-calculate-a-posterior" class="section level2">
+<h2><span class="header-section-number">4.1</span> How to calculate a posterior?</h2>
+<p>Bayesian inference requires calculating the posterior distribution,
+<span class="math display">\[
+p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int_{\theta&#39; \in \Theta} p(y | \theta&#39;) p(\theta&#39;)\, d\theta&#39; } .
+\]</span>
+However, calculating this quantity is difficult.
+The denominator (marginal likelihood) is an integral.
+Additionally, and function of the distribution, e.g. the mean is <span class="math inline">\(\int \theta p(\theta | y) \,d\theta\)</span> also requires calculating an integral.</p>
+<p>In general there are several strategies for this.</p>
+<ol style="list-style-type: decimal">
+<li>Symbolic/Analytic: in a few cases, the posterior distribution can be derived symbolically and has a closed-form solution that corresponds distribution that can be sampled from. <em>Conjugate priors</em> are the most common case of this.</li>
+<li>Functional: find a function that approximates the true posterior. e.g. maximum a posteriori, Laplace/quadratic approximation.</li>
+<li>Grid/Quadrature. approximate the posterior with a discrete distribution evaluated at a fixed set of points.</li>
+<li>Sampling. draw a sample from the posterior.</li>
+</ol>
+<p>Additionally, methods an incorporate and combine various parts of these approaches.</p>
+</div>
+<div id="example-globe-tossing-model" class="section level2">
+<h2><span class="header-section-number">4.2</span> Example: Globe-tossing model</h2>
+<p>Suppose that we want to estimate the proportion of the Earth’s surface that is water.</p>
+<p>Suppose that you don’t have any idea what proportion of the Earth’s surface (<span class="math inline">\(\theta\)</span>) is covered in water, so you think any proportion is equally likely:
+<span class="math display">\[
+\theta \sim \dbeta(1, 1) = \dunif(0, 1)
+\]</span>
+Alas, the internet is down so you cannot look it up on Wikipedia.
+Luckily, you do have a globe.
+Since it would be hard to directly calculate the area on the globe, you estimate the proportion that is water by repeatedly choosing a random point on the globe by spinning it, and marking whether that point
+is water (<code>&quot;W&quot;</code>) or land (<code>&quot;L&quot;</code>).
+After 10 spins you have the following sequence of water and land.</p>
+<pre class="sourceCode r"><code class="sourceCode r">smpls &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>)</code></pre>
+<p>Given that data, what is your estimate about the proportion of the earth’s surface that is water?</p>
+<pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">sum</span>(smpls <span class="op">==</span><span class="st"> &quot;W&quot;</span>)
+n &lt;-<span class="st"> </span><span class="kw">length</span>(smpls)</code></pre>
+<p>To summarize, this model is
+<span class="math display">\[
+\begin{aligned}[t]
+y &amp;\sim dbinom(n, \theta) \\
+\theta &amp;\sim beta(1, 1) \\
+\end{aligned}
+\]</span>
+Suppose we use
+<span class="math display">\[
+\theta \sim beta(1, 1)
+\]</span></p>
+<p>We will calculate this posterior distribution in multiple ways.
+For now, save the parameters of this model in some object for later reuse.
+The prior on <span class="math inline">\(\theta\)</span> is,</p>
+<pre class="sourceCode r"><code class="sourceCode r">prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)</code></pre>
+<p>Since the beta is a conjugate distribution of the binomial likelihood, we
+can analytically calculate the posterior distribution.</p>
+<pre class="sourceCode r"><code class="sourceCode r">posterior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>y,  <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</code></pre>
+<p>The posterior distribution is
+<span class="math display">\[
+p(\theta | y) = \dbeta(3, 9)
+\]</span></p>
+</div>
+<div id="quadrature" class="section level2">
+<h2><span class="header-section-number">4.3</span> Quadrature</h2>
+<div id="grid-approximation" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Grid approximation</h3>
+<p>tl;dr: Approximate the posterior distribution by taking a grid of points in <span class="math inline">\(\theta\)</span> and calculating <span class="math inline">\(p(\theta|y)\)</span>.
+Doesn’t work well in large dimensions, or if the grid does not include many points in the area with high posterior density.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</span>
+<span class="co">#&gt; ✔ ggplot2 2.2.1     ✔ purrr   0.2.4</span>
+<span class="co">#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.4</span>
+<span class="co">#&gt; ✔ tidyr   0.8.0     ✔ stringr 1.3.0</span>
+<span class="co">#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0</span>
+<span class="co">#&gt; ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
+grid &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">10</span>),
+  <span class="dt">prior =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> prior<span class="op">$</span>a, <span class="dt">shape2 =</span> prior<span class="op">$</span>b),
+  <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">posterior_unst =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,
+         <span class="dt">posterior =</span> posterior_unst <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior_unst))</code></pre>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.1)</span></p>
+</div>
+</div>
+<div id="functional-approximations" class="section level2">
+<h2><span class="header-section-number">4.4</span> Functional Approximations</h2>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.3, 13.3)</span></p>
+<div id="maximum-a-posteriori" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Maximum A Posteriori</h3>
+<p>tl;dr: approximate the posterior distribution with a point mass at the</p>
+<p>Maximum a posteriori estimation finds value of <span class="math inline">\(\theta\)</span> that maximizes the posterior distribution,
+<span class="math display">\[
+\hat{\theta} = \arg\max_{\theta} p(\theta |y) .
+\]</span></p>
+<p>The MAP is best thought of a Bayesian point estimate of the mode of the posterior distribution.
+However, unlike (most?) other point estimates it does not require first computing the posterior distribution.</p>
+<p>However, we can consider it a functional approximation of the posterior distribution, in which the approximating distribution is a point mass at <span class="math inline">\(\hat{\theta}\)</span>.</p>
+<p>Notes:</p>
+<ul>
+<li><p>often the maximum of the posterior is much easier to calculate than the
+entire posterior distribution</p></li>
+<li><p>when the prior is improper, <span class="math inline">\(p(\theta | y) \propto p(y | theta)\)</span> and the
+MAP and maximum likelihood (MLE) estimators produce the same point estimate.</p></li>
+</ul>
+</div>
+<div id="laplace-approximation" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> Laplace Approximation</h3>
+<p>tl;dr: approximate the posterior distribution with a normal distribution centered at the maximum.</p>
+<p>The Laplace or quadratic approximation to the posterior distribution uses a normal approximation to the posterior distribution.</p>
+<ol style="list-style-type: decimal">
+<li>Find maximum of <span class="math inline">\(p(\theta | y)\)</span>.</li>
+<li>Take the Taylor expansion around the maximum <span class="math inline">\(\hat{\theta}\)</span>,</li>
+</ol>
+<p><span class="math display">\[
+\begin{aligned}[t]
+p(\theta | y) &amp;
+\approx p(\widehat{\theta}) + (\theta - \widehat{\theta}) \left[ \frac{d}{d \theta} p(\theta | y) \right]_{\theta = \hat{\theta}} + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
+&amp;= p(\widehat{\theta}) + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
+\end{aligned}
+\]</span>
+where the second term is zero since <span class="math inline">\(\hat{\theta}\)</span> is the maximum of <span class="math inline">\(p(\theta | y)\)</span>, <span class="math inline">\(d / d\theta p(\theta | y) = 0\)</span>.</p>
+<p>The first term <span class="math inline">\(p(\theta)\)</span> is a constant.
+The second term is proportional to the logarithm of a normal density,
+<span class="math display">\[
+p(\theta | y) \approx dnorm\left(\hat{\theta},\left[ - \frac{d^2}{d \theta^2} \log p(\theta | y) \middle|_{\theta = \hat{\theta}} \right] \right)
+\]</span></p>
+<p>Extensions of this approach include:</p>
+<ul>
+<li>Fitting a mixture of normal densities. This is especially useful for multi-modal densities. <span class="citation">(Gelman et al. 2013, 319)</span></li>
+<li>Using a multivariate Students-<span class="math inline">\(t\)</span> distribution instead of a normal distribution <span class="citation">(Gelman et al. 2013, 319)</span></li>
+<li>Using the the normal or Laplace approximation as a proposal distribution with importance sampling <span class="citation">(Gelman et al. 2013, 319)</span></li>
+</ul>
+</div>
+<div id="example" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> Example</h3>
+<p>Rather than deriving the second derivative for the posterior distribution, I will use numerical derivatives in this example.
+The idea is the same, although the numerical derivatives are slower than symbolic derivatives.</p>
+<p>Use the R function <code>optimize</code> to calculate the maximum of the posterior.
+We will need to use the option <code>hessian = TRUE</code> in order to calculate the second derivatives needed for the variance parameter of the normal distribution.</p>
+<p>Write a function that takes a single parameter <code>par</code> and returns the log posterior value.</p>
+<pre class="sourceCode r"><code class="sourceCode r">calc_posterior &lt;-<span class="st"> </span><span class="cf">function</span>(par) {
+  lprior &lt;-<span class="st"> </span><span class="kw">dbeta</span>(par, prior<span class="op">$</span>a, prior<span class="op">$</span>b, <span class="dt">log =</span> <span class="ot">TRUE</span>)
+  lpost &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> par, <span class="dt">log =</span> <span class="ot">TRUE</span>)
+  <span class="op">-</span><span class="st"> </span>(lprior <span class="op">+</span><span class="st"> </span>lpost)
+}</code></pre>
+<p>Find <span class="math inline">\(\hat{\theta}\)</span> and the second derivative using <code>optim</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">ret &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="fl">0.5</span>, <span class="dt">fn =</span> calc_posterior, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">method =</span> <span class="st">&quot;Brent&quot;</span>,
+             <span class="dt">lower =</span> <span class="dv">0</span>, <span class="dt">upper =</span> <span class="dv">1</span>)</code></pre>
+<p>The Hessian is a matrix of the second partial derivatives, which is what we need.</p>
+<pre class="sourceCode r"><code class="sourceCode r">theta_max &lt;-<span class="st"> </span>ret<span class="op">$</span>par
+theta_var &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">drop</span>(ret<span class="op">$</span>hessian)</code></pre>
+<p>Let’s plot the value of the Laplace approximation and the true posterior distribution.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tibble</span>(
+  <span class="dt">theta =</span> <span class="kw">ppoints</span>(<span class="dv">100</span>),
+  <span class="dt">approx =</span> <span class="kw">dnorm</span>(theta, theta_max, <span class="kw">sqrt</span>(theta_var)),
+  <span class="dt">actual =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> theta)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> approx)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> actual), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="bayesian-computation_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variational-inference" class="section level3">
+<h3><span class="header-section-number">4.4.4</span> Variational Inference</h3>
+<p>tl;dr: approximate the posterior distribution with a simple(r) distribution that is close to the posterior distribution.</p>
+<p>TODO</p>
+<p>See <span class="citation">Grimmer (2011)</span>, <span class="citation">Ranganath, Gerrish, and Blei (2014)</span>, <span class="citation">Kucukelbir et al. (2015)</span>, and <span class="citation">Blei, Kucukelbir, and McAuliffe (2017)</span>.</p>
+</div>
+</div>
+<div id="sampling-methods" class="section level2">
+<h2><span class="header-section-number">4.5</span> Sampling Methods</h2>
+<div id="numerical-integration" class="section level3">
+<h3><span class="header-section-number">4.5.1</span> Numerical Integration</h3>
+<p>Numerical integration calculates a expectation of a function using samples <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from a distribution <span class="math inline">\(p(\theta)\)</span>,
+<span class="math display">\[
+\E(h(\theta) | y) = \int h(\theta) p(\theta | y) d\theta \approx \frac{1}{S} \sum_{s = 1}^S h(\theta^s) .
+\]</span>
+The estimation error improves with the number of (independent) samples.</p>
+<p>Deterministic numerical integration is based on evaluating <span class="math inline">\(h(\theta) p(\theta | y)\)</span> at a set of points <span class="math inline">\(\theta^1, \dots, \theta^S\)</span>.
+<span class="math display">\[
+\E(h(\theta) | y) = \int h(\theta) p(\theta | y) \approx \frac{1}{S} w_s h(\theta^s) p(\theta^s | y) ,
+\]</span>
+with weights <span class="math inline">\(w_s\)</span> for the volume of each point.
+The accuracy of this method can improve with smarter choices of the grid and also better interpolation between points.
+The simplest method is a grid with equal weights, but more sophisticated quadrature methods also exist.</p>
+</div>
+<div id="inverse-transform-sampling" class="section level3">
+<h3><span class="header-section-number">4.5.2</span> Inverse transform sampling</h3>
+<p>A common method of random sampling is <a href="https://en.wikipedia.org/wiki/Inverse_transform_sampling">inverse-transformation sampling</a>.</p>
+<p>Suppose we want to sample from random variable <span class="math inline">\(X\)</span> which has a distribution with a CDF of <span class="math inline">\(P(X)\)</span>.
+We can draw a sample as follows,</p>
+<ol style="list-style-type: decimal">
+<li><p>Draw <span class="math inline">\(u\)</span> from <span class="math inline">\(unif(0, 1)\)</span></p></li>
+<li><p>Let <span class="math inline">\(x = P^{-1}(u)\)</span>, where <span class="math inline">\(P^{-1}(X)\)</span> is the inverse of the CDF (quantile)
+function for <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)
+post_inverse &lt;-<span class="st"> </span><span class="kw">qbeta</span>(p, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)
+
+<span class="kw">ggplot</span>(<span class="kw">tibble</span>(<span class="dt">x =</span> post_inverse), <span class="kw">aes</span>(<span class="dt">x =</span> x)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>()</code></pre>
+<p><img src="bayesian-computation_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li><p>This generally only works on a univariate distribution</p></li>
+<li><p>We would have to CDF of the posterior distribution analytically, but in
+hard problems that is something we don’t know.</p></li>
+</ol>
+</div>
+<div id="direct-approximation" class="section level3">
+<h3><span class="header-section-number">4.5.3</span> Direct approximation</h3>
+<p>Compute the target density at the set of of evenly spaced values <span class="math inline">\(\theta_1, \dots, \theta_S\)</span> that cover (most of) the parameter space for <span class="math inline">\(\theta\)</span>.</p>
+<p>Approximate <span class="math inline">\(p(\theta | y)\)</span> by the density at these values with
+<span class="math display">\[
+p(\theta | y) \approx \left\{ \frac{p(\theta_s| y)}{ \sum_{j = 1}^S p(\theta_{j} | y)} \right\}_{s = 1}^S
+\]</span>
+This will also work with an un-normalized density function.</p>
+<p>To draw a random sample from this, sample from the discrete
+approximation with weights proportional to the <span class="math inline">\(p(\theta_s | y)\)</span>.</p>
+<div id="example-1" class="section level4">
+<h4><span class="header-section-number">4.5.3.1</span> Example</h4>
+<p>In the water example, there is no reason to do this.
+However, there could be cases where it is possible to calculate the</p>
+<pre class="sourceCode r"><code class="sourceCode r">theta_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">512</span>)
+w &lt;-<span class="st"> </span><span class="kw">dbeta</span>(theta_grid, prior<span class="op">$</span>a, prior<span class="op">$</span>b) <span class="op">*</span><span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta_grid)
+theta_direct &lt;-<span class="st"> </span><span class="kw">sample</span>(theta_grid, <span class="dt">size =</span> <span class="dv">512</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(theta_direct)
+<span class="co">#&gt; [1] 0.254</span></code></pre>
+</div>
+</div>
+<div id="rejection-sampling" class="section level3">
+<h3><span class="header-section-number">4.5.4</span> Rejection sampling</h3>
+<p>tl;dr: Sample from a proposal density and reject with a probability proportional to the ratio of the target density to the proposal density. Works best if the proposal density is close to the target density.</p>
+<p>Rejection sampling consists of the following:</p>
+<ol style="list-style-type: decimal">
+<li>Sample from a proposal density, e.g. the prior <span class="math inline">\(p(\theta)\)</span></li>
+<li>Accept with probability <span class="math inline">\(p(\theta | y) / p(\theta)\)</span></li>
+</ol>
+<p>Suppose there is a positive function <span class="math inline">\(g(\theta)\)</span> for all <span class="math inline">\(\theta\)</span> for which <span class="math inline">\(p(\theta | y) &gt; 0\)</span>,</p>
+<ul>
+<li>Draw from a probability density proportional to <span class="math inline">\(g\)</span></li>
+<li>Importance ratio <span class="math inline">\(p(\theta | y) / g(\theta)\)</span> must have a known bound, which means that there exists a constant <span class="math inline">\(M\)</span> such that <span class="math inline">\(p(\theta | y) / g(\theta) \leq M\)</span> for all <span class="math inline">\(\theta\)</span>.</li>
+</ul>
+<p>The algorithm proceeds as follows</p>
+<ol style="list-style-type: decimal">
+<li>Sample <span class="math inline">\(\theta\)</span> at random from the probability proportional to <span class="math inline">\(g(\theta)\)</span></li>
+<li>With probability <span class="math inline">\(p(\theta | y) / M g(\theta)\)</span> accept <span class="math inline">\(\theta\)</span> as a draw from <span class="math inline">\(p\)</span>. If rejected, return to 1.</li>
+</ol>
+<p>Need to choose <span class="math inline">\(M\)</span> so that the probability in step 2 is not greater than 1.
+This can be <span class="math inline">\(M = \max p(\theta | y)\)</span>.
+But in general, the efficiency of the algorithm depends on <span class="math inline">\(M\)</span>, but it may be hard to find a good value.</p>
+<p>Since the probability of success is <span class="math inline">\(1 / M\)</span>, the expected number of draws from proposal density to get a single draw from the</p>
+<p>The ideal case is that the approximate density <span class="math inline">\(g(\theta)\)</span> is roughly proportional to <span class="math inline">\(p(\theta | y)\)</span>.</p>
+<ul>
+<li>univariate distributions</li>
+<li>truncated distributions, e.g. normal truncated distribution</li>
+</ul>
+</div>
+<div id="importance-sampling" class="section level3">
+<h3><span class="header-section-number">4.5.5</span> Importance Sampling</h3>
+<p>tl;dr: Draw a sample from a target distribution from an approximate distribution
+weight those samples by the ratio of target distribution to the approximate distribution.
+Works best if the proposal density is close to the target density, or at least wider
+than the target density.</p>
+<p>Suppose that we want to know <span class="math inline">\(\E(h(\theta) | y)\)</span> but cannot directly sample from <span class="math inline">\(p(\theta | y)\)</span>.</p>
+<p>However, we can sample from a distribution <span class="math inline">\(g(\theta)\)</span>.
+Then,
+<span class="math display">\[
+\E(h(\theta | y)) = \frac{\int h(\theta) q(\theta | y) d\theta}{\int q(\theta | y) d\theta} = \frac{\int \left[h(\theta) q(\theta | y) / g(\theta) \right] g(\theta) d\theta}{\int \left[ q(\theta | y) / g(\theta) \right] g(\theta) d\theta}  
+\]</span>
+This can be estimated using <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from <span class="math inline">\(g(\theta)\)</span>,
+<span class="math display">\[
+\frac{\frac{1}{S} \sum_{s = 1}^s h(\theta^s) w(\theta^s)}{\frac{1}{S} \sum_{s = 1}^S w(\theta^s)} ,
+\]</span>
+where
+<span class="math display">\[
+w(\theta^s) = \frac{q(\theta^s | y)}{g(\theta^s)}
+\]</span>
+are called the <em>importance ratios</em> or <em>importance weights</em>.</p>
+<ul>
+<li><p>use the same set of random draws for the numerator and denominator to reduce sampling error.</p></li>
+<li><p>worst case: importance ratio are small with high probability, but with a
+low probability are very high. This occurs when the <span class="math inline">\(q\)</span> has wide tails
+relative to <span class="math inline">\(g\)</span>. Can use a <span class="math inline">\(t_4\)</span> distribution as a proposal distribution for
+a normal distribution, but not a normal distribution for a proposal
+distribution of a <span class="math inline">\(t_4\)</span> distribution.</p></li>
+</ul>
+<p>The values of the importance weights can be used to discover problems with the method.
+If any ratios are too large, estimates will be poor.</p>
+<p>If the variance of the weights is finite, the effective sample size is
+<span class="math display">\[
+S_{eff} = \frac{1}{\sum_{s = 1}^S (\tilde{w}(\theta^s))^2} .
+\]</span>
+where <span class="math inline">\(\tilde{w}\)</span> are the normalized weights,
+<span class="math display">\[
+\tilde{w}(\theta^s) = \frac{w(\theta^S)}{\sum_{s&#39; = 1}^S w(\theta^{s&#39;})}.
+\]</span></p>
+<p>The <strong>loo</strong> package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights <span class="citation">(Vehtari, Gelman, and Gabry 2015, 2016)</span>.</p>
+<p><em>Importance resampling</em> (or <em>sampling-importance resampling</em>) obtains independent samples with equal weights.</p>
+<p>Draw <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from the approximate distribution <span class="math inline">\(g\)</span>.</p>
+<p>Then to draw a sample of size <span class="math inline">\(k &lt; S\)</span>, sample <em>without replacement</em>
+where sampling <span class="math inline">\(\theta^s\)</span> is proportional to its weight,
+<span class="math display">\[
+    \Pr(\theta^s) \propto w(\theta^s) = \frac{q(\theta^s | y)}{g(\theta^s)} .
+\]</span></p>
+<p>Sampling <em>without replacement</em> helps to prevent a degenerate case where all or most of the <span class="math inline">\(k\)</span> samples are the same <span class="math inline">\(\theta^s\)</span> due to large importance ratios.</p>
+<p>If the proposal distribution is the prior, then the weights are proportional to the likelihood,
+<span class="math display">\[
+w(\theta^S) = \frac{p(\theta | y)}{p(\theta)} = \frac{p(y | \theta) p(\theta)}{p(\theta)} = p(y | \theta)
+\]</span></p>
+<p>Other notes</p>
+<ul>
+<li><p>Similar to both rejection sampling and the Metropolis algorithm</p></li>
+<li><p>Sequential Monte Carlo (SMC) is a variant that is particularly useful for
+updating posterior distributions when the data arrives sequentially—either
+real time or because it involves time series data <span class="citation">(Carvalho et al. 2010)</span>.</p></li>
+<li><p>To update a model when a similar posterior is available. E.g. the posterior
+distribution for leave-one-out cross validation <span class="citation">(Vehtari, Gelman, and Gabry 2015)</span>.
+The distribution <span class="math inline">\(p(\theta | y_{-i})\)</span> is likely to be similar to <span class="math inline">\(p(\theta | y)\)</span>,
+so if we have already calculated <span class="math inline">\(p(\theta | y)\)</span> we can use the later as the
+proposal distribution for <span class="math inline">\(p(\theta | y)\)</span>.</p></li>
+</ul>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.4)</span>, <span class="citation">Gelfand and Smith (1990)</span>, <span class="citation">Lopes, Polson, and Carvalho (2012)</span>, and
+<span class="citation">Smith and Gelfand (1992)</span> for more on importance sampling.</p>
+</div>
+<div id="example-2" class="section level3">
+<h3><span class="header-section-number">4.5.6</span> Example</h3>
+<p>Use the prior as the proposal distribution.</p>
+<pre class="sourceCode r"><code class="sourceCode r">S &lt;-<span class="st"> </span><span class="dv">512</span>
+theta &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, prior<span class="op">$</span>a, prior<span class="op">$</span>b)
+w &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)</code></pre>
+<p>The mean value of the posterior is</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(theta <span class="op">*</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)
+<span class="co">#&gt; [1] 0.246</span></code></pre>
+<p>The effective sample size of this sample is,</p>
+<pre class="sourceCode r"><code class="sourceCode r">w_tilde &lt;-<span class="st"> </span>w <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)
+<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w_tilde<span class="op">^</span><span class="dv">2</span>)
+<span class="co">#&gt; [1] 215</span></code></pre>
+<p>Finally, to draw a new sample from this, we can draw without replacement,</p>
+<pre class="sourceCode r"><code class="sourceCode r">S2 &lt;-<span class="st"> </span><span class="dv">256</span>
+post_sir1 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre>
+<p>or with replacement,</p>
+<pre class="sourceCode r"><code class="sourceCode r">post_sir2 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre>
+<p>depending on our purposes.</p>
+</div>
+<div id="mcmc-methods" class="section level3">
+<h3><span class="header-section-number">4.5.7</span> MCMC Methods</h3>
+<p>See <span class="citation">Gelman et al. (2013 Ch 11–12)</span> for more on MCMC methods.</p>
+<div id="metropolis-hastings" class="section level4">
+<h4><span class="header-section-number">4.5.7.1</span> Metropolis-Hastings</h4>
+<p>The <em>Metropolis-Hastings</em> algorithm is a family of MCMC methods useful for sampling from posterior distributions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Draw a starting value <span class="math inline">\(\theta^0\)</span> for which <span class="math inline">\(p(\theta^0 | y) &gt; 0\)</span>.
+This can be specified manually or sampled from a crude approximation.</p></li>
+<li><p>For iterations *t = 1, 2, …$:</p>
+<!-- lint disable no-inline-padding -->
+<ol style="list-style-type: decimal">
+<li>Sample a <em>proposal</em> value <span class="math inline">\(\theta^{*}\)</span> from a <em>jumping distribution</em>
+(<em>proposal distribution</em>) at time <span class="math inline">\(t\)</span>, <span class="math inline">\(J_t(\theta^{*} | \theta^{t - 1})\)</span>.</li>
+</ol>
+<!-- lint enable no-inline-padding -->
+<ol style="list-style-type: decimal">
+<li><p>Calculate the ratio of the density of the proposal and target distributions,
+<span class="math display">\[
+r = \frac{p(\theta^{*} | y) / J_t(\theta^* | \theta^{t - 1})}{p(\theta^{t - 1} | y) / J_t(\theta^{t - 1} | \theta^{*})} .
+\]</span></p></li>
+<li><p>Set
+<span class="math display">\[
+\theta^t =
+\begin{cases}
+\theta^* &amp; \text{with probability } \min(r, 1)
+\theta^{t - 1} &amp; \text{otherwise.}
+\end{cases}
+\]</span></p></li>
+</ol></li>
+</ol>
+<p>Thus the transition distribution <span class="math inline">\(T_t(\theta^t | \theta^{t - 1})\)</span> is a mixture distribution of</p>
+<ol style="list-style-type: decimal">
+<li>point mass at <span class="math inline">\(\theta^t = \theta^{t - 1}\)</span></li>
+<li>jumping distribution $J_t(^t | ^{t - 1}),</li>
+</ol>
+<p>with the weights adjusting for the acceptance rates.</p>
+<p>The main requirements for this algorithm are</p>
+<ol style="list-style-type: decimal">
+<li>Be able to draw samples from the jumping distribution <span class="math inline">\(J_t(\theta^* | \theta)\)</span></li>
+<li>Be able to calculate the density ratio <span class="math inline">\(r\)</span>, usually meaning that both <span class="math inline">\(p(\theta^* | y)\)</span> and <span class="math inline">\(p(\theta^{t - 1} | y)\)</span> must be able to be calculated for all <span class="math inline">\(\theta\)</span>.</li>
+</ol>
+<p>The jumping distribution can be asymmetric.
+However, it if is symmetric (Metropolis algorithm), then the ratio acceptance ratio simplifies to,
+<span class="math display">\[
+r = \frac{p(\theta^* | y)}{p(\theta^{t - 1} | y)} .
+\]</span></p>
+<p>Notes:</p>
+<ul>
+<li><p>For this to work the Markov chain this produces must have stationary
+distribution that <span class="citation">(Gelman et al. 2013, 279)</span>.</p></li>
+<li><p>MH is similar is like a stochastic optimization algorithm. Instead of
+<strong>always</strong> moving towards the region of higher density, it only stochastically
+moves towards the region of higher density. It tunes how often it moves
+towards the region of higher density in order to ensure that it samples
+from the distribution in proportion to the density.</p></li>
+<li><p>MH is similar to a dynamic form of rejection sampling or importance sampling.
+However, whereas those methods have a static proposal distribution, the
+jumping distribution, while fixed in its parameters, of the HM algorithm
+is re-centered around the last draw, so it can move to areas of higher density.</p></li>
+</ul>
+<p>When does MH not work well?</p>
+<ol style="list-style-type: decimal">
+<li>Posterior distributions with wide tails.</li>
+<li>Multimodal distributions</li>
+</ol>
+</div>
+<div id="gibbs-sampler" class="section level4">
+<h4><span class="header-section-number">4.5.7.2</span> Gibbs Sampler</h4>
+<p>The Gibbs sampler has been one of the most common methods used to sample from posterior distributions.</p>
+<p>The Gibbs sampler is a special case of the Metropolis-Hastings sampler.
+Suppose that the parameter vector <span class="math inline">\(\theta\)</span> can be divided into <span class="math inline">\(d\)</span> subvectors.</p>
+<ul>
+<li><p>For iterations, <span class="math inline">\(t = 1, \dots\)</span>:</p>
+<ul>
+<li><p>For <span class="math inline">\(j \in 1, \dots, d\)</span></p>
+<ul>
+<li>Draw a value from the conditional distribution of <span class="math inline">\(\theta_j\)</span> given all the other parameters,
+<span class="math display">\[
+\theta_{j}^t \sim p(\theta_j | \theta^{t - 1}_{-j}, y),
+\]</span>
+where <span class="math inline">\(\theta^{t - 1}_{-j}\)</span> has consists of updated parameters for all parameters preceding <span class="math inline">\(j\)</span> and the previous iteration’s values for all succeeding parameters,
+<span class="math display">\[
+\theta_{-j}^{t - 1} = \left(\theta_1^t, \dots, \theta_{j - 1}^t, \theta_{j - 1}^{t - 1}, \dots, \theta_d^{t - 1}\right) .
+\]</span></li>
+</ul></li>
+</ul></li>
+<li><p>Gibbs sampler is a special case of MH algorithm. It is appealing because the use of full-conditional distributions means that draws are <strong>never</strong> rejected.</p></li>
+<li><p>The use of full-conditional distributions often results in highly correlated iterations.
+Many applications adjust the method to reduce these correlations.</p></li>
+<li><p>It can be difficult to derive the full-conditional distributions in many cases.</p></li>
+</ul>
+</div>
+<div id="hamiltonian-monte-carlo-hmc" class="section level4">
+<h4><span class="header-section-number">4.5.7.3</span> Hamiltonian Monte Carlo (HMC)</h4>
+<div id="assessing-convergence" class="section level5">
+<h5><span class="header-section-number">4.5.7.3.1</span> Assessing Convergence</h5>
+<p>Iterative simulation methods have two additional issues above and beyond those of simulations <span class="citation">(Gelman et al. 2013, 282)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><p>The iterations have not proceeded long enough to find the typical set and
+are not drawing samples from the target distribution.</p></li>
+<li><p>The samples have within-sequence correlations.
+Serial correlation is not a fatal problem.</p></li>
+</ol>
+<p>How to monitor and assess iterative simulation</p>
+<ol style="list-style-type: decimal">
+<li><p>Design simulations to allow monitoring of convergence by running multiple chains
+from dispersed starting points.</p></li>
+<li><p>Monitor convergence by comparing within chain variation and between variation
+using the <span class="math inline">\(\hat{R}\)</span> statistic. Only when the between and within variations are
+approximately equal will the multiple chains appear to be sampling from the same distribution.</p></li>
+<li><p>Require a certain level of efficiency in the output in terms of acceptable sample size.
+If that that efficiency is too costly to obtain, it may require tweaking the model
+or the algorithm to be more efficient. See <span class="citation">Gelman et al. (2013 Ch. 12)</span> for methods to speed up MCMC.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="discarding-early-iterations" class="section level3">
+<h3><span class="header-section-number">4.5.8</span> Discarding early iterations</h3>
+<p>Because iterative algorithms may take time to find the typical set of the target distribution, sometimes the early iterations are discarded.</p>
+<p>In Gibbs sampling, it is common to have a “burn-in” period which is discarded.
+The algorithm is theoretically still sampling from the posterior distribution, but in the burn-in period it may not have wandered into the typical yet and thus those draws are unrepresentative.</p>
+<p>In HMC methods, there is a “warmup” period of each chain.
+In this period the algorithm is <strong>not</strong> sampling using a method guaranteed to draw a sample from the posterior distribution.
+Instead it is searching for values of the <em>tuning-parameters</em> of the algorithm.
+Only after these turning-parameters are set are samples used for analysis.
+This is similar to the burn-in period of Gibbs sampling in that those iterations are discarded.
+However, it is serving a fundamentally different role in that the</p>
+<p>Generally, the issue with MCMC algorithms is not in finding the typical set.
+In application, they tend to find typical set quickly (FIND CITE – Jackman?).
+Generally, the larger issue is that the draws are correlated and it may take a long time to explore the posterior distribution.</p>
+<p>See <span class="citation">Gelman et al. (2013, 282)</span>.</p>
+</div>
+<div id="monte-carlo-sampling" class="section level3">
+<h3><span class="header-section-number">4.5.9</span> Monte Carlo Sampling</h3>
+<p>Monte Carlo methods are used to numerically approximate integrals, when the integral function is not tractable but the function being integrated is.</p>
+<p>In Bayesian stats, the mean of a probability density <span class="math inline">\(p(\theta)\)</span> is
+<span class="math display">\[
+\mu = \int_{\Theta} \theta p(\theta) \, d \theta .
+\]</span>
+Except for cases in which the distribution <span class="math inline">\(p(\theta)\)</span> has a known form (not the case for most applied models) for functional form of the integral isn’t known, but <span class="math inline">\(p(\theta)\)</span> is</p>
+<p>The Monte Carlo estimate of <span class="math inline">\(\mu\)</span> is.</p>
+<ul>
+<li><p>Draw <span class="math inline">\(N\)</span> independent samples, <span class="math inline">\(\theta^{(1)}, \dots, \theta^{(N)}\)</span>, from <span class="math inline">\(p(\theta)\)</span>.</p></li>
+<li><p>Estimate <span class="math inline">\(\hat{\mu}\)</span> with
+<span class="math display">\[
+\hat{\mu} = \frac{1}{N} \sum_{n = 1}^N \theta^{(N)} .
+\]</span></p></li>
+</ul>
+<p>If <span class="math inline">\(p(\theta)\)</span> has finite mean and variance, the law of large numbers ensures
+that the Monte Carlo estimate converges to the true value
+<span class="math display">\[
+\lim_{N \to \infty} \hat\mu \to \mu
+\]</span>
+and the estimation error is governed by the CLT,
+<span class="math display">\[
+| \mu - \hat{\mu} | \propto \frac{\sigma}{\sqrt{N}}
+\]</span></p>
+<p><strong>Example:</strong> The mean of <span class="math inline">\(Y = X^2\)</span> where <span class="math inline">\(X \sim \dnorm(0, 1)\)</span>.
+Draw a sample from <span class="math inline">\(Y\)</span>,</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1024</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></code></pre>
+<p>The Monte Carlo estimates of the mean is</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(x)
+<span class="co">#&gt; [1] 1.03</span></code></pre>
+<p>with standard error,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(x) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))
+<span class="co">#&gt; [1] 0.0456</span></code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mcmc-diagnostics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/bayesian-computation.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

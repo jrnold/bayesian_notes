@@ -1,6 +1,8 @@
 
 # Priors
 
+> Yeah, well, you know, that’s just, like, your opinion, man. — The Dude (*The Big Lebowski*)
+
 Priors for coefficients and scales.
 
 ## Levels of Priors
@@ -18,7 +20,7 @@ $$
 p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int p(y | \theta') p(\theta') d\theta'},
 $$
 has a [closed-form solution](https://en.wikipedia.org/wiki/Closed-form_expression) and can be calculated exactly.
-In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used. 
+In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used.
 Unfortunately, these cases are few.
 
 Most of those cases involve **conjugate priors**.
@@ -32,13 +34,13 @@ Here is a diagram of a few common conjugate priors.[^conjugate]
 
 [^conjugate]: Based on John Cook's a [Diagram of Conjugate Prior distributions](https://www.johndcook.com/blog/conjugate_prior_diagram/).
 
-The table in the Wikipedia page for [Conjugate priors](https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4) is as complete as any out there. 
+The table in the Wikipedia page for [Conjugate priors](https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4) is as complete as any out there.
 @Fink1997a for a compendium of references.
 Also see [Distributions] for more information about probability distributions.
 
 ### Binomial-Beta
 
-Binomial distribution: If $N \in \Nats$ (number of trials), $\theta \in (0, 1)$ (success probability in each trial), 
+Binomial distribution: If $N \in \Nats$ (number of trials), $\theta \in (0, 1)$ (success probability in each trial),
 then for $n \in \{0, \dots, N\}$,
 $$
 \dBinom(n | N, \theta) = \binom{N}{n} \theta^{n} (1 - \theta)^{N - n} .
@@ -46,7 +48,7 @@ $$
 
 Beta distribution: If $\alpha \in \RealPos$ (shape) and $\beta \in \RealPos$ (shape), then for $\theta \in (0, 1)$,
 $$
-\dbeta(\theta | \alpha, \beta) = \frac{1}{\mathrm{B}(\alpha, \beta)} \theta^{\alpha - 1} (1 - \theta)^{\beta - 1}, 
+\dbeta(\theta | \alpha, \beta) = \frac{1}{\mathrm{B}(\alpha, \beta)} \theta^{\alpha - 1} (1 - \theta)^{\beta - 1},
 $$
 where $\mathrm{B}$ is the beta function,
 $$
@@ -89,14 +91,13 @@ p(\theta | y, \alpha) &= \ddirichlet(\theta | \alpha + y) && \text{Dirichlet pos
 \end{aligned}
 $$
 
-
 ### Poisson-Gamma
 
-Let $\lamba$ be the rate parameter of the Poisson distribution.
+Let $\lambda$ be the rate parameter of the Poisson distribution.
 
 If $\lambda \in \R^+$ (rate parameter), then for $n \in \N$,
 $$
-\dpois(n|\lambda) = \frac{1}{n!} \lambda^n \exp(-\lambda) 
+\dpois(n|\lambda) = \frac{1}{n!} \lambda^n \exp(-\lambda)
 $$
 If $\alpha \in \R^{+}$ (shape parameter), $\beta \in \R^{+}$ (inverse scale parameter), then for $y \in \R^{+}$,
 $$
@@ -124,12 +125,9 @@ p(\mu | y, \mu, \sigma^2, \mu_0, \sigma_0^2) &= \dbeta(\mu | \tilde{\mu}, \tilde
 \end{aligned}
 $$
 
-
 ### Exponential Family
 
 Likelihood functions in the [exponential family](https://en.wikipedia.org/wiki/Exponential_family) have conjugate priors, often also in the exponential family.[^expconj]
-
-[^expconj]: <https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions>
 
 ## Improper Priors
 
@@ -137,7 +135,6 @@ If prior distributions are given an [improper uniform prior](https://en.wikipedi
 $$
 p(\theta | y) \propto p(y | \theta) p(\theta) \propto p(y | \theta)
 $$
-
 
 ## Cromwell's Rule
 
@@ -157,20 +154,18 @@ $$
 p(\theta = x | y) \propto p(y | \theta = x) p(\theta = x) = 0
 $$
 
-
-
 ## Asymptotics
 
-As the sample size increases, the Bayesian distribution converges to a normal distribution centered on the true vaue of the parameter.
+As the sample size increases, the Bayesian distribution converges to a normal distribution centered on the true value of the parameter.
 
 Suppose data $y_1, \dots, y_n \sim$ are an iid sample from the distribution $f(y)$.
-Suppose that the data are modeled with a parameteric family $p(y | \theta)$ and a prior distribution $p(\theta)$.
+Suppose that the data are modeled with a parametric family $p(y | \theta)$ and a prior distribution $p(\theta)$.
 
 If the data distribution is included in the parametric family, meaning that there exists a $\theta_0$ such that $p(y | \theta_0) = f(y)$, then the posterior distribution is *consistent* in that it converges to the true parameter value $\theta_0$ as $n \to \infty$.
 
 Otherwise, the posterior convergences to the distribution $p(y | \theta)$ closes to the true distribution.
 
-As $n \to infty$, the likleihood dominates the posterior distribution.
+As $n \to infty$, the likelihood dominates the posterior distribution.
 
 There are cases in which the normal approximation is incorrect.
 
@@ -183,6 +178,99 @@ There are cases in which the normal approximation is incorrect.
 1.  convergence to the edge of the parameter space
 1.  tails of the distribution can be inaccurate even if the normal approximation converges to the correct value; e.g. the normal approximation will still place a non-zero density on negative values of a non-negative parameter.
 
+## Proper and Improper Priors
+
+A prior distribution $p(\theta)$ is an improper when it is not a probability distribution, meaning
+$$
+\int p(\theta) \,d\theta = \infty .
+$$
+Perhaps the most common improper distribution is an unbounded uniform distribution,
+$$
+p(\theta) \propto 1
+$$
+for $-\infty < \theta < \infty$.
+
+Improper priors can be used, because in some cases, the posterior distribution can still be proper even if the prior is not.
+
+| Prior    | Posterior |
+| -------- | --------- |
+| Improper | ?         |
+| Proper   | Proper    |
+
+One common case of this is a linear regression model with improper priors.
+$$
+p(\beta, \sigma | y, X) =
+\begin{cases}
+y &\sim \dnorm(X \beta, \sigma^{2} I)
+\end{cases}
+$$
+If the number of observations (rows of $X$) is less than the number of
+independent columns in $X$ (variables plus the constant), then the MLE of
+$\beta$ is undefined, and also the posterior distribution is improper.
+But if alter that model to include a proper prior,
+$$
+p(\beta, \sigma | y, X) =
+\begin{cases}
+y &\sim \dnorm(X \beta, \sigma^{2} I) \\
+\beta & \sim \dnorm(\mu_\beta, \Sigma_\beta) \\
+\gamma &\sim p(\gamma)
+\end{cases}
+$$
+then we can estimate $p(\beta, \sigma | y, X)$ even if the number of
+observations is less than the number of variables. Consider the case if we
+observe *no* data; then the posterior distribution is equal to the prior, and
+since the prior is a proper distribution, so is the posterior.
+
+However, because a proper posterior allows for estimating a posterior, does
+imply that the posterior distribution is any "good". But that is the role of
+the evaluation step in Bayesian analysis. In the cases where an improper prior
+would lead to an improper posterior, the choice of the prior is important
+because the prior will dominate the shape of the posterior distribution.
+
+One way of thinking about many "identification" assumptions in MLE models is
+that they can loosely be considered "priors". What is called the likelihood and
+what is called the the prior is not well-defined, and often the choice of of
+likelihood functions is both subjective and the most important part of the
+analysis.
+
+Regarding improper priors, also see the asymptotic results that the posterior
+distribution increasingly depends on the likelihood as sample size increases.
+
+Stan: If no prior distributions is specified for a parameter, it is given an
+improper prior distribution on $(-\infty, +\infty)$ after transforming the
+parameter to its constrained scale.
+
+## Hyperpriors and Hyperparameters
+
+A hyperparameter is a parameter in a prior.
+A hyperprior is a term for a prior on
+
+Consider the case of a binomial likelihood with a beta prior on the proportion parameter $\theta$.
+The observed value of $n$ and the $N$
+$$
+\begin{aligned}[t]
+p(n | \theta) &\sim \dBinom(N, \theta) && \text{likelihood for } n \\
+p(\theta) &\sim \dbeta(a, b)  && \text{prior on } \theta \\
+\end{aligned}
+$$
+This is a model of the posterior distribution of $\theta$ given the data,
+where the data consists of the $n$ successes, the total number of trails $N$, *and* $a$ and $b$, the assumed shape parameters of the beta prior on $\theta$.
+Thus our posterior distribution is,
+$$
+p(\theta | n, N, a, b) .
+$$
+
+However, suppose we decided that since we did not have a good reason to choose any particular values of $a$ and $b$ for the prior distribution, we would treat the shape parameters of the beta distribution as parameters and assign them their own prior distributions,
+$$
+\begin{aligned}[t]
+p(n | \theta) &\sim \dBinom(N, \theta) && \text{likelihood for } n \\
+p(\theta) &\sim \dbeta(\alpha, \beta)  && \text{prior on } \theta \\
+p(\alpha) &\sim \dexp(a^*)  && \text{hyperprior} \\
+p(\beta) &\sim \dexp(b^*)  && \text{hyperprior}
+\end{aligned}
+$$
+Now the parameters of the model are $\theta$, $\alpha$, and $\beta$, and the data are $n$, $N$, $a^{*}$, and $b^{*}$.
+Since one parameter in the model ($\theta$) is a function of other parameters, $\alpha$ and $\beta$, we call $\alpha$ and $\beta$ hyperparameters.
 
 ## References
 
@@ -193,3 +281,5 @@ There are cases in which the normal approximation is incorrect.
 -   @GelmanJakulinPittauEtAl2008a discusses using Cauchy(0, 2.5) for prior distributions
 -   @Gelman2006a provides a prior distribution on variance parameters in hierarchical models.
 -   @PolsonScott2012a on using Half-Cauchy priors for scale parameters
+
+[^expconj]: <https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions>

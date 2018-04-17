@@ -2,8 +2,9 @@
 # Introduction to Stan and Linear Regression
 
 This chapter is an introduction to writing and running a Stan model in R.
-Also see the **rstan** [vignette](https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html) for similar content.
-
+Also see the **rstan**
+[vignette](https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html)
+for similar content.
 
 ## Prerequisites {-}
 
@@ -15,7 +16,7 @@ library("tidyverse")
 
 For this section we will use the `duncan` dataset included in the **carData** package.
 Duncan's occupational prestige data is an example dataset used throughout the popular Fox regression text, *Applied Regression Analysis and Generalized Linear Models* [@Fox2016a].
-It is originally from @Duncan1961a consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that 
+It is originally from @Duncan1961a consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that
 
 ```r
 data("Duncan", package = "carData")
@@ -31,9 +32,10 @@ A standard way to do this is with the OLS estimator:
 $$
 \begin{multline}
 y_i = \beta_0 + \beta_1 I(\mathtt{type} = \mathtt{"prof"}) + \beta_2 I(\mathtt{type} = \mathtt{"wc"}) \\
-+ \beta_3 \mathtt{income} + \beta_4 \mathtt{education} + \epsilon_i
+\quad + \beta_3 \mathtt{income} + \beta_4 \mathtt{education} + \epsilon_i
 \end{multline}
 $$
+
 
 ```r
 duncan_lm <- lm(prestige ~ type + income + education, data = Duncan)
@@ -101,7 +103,7 @@ $$
 **Priors:** The model needs to specify a prior distribution for the parameters $(\beta, \sigma)$.
 Rather than specify a single distribution for $\beta$ and $\sigma$, it will be easier to specify independent (separate) distributions for $\beta$ and $\sigma$.
 
-We will use what are called an *improper uniform priors*. 
+We will use what are called an *improper uniform priors*.
 An improper prior is,
 $$
 p(\theta) \propto C
@@ -119,7 +121,7 @@ $$
 \begin{aligned}
 p(\beta, \sigma | x, y) &\propto p(y| \beta, \sigma, x) p(\beta, \sigma, x) \\
 &= \prod_{i = 1}^n N(y_i | x_i' \beta, \sigma^2) \cdot C \\
-&\propto \prod_{i = 1}^n N(y_i | x_i' \beta, \sigma^2) 
+&\propto \prod_{i = 1}^n N(y_i | x_i' \beta, \sigma^2)
 \end{aligned}
 $$
 
@@ -142,7 +144,7 @@ Each block has a specific purpose in the model.
 
 ## Sampling Model with Stan
 
-```
+``` stan
 functions {
     // OPTIONAL: user-defined functions
 }
@@ -167,6 +169,7 @@ generated quantities {
 ```
 
 The file `lm0.stan` is a Stan model for the linear regression model previously defined.
+
 
 ```
 data {
@@ -226,16 +229,17 @@ library("rstan")
 mod1 <- stan_model("stan/lm.stan")
 ```
 
+
 ```r
 mod1
 ```
 
 prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("data {\n  // number of observations\n  int n;\n  // response vector\n  vector[n] y;\n  // number of columns in the design matrix X\n  int k;\n  // design matrix X\n  matrix [n, k] X;\n  // // beta prior\n  // real b_loc;\n  // real<lower = 0.0> b_scale;\n  // // sigma prior\n  // real sigma_scale;\n}\nparameters {\n  // regression coefficient vector\n  vector[k] b;\n  // scale of the regression errors\n  real<lower = 0.0> sigma;\n}\ntransformed parameters {\n  // mu is the observation fitted/predicted value\n  // also called yhat\n  vector[n] mu;\n  mu = X * b;\n}\nmodel {\n  // priors\n  // b ~ normal(b_loc, b_scale);\n  // sigma ~ cauchy(0, sigma_scale);\n  // likelihood\n  y ~ normal(mu, sigma);\n  // the ~ is a shortcut\n  // target += normal_lpdf(y | mu, sigma);\n  // for (i in 1:n) {\n  //   y[i] ~ normal(mu[i], sigma)\n  // }\n}\ngenerated quantities {\n  // // simulate data from the posterior\n  // vector[n] y_rep;\n  // // log-likelihood posterior\n  // vector[n] log_lik;\n  // for (i in 1:n) {\n  //   y_rep[i] = normal_rng(mu[i], sigma);\n  //   log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);\n  // }\n}")))
 
-
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.
 
 **Note**Since a Stan model compiles to C++ code, you may receive some warning messages such as
+
 ```
 /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function 'set_zero_all_adjoints' [-Wunused-function]
     static void set_zero_all_adjoints() {
@@ -243,13 +247,13 @@ See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-sta
 In file included from file1d4a4d50faa.cpp:8:
 In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 ```
+
 As long as your model compiles, you can ignore these compiler warnings (On the other hard, warnings that occur during sampling should not be ignored).
 If the Stan model does not give you a syntax error when parsing the model, it should compile to valid C++.[^bugs][^c-warnings]
-See 
+See
 
-[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the [instructions](http://mc-stan.org/issues/) on how to inform the Stan developers about bugs. 
+[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the [instructions](http://mc-stan.org/issues/) on how to inform the Stan developers about bugs.
 [c-warnings]: The extended installation instructions for [MacOS/Linux](https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux) and [Windows](https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows) have instructions for adding compiler options to the R [Makevars](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars) file.
-
 
 ### Sampling
 
@@ -262,11 +266,18 @@ mod1_data <- list(
   n = nrow(Duncan)
 )
 ```
-The data types in Stan are all numeric (either integers or reals), but they include matrices and vectors. 
-However, there is nothing like a data frame in Stan. 
-Whereas in the R function `lm` we can provide a formula and a data set for where to look for objects, and the function will create the appropriate $X$ matrix for the regression, we will need to create that matrix ourselves---expanding categorical variables to indicator variables, and expanding interactions and other functions of the predictors.
-However, we need to do that all manually.
-The function [stats](https://www.rdocumentation.org/packages/stats/topics/model.matrix) is the workhorse function used in `lm` and many other R functions to convert a formula into the matrix used in estimation.
+
+The data types in Stan are all numeric (either integers or reals), but they
+include matrices and vectors. However, there is nothing like a data frame in
+Stan. Whereas in the R function `lm` we can provide a formula and a data set
+for where to look for objects, and the function will create the appropriate $X$
+matrix for the regression, we will need to create that matrix
+ourselves---expanding categorical variables to indicator variables, and
+expanding interactions and other functions of the predictors. However, we need
+to do that all manually. The function [stats](https://www.rdocumentation.org/packages/stats/topics/model.matrix) is the
+workhorse function used in `lm` and many other R functions to convert a formula
+into the matrix used in estimation.
+
 
 ```r
 X <- model.matrix(prestige ~ type + income + education, data = Duncan)
@@ -305,21 +316,26 @@ Now, sample from the posterior, using the function `sampling`:
 mod1_fit <- sampling(mod1, data = mod1_data)
 ```
 
-
 ### Convergence Diagnostics and Model Fit
 
-- **Convergence Diagnostics:** Is this the posterior distribution that you were looking for? These don't directly say anything about how "good" the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.
+-   **Convergence Diagnostics:** Is this the posterior distribution that you
+    were looking for? These don't directly say anything about how "good" the
+    model is in terms representing the data, they are only evaluating how well
+    the sampler is doing at sampling the posterior distribution of the given
+    model. If there are problems with these, then the sample results do not
+    represent the posterior distribution, and your inferences will be biased.
 
-    - `mcse`: 
-    - `n_eff`: 
-    - `Rhat`
-    - `divergences`
-    
-- **Model fit:** Is this statistical model appropriate for the data? Or better than other models?
+    -   `mcse`:
+    -   `n_eff`:
+    -   `Rhat`
+    -   `divergences`
 
-    - Posterior predictive checks    
-    - Information criteria:
-    
-        - WAIC
-        - Leave-one-out Cross-Validation
+-   **Model fit:** Is this statistical model appropriate for the data?
+    Or better than other models?
 
+    -   Posterior predictive checks
+
+    -   Information criteria:
+
+        -   WAIC
+        -   Leave-one-out Cross-Validation

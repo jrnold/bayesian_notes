@@ -73,7 +73,6 @@ $$
 
 This example considers three ways of modeling $\mu_i$:
 
-
 1.  **Complete Pooling:** All players have the same batting average parameter.
     $$
     \eta_i = \eta .
@@ -84,14 +83,14 @@ This example considers three ways of modeling $\mu_i$:
     $$
     On the log odds scale, this places 95% of the probability mass between 0.7 and 99.3 on the proportion scale.
 
-2.  **Non-pooled:** Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
+1.  **Non-pooled:** Each players (log-odds) batting average is independent, with each assigned a separate weak prior.
     $$
     \begin{aligned}[t]
     \eta_i &\sim \dnorm(0, 2.5)
     \end{aligned}
     $$
 
-3.  **Partial-pooling:** Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution.
+1.  **Partial-pooling:** Each player has a separate (log-odds) batting average, but these batting average parameters are drawn from a common normal distribution.
     $$
     \begin{aligned}[t]
     \eta_i &\sim \dnorm(0, \tau) \\

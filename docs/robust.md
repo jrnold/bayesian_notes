@@ -1,7 +1,7 @@
 
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 # Heteroskedasticity and Robust Regression
@@ -15,16 +15,21 @@ library("tidyverse")
 library("rubbish")
 ```
 
-
 ## Linear Regression with Student t distributed errors
 
-Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
-The normal distribution has narrow tail probabilities.
+Like OLS, Bayesian linear regression with normally distributed errors is
+sensitive to outliers. 
+This is because the normal distribution has narrow tail probabilities, 
+with 99.8% of the probability within three standard deviations.
+Thus, if we estimate 
 
-This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
-Higher surprise is a lower log-likelihood.
-Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
-This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
+This plots the normal, Double Exponential (Laplace), and Student-t ($df = 4$)
+distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
+Higher surprise is a lower log-likelihood. Both the Student-t and Double
+Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
+This means that outliers impose less of a penalty on the log-posterior models
+using these distributions, and the regression line would need to move less to
+incorporate those observations since the error distribution will not consider them as unusual.
 
 
 ```r
@@ -150,29 +155,38 @@ summary(mod_normal_fit, pars = c("b"))$summary
 #> b[4] 1.01
 ```
 
-
 ## Heteroskedasticity
 
 In applied regression, heteroskedasticity consistent or robust standard errors are often used.
 
-However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals.
-Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.
+However, there is straightforwardly direct translation of HC standard error to
+regression model this in a Bayesian setting. The sandwich method of estimating
+HC errors uses the same point estimates for the regression coefficients as OLS,
+but estimates the standard errors of those coefficients in a second stage from
+the OLS residuals. Disregarding differences in frequentist vs. Bayesian
+inference, it is clear that a direct translation of that method could not be
+fully Bayesian since the coefficients and errors are not estimated jointly.
 
-In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, $\sigma_i$,
+In a linear normal regression model with heteroskedasticity, each observation
+has its own scale parameter, $\sigma_i$,
 $$
 \begin{aligned}[t]
 y_i &\sim \dnorm(X \beta, \sigma_i) .
 \end{aligned}
 $$
-It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper.
-To estimate this model we have to apply some model to the scale terms, $\sigma_i$.
-In fact, you can think of homoskedasticity as the simplest such model; assuming that all $\sigma_i = \sigma$.
-A more general model of $\sigma_i$ should encode any information the analyst has about the scale terms.
-This can be a distribution or functions of covariates for how we think observations may have different values.
+It should be clear that without proper priors this model is not identified,
+meaning that the posterior distribution is improper. To estimate this model we
+have to apply some model to the scale terms, $\sigma_i$. In fact, you can think
+of homoskedasticity as the simplest such model; assuming that all $\sigma_i =
+\sigma$. A more general model of $\sigma_i$ should encode any information the
+analyst has  about the scale terms. This can be a distribution or functions of
+covariates for how we think observations may have different values.
 
 ### Covariates
 
-A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into $k = 1, \dots, K$ groups, and $k[i]$ is the group of observation $i$,
+A simple model of heteroskedasticity is if the observations can be split into
+groups. Suppose the observations are partitioned into $k = 1, \dots, K$ groups,
+and $k[i]$ is the group of observation $i$,
 $$
 \sigma_i = \sigma_{k[i]}
 $$
@@ -182,12 +196,14 @@ $$
 \log(\sigma_i) \sim \dnorm(X \gamma, \tau)
 $$
 
-
 ### Student-t Error
 
 The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.
 
-A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+A reparameterization that will be used quite often is to rewrite a normal
+distributions with unequal scale parameters as the product of a common global
+scale parameter ($\sigma$), and observation specific local scale parameters,
+$\lambda_i$,[^globalmixture]
 $$
 y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
 $$
@@ -200,29 +216,26 @@ $$
 y_i \sim \dt{\nu}(X \beta, \sigma) .
 $$
 
-
-[^globalmixture]: See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
-
+[^globalmixture]: See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/)
+    for a visualization of a Student-t distribution a mixture of Normal distributions,
+    and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation
+    of the Student t distribution as a mixture of normal distributions.
+    This scale mixture of normal representation will also be used with shrinkage
+    priors on the regression coefficients.
 
 **Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
 
-1. Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
-2. $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
+1.  Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
+1.  $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
 
 When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
 
-
 ## References
 
-### Robust regression
+For more on robust regression see @GelmanHill2007a [sec 6.6], @BDA3 [ch 17], and @Stan2016a [Sec 8.4].
 
--   See @GelmanHill2007a [sec 6.6], @BDA3 [ch 17]
--   @Stan2016a [Sec 8.4] for the Stan example using a Student-t distribution
-
-### Heteroskedasticity
-
--   @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
--   @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
+For more on heteroskedasticity see @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
+@Stan2016a discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.
 
 ### Quantile regression
 

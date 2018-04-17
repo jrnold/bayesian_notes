@@ -1,8 +1,6 @@
 
 # Generalized Linear Models
 
-## Generalized Linear Models
-
 Generalized linear models (GLMs) are a class of commonly used models.
 In GLMs, the mean is specified as a function of a linear model of predictors,
 $$
@@ -12,13 +10,16 @@ GLMs are a generalization of linear regression from an unbounded continuous outc
 
 A GLM consists of three components:
 
-1. A *probability distribution* (*family*) specifying the conditional distribution of the response variable.
+1.  A *probability distribution* (*family*) specifying the conditional
+    distribution of the response variable.
     In GLMs, the distribution is in the exponential family: Normal, Binomial, Poisson, Categorical, Multinomial, Poisson, Beta.
-2. A *linear predictor*, which is a linear function of the predictors,
+
+1.  A *linear predictor*, which is a linear function of the predictors,
     $$
-    \eta = \mat{X} \vec{\beta} .
+    \eta = \mat{X} \vec{\beta}.
     $$
-3. A *link function* ($g(.)$) which maps the expected value to the  the linear predictor,
+
+1.  A *link function* ($g(.)$) which maps the expected value to the  the linear predictor,
     $$
     g(\mu) = \eta .
     $$
@@ -34,6 +35,7 @@ These are also easily estimated in a Bayesian setting.
 See the help for [stats](https://www.rdocumentation.org/packages/stats/topics/family) for common probability distributions, [stats](https://www.rdocumentation.org/packages/stats/topics/make.link) for common links,  and the [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model) page for a table of common GLMs.
 See the function **[VGAM](https://cran.r-project.org/package=VGAM)** for even more examples of link functions and probability distributions.
 
+<!--
 Link                       Range of $\mu_i$                    $\eta_i = g(\mu_i)$                         $\mu_i = g^{-1}(\eta)_i$
 -------------------------- ----------------------------------- ------------------------------------------- ----------------------------------------
 Identity                   $(-\infty, \infty)$                 $\mu_i$                                     $\eta_i$
@@ -48,8 +50,8 @@ Log-log                    $(0, 1)$                            $-\log(-log(\mu_i
 Complementary Log-log      $(0, 1)$                            $\log(-log(1 - \mu_i))$                     $1 - \exp(-\exp(\eta_i))$
 
 Table:  Common Link Functions and their inverses. Table derived from @Fox2016a [p. 419].
-
-
+-->
+<!--
 Distribution           Canonical Link  Range of $Y_i$                                                        Other link functions
 ---------------------- --------------- --------------------------------------------------------------------- ------------------------------
 Normal                 Identity        real: $(-\infty, +\infty)$                                            log, inverse
@@ -64,6 +66,7 @@ Multinomial            Logit           K-vector of integers, $\{x_1, \dots, x_K\
 
 Table: Common distributions and link functions. Table derived from @Fox2016a [p. 421],  [Wikipedia](https://en.wikipedia.org/wiki/Generalized_linear_model), and [stats](https://www.rdocumentation.org/packages/stats/topics/glm).
 
+-->
 
 ## Count Models
 
@@ -102,7 +105,6 @@ The outcome variable is the number of countries imposing sanctions.
 ```r
 data("sanction", package = "Zelig")
 ```
-
 
 
 ```r
@@ -263,7 +265,6 @@ $$
 \end{aligned}
 $$
 
-
 **Important** The negative binomial distribution has many different parameterizations.
 An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
 $$
@@ -286,16 +287,6 @@ In Stan, there are multiple parameterizations of the
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
 -   @BDA3 [Ch 16]
-
-### References
-
-For general references on count models see
-
--   @GelmanHill2007a [p. 109-116]
--   @McElreath2016a [Ch 10]
--   @Fox2016a [Ch. 14]
--   @BDA3 [Ch. 16]
-
 
 ## Multinomial / Categorical Models
 
@@ -346,6 +337,13 @@ See:
 -   **rstanarm** documentation [Modeling Rates/Proportions using Beta Regression with rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/betareg.html)
 
 ## References
+
+For general references on count models see
+
+-   @GelmanHill2007a [p. 109-116]
+-   @McElreath2016a [Ch 10]
+-   @Fox2016a [Ch. 14]
+-   @BDA3 [Ch. 16]
 
 @BDA3 [Ch 16], @GelmanHill2007a [Ch. 5-6], @McElreath2016a [Ch. 9]. @King1998a discusses MLE estimation of many common GLM models.
 

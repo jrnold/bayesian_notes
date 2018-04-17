@@ -4,10 +4,12 @@ rmd_subdir: false
 delete_merged_file: true
 rmd_files:
   - "index.Rmd"
+  - "intro.Rmd"
   - "theory.Rmd"
   - "priors.Rmd"
-  # - "computation.Rmd"
-  # - "bayesian-computation.Rmd"
+  - "estimation.Rmd"
+  - "computation.Rmd"
+  - "bayesian-computation.Rmd"
   - "diagnostics.Rmd"
   - "posterior-predictive.Rmd"
   - "models.Rmd"

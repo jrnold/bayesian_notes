@@ -1,7 +1,7 @@
 
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -9,8 +9,8 @@ editor_options:
 
 There are two parts of checking a Bayesian model:
 
-1. diagnostics: Is the sampler working? Is it adequately approximating the specified posterior distribution: $p(\theta | D)$.
-2. model fit: Does the model adequately represent the data?
+1.  diagnostics: Is the sampler working? Is it adequately approximating the specified posterior distribution: $p(\theta | D)$.
+1.  model fit: Does the model adequately represent the data?
 
 This chapter covers the former.
 
@@ -24,12 +24,11 @@ library("rstan")
 library("tidyverse")
 ```
 
-
 ## Reparameterize Models
 
-1. Reduce correlation between parameters (e.g. see `mcmc_pairs`)
-2. Put parameters on the same scale. The samplers work best when all parameters are roughly on the same scale, e.g. $\approx 1$. Try to avoid situations where parameters are orders of magnitude different, e.g. 1e-5 and 1e+10.
-3. Increase the informativeness of priors. If parameters are too uninformative, the posterior distribution may have wide tails that hamper sampling. One way of thinking about it is that the model is only "weakly identified" and requires either more data or more informative priors to estimate.
+1.  Reduce correlation between parameters (e.g. see `mcmc_pairs`)
+1.  Put parameters on the same scale. The samplers work best when all parameters are roughly on the same scale, e.g. $\approx 1$. Try to avoid situations where parameters are orders of magnitude different, e.g. 1e-5 and 1e+10.
+1.  Increase the informativeness of priors. If parameters are too uninformative, the posterior distribution may have wide tails that hamper sampling. One way of thinking about it is that the model is only "weakly identified" and requires either more data or more informative priors to estimate.
 
 ## Convergence Diagnostics
 
@@ -53,24 +52,21 @@ See @Stan2016a [Sec 28.2] for the equations to calculate these.
 
 **TODO:** Examples of passing and non-passing $\hat{R}$ chains using fake data generated from known functions with a given autocorrelation.
 
-
 **Rule of Thumb:** The rule of thumb is that R-hat values for all less than 1.1 [source](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html).
 Note that **all** parameters must show convergence.
 This is a necessary but not sufficient condition for convergence.
 
-
 ### References
 
-- @BDA3 [p. 267]
-- @Stan2016a [Ch 28.] for how Stan calculates Hat, autocorrelations, and ESS.
-- @GelmanRubin1992a introduce the R-hat statistic
+-   @BDA3 [p. 267]
+-   @Stan2016a [Ch 28.] for how Stan calculates Hat, autocorrelations, and ESS.
+-   @GelmanRubin1992a introduce the R-hat statistic
 
 ## Autocorrelation, Effective Sample Size, and MCSE
 
 MCMC samples are dependent.  This does not effect the validity of inference on the posterior if the samplers has time to explore the posterior distribution, but it does affect the efficiency of the sampler.
 
 In other words, highly correlated MCMC samplers requires more samples to produce the same level of Monte Carlo error for an estimate.
-
 
 ### Effective Sample Size
 
@@ -95,8 +91,11 @@ $$
 \hat{n}_{eff} = \frac{mn}{1 + 2 \sum_{t = 1}^T \hat{\rho}_t}
 $$
 
-- See also @Stan2016a [Sec 28.4], @Geyer2011a, and @BDA3 [Sec 11.5].
-- This isn't the only way to calculate the effective sample size. The **[coda](https://cran.r-project.org/package=coda)** package function [coda](https://www.rdocumentation.org/packages/coda/topics/effectiveSize) uses a different method. The differences are due to how the autocorrelation is calculated.
+-   See also @Stan2016a [Sec 28.4], @Geyer2011a, and @BDA3 [Sec 11.5].
+
+-   This isn't the only way to calculate the effective sample size. The
+    **[coda](https://cran.r-project.org/package=coda)** package function [coda](https://www.rdocumentation.org/packages/coda/topics/effectiveSize)
+    uses a different method. The differences are due to how the autocorrelation is calculated.
 
 **Example:** Comparison of the effective sample sizes for data generated with various levels of autocorrelation.
 The package `rstan` does not directly expose the function it uses to calculate ESS, so this `ess` function does so (for a single chain).
@@ -116,7 +115,7 @@ sims <- map_df(c(0, 0.5, 0.75, 0.99),
   function(ar) {
     tibble(ar = ar,
            y = if (ar == 0) {
-             rnorm(n) 
+             rnorm(n)
            } else {
              as.numeric(arima.sim(list(ar = ar), n))
            },
@@ -144,15 +143,15 @@ Due to the autocorrelation, the reduction in the number of effective samples wil
 
 Both of these will produce 1,000 samples from the posterior, but effective sample size of $B$ will be greater than the effective sample size of $A$, since after thinning g the autocorrelation in $B$ will be lower.
 
-- *A* Generating 1,000 samples after convergence and save all of them
-- *B* Generating 10,000 samples after convergence and save every 10th sample
+-   *A* Generating 1,000 samples after convergence and save all of them
+-   *B* Generating 10,000 samples after convergence and save every 10th sample
 
 In this case, A produces 10,000 samples, and B produces 1,000.
 The effective sample size of A will be higher than B.
 However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: $N_{eff}(A) / N_{eff}(B) < 10$.
 
-- *A* Generating 10,000 samples after convergence and save all of them
-- *B* Generating 10,000 samples after convergence and save every 10th sample
+-   *A* Generating 10,000 samples after convergence and save all of them
+-   *B* Generating 10,000 samples after convergence and save every 10th sample
 
 Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.
 
@@ -189,8 +188,8 @@ map_df(c(1, 2, 4, 8, 16, 32), thin_ess,
 #> 6   32.   128  128.       1.00
 ```
 
-- @BDA3 [p. 282-283]
-- @Stan2016a [p. 354-355]
+-   @BDA3 [p. 282-283]
+-   @Stan2016a [p. 354-355]
 
 ### Traceplots
 
@@ -198,13 +197,13 @@ Trace plots are a time series of sampler iterations, e.g. as produced by [bayesp
 
 These can, but **should not**, be used to assess convergence,
 
-- such visual inspection is 'notoriously unreliable' [@BDA3, p. 285]
-- it cannot scale to many parameters
+-   such visual inspection is 'notoriously unreliable' [@BDA3, p. 285]
+-   it cannot scale to many parameters
 
 Trace plots may be useful for diagnosing convergence problems *after* $\hat{R}$ or or $n_eff$ indicates problems. Some possible issues to check in these plots are
 
-- multimodality (the traceplot jumps between different distributions)
-- wide posterior tails (the traceplot shows regions where the sampler will reach and have difficulty returning to the main distribution)
+-   multimodality (the traceplot jumps between different distributions)
+-   wide posterior tails (the traceplot shows regions where the sampler will reach and have difficulty returning to the main distribution)
 
 ### Monte Carlo Standard Error (MCSE)
 
@@ -236,10 +235,9 @@ See @FlegalHaranJones2008a and the **[mcmcse](https://cran.r-project.org/package
 
 The estimation of standard errors for quantiles, as would be used in is more complicated. See the package **[mcmcse](https://cran.r-project.org/package=mcmcse)** for Monte Carlo standard errors of quantiles (though calculated in a different method than **rstan**).
 
-- @BDA3 [Sec. 10.5]
-- @FlegalHaranJones2008a
-- [Talk by Geyer on MCSE ](http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf)
-
+-   @BDA3 [Sec. 10.5]
+-   @FlegalHaranJones2008a
+-   [Talk by Geyer on MCSE](http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf)
 
 ## HMC-NUT Specific Diagnostics
 
@@ -248,28 +246,27 @@ This is unusual, as most Bayesian sampling methods do not give indication of whe
 
 Three specific HMC-NUTS diagnostics are
 
-1. divergent transitions
-2. maximum tree-depth
-3. Bayesian fraction of missing information
+1.  divergent transitions
+1.  maximum tree-depth
+1.  Bayesian fraction of missing information
 
 The general way to fix these issues is the manually adjust the HMC-NUTS sampler parameters.n
 
-1. Stepsize: Length of the steps to take
-2. Tree-fdepth: Number of steps to take
+1.  Stepsize: Length of the steps to take
+1.  Tree-depth: Number of steps to take
 
 During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal.
 The other alternative is to reparameterize the models.
 
-
 ### Divergent transitions
 
-**The problem:** The details of the HMC are technical and can be found **TODO**. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating.
+The details of the HMC are technical and can be found **TODO**. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating.
 If the step sizes are too large, the discrete approximation does not work.
 Helpfully, when the approximation is poor it does not fail without any indication but will produce "divergent transitions".
 
-*If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased*
+If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased.
 
-**The solution:** Reduce the step size. This can be done by increasing the the `adapt_delta` parameter.
+Reduce the step size. This can be done by increasing the the `adapt_delta` parameter.
 This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup.
 A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.
 
@@ -277,36 +274,38 @@ See @Stan2016a [p. 380]
 
 ### Maximum Tree-depth
 
-**The problem:** NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
+NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
 If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum.
 While divergent transitions bias inference, a too-small maximum tree-depth only affects efficiency.
 The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum tree-depth were set higher.
 
-**The solution:** Increase the maximum tree-depth.
+Increase the maximum tree-depth.
 
 ### Bayesian Fraction of Missing Information
 
 This is rather technical. See @Betancourt2016a.
 
-# Debugging Bayesian Computating
+## Debugging Bayesian Computing
 
 See @BDA3 [p. 270], ...
 
-1.  Pick a reasonable value for the "true" parameter vector $\theta^* \sim p(\theta)$. This should be a random draw from the prior, but if $\theta$ is uniformative, then any reaonsable value of $\theta$ should work.
-2.  Draw all other parameters that are conditional on $\theta^*$.
-3.  Simulate a large fake dataset $y^{fake}$ from the data distribution $p(y | \theta^*)$
-4.  Calculate the posterior $p(\theta | y^{rep})$.
-5.  Compare the posterior distribution $p(\theta | y)$ to its true value $\theta^*$. For example there should be a 50% probability that the 50% posterior interval of $p(\theta | y)$ contains $\theta^*$.
+1.  Pick a reasonable value for the "true" parameter vector $\theta^* \sim p(\theta)$. This should be a random draw from the prior, but if $\theta$ is uninformative, then any reasonable value of $\theta$ should work.
+1.  Draw all other parameters that are conditional on $\theta^*$.
+1.  Simulate a large fake dataset $y^{fake}$ from the data distribution $p(y | \theta^*)$
+1.  Calculate the posterior $p(\theta | y^{rep})$.
+1.  Compare the posterior distribution $p(\theta | y)$ to its true value $\theta^*$. For example there should be a 50% probability that the 50% posterior interval of $p(\theta | y)$ contains $\theta^*$.
 
 Notes
 
 -   for large number of parameters: calculate the proportion of 50% credible intervals that contain the true value.
+
 -   residual plot: for all scalar parameters $\theta_j$, calculate the residual $\E[\theta_j] - \theta^*$. The residuals should have mean 0.
+
 -   for models with few parameters, perform many fake data simulations.
+
 -   convergence and posterior predictive tests may also indicate issues with the model.
 
     -   it could be either a problem with the model, or a problem in computation.
     -   simplify the model by removing parameters or setting them to fixed values
 
 -   Start with a simple model and build complexity. This is useful both because the simple model may be "good enough" for your purposes, and because adding one part at a time makes it easier to catch and fix bugs.
-    

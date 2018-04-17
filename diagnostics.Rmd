@@ -237,7 +237,7 @@ Three specific HMC-NUTS diagnostics are
 The general way to fix these issues is the manually adjust the HMC-NUTS sampler parameters.n
 
 1.  Stepsize: Length of the steps to take
-1.  Tree-fdepth: Number of steps to take
+1.  Tree-depth: Number of steps to take
 
 During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal.
 The other alternative is to reparameterize the models.
@@ -269,11 +269,11 @@ Increase the maximum tree-depth.
 
 This is rather technical. See @Betancourt2016a.
 
-## Debugging Bayesian Computating
+## Debugging Bayesian Computing
 
 See @BDA3 [p. 270], ...
 
-1.  Pick a reasonable value for the "true" parameter vector $\theta^* \sim p(\theta)$. This should be a random draw from the prior, but if $\theta$ is uniformative, then any reaonsable value of $\theta$ should work.
+1.  Pick a reasonable value for the "true" parameter vector $\theta^* \sim p(\theta)$. This should be a random draw from the prior, but if $\theta$ is uninformative, then any reasonable value of $\theta$ should work.
 1.  Draw all other parameters that are conditional on $\theta^*$.
 1.  Simulate a large fake dataset $y^{fake}$ from the data distribution $p(y | \theta^*)$
 1.  Calculate the posterior $p(\theta | y^{rep})$.

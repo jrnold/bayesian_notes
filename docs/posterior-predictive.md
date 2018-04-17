@@ -1,17 +1,18 @@
 
 # Model Checking
 
-## Why check models? 
+## Why check models?
 
 -   In theory---Bayesian model should include all relevant substantive knowledge and subsume all possible theories.
 -   In practice---it won't. We need to check how the model fits data.
 
-The question is not whether a model is "true"; it isn't [@Box1976a]. 
+The question is not whether a model is "true"; it isn't [@Box1976a].
 The question is whether it is good enough for the purposes of the analysis.
 The problem is how we can specify "good enough" criteria, and how we can check those criteria.
 
-
-See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6], @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a for more discussion of the motivation and use of posterior predictive checks.
+See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6],
+@GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a for a
+more discussion of the motivation and use of posterior predictive checks.b
 
 ## Posterior Predictive Checks
 
@@ -57,7 +58,10 @@ The definition of a posterior p-value does not specify a particular test-statist
 The best advice is that $T$ depends on the application.
 
 -   @BDA3 [p. 146] Speed of light example uses the 90% interval (61st and 6th order statistics).
--   @BDA3 [p. 147] binomial trial example uses the number of switches (0 to 1, or 1 to 0) in order to test independence.
+
+-   @BDA3 [p. 147] binomial trial example uses the number of switches (0 to 1, or 1 to 0)
+    in order to test independence.
+
 -   @BDA3 [p. 148] hierarchical model for adolescent smoking uses.
 
     -   percent of adolescents in the sample who never smoked
@@ -68,14 +72,14 @@ The best advice is that $T$ depends on the application.
 
 A posterior predictive p-value is different than a classical p-value.
 
-- Posterior predictive p-value
+-   Posterior predictive p-value
 
-    -   distributed uniform if the **model is true**
+    -   distributed uniform if the **model is true**.
 
-- Classical p-value
+-   Classical p-value
 
-    -   distributed uniform if the **null hypothesis** ($H_0$) is true
-    
+    -   distributed uniform if the **null hypothesis** ($H_0$) is true.
+
 A *u-value* is any function of the data that has a $U(0, 1)$ sampling distribution [@BDA3, p. 151]
 
 -   a u-value can be averaged over $\theta$, but it is not Bayesian, and is not a probability distribution
@@ -85,7 +89,7 @@ A *u-value* is any function of the data that has a $U(0, 1)$ sampling distributi
 
 Compare statistics for each observation.
 
-*Conditional Predictive Ordinate (CPO)*: 
+*Conditional Predictive Ordinate (CPO)*:
 The CPO [@Gelfand1995a] is the leave-one-out cross-validation predictive density:
 $$
 p(y_i | y_{-i}) = \int p(y_i | \theta) p(\theta | y_{-i}) d\,\theta
@@ -99,12 +103,13 @@ Let the *predictive quantile* ($PQ_i$) be
 $$
 PQ_i = p(y_i^{(rep)} > y_i) .
 $$
-Then the *predictive concordance* be the proportion of $y_i$ that are not outliers. @Gelfand1995a argues that the predictive concordance should match 95% - in other words that the posterior predictive distribution should have the correct coverage.
-
+Then the *predictive concordance* be the proportion of $y_i$ that are not
+outliers. @Gelfand1995a argues that the predictive concordance should match 95%.
+In other words that the posterior predictive distribution should have the correct coverage.
 
 ### Outliers
 
-Can be identified by the inverse-CPO. 
+Can be identified by the inverse-CPO.
 
 -   larger than 40 are possible outliers, and those higher than 70 are extreme values [@Ntzoufras2009a, p. 376].
 -   @Congdon2014a scales CPO by dividing each by its individual max and considers observations with scaled CPO under 0.01 as outliers.
@@ -115,12 +120,19 @@ Can be identified by the inverse-CPO.
 
 Instead of calculating posterior probabilities, plot simulated data and observed data and visually compare them. See @BDA3 [p. 154].
 
--   plot simulated data and real data [@BDA3, p. 154]. This is similar to ideas in @WickhamCookHofmannEtAl2010a.
+-   plot simulated data and real data [@BDA3, p. 154]. This is similar to
+    ideas in @WickhamCookHofmannEtAl2010a.
+
 -   plot summary statistics or inferences
+
 -   residual plots
 
-    -   Bayesian residuals have a distribution $r_i^{(s)} = y_i - \E(y_i | \theta^{s})$
-    -   Bayesian residual graph plots single realization of the residuals, or a summary of their posterior distributions
+    -   Bayesian residuals have a distribution
+        $r_i^{(s)} = y_i - \E(y_i \theta^{s})$
+
+    -   Bayesian residual graph plots single realization of the residuals,
+        or a summary of their posterior distributions
+
     -   binned plots are best for discrete data [@BDA3, p. 157]
 
 <!--

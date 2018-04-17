@@ -17,6 +17,17 @@ $$
 y_i \sim \dpois(\lambda_i) ,
 $$
 
+In Stan, the Poisson distribution has two implementations:
+
+-   `r stanfunc("poisson_lpdf")`
+-   `r stanfunc("poisson_log_lpdf")`
+
+The Poisson with a log link. This is for numeric stability.
+
+In **rstanarm** use `r rdoc("rstanarm", "stan_glm")` for a Poisson GLM.
+
+-   **rstanarm** vignette on [count models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
+
 ## Negative Binomial
 
 The [Negative Binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) model is also used for unbounded count data,
@@ -39,7 +50,7 @@ $$
 \end{aligned}
 $$
 
-**ImportantL** The negative binomial distribution has many different parameterizations.
+**Important** The negative binomial distribution has many different parameterizations.
 An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
 $$
 y_i \sim \dnbinalt(\mu_i, \phi)
@@ -62,14 +73,6 @@ In Stan, there are multiple parameterizations of the
 
 Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
-### Example: Number of Number o
-
-TODO
-
-### References
-
-The parameter $\lambda_i \in (0, \infty)$ is both the mean and variance of the distribution.
-
 ### Link functions
 
 In many applications, $\lambda$, is modeled as some function of covariates or other parameters.
@@ -82,19 +85,6 @@ which has the inverse,
 $$
 \lambda_i = \log(\vec{x}_i \vec{\beta})
 $$
-
-### Stan
-
-In Stan, the Poisson distribution has two implementations:
-
--   `r stanfunc("poisson_lpdf")`
--   `r stanfunc("poisson_log_lpdf")`
-
-The Poisson with a log link. This is for numeric stability.
-
-In **rstanarm** use `r rdoc("rstanarm", "stan_glm")` for a Poisson GLM.
-
--   **rstanarm** vignette on [count models](https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html).
 
 ## Example: Bilateral Sanctions
 
