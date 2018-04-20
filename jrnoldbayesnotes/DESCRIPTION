@@ -1,11 +1,12 @@
-Package: jrnold.bayesian.notes
+Package: jrnold.bayes.notes
 Type: Package
-Title: Miscellaneous functions
+Title: Miscellaneous Functions and Data for Bayesian Notes
 Version: 0.1.0.9000
 Authors@R: c(person("Jeffrey", "Arnold",
                      email = "jeffrey.arnold@gmail.com",
                      role  = c("aut", "cre")))
-Description: Metapackage for installing prerequisites for jrnold/bayesian_notes.
+Description: Package to install dependencies, Stan models,
+  and data for https://github.com/jrnold/bayesian_notes.
 Copyright: file COPYRIGHTS
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -14,12 +15,13 @@ Depends:
     R (> 3.0.0)
 Imports:
     bayesplot,
+    bayz,
     ggmcmc,
     loo,
     rstan,
     rstanarm,
-    rubbish,
-    tidyverse,
+    tidyverse
 Remotes:
-    jrnold/rubbish
+    jrnold/jrnoldmisc,
+    jrnold/bayz
 RoxygenNote: 6.0.1

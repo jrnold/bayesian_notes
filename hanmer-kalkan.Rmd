@@ -6,7 +6,6 @@
 library("rstan")
 library("tidyverse")
 library("haven")
-library("rubbish")
 ```
 
 ```{r}
