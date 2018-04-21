@@ -1,3 +1,4 @@
+# nolint start
 #' Xenophobic Vote Share in 2003 Russian Duma Elections
 #'
 #' Data from the 2003 Russian State Duma elections, focusing on the
@@ -27,3 +28,4 @@
 #' Berry, W. D., Golder, M., Milton, D. \dQuote{\href{https://dx.doi.org/10.1017/S0022381612000199}{Improving Tests of Theories Positing Interaction}.}
 #' \emph{Journal of Politics}
 "alexseev"
+# nolint end

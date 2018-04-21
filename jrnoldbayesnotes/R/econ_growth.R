@@ -1,3 +1,4 @@
+# nolint start
 #' Economic Growth Data for 15 Industrialized Democracies, 1974-1980
 #'
 #' Lange and Garret (1985) economic growth data for 15 industrialized
@@ -17,3 +18,4 @@
 #' @references Lange, P., Garrett, G. (1985) \dQuote{The Politics of Growth: Strategic Interaction and Economic Performance in the Advanced Industrial Democracies, 1974-1980.}
 #'   \emph{Journal of Politics}.
 "econ_growth"
+# nolint end

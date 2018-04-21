@@ -6,7 +6,7 @@ Authors@R: c(person("Jeffrey", "Arnold",
                      email = "jeffrey.arnold@gmail.com",
                      role  = c("aut", "cre")))
 Description: Package to install dependencies, Stan models,
-  and data for https://github.com/jrnold/bayesian_notes.
+  and data for <https://github.com/jrnold/bayesian_notes>.
 Copyright: file COPYRIGHTS
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -20,6 +20,7 @@ Imports:
     loo,
     rstan,
     rstanarm,
+    stringr,
     tidyverse
 Remotes:
     jrnold/jrnoldmisc,

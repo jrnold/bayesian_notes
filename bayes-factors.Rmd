@@ -11,10 +11,9 @@ $$
 
 Problems with Bayes' Factors
 
-- It depends heavily on the choice ov prior.
-- It is not (easily) defined for improper priors
-- There is an implicit assumption that one of the competing models is correct
-
+-   It depends heavily on the choice ov prior.
+-   It is not (easily) defined for improper priors
+-   There is an implicit assumption that one of the competing models is correct
 
 @KassRaftery1995 suggest BIC as an approximation for Bayes Factors.
 $$
@@ -27,9 +26,9 @@ $$
 BIC_{H_2} - BIC_{H_1} \approx -2 \ln (\text{Bayes factor}(H_2; H_2)) .
 $$
 
-- requires that $p$ (number of parameters) is well-defined
-- number of observations $n$ is well-defined
-- MLE exists
+-   requires that $p$ (number of parameters) is well-defined
+-   number of observations $n$ is well-defined
+-   MLE exists
 
 Computationally, estimating the marginal likelihood
 $$
@@ -39,9 +38,9 @@ $$
 None of the methods are particularly good; e.g. the estimator suggested by @KassRaftery1995 has an [infinite variance](https://radfordneal.wordpress.com/2008/08/17/the-harmonic-mean-of-the-likelihood-worst-monte-carlo-method-ever/).
 This is one reason why most estimators of the posterior distribution avoid calculating the marginal likelihood.
 
-Notes
+Notes:
 
-- Bayes factors work better for discrete hypotheses/models than for continuous hypotheses/models. For the latter, use continuous model expansion [@BDA3, Sec 7.5].
+-   Bayes factors work better for discrete hypotheses/models than for continuous hypotheses/models. For the latter, use continuous model expansion [@BDA3, Sec 7.5].
 
 <!--
 ## Lindley's Paradox
@@ -65,13 +64,14 @@ BF_{01}(t_n) = (1 = n)^{1/2} \exp(-n t^2_n / 2[1 + n]).
 $$
 -->
 
-See Bayesian Estimation supersedes the t-test http://www.indiana.edu/~kruschke/BEST/BEST.pdf
+See [Bayesian Estimation supersedes the t-test](http://www.indiana.edu/~kruschke/BEST/BEST.pdf)
 
+<!--
 - http://doingbayesiandataanalysis.blogspot.com/2017/02/equivalence-testing-two-one-sided-test.html
+-->
 
 ## References
 
-- BDA Sec 7.4
-- Kruschke (2015) [Bayes factors for tests of mean and effect size can be very different](http://doingbayesiandataanalysis.blogspot.com/2015/04/bayes-factors-for-tests-of-mean-and.html). doingbayesiandataanalysis.blogspot.com.
-
-- [This Cross Validated](https://stats.stackexchange.com/questions/209810/computation-of-the-marginal-likelihood-from-mcmc-samples) post by Christian Robert has many useful references to the recentish state of the problem.
+-   @BDA3 [Sec 7.4]
+-   Kruschke (2015) [Bayes factors for tests of mean and effect size can be very different](http://doingbayesiandataanalysis.blogspot.com/2015/04/bayes-factors-for-tests-of-mean-and.html). doingbayesiandataanalysis.blogspot.com.
+-   [This Cross Validated](https://stats.stackexchange.com/questions/209810/computation-of-the-marginal-likelihood-from-mcmc-samples) post by Christian Robert has many useful references to the recent state of the art for calculating the marginal likelihood from MCMC samples.

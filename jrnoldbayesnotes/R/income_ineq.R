@@ -1,3 +1,4 @@
+# nolint start
 #' Income Inequality in 18 Industrialized Countries
 #'
 #' Income Inequality in 18 Industrialized Countries from Jackman (1980)
@@ -21,3 +22,4 @@
 #' Jackman, R. W. (1980) \dQuote{The Impact of Outliers on Income Inequality} \emph{American Sociological Review}.
 #'
 "income_ineq"
+# nolint end

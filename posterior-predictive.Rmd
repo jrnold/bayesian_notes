@@ -71,17 +71,17 @@ The best advice is that $T$ depends on the application.
 
 A posterior predictive p-value is different than a classical p-value.
 
--   Posterior predictive p-value
+-   Posterior predictive $p$-value
 
     -   distributed uniform if the **model is true**.
 
--   Classical p-value
+-   Classical $p$-value
 
     -   distributed uniform if the **null hypothesis** ($H_0$) is true.
 
-A *u-value* is any function of the data that has a $U(0, 1)$ sampling distribution [@BDA3, p. 151]
+A $u$-value* is any function of the data that has a $U(0, 1)$ sampling distribution [@BDA3, p. 151]
 
--   a u-value can be averaged over $\theta$, but it is not Bayesian, and is not a probability distribution
+-   a $u$-value can be averaged over $\theta$, but it is not Bayesian, and is not a probability distribution
 -   posterior p-value: probability statement, conditional on model and data, about future observations
 
 ### Marginal predictive checks

@@ -23,7 +23,7 @@ The remainder of these notes discusses how to apply this to problems.
 
 The three steps of Bayesian analysis [@BDA3, p. 3] are
 
-1.  *Modeling*: define a full probability model which incorporates all observervable and unobservable quantities of the problem.
+1.  *Modeling*: define a full probability model which incorporates all observable and unobservable quantities of the problem.
     To the extent possible, the model should incorporate all relevant data about the underlying problem and data generating problem.
 
 1.  *Estimation*: given data, estimate the parameters for the *posterior distribution* defined in the modeling step.

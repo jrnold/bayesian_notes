@@ -1,3 +1,4 @@
+# nolint start
 #' Unionization Data for 20 Industrialized Democracies in 1980
 #'
 #' Wallerstein (1989) and Stephens (1991) unionization data for 20
@@ -21,3 +22,4 @@
 #' Wallerstein, M. (1989) \dQuote{Union Organization in the Advanced Industrial Democracies.}
 #'   \emph{American Political Science Review}
 "unionization"
+# nolint end

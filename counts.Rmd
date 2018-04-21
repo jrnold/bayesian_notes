@@ -65,7 +65,7 @@ $$
 
 ### Stan
 
-In Stan, there are multiple parameterizations of the
+In Stan, there are multiple parameterizations of the negative binomial distribution:
 
 -   `neg_binomial_lpdf(y | alpha, beta)`with shape parameter `alpha` and inverse scale parameter `beta`.
 -   `neg_binomial_2_lpdf(y | mu, phi)` with mean `mu` and over-dispersion parameter `phi`.
@@ -86,7 +86,7 @@ $$
 \lambda_i = \log(\vec{x}_i \vec{\beta})
 $$
 
-## Example: Bilateral Sanctions
+### Example: Bilateral Sanctions
 
 A regression model of bilateral sanctions for the period 1939 to 1983 [@Martin1992a].
 The outcome variable is the number of countries imposing sanctions.

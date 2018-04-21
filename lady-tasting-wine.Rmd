@@ -12,7 +12,7 @@ library("datums")
 > which is which. The only possible results are right,
 > denoted by R and wrong W. The experiment is to be
 > repeated with 6 pairs of cups in all. Suppose that the
-> result is RRRRRW with only the last pair wrong.
+> result is `RRRRRW` with only the last pair wrong.
 > Fisher’s analysis goes as follows.
 
 1.  Suppose that the guesses are independent and drawn from the same underlying distribution parameterized by $\theta$, the probability that the lady is correct. What is the likelihood?
@@ -20,5 +20,5 @@ library("datums")
 1.  Suppose that you think that the 
 1.  Calculate a 95% confidence interval using the Wald formula. How does it differ from the Bayesian credible interval? 
 1.  Conduct a hypothesis test at 5% significance level. What does this mean? Using the posterior distribution, calculate probability that $\theta > 0.5$? How does it differ from the Bayesian credible interval in values and interpretation?
-1.  Suppose you think its reasonable that no one can do worse than chance. So you restrict the support of $\theta$ to $\frac{1}{5}$. Estimate the model using a grid of theta values.
+1.  Suppose you think its reasonable that no one can do worse than chance. So you restrict the support of $\theta$ to $\frac{1}{5}$. Estimate the model using a grid of $\theta$ values.
 1.  Estimate with Stan.
