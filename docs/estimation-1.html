@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="multilevel-models.html">
-<link rel="next" href="annotated-bibliography.html">
+<link rel="prev" href="priors.html">
+<link rel="next" href="bayesian-computation.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -457,104 +457,148 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="distributions" class="section level1">
-<h1><span class="header-section-number">16</span> Distributions</h1>
-<p>The parameterizations and notations for distributions largely follow <span class="citation">Gelman et al. (2013)</span> and <span class="citation">Stan Development Team (2016)</span>.</p>
-<p>The Wikipedia <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions">List of Probability Distributions</a> is a fairly complete reference.
-Standard references of probability distributions are <span class="citation">(Johnson, Kotz, and Balakrishnan 1994, 1995, 1997; Kotz, Balakrishnan, and Johnson 2000; Wimmer and Altmann 1999; Forbes et al. 2010; Asquith 2011)</span>.</p>
-<p>The <a href="https://cran.r-project.org/web/views/Distributions.html">Probability Distributions</a> CRAN task view contains both links and descriptions of probability distributions and as such serves as a useful list of probability distributions.</p>
-<p>“The Chart of Univariate Distribution Relationships” <span class="citation">(Leemis and McQueston 2008)</span> is the classic chart of the relationships between univariate distributions.</p>
-<p>There are a few variations of this chart online:</p>
+<div id="estimation-1" class="section level1">
+<h1><span class="header-section-number">6</span> Estimation</h1>
+<div id="point-estimates" class="section level2">
+<h2><span class="header-section-number">6.1</span> Point Estimates</h2>
+<p>Bayesian point estimators use the following recipe:</p>
+<ol style="list-style-type: decimal">
+<li>define a loss function that penalizes guesses</li>
+<li>take the expected value of that loss function over the parameter of interest</li>
+</ol>
+<p>Let <span class="math inline">\(\theta\)</span> be a parameter with a prior distribution <span class="math inline">\(\pi\)</span>.
+Let <span class="math inline">\(L(\theta, \hat{\theta})\)</span> be a loss function. Examples of loss-functions include</p>
 <ul>
-<li><a href="http://www.math.wm.edu/~leemis/chart/UDR/UDR.html">Univariate Distribution Relationships</a></li>
-<li><a href="https://www.johndcook.com/blog/distribution_chart/">Diagram of distribution relationships</a></li>
+<li><strong>squared error</strong>: <span class="math inline">\((\theta - \hat{\theta})^2\)</span></li>
+<li><strong>absolute error</strong>: <span class="math inline">\(|\theta - \hat{\theta}|\)</span></li>
 </ul>
-<!--
-### Beta Distribution
+<p>Let <span class="math inline">\(\hat{\theta}(x)\)</span> be an estimator.
+The <strong>Bayes risk</strong> of <span class="math inline">\(\hat{\theta}\)</span> is the expected value of the loss function over the probability distribution of <span class="math inline">\(\theta\)</span>.
+<span class="math display">\[
+\E_{\pi}(L(\theta, \hat{\theta})) = \int L(\theta, \hat{\theta}) \pi(\theta) d\,\theta
+\]</span></p>
+<p>An estimator is a <strong>Bayes estimator</strong> if it minimizes the the Bayes risk over all estimators.</p>
+<!--lint disable table-cell-padding table-pipe-alignment  -->
+<table>
+<colgroup>
+<col width="7%" />
+<col width="92%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estimator</th>
+<th>Loss Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean</td>
+<td><span class="math inline">\((\theta - \hat{\theta})^2\)</span></td>
+</tr>
+<tr class="even">
+<td>Median</td>
+<td><span class="math inline">\(|\theta - \hat{\theta}|\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p\)</span>-Quantile</td>
+<td><span class="math inline">\(\begin{cases} p | \theta - \hat{\theta} | &amp; \text{for } \theta - \hat{\theta} \geq 0 \\ (1 - p) |\theta - \hat{\theta} | &amp; \text{for } \theta - \hat{\theta} &lt; 0 \end{cases}\)</span></td>
+</tr>
+<tr class="even">
+<td>Mode</td>
+<td><span class="math inline">\(\begin{cases} 0 &amp; \text{for } | \theta = \hat{\theta} | &lt; \epsilon \\ 1 | &amp; \text{for } |\theta - \hat{\theta}| &gt; \epsilon \end{cases}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>\end{cases}$</p>
+<!--lint enable table-cell-padding table-pipe-alignment  -->
+<p>The posterior mode can often be directly estimated by maximizing the posterior distribution,
+<span class="math display">\[
+\hat{\theta}_{\text{mode}} = \arg \max_{\theta} \int \theta(\theta | y) .
+\]</span>
+This is called <strong>maximum a posteriori</strong> (MAP) estimation.</p>
+<p>Given a estimation could be used by including that loss function into that function,
+<span class="math display">\[
+\hat\theta = \arg \min_{\theta^*} \int L(theta, \theta^*) p(\theta) \,d\theta .
+\]</span>
+However, since that still requires integrating over the distribution of <span class="math inline">\(\theta\)</span>.
+In cases where the form of <span class="math inline">\(p(\theta)\)</span> is known, this may have a closed form.
+In the cases of most posterior distributions, this would require some sort of approximation of the distribution of <span class="math inline">\(p(\theta)\)</span>.</p>
+<p><span class="math display">\[
+p(\theta | )
+\]</span></p>
+</div>
+<div id="credible-intervals" class="section level2">
+<h2><span class="header-section-number">6.2</span> Credible Intervals</h2>
+<!-- TODO: I need better notation here -->
+<p>A <span class="math inline">\(p \times 100\)</span> credible interval of a parameter <span class="math inline">\(\theta\)</span> with distribution <span class="math inline">\(f(\theta)\)</span> is an interval <span class="math inline">\((a, b)\)</span> such that,
+<span class="math display">\[
+CI(\theta | p) = (a, b) s.t. \int_{a}^{b} f(\theta) \,d\theta = p.
+\]</span></p>
+<p>The credible interval is not uniquely defined.
+There may be multiple intervals that satisfy the definition of a credible interval.
+The most common are the</p>
+<ul>
+<li><p><strong>equal-tailed interval</strong>: <span class="math inline">\((F^{-1}(p / 2), F^{-1}((1 - p) / 2))\)</span> where <span class="math inline">\(F^{-1}\)</span> is the quantile function of <span class="math inline">\(\theta\)</span>.
+The 95% credible interval would use the 2.5% and 97.5% quantiles.</p></li>
+<li><p><strong>highest posterior density interval</strong>: The shortest credible interval.
+If the distribution is not unimodal and symmetric, the HPD interval is not the same as the equal-tailed interval.</p></li>
+</ul>
+<p>Generally it is fine to use the equal-tailed interval. This is what Stan reports by default.</p>
+<p>The HPD</p>
+<ul>
+<li><p>is harder to calculate.</p></li>
+<li><p>may not be a convex interval if it is a multimodal distribution. (Though that may be a desirable feature.)</p></li>
+<li><p>unlike the central interval, not invariant under transformation. For some function <span class="math inline">\(g\)</span>,
+if <span class="math inline">\(CI_{HPD}(\theta) = (a, b)\)</span>, then generally <span class="math inline">\(CI(g(\theta)) \neq (g(a), g(b))\)</span>.
+However, for the equal-tailed interval, <span class="math inline">\(CI(g(\theta)) = (g(a), g(b))\)</span>.</p></li>
+</ul>
+<p>How to calculate?</p>
+<p>For the equal-tailed credible interval:</p>
+<ul>
+<li>If the quantile function is known, use that.</li>
+<li>Otherwise, calculate the quantiles of the sample.</li>
+</ul>
+<p>For example, the 95% credible interval for a standard normal distribution is,</p>
+<pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="fl">0.95</span>
+<span class="kw">qnorm</span>(<span class="kw">c</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>))
+<span class="co">#&gt; [1] -1.96  1.96</span></code></pre>
+<p>The 95% credible interval for a sample drawn from a normal distribution is,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>), <span class="dt">prob =</span> <span class="kw">c</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>))
+<span class="co">#&gt;  2.5% 97.5% </span>
+<span class="co">#&gt; -1.78  1.79</span></code></pre>
+<p>There are multiple functions in multiple packages that calculate the HPD interval.
+<code>coda::HPDitnterval</code>.</p>
+<div id="compared-to-confidence-intervals" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Compared to confidence intervals</h3>
+<p>TODO</p>
+</div>
+</div>
+<div id="bayesian-decision-theory" class="section level2">
+<h2><span class="header-section-number">6.3</span> Bayesian Decision Theory</h2>
+<p>One aspect of Bayesian inference is that it separates <em>inference</em> from <em>decision</em>.</p>
+<ol style="list-style-type: decimal">
+<li>Estimate a posterior distribution <span class="math inline">\(p(\theta | y)\)</span></li>
+<li>Define a loss function for an action (<span class="math inline">\(a\)</span>) and parameter (<span class="math inline">\(\theta\)</span>), <span class="math inline">\(L(a, \theta)\)</span>.</li>
+<li>Choose that action that minimizes the loss function</li>
+</ol>
+<p>In this framework, inference is a subset of decisions and <strong>estimators</strong> are a subset of decision rules.
+Choosing an estimate is an action that aims the minimize the loss of function of guessing a parameter value.</p>
+<p>Given <span class="math inline">\(theta\)</span> and its distribution <span class="math inline">\(p(\theta)\)</span> and a loss function <span class="math inline">\(L(a, \theta)\)</span>,
+the optimal action <span class="math inline">\(a^*\)</span> from a set of actions <span class="math inline">\(\mathcal{A}\)</span> is
+<span class="math display">\[
+a^* \arg \min_{a \in \mathcal{A}} \int p(\theta) L(a, \theta) \,d \theta .
+\]</span>
+If we only have a sample of size <span class="math inline">\(S\)</span> from <span class="math inline">\(p(\theta)\)</span> (as in a posterior distribution estimated by MCMC), the optimal decision would be calculated as:
+<span class="math display">\[
+a^* \arg \min_{a \in \mathcal{A}} \sum_{s = 1}^S L(a, \theta_s) .
+\]</span></p>
+<p>The introductions of the <a href="https://www.thetalkingmachines.com/episodes/data-science-africa-dina-machuve">Talking Machines</a> episodes <a href="https://www.thetalkingmachines.com/episodes/church-bayes-and-collecting-data">The Church of Bayes and Collecting Data</a>
+and have a concise discussion by Neil Lawrence on the pros and cons of Bayesian decision making.</p>
 
-See [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution).
-
-$$
-\dbeta(x | \alpha, \beta) = \frac{x^{\alpha - 1} (1 - x)^{\beta- 1}}{B(\alpha, \beta)}
-$$
-where $B(\alpha, \beta) = \Gamma(\alpha) \Gamma(\beta) / \Gamma(\alpha + \beta)$.
-
-$$
-\begin{aligned}[t]
-\mu = \E(X) &= \frac{\alpha}{\alpha + \beta} \\
-\sigma^2 = \Var(X) &= \frac{\alpha\beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
-\end{aligned}
-$$
-
-For modeling, $\alpha$ and $\beta$ are difficult to work with, so some alternative parameterizations may be useful [^param].
-
-[^param]: <https://en.wikipedia.org/wiki/Beta_distribution>
-
-Mean ($\mu$) and sample size ($\nu$),
-$$
-\begin{aligned}[t]
-\alpha &= \mu \nu \\
-\beta  &= (1 - \mu) \nu
-\end{aligned}
-$$
-Mode ($\omega$) and concentration ($\kappa = \alpha + \beta$):
-$$
-\begin{aligned}[t]
-\alpha &= \omega (\kappa - 2) + 1 \\
-\beta  &= (1 - \omega) (\kappa - 2) + 1
-\end{aligned}
-$$
-Mean ($\mu$) and variance ($\sigma^2$) is difficult because the variance is a function of the mean:
-$$
-\begin{aligned}[t]
-\alpha &= \mu \left( \frac{\mu (1 - \mu)}{\sigma^2} - 1 \right), & \text{if } \sigma^2 < \mu (1 - \mu) , \\
-\beta &= (1 - \mu) \left( \frac{\mu (1 - \mu)}{\sigma^2} - 1 \right), & \text{if } \sigma^2 < \mu (1 - \mu) .
-\end{aligned}
-$$
+</div>
+</div>
 
 
-### Gamma Distribution
-
-See [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution).
-
-Shape $k > 0$ and scale $\theta > 0$,
-$$
-\dgamma(x | k, \theta) = \frac{1}{\Gamma(k) \theta^k}x^{k - 1}\exp(- x / \theta) .
-$$
-with
-$$
-\begin{aligned}[t]
-\mu = \E[X] &= k \theta \\
-\sigma^2 = \Var[X] &= k \theta^2
-\end{aligned}
-$$
-This can be reparameterized as,
-$$
-\begin{aligned}[t]
-k &= \frac{\mu^2}{\sigma^2} \\
-\theta &= \frac{\sigma^2}{\mu}
-\end{aligned}
-$$
-
-Shape $\alpha > 0$ and rate $\beta > 0$,
-$$
-\dgamma(x | \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}\exp(- \beta x) .
-$$
-with
-$$
-\begin{aligned}[t]
-\mu = \E[X] &= \frac{\alpha}{\beta} \\
-\sigma^2 = \Var[X] &= \frac{\alpha}{\beta^2}
-\end{aligned}
-$$
-This can be reparameterized as,
-$$
-\begin{aligned}[t]
-\alpha &= \frac{\mu^2}{\sigma^2} \\
-\beta &= \frac{\mu}{\sigma^2}
-\end{aligned}
-$$
--->
 
 </div>
             </section>
@@ -562,8 +606,8 @@ $$
           </div>
         </div>
       </div>
-<a href="multilevel-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="annotated-bibliography.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="priors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bayesian-computation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -583,7 +627,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/distributions.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/estimation.Rmd",
 "text": "Edit"
 },
 "download": null,

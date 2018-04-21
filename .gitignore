@@ -13,3 +13,4 @@ node_modules
 *.rds
 *.knit.md
 *.utf8.md
+/bookdown*

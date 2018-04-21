@@ -443,7 +443,7 @@ where the null hypothesis is that random effects are consistent. However,
 random effects; and in large samples, random effects behave like fixed effects
 anyways.
 
- ## References
+## References
 
 Texts and chapters on multi-level analysis:
 

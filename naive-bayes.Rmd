@@ -1,79 +1,6 @@
-```{r include=FALSE, cache=FALSE}
-suppressPackageStartupMessages({
-})
-# only load stuff that I use outside
-"%>%" <- magrittr::"%>%"
-
-set.seed(92508117 )
-options(digits = 3)
-
-knitr::opts_chunk$set(
-  comment = "#>",
-  collapse = TRUE,
-  cache = TRUE,
-  out.width = "70%",
-  fig.align = "center",
-  fig.width = 6,
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-options(dplyr.print_min = 6,
-        dplyr.print_max = 6)
-
-rstan::rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
-
-# Helpful Documentation functions
-rpkg_url <- function(pkg) {
-  stringr::str_c("https://cran.r-project.org/package=", pkg)
-}
-
-rpkg <- function(pkg) {
-  stringr::str_c("**[", pkg, "](", rpkg_url(pkg), ")**")
-}
-
-rdoc_url <- function(pkg, fun) {
-  stringr::str_c("https://www.rdocumentation.org/packages/", pkg, "/topics/", fun) # nolint
-}
-
-rdoc <- function(pkg, fun, full_name = FALSE) {
-  text <- if (full_name) stringr::str_c(pkg, "::", fun) else pkg
-  stringr::str_c("[", text, "](", rdoc_url(pkg, fun), ")")
-}
-
-STAN_VERSION <- "2.14.0"
-STAN_URL <- "http://mc-stan.org/documentation/"
-# nolint start
-STAN_MAN_URL <- stringr::str_c("https://github.com/stan-dev/stan/releases/download/v",
-                               STAN_VERSION, "/stan-reference-",
-                               STAN_VERSION, ".pdf")
-# nolint end
-
-standoc <- function(x = NULL) {
-  if (!is.null(x)) {
-    STAN_MAN_URL
-  } else {
-    stringr::str_c("[", x, "](", STAN_MAN_URL, ")")
-  }
-}
-
-# placeholder for maybe linking directly to docs
-stanfunc <- function(x) {
-  stringr::str_c("`", x, "`")
-}
-
-knit_print.stanmodel <- function(x, options) {
-  code_html <- x@model_code %>%
-    htmltools::HTML() %>%
-    htmltools::tags$code() %>%
-    htmltools::tags$pre(class = "stan")
-  knitr::asis_output(code_html)
-}
-```
 # Naive Bayes 
 
-## Prerequisites
+## Prerequisites {-}
 
 This example will use the following libraries.
 ```{r setup,message=FALSE}
@@ -136,16 +63,16 @@ The authorship of the remaining 15 papers is (was) disputed between Hamilton and
 
 In an early example of empirical Bayesian statistics and computational NLP, F. Mosteller and D. L. Wallace used naive Bayes to classify the disputed articles and conclude that there is strong evidence to suggest that Madison wrote all the disputed articles.
 
-Data on the federalist papers is contained in two csv files.
-The file `federalist.csv` contains metadata on each document, including the author and title.
-The file `federalist_words.csv` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens ("OTHER").
+Data on the federalist papers is contained in two datasets included in the **jrnold.bayes.notes** package.
+The dataset `federalist` contains metadata on each document, including the author and title.
+The dataset `federalist_wordcounts` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens (`"OTHER"`).
 
 We will load both files
-```{r words,message=FALSE}
-words <- read_csv("federalist_words.csv", na = "")
+```{r federalst_wordcounts,message=FALSE}
+data("federalist_wordcounts", package = "jrnold.bayes.notes")
 ```
 ```{r federalist,message=FALSE}
-federalist <- read_csv("federalist.csv", na = "")
+data("federalist", package = "jrnold.bayes.notes")
 ```
 
 The objective is to estimate the author of a document given features of that document.
@@ -199,7 +126,7 @@ $$
 The estimator $\hat{\theta}_{k}^{(j)}$ is the fraction of times that word $k$ appears among all words in all documents in category $j$.
 
 ```{r p_words_author}
-p_words_author <- words %>%
+p_words_author <- federalist_wordcounts %>%
   # keep only Hamilton and Madison
   filter(author %in% c("Hamilton", "Madison")) %>%
   # count terms used by each author
@@ -221,7 +148,7 @@ Now that we've estimated $\hat{p}(y | x)$ and $\hat{p}(y)$ we can predict the cl
 
 Calculate the probability of each class, $p(y_{test} | x_{test}, \hat{theta})$, for all documents given the learned parameters $\theta$.
 ```{r}
-pred_doc_author <- words %>%
+pred_doc_author <- federalist_wordcounts %>%
   # keep only Hamilton, Madison, and undetermined
   filter(!author %in% "Jay") %>%
   # remove actual author

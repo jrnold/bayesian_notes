@@ -1,9 +1,11 @@
+
 # Naive Bayes 
 
-## Prerequisites
+## Prerequisites {-}
 
 This example will use the following libraries.
-```{r setup,message=FALSE}
+
+```r
 library("tidyverse")
 ```
 
@@ -63,16 +65,18 @@ The authorship of the remaining 15 papers is (was) disputed between Hamilton and
 
 In an early example of empirical Bayesian statistics and computational NLP, F. Mosteller and D. L. Wallace used naive Bayes to classify the disputed articles and conclude that there is strong evidence to suggest that Madison wrote all the disputed articles.
 
-Data on the federalist papers is contained in two csv files.
-The file `federalist.csv` contains metadata on each document, including the author and title.
-The file `federalist_words.csv` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens ("OTHER").
+Data on the federalist papers is contained in two datasets included in the **jrnold.bayes.notes** package.
+The dataset `federalist` contains metadata on each document, including the author and title.
+The dataset `federalist_wordcounts` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens (`"OTHER"`).
 
 We will load both files
-```{r words,message=FALSE}
-words <- read_csv("federalist_words.csv", na = "")
+
+```r
+data("federalist_wordcounts", package = "jrnold.bayes.notes")
 ```
-```{r federalist,message=FALSE}
-federalist <- read_csv("federalist.csv", na = "")
+
+```r
+data("federalist", package = "jrnold.bayes.notes")
 ```
 
 The objective is to estimate the author of a document given features of that document.
@@ -111,12 +115,18 @@ $$
 This is the number of documents in class $j$ divided by the total number of documents in the training data.
 
 Calculate the proportion of documents written by Hamilton and Madison:
-```{r}
+
+```r
 p_author <- federalist %>%
   filter(author %in% c("Hamilton", "Madison")) %>%
   count(author) %>%
   mutate(pi = (n + 1) / sum(n + 1))
 p_author
+#> # A tibble: 2 x 3
+#>   author       n    pi
+#>   <chr>    <int> <dbl>
+#> 1 Hamilton    51 0.776
+#> 2 Madison     14 0.224
 ```
 
 The MAP estimator for the conditional probability of $p(x | y)$ is
@@ -125,8 +135,9 @@ $$
 $$
 The estimator $\hat{\theta}_{k}^{(j)}$ is the fraction of times that word $k$ appears among all words in all documents in category $j$.
 
-```{r p_words_author}
-p_words_author <- words %>%
+
+```r
+p_words_author <- federalist_wordcounts %>%
   # keep only Hamilton and Madison
   filter(author %in% c("Hamilton", "Madison")) %>%
   # count terms used by each author
@@ -139,6 +150,15 @@ p_words_author <- words %>%
   ungroup()
 
 head(p_words_author)
+#> # A tibble: 6 x 4
+#>   author   term  count    theta
+#>   <chr>    <chr> <int>    <dbl>
+#> 1 Hamilton a      2496 0.0199  
+#> 2 Hamilton all     436 0.00347 
+#> 3 Hamilton also     35 0.000286
+#> 4 Hamilton an      636 0.00507 
+#> 5 Hamilton and    2702 0.0215  
+#> 6 Hamilton any     365 0.00291
 ```
 
 Note that in our MAP estimators of both $\theta$ and $\pi$, we add one to the observed counts in order to keep the probabilities strictly greater than 0.
@@ -147,8 +167,9 @@ These can be justified using as [conjugate prior distributions](https://en.wikip
 Now that we've estimated $\hat{p}(y | x)$ and $\hat{p}(y)$ we can predict the classes for both the papers where the author was observed, and those that it wasn't observed.
 
 Calculate the probability of each class, $p(y_{test} | x_{test}, \hat{theta})$, for all documents given the learned parameters $\theta$.
-```{r}
-pred_doc_author <- words %>%
+
+```r
+pred_doc_author <- federalist_wordcounts %>%
   # keep only Hamilton, Madison, and undetermined
   filter(!author %in% "Jay") %>%
   # remove actual author
@@ -165,7 +186,8 @@ pred_doc_author <- words %>%
 ```
 
 Calculate the posterior distribution by adding the prior probabilities of each author:
-```{r}
+
+```r
 p_author_doc <-
   left_join(pred_doc_author, 
             select(p_author, author, pi), 
@@ -180,7 +202,8 @@ p_author_doc <-
 ```
 
 Dataset with the probability that the document was written by Hamilton.
-```{r}
+
+```r
 predictions <- p_author_doc %>%
   filter(author == "Hamilton") %>% 
   select(number, p_author_doc) %>%
@@ -195,20 +218,33 @@ predictions <- p_author_doc %>%
 ```
 
 For documents with known authors, the Naive Bayes method predicts the actual author in all cases.
-```{r}
+
+```r
 filter(predictions, author != "Unknown") %>%
   group_by(author) %>%
   summarise(accuracy = mean(correct))
+#> # A tibble: 2 x 2
+#>   author   accuracy
+#>   <chr>       <dbl>
+#> 1 Hamilton       1.
+#> 2 Madison        1.
 ```
 
 For the documents with an unknown author, it predicts most of them to have been written by Madison.
-```{r}
+
+```r
 filter(predictions, author == "Unknown") %>%
   ungroup() %>%
   count(pred)  
+#> # A tibble: 2 x 2
+#>   pred         n
+#>   <chr>    <int>
+#> 1 Hamilton     1
+#> 2 Madison     14
 ```
 
-```{r}
+
+```r
 ggplot(predictions, aes(x = number, colour = author, y = p_author_doc)) +
   geom_point() +
   labs(y = expression(paste("P", group("(", paste("Hamilton", "|" ,"."), ")"))),
@@ -216,6 +252,8 @@ ggplot(predictions, aes(x = number, colour = author, y = p_author_doc)) +
        title = "Predicted Author of Federalist Papers") +
   theme(legend.position = "bottom")
 ```
+
+<img src="naive-bayes_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Extensions
 

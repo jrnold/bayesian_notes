@@ -162,7 +162,7 @@ Extensions of this approach include:
 -   Using a multivariate Students-$t$ distribution instead of a normal distribution [@BDA3, p. 319]
 -   Using the the normal or Laplace approximation as a proposal distribution with importance sampling [@BDA3, p. 319]
 
-### Example
+#### Example
 
 Rather than deriving the second derivative for the posterior distribution, I will use numerical derivatives in this example.
 The idea is the same, although the numerical derivatives are slower than symbolic derivatives.
@@ -403,7 +403,7 @@ Other notes
 See @BDA3 [Sec 10.4], @GelfandSmith1990a, @LopesPolsonCarvalho2012a, and
 @SmithGelfand1992a for more on importance sampling.
 
-### Example
+#### Example
 
 Use the prior as the proposal distribution.
 

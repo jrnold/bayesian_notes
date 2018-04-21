@@ -35,26 +35,14 @@ bball1970 <-
   mutate(bball1970,
          BatAvg1 = Hits / AB,
          BatAvg2 = RemainingHits / RemainingAB)
-bball1970
-#>        Player AB Hits RemainingAB RemainingHits BatAvg1 BatAvg2
-#> 1    Clemente 45   18         367           127   0.400   0.346
-#> 2    Robinson 45   17         426           127   0.378   0.298
-#> 3      Howard 45   16         521           144   0.356   0.276
-#> 4   Johnstone 45   15         275            61   0.333   0.222
-#> 5       Berry 45   14         418           114   0.311   0.273
-#> 6     Spencer 45   14         466           126   0.311   0.270
-#> 7   Kessinger 45   13         586           155   0.289   0.265
-#> 8    Alvarado 45   12         138            29   0.267   0.210
-#> 9       Santo 45   11         510           137   0.244   0.269
-#> 10    Swaboda 45   11         200            46   0.244   0.230
-#> 11 Petrocelli 45   10         538           142   0.222   0.264
-#> 12  Rodriguez 45   10         186            42   0.222   0.226
-#> 13      Scott 45   10         435           132   0.222   0.303
-#> 14      Unser 45   10         277            73   0.222   0.264
-#> 15   Williams 45   10         591           195   0.222   0.330
-#> 16 Campaneris 45    9         558           159   0.200   0.285
-#> 17     Munson 45    8         408           129   0.178   0.316
-#> 18      Alvis 45    7          70            14   0.156   0.200
+head(bball1970)
+#>      Player AB Hits RemainingAB RemainingHits BatAvg1 BatAvg2
+#> 1  Clemente 45   18         367           127   0.400   0.346
+#> 2  Robinson 45   17         426           127   0.378   0.298
+#> 3    Howard 45   16         521           144   0.356   0.276
+#> 4 Johnstone 45   15         275            61   0.333   0.222
+#> 5     Berry 45   14         418           114   0.311   0.273
+#> 6   Spencer 45   14         466           126   0.311   0.270
 ```
 
 Let $y_i$ be the number of hits in the first 45 at bats for player $i$,

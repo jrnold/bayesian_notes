@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="multilevel-models.html">
-<link rel="next" href="annotated-bibliography.html">
+<link rel="prev" href="bayesian-inference.html">
+<link rel="next" href="example-predicting-names-from-ages.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -457,113 +457,261 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="distributions" class="section level1">
-<h1><span class="header-section-number">16</span> Distributions</h1>
-<p>The parameterizations and notations for distributions largely follow <span class="citation">Gelman et al. (2013)</span> and <span class="citation">Stan Development Team (2016)</span>.</p>
-<p>The Wikipedia <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions">List of Probability Distributions</a> is a fairly complete reference.
-Standard references of probability distributions are <span class="citation">(Johnson, Kotz, and Balakrishnan 1994, 1995, 1997; Kotz, Balakrishnan, and Johnson 2000; Wimmer and Altmann 1999; Forbes et al. 2010; Asquith 2011)</span>.</p>
-<p>The <a href="https://cran.r-project.org/web/views/Distributions.html">Probability Distributions</a> CRAN task view contains both links and descriptions of probability distributions and as such serves as a useful list of probability distributions.</p>
-<p>“The Chart of Univariate Distribution Relationships” <span class="citation">(Leemis and McQueston 2008)</span> is the classic chart of the relationships between univariate distributions.</p>
-<p>There are a few variations of this chart online:</p>
-<ul>
-<li><a href="http://www.math.wm.edu/~leemis/chart/UDR/UDR.html">Univariate Distribution Relationships</a></li>
-<li><a href="https://www.johndcook.com/blog/distribution_chart/">Diagram of distribution relationships</a></li>
-</ul>
-<!--
-### Beta Distribution
-
-See [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution).
-
-$$
-\dbeta(x | \alpha, \beta) = \frac{x^{\alpha - 1} (1 - x)^{\beta- 1}}{B(\alpha, \beta)}
-$$
-where $B(\alpha, \beta) = \Gamma(\alpha) \Gamma(\beta) / \Gamma(\alpha + \beta)$.
-
-$$
-\begin{aligned}[t]
-\mu = \E(X) &= \frac{\alpha}{\alpha + \beta} \\
-\sigma^2 = \Var(X) &= \frac{\alpha\beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+<div id="bayes-theorem" class="section level1">
+<h1><span class="header-section-number">2</span> Bayes Theorem</h1>
+<p>This document contains a discussion and several examples of Bayes’ Theorem.</p>
+<div id="prerequisites" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;babynames&quot;</span>)</code></pre>
+</div>
+<div id="introduction-to-bayes-theorem" class="section level2">
+<h2><span class="header-section-number">2.1</span> Introduction to Bayes’ Theorem</h2>
+<p>For events, <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>,
+<span class="math display">\[
+\underbrace{\Pr(A | B)}_{\text{posterior}} = \frac{\overbrace{\Pr(B | A)}^{\text{likelihood}} \overbrace{\Pr(A)}^{\text{prior}}}{\underbrace{\Pr(B)}_{\text{marginal likelihood}}},
+\]</span>
+where <span class="math inline">\(\Pr(B) \neq 0\)</span>.</p>
+<p>For discrete random variables <span class="math inline">\(X\)</span> which takes values in the set <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(Y\)</span> which takes values in the set <span class="math inline">\(\mathcal{Y}\)</span>,
+Bayes’ Theorem can be written as,
+<span class="math display">\[
+p_{Y|X}(X = x|Y = y) = \frac{p_{Y|X}(Y = y|X = x) p_X(X = x)}{p_Y(Y = y)} = \frac{p_{Y|X}(Y = y|X = x) p_X(X = x)}{\sum_{x \in \mathcal{x}} p_{Y|X}(Y = y|X = x) p_X(X = x)}
+\]</span></p>
+<p>For continuous random variables <span class="math inline">\(X\)</span> with support <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> with support <span class="math inline">\(\mathcal{Y}\)</span>,
+Bayes’ Theorem can be written as,
+<span class="math display">\[
+  p_{Y|X}(x|Y = y) = \frac{p_{Y|X = x}(y) p_X(x)}{p_Y(y)} = \frac{p_{Y|X = x}(y) p_X(x)}{\int_{x \in \mathcal{x}} p_{Y|X = x}(y) p_X(x) dx}
+\]</span>
+Though there are deeper differences between discrete and continuous probability theory, the primary difference in the equations for Bayes’ Theorem with discrete or continuous random variables is whether summation or integration is used to calculate the marginal likelihood.</p>
+</div>
+<div id="examples" class="section level2">
+<h2><span class="header-section-number">2.2</span> Examples</h2>
+<div id="taxi-cab-problem" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Taxi-Cab Problem</h3>
+<blockquote>
+<p>Suppose you were told that a taxi-cab was involved in a hit-and-run accident one night.
+Of the taxi-cabs in the city, 85% belonged to the Green company and 15% to the Blue company.
+You are then asked to estimate the likelihood that the hit-and-run accident involved a green taxi-cab (all else being equal).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+</blockquote>
+<p>What is the probability that the taxi-cab involved in the hit and run is blue?
+It is 85%, since we have no other information.</p>
+<blockquote>
+<p>You are then told that an eyewitness had identified the cab as a blue cab.
+But when her ability to identify cabs under appropriate visibility conditions was tested, she was wrong 20% of the time.
+What is the probability that the cab is blue?</p>
+</blockquote>
+<p>Let <span class="math inline">\(H_B\)</span> (<span class="math inline">\(H_G\)</span>) be the event that a blue (green) cab committed the hit and run.
+Let <span class="math inline">\(W_B\)</span> (<span class="math inline">\(W_G\)</span>) be the event that the witness reported that a blue (green) cab committed the hit and run.</p>
+<p>We are interested in <span class="math inline">\(\Pr(H_B | W_B)\)</span>, the probability that a blue cab committed the hit and run given that the witness reported a blue cab committing the hit and run.
+<span class="math display">\[
+\Pr(H_B | W_B) = \frac{\Pr(W_B | H_B) \Pr(H_B)}{\Pr(W_B)} = \frac{\Pr(W_B | H_B) \Pr(H_B)}{\Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_G) \Pr(H_G)}.
+\]</span></p>
+<p>The prior probabilities of the color of the cab come are the proportions of cabs in the city,
+<span class="math display">\[
+\begin{aligned}
+\Pr(H_B) &amp;= 0.15 ,\\
+\Pr(H_G) &amp;= 0.85 .
 \end{aligned}
-$$
-
-For modeling, $\alpha$ and $\beta$ are difficult to work with, so some alternative parameterizations may be useful [^param].
-
-[^param]: <https://en.wikipedia.org/wiki/Beta_distribution>
-
-Mean ($\mu$) and sample size ($\nu$),
-$$
+\]</span></p>
+<p>The conditional probabilities are,
+<span class="math display">\[
 \begin{aligned}[t]
-\alpha &= \mu \nu \\
-\beta  &= (1 - \mu) \nu
+p(W_B | H_B) &amp;= 0.8 , \\
+p(W_B | H_G) &amp;= 0.2 .
 \end{aligned}
-$$
-Mode ($\omega$) and concentration ($\kappa = \alpha + \beta$):
-$$
+\]</span></p>
+<p>The marginal likelihood (model evidence) is the overall probability that a cab is reported to be blue.
+This considers both the probabilities that a witness reports that the cab is blue when it is blue and reports that it is blue when it is green.
+<span class="math display">\[
 \begin{aligned}[t]
-\alpha &= \omega (\kappa - 2) + 1 \\
-\beta  &= (1 - \omega) (\kappa - 2) + 1
+\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_B) \Pr(H_B)
 \end{aligned}
-$$
-Mean ($\mu$) and variance ($\sigma^2$) is difficult because the variance is a function of the mean:
-$$
+\]</span></p>
+<p>To calculate the posterior distribution, put the prior and likelihoods into a table.</p>
+<pre class="sourceCode r"><code class="sourceCode r">cabs &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+<span class="op">~</span><span class="st"> </span>color, <span class="op">~</span><span class="st"> </span>prior, <span class="op">~</span><span class="st"> </span>likelihood,
+<span class="st">&quot;blue&quot;</span>,      <span class="fl">0.15</span>,        <span class="fl">0.8</span>,
+<span class="st">&quot;green&quot;</span>,     <span class="fl">0.85</span>,        <span class="fl">0.2</span>
+)</code></pre>
+<p>Calculate the marginal probability.</p>
+<pre class="sourceCode r"><code class="sourceCode r">cabs <span class="op">%&gt;%</span>
+<span class="kw">mutate</span>(
+<span class="dt">marginal =</span> <span class="kw">sum</span>(likelihood <span class="op">*</span><span class="st"> </span>prior),
+<span class="dt">posterior =</span> likelihood <span class="op">*</span><span class="st"> </span>prior <span class="op">/</span><span class="st"> </span>marginal
+)
+<span class="co">#&gt; # A tibble: 2 x 5</span>
+<span class="co">#&gt;   color prior likelihood marginal posterior</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 blue  0.150      0.800    0.290     0.414</span>
+<span class="co">#&gt; 2 green 0.850      0.200    0.290     0.586</span></code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Suppose that you know that all cabs in the city are blue or green, but you don’t know the proportions of them.
+You use the <a href="https://en.wikipedia.org/wiki/Principle_of_indifference">principle of indifference</a> to assign prior probabilities of,
+<span class="math display">\[
 \begin{aligned}[t]
-\alpha &= \mu \left( \frac{\mu (1 - \mu)}{\sigma^2} - 1 \right), & \text{if } \sigma^2 < \mu (1 - \mu) , \\
-\beta &= (1 - \mu) \left( \frac{\mu (1 - \mu)}{\sigma^2} - 1 \right), & \text{if } \sigma^2 < \mu (1 - \mu) .
+p(H_B) = p(H_G) = 0.5 .
 \end{aligned}
-$$
+\]</span>
+Suppose the witness reports that a blue cab hit the citizen, what is the probability that the cab committing the hit and run was blue.</p></li>
+<li><p>A common answer to this question is “blue”. This mistake is often due to
+ignoring the prior probability of an event, and interpreting <span class="math inline">\(P(H_B | W_B) = P(W_B | H_B)\)</span>. This is called the <a href="https://en.wikipedia.org/wiki/Base_rate_fallacy">base-rate fallacy</a>?
+What prior does the base-rate fallacy correspond to?
+In other words, what prior is needed such that <span class="math inline">\(\Pr(H_B | W_B) = \Pr(W_B | H_B)\)</span>.</p></li>
+<li><p>Suppose that there was was perfectly reliable video evidence of the hit and run, such that <span class="math inline">\(\Pr(W_B | H_B) = 1\)</span> and <span class="math inline">\(\Pr(W_B | H_G) = 0\)</span>.
+What is the probability that the cab committing the hit and run was blue?</p></li>
+<li><p>Suppose that the witness reports that the cab was “yellow”.
+You know that there are no yellow cabs in the city, thus <span class="math inline">\(\Pr(H_Y) = 0\)</span>.
+What is the probability that the cab committing the hit and run was
+yellow, given that the witness reports it being yellow?
+What level of accuracy would you require from the witness such that
+you believed that the cab committing the hit and run was yellow.</p></li>
+<li><p>What level of accuracy would be required from the witness such that
+it is more probable that a green cab committed the hit and run
+than a blue cab?</p></li>
+<li><p>There have been various proposals to quantify what is meant by
+“<a href="https://doi.org/10.1093/lpr/mgl015">beyond a reasonable doubt</a>”.
+But for the purpose of this question, let’s suppose that beyond a
+reasonable doubt is a probability greater or equal to 0.8. What
+level of accuracy is required from the witness to meet the
+reasonable doubt standard?</p></li>
+</ol>
+</div>
+</div>
+<div id="why-most-research-findings-are-false" class="section level2">
+<h2><span class="header-section-number">2.3</span> Why most research findings are false</h2>
+<p>Consider this simplified mode of scientific research.
+Let <span class="math inline">\(H\)</span> (<span class="math inline">\(\lnot H\)</span>) be the event that a hypothesis is true (false).
+Let <span class="math inline">\(D\)</span> (<span class="math inline">\(\lnot D\)</span>) be the result of a hypothesis test of <span class="math inline">\(H\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>Suppose that the test uses statistical significance level of <span class="math inline">\(\alpha = 0.05\)</span>
+Since statistical significance controls the presence of type I error,
+<span class="math display">\[
+P(H | \lnot D) = \alpha = 0.05
+\]</span></p>
+<pre class="sourceCode r"><code class="sourceCode r">alpha &lt;-<span class="st"> </span><span class="fl">0.05</span></code></pre>
+<p>Suppose that the test uses a power level of <span class="math inline">\(\beta = 0.8\)</span>.
+Since power is <span class="math inline">\(1 - \Pr(\text{Type II error})\)</span>,
+<span class="math display">\[
+\Pr(H | D) = \beta = 0.8
+\]</span></p>
+<pre class="sourceCode r"><code class="sourceCode r">beta &lt;-<span class="st"> </span><span class="fl">0.8</span></code></pre>
+<p>Given that information, suppose that you observe <span class="math inline">\(D\)</span>. Can you calculate <span class="math inline">\(\Pr(H | D)\)</span>?</p>
+<p>No. By Bayes’ Theorem,
+<span class="math display">\[
+  \Pr(H | D) = \frac{\Pr(D | H) \Pr(H)}{\Pr(D)}
+\]</span>
+We cannot calculate this because we do not know <span class="math inline">\(\Pr(H)\)</span>.</p>
+<p>Suppose that a priori, many hypotheses are false.
+We will set <span class="math inline">\(\Pr(H)\)</span> to the following value, but will explore how the posterior changes with respect to different values of it.
+<span class="math display">\[
+  \Pr(H) = 0.1 .
+\]</span></p>
+<p>With this information we can calculate
+<span class="math display">\[
+  \Pr(H | D) = \frac{\Pr(D | H) \Pr(H)}{\Pr(D | H) \Pr(H) + \Pr(D | \lnot H) \Pr(\lnot H)}
+\]</span></p>
+<pre class="sourceCode r"><code class="sourceCode r">p_theta &lt;-<span class="st"> </span><span class="fl">0.1</span>
+science &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span><span class="st"> </span>theta,     <span class="op">~</span><span class="st"> </span>x,       <span class="op">~</span><span class="st"> </span>prior, <span class="op">~</span><span class="st"> </span>likelihood,
+  <span class="ot">TRUE</span>,    <span class="ot">TRUE</span>,       p_theta,         beta,
+  <span class="ot">TRUE</span>,   <span class="ot">FALSE</span>,       p_theta,     <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>beta,
+  <span class="ot">FALSE</span>,    <span class="ot">TRUE</span>,   <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p_theta,        alpha,
+  <span class="ot">FALSE</span>,   <span class="ot">FALSE</span>,   <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p_theta,    <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha
+)</code></pre>
+<p>Calculate the posterior probability for each value of <code>theta</code>,
+for the different cases of <code>x</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(science, x) <span class="op">%&gt;%</span>
+<span class="kw">mutate</span>(<span class="dt">marginal   =</span> <span class="kw">sum</span>(likelihood <span class="op">*</span><span class="st"> </span>prior),
+       <span class="dt">posterior =</span> likelihood <span class="op">*</span><span class="st"> </span>prior <span class="op">/</span><span class="st"> </span>marginal
+) <span class="op">%&gt;%</span>
+<span class="kw">arrange</span>(x)
+<span class="co">#&gt; # A tibble: 4 x 6</span>
+<span class="co">#&gt; # Groups:   x [2]</span>
+<span class="co">#&gt;   theta x     prior likelihood marginal posterior</span>
+<span class="co">#&gt;   &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 TRUE  FALSE 0.100     0.200     0.875    0.0229</span>
+<span class="co">#&gt; 2 FALSE FALSE 0.900     0.950     0.875    0.977 </span>
+<span class="co">#&gt; 3 TRUE  TRUE  0.100     0.800     0.125    0.640 </span>
+<span class="co">#&gt; 4 FALSE TRUE  0.900     0.0500    0.125    0.360</span></code></pre>
+<div id="questions" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Questions</h3>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(p\)</span>-value hacking is a process by which a research ensures that their test has a statistically significant result? What term does this affect? If you know a study was p-value hacked, what is the posterior distribution</p></li>
+<li><p>Suppose a paper finds support for a novel and counter-intuitive theory. What parameter would that affect? Would it result in a higher or lower posterior probability?</p></li>
+<li><p>Suppose a paper conducts a test of a well-established theory. What parameter would that affect? Would it result in a higher or lower posterior probability?</p></li>
+<li><p>There are <a href="https://osf.io/preprints/psyarxiv/mky9j">some arguments</a> that the <span class="math inline">\(p\)</span>-value threshold should be reduced to <span class="math inline">\(\alpha = 0.005\)</span>. What is the posterior probability of <span class="math inline">\(\Pr(H | D)\)</span> in that case?</p></li>
+<li><p>Given the other parameters, what value of <span class="math inline">\(\alpha\)</span> would you need so that <span class="math inline">\(\Pr(H | D) \geq 0.95\)</span> ?</p></li>
+<li><p>Many studies are under-powered. For example, <a href="https://www.nature.com/articles/nrn3475">this paper</a> finds that empirically, many neuroscience experiments have powers of 8% to 31%. Suppose that the experiment has a power of 20%. What is the posterior probability <span class="math inline">\(\Pr(H | D)\)</span>?</p></li>
+<li><p>Given the other parameters, what value of <span class="math inline">\(\beta\)</span> would you need so that <span class="math inline">\(\Pr(H | D) \geq 0.95\)</span> ?</p></li>
+<li><p>Given the original parameters, how many times would you have to replicate a study to get <span class="math inline">\(P(H | D_1, \dots, D_k) \geq 0.95\)</span>?</p></li>
+<li><p>Suppose you run a study twice. Does <span class="math inline">\(P(H | D_1, \lnot D_2) = P(H | D_1, \lnot D_2)\)</span>? In other words, does the order in which evidence is received matter?</p></li>
+<li><p>A study produces a statistically significant result, with a <span class="math inline">\(p\)</span>-value of 0.01. The PI explains the results to the press saying that there is only a 1% chance that the findings are false. Is that interpretation of the p-value correct? If not, why not?</p></li>
+<li><p>Calculate the <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler</a> divergence between<br />
+<span class="math display">\[
+KL(\Pr(H|D) || \Pr(H)) = \sum \Pr(H | D) \log \frac{\Pr(H | D)}
+\]</span></p></li>
+</ol>
+<p>Which event has more information, <span class="math inline">\(D\)</span> or <span class="math inline">\(\lnot D\)</span>?</p>
+</div>
+</div>
+<div id="measurement-error-and-rare-events-in-surveys" class="section level2">
+<h2><span class="header-section-number">2.4</span> Measurement Error and Rare Events in Surveys</h2>
+<p>Suppose a survey includes 20,000 respondents.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+Of them 19,500 are citizens and 500 are not.
+Suppose that 99.9% of the time, the survey question response is correct (citizens respond that they are citizens, and non-citizens respond that they are non-citizens).
+The survey against voting records, which provides the estimate <span class="math inline">\(P(v = 1 | c = 0) = 0.7\)</span></p>
+<p>What is the probability of being a non-citizen given that a person reported being a non-citizen?</p>
+<pre class="sourceCode r"><code class="sourceCode r">sample_size &lt;-<span class="st"> </span><span class="dv">20000</span>
+non_citizens &lt;-<span class="st"> </span><span class="dv">500</span>
+p_non_citizen &lt;-<span class="st"> </span>non_citizens <span class="op">/</span><span class="st"> </span><span class="dv">20000</span>
+accuracy &lt;-<span class="st"> </span><span class="fl">0.999</span>
+prior_citizen &lt;-<span class="st"> </span><span class="fl">0.5</span>
 
+<span class="kw">tribble</span>(
+  <span class="op">~</span><span class="st"> </span>citizen_reported, <span class="op">~</span><span class="st"> </span>citizen,           <span class="op">~</span><span class="st"> </span>prior,  <span class="op">~</span><span class="st"> </span>likelihood,
+  <span class="ot">TRUE</span>,      <span class="ot">TRUE</span>,     prior_citizen,      accuracy,
+  <span class="ot">TRUE</span>,     <span class="ot">FALSE</span>,     prior_citizen,  <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>accuracy,
+  <span class="ot">FALSE</span>,     <span class="ot">TRUE</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>prior_citizen,      accuracy,
+  <span class="ot">FALSE</span>,    <span class="ot">FALSE</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>prior_citizen,  <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>accuracy
+)
+<span class="co">#&gt; # A tibble: 4 x 4</span>
+<span class="co">#&gt;   citizen_reported citizen prior likelihood</span>
+<span class="co">#&gt;   &lt;lgl&gt;            &lt;lgl&gt;   &lt;dbl&gt;      &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 TRUE             TRUE    0.500    0.999  </span>
+<span class="co">#&gt; 2 TRUE             FALSE   0.500    0.00100</span>
+<span class="co">#&gt; 3 FALSE            TRUE    0.500    0.999  </span>
+<span class="co">#&gt; 4 FALSE            FALSE   0.500    0.00100</span></code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Given a respondent responded that they were a non-citizen, what is the probability that they are actually a non-citizen?</p></li>
+<li><p>How many citizens do you expect to respond that they are non-citizens?</p></li>
+<li><p>How many non-citizens do you expect to respond that they are citizens?</p></li>
+<li><p>Is the prior reasonable? How would you choose a better prior? How much would
+it affect the results?</p></li>
+<li><p>Suppose that citizens vote with 70% probability, and non-citizens never vote.</p>
+<ol style="list-style-type: decimal">
+<li>With these assumptions, what is the probability that they are a non-citizen given that they voted?</li>
+<li>What is the probability that someone voted given that they reported being a non-citizen in the survey?</li>
+</ol></li>
+<li><p>What is the implication for studying rare events, such as non-citizen voting using surveys (not designed for that)?</p></li>
+</ol>
 
-### Gamma Distribution
-
-See [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution).
-
-Shape $k > 0$ and scale $\theta > 0$,
-$$
-\dgamma(x | k, \theta) = \frac{1}{\Gamma(k) \theta^k}x^{k - 1}\exp(- x / \theta) .
-$$
-with
-$$
-\begin{aligned}[t]
-\mu = \E[X] &= k \theta \\
-\sigma^2 = \Var[X] &= k \theta^2
-\end{aligned}
-$$
-This can be reparameterized as,
-$$
-\begin{aligned}[t]
-k &= \frac{\mu^2}{\sigma^2} \\
-\theta &= \frac{\sigma^2}{\mu}
-\end{aligned}
-$$
-
-Shape $\alpha > 0$ and rate $\beta > 0$,
-$$
-\dgamma(x | \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}\exp(- \beta x) .
-$$
-with
-$$
-\begin{aligned}[t]
-\mu = \E[X] &= \frac{\alpha}{\beta} \\
-\sigma^2 = \Var[X] &= \frac{\alpha}{\beta^2}
-\end{aligned}
-$$
-This can be reparameterized as,
-$$
-\begin{aligned}[t]
-\alpha &= \frac{\mu^2}{\sigma^2} \\
-\beta &= \frac{\mu}{\sigma^2}
-\end{aligned}
-$$
--->
-
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Example from Tversky, D. Kahneman, Evidential impact of base rates, in <em>Judgment under uncertainty: Heuristics and biases</em>, D. Kahneman, P. Slovic, A. Tversky (editors), Cambridge University Press, 1982.<a href="bayes-theorem.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>This example is derived from Ioannides, John P. A. (2005) “<a href="http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020124">Why Most Published Research Findings Are False</a>”, <em>PLOS Medicine</em>.<a href="bayes-theorem.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>This example is from Stephen Ansolabehere,
+Samantha Luks, Brian F. Schaffner, <a href="https://cces.gov.harvard.edu/news/perils-cherry-picking-low-frequency-events-large-sample-surveys">The Perils of Cherry Picking Low Frequency Events in Large Sample Surveys</a>.<a href="bayes-theorem.html#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="multilevel-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="annotated-bibliography.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="bayesian-inference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="example-predicting-names-from-ages.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -583,7 +731,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/distributions.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/bayes-theorem.Rmd",
 "text": "Edit"
 },
 "download": null,

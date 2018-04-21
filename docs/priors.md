@@ -3,9 +3,9 @@
 
 > Yeah, well, you know, that’s just, like, your opinion, man. — The Dude (*The Big Lebowski*)
 
-Priors for coefficients and scales.
-
 ## Levels of Priors
+
+The levels of 
 
 1.  Flat prior
 1.  Vague but proper prior, e.g. $\dnorm(. | 0, 1e6)$
