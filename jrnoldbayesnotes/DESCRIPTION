@@ -18,13 +18,17 @@ Imports:
     bayz,
     ggmcmc,
     loo,
+    pscl,
+    recipes,
     rstan,
     rstanarm,
     stringr,
-    tidyverse
+    tidyverse,
+    ZeligData
 Remotes:
     jrnold/jrnoldmisc,
-    jrnold/bayz
+    jrnold/bayz,
+    jrnold/ZeligData
 RoxygenNote: 6.0.1
 Suggests:
     spelling

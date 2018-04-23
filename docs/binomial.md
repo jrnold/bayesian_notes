@@ -1,4 +1,9 @@
 
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Binomial Models
 
 
@@ -6,7 +11,7 @@
 library("rstan")
 library("rstanarm")
 library("tidyverse")
-library("rubbish")
+library("recipes")
 library("bayz")
 ```
 
@@ -92,6 +97,10 @@ map_df(
 
 <img src="binomial_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
 
+Notes:
+
+-   The logistic distribution is approximately a Student-t with df=7.
+
 ### Stan
 
 In Stan, the Binomial distribution has two implementations:
@@ -112,6 +121,16 @@ $$
 
 ### Example: Vote Turnout
 
+Estimate a model of vote turnout in the 1992 from the American National Election Survey (ANES) as a function of race, age, and education.
+The data and example is from the Zelig library [Zelig](https://www.rdocumentation.org/packages/Zelig/topics/turnout).[^ex-logit]
+You can load it with
+
+```r
+data("turnout", package = "ZeligData")
+```
+
+#### Stan
+
 A general Stan model for estimating logit models is:
 
 
@@ -119,246 +138,72 @@ A general Stan model for estimating logit models is:
 mod1
 ```
 
-prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("// Logit Model\n//\n// y ~ Bernoulli(p)\n// p = a + X B\n// b0 \\sim cauchy(0, 10)\n// b \\sim cauchy(0, 2.5)\ndata {\n  // number of observations\n  int N;\n  // response\n  // vectors are only real numbers\n  // need to use an array\n  int<lower = 0, upper = 1> y[N];\n  // number of columns in the design matrix X\n  int K;\n  // design matrix X\n  // should not include an intercept\n  matrix [N, K] X;\n}\ntransformed data {\n  # default scales same as rstanarm\n  # assume data is centered and scaled\n  real<lower = 0.0> a_scale;\n  vector<lower = 0.0>[K] b_scale;\n  a_scale = 10.0;\n  b_scale = rep_vector(2.5, K);\n}\nparameters {\n  // regression coefficient vector\n  real a;\n  vector[K] b;\n}\ntransformed parameters {\n  vector<lower = 0.0, upper = 1.0>[N] p;\n  p = inv_logit(a + X * b);\n}\nmodel {\n  // priors\n  a ~ normal(0.0, a_scale);\n  b ~ normal(0.0, b_scale);\n  // likelihood\n  y ~ binomial(1, p);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[N] y_rep;\n  // log-likelihood posterior\n  vector[N] log_lik;\n  for (i in 1:N) {\n    y_rep[i] = binomial_rng(1, p[i]);\n    log_lik[i] = binomial_lpmf(y[i] | 1, p[i]);\n  }\n}")))
+prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("// Poisson GLM\ndata {\n  // number of observations\n  int<lower=0> N;\n  // response\n  // vectors are only real numbers\n  // need to use an array\n  int<lower = 0, upper = 1> y[N];\n  // number of columns in the design matrix X\n  int<lower=0> K;\n  // design matrix X\n  // should not include an intercept\n  matrix [N, K] X;\n  // priors on alpha\n  real<lower=0> scale_alpha;\n  real<lower=0> scale_beta;\n  // keep responses\n  int<lower=0, upper=1> use_y_rep;\n  int<lower=0, upper=1> use_log_lik;\n}\nparameters {\n  // regression coefficient vector\n  real alpha;\n  vector[K] beta;\n}\ntransformed parameters {\n  vector[N] eta;\n\n  eta = alpha + X * beta;\n}\nmodel {\n  // priors\n  alpha ~ normal(0.0, scale_alpha);\n  beta ~ normal(0.0, scale_beta);\n  // likelihood\n  y ~ bernoulli_logit(eta);\n}\ngenerated quantities {\n  // simulate data from the posterior\n  vector[N * use_y_rep] y_rep;\n  // log-likelihood posterior\n  vector[N * use_log_lik] log_lik;\n  for (i in 1:num_elements(y_rep)) {\n    y_rep[i] = bernoulli_rng(inv_logit(eta[i]));\n  }\n  for (i in 1:num_elements(log_lik)) {\n    log_lik[i] = bernoulli_logit_lpmf(y[i] | eta[i]);\n  }\n}")))
 
-Estimate a model of vote turnout in the 1992 from the American National Election Survey (ANES).
-The data is from [Zelig](https://www.rdocumentation.org/packages/Zelig/topics/turnout).[^ex-logit]
 
 ```r
-data("turnout", package = "Zelig")
+data("turnout", package = "ZeligData")
 ```
-Vote choice (`vote`) is modeled as a function of age, income, and race.
+
+Vote choice (`vote`) is modeled as a function of age, age-squared, income, and race.
+
+Preprocess the data to create the design matrix, `X`, and the response `y` using the **recipes** package.
+We will need to center and scale the design matrix.
 
 ```r
-mod_formula <- vote ~ poly(age, 2) + income + educate + race - 1
+turnout <- mutate(turnout, white = as.numeric(race == "white"))
+rec_turnout <- recipe(vote ~ income + age + white,
+                      data = turnout) %>%
+  step_poly(age, options = list(degree = 2)) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  prep(data = turnout, retain = TRUE)
+X <- juice(rec_turnout, all_predictors(), composition = "matrix")
+y <- juice(rec_turnout, all_outcomes(), composition = "matrix") %>%
+  drop()
 ```
+
 
 ```r
-mod1_data <- lm_preprocess(mod_formula, data = turnout)
+mod1_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y,
+  scale_alpha = 10,
+  scale_beta = 2.5,
+  use_y_rep = FALSE,
+  use_log_lik = TRUE
+)
 ```
 
 
-[^ex-logit]: Example from [Zelig-logit](http://docs.zeligproject.org/en/latest/zelig-logit.html).
 
-### Separation
+#### rstanarm
 
-Separation is when a predictor perfectly predicts a binary response variable [@Rainey2016a, @Zorn2005a].
+The **rstanarm** package can estimate binomial models using the function `stan_glm`:
 
--   *complete separation*: the predictor perfectly predicts both 0's and 1's.
--   *quasi-complete separation*: the predictor perfectly predicts either 0's or 1's.
 
-This is related and similar to identification in MLE and multicollinearity in OLS.
+```r
+fit2 <- stan_glm(vote ~ income + age + white, data = turnout)
+```
 
-The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.
+### Robit
 
-Using a weakly informative prior such as those suggested by is sufficient to solve separation,
-$$
-\beta_k \sim \dnorm(0, 2.5)
-$$
-where all the columns of $\code{x}$ are assumed to mean zero, unit variance (or otherwise standardized).
-The half-Cauchy prior, $\dhalfcauchy(0, 2.5)$, suggested in @GelmanJakulinPittauEtAl2008a is insufficiently informative to  to deal with separation [@GhoshLiMitra2015a], but finite-variance weakly informative Student-t or Normal distributions will work.
-
-These are the priors suggested by [Stan](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and used by default in **rstanarm** [rstanarm](https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm).
-
-@Rainey2016a provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values.
-Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).
-
-@Firth1993a suggests the Jeffreys invariant prior,
-$$
-p(\beta_k) \propto |I(\beta)|^{\frac{1}{2}}
-$$
-where $|I(\beta)|$ is the information matrix,
+The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
+For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
 $$
 \begin{aligned}[t]
-I(\beta) &= \mat{X}\T \mat{W} \mat{X} \\
-\mat{W} &= \diag(\pi_i (1 - \pi_i))
+y_i &\sim \dbin \left(n_i, \pi_i \right) \\
+\pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | d, 0, (d - 2)/ d) dx \\
+\eta_i &= \alpha + X \beta
 \end{aligned}
 $$
-This is the Jeffreys invariant prior. This was also recommended @Zorn2005a.
-
-@GreenlandMansournia2015a suggest a log-F prior distribution which has an intuitive interpretation related to the number of observations.
-
-#### Example: Support of ACA Medicaid Expansion
-
-This example is from @Rainey2016a from the original paper @BarrilleauxRainey2014a
-with replication code [here](https://github.com/carlislerainey/separation).
-
-
-```r
-library("rstan")
-library("tidyverse")
-library("magrittr")
-#> 
-#> Attaching package: 'magrittr'
-#> The following object is masked from 'package:purrr':
-#> 
-#>     set_names
-#> The following object is masked from 'package:tidyr':
-#> 
-#>     extract
-#> The following object is masked from 'package:rstan':
-#> 
-#>     extract
-
-URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv"
-
-
-
-f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg + percent_uninsured +
-      income + percent_nonwhite + percent_metro)
-
-br <- read_csv(URL) %>%
-  mutate(oppose_expansion = 1 - support_expansion,
-         dem_governor = -1 * gop_governor,
-         obama_win = as.integer(obama_share >= 0.5),
-         percent_nonwhite = percent_black + percent_hispanic) %>%
-  rename(gop_leg = legGOP) %>%
-  # keep only variables in the formula
-  model.frame(f, data = .) %>%
-  # drop missing values (if any?)
-  drop_na()
-#> Parsed with column specification:
-#> cols(
-#>   .default = col_integer(),
-#>   state = col_character(),
-#>   state_abbr = col_character(),
-#>   house12 = col_double(),
-#>   sen12 = col_double(),
-#>   support_expansion_new = col_character(),
-#>   percent_uninsured = col_double(),
-#>   ideology = col_double(),
-#>   income = col_double(),
-#>   percent_black = col_double(),
-#>   percent_hispanic = col_double(),
-#>   percent_metro = col_double(),
-#>   dsh = col_double(),
-#>   obama_share = col_double()
-#> )
-#> See spec(...) for full column specifications.
-
-br_scaled <- br %>%
-  # Autoscale all vars but response
-  mutate_at(vars(-oppose_expansion), autoscale)
-
-glm(f, data = br, family = "binomial") %>% summary()
-#> 
-#> Call:
-#> glm(formula = f, family = "binomial", data = br)
-#> 
-#> Deviance Residuals: 
-#>    Min      1Q  Median      3Q     Max  
-#> -2.374  -0.461  -0.131   0.630   2.207  
-#> 
-#> Coefficients:
-#>                   Estimate Std. Error z value Pr(>|z|)   
-#> (Intercept)         4.5103     4.5986    0.98    0.327   
-#> dem_governor       -4.1556     1.4794   -2.81    0.005 **
-#> obama_win          -2.1470     1.3429   -1.60    0.110   
-#> gop_leg            -0.1865     1.2974   -0.14    0.886   
-#> percent_uninsured  -0.3072     0.1651   -1.86    0.063 . 
-#> income             -0.0421     0.0776   -0.54    0.587   
-#> percent_nonwhite   17.8505    48.3030    0.37    0.712   
-#> percent_metro     -12.4390    32.4446   -0.38    0.701   
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> (Dispersion parameter for binomial family taken to be 1)
-#> 
-#>     Null deviance: 68.593  on 49  degrees of freedom
-#> Residual deviance: 37.948  on 42  degrees of freedom
-#> AIC: 53.95
-#> 
-#> Number of Fisher Scoring iterations: 5
-
-fit1 <- stan_glm(f, data = br, family = "binomial")
-fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
-```
-
-## Rare Events Logit
-
-## Case Control
-
-In binary outcome variables, sometimes it is useful to sample on the dependent variable.
-For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.
-For most country-pairs, for most years, there is no conflict.
-If some data are costly to gather, it may be cost efficient to get data for conflicts and then randomly select a smaller number of non-conflicts on which to gather data.
-The sample will no longer be representative, but the estimates can be corrected.
-
-The reason this works well, is that if there are very few 1's, additional 0's have little influence on the estimation (@KingZeng2001a).
-This should hold more generally will unbalanced classes; in some sense, the amount of effective observations is not much more than the number in the lowest category.
-
-@KingZeng2001a propose two corrections:
-
-1.  Correcting the intercept (prior correction)
-1.  Weighting observations
-
-The *prior correction* notes that
-$$
-\pi_i = \frac{1}{1 + \exp(-\mat{X} \vec{beta})}
-$$
-
-The unbalanced sample only affects the intercept. If $\hat\beta_0$ is the intercept from the MLE, the case-control corrected intercept $\tilde{\beta}$ is,
-$$
-\tilde{\vec{\beta}}_0^* = \hat{\vec{\beta}}_0 - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
-$$
-In an MLE setting, this can be applied after estimation, but used in any predicted values.
-In a Bayesian setting, this correct should be applied within the model by adding the offset to the estimation.
-
-In a Stan model, this could be implemented by directly incrementing these values
-
-``` stan
-data {
-  int N;
-  int y[N];
-  real tau;
-}
-transformed data {
-  real offset;
-  real y_mean;
-  y_mean = mean(y);
-  offset = log((1 - tau) / tau * (y_mean) / (1 - y_mean));
-}
-parameters {
-  real alpha0;
-}
-transformed parameters {
-  real alpha;
-  alpha <- alpha0 - offset;
-}
-```
-
-If there was uncertainty about $\tau$, then $\tau$ could be modeled as a parameter.
-It may also be okay to only correct the intercept in a generated quantities block? (not sure).
-
-An alternative approach is to use a *weighted likelihood*:
-
--   ones are weighted by $\tau / \bar{y}$
--   zeros are weighted by $(1 - \tau) / \bar{1 - \bar{y}}$
-
-The log likelihood would then be
-$$
-\ln L_w(\beta | y) = w_1 \sum_{Y_i = 1} \ln (\pi_i) + w_0 \sum_{Y_i = 0} \ln (1 - \pi_i)
-$$
-
-In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation.
-For example, something like this,
-
-``` stan
-if (y[i]) {
-  target += w * binomial_lpdf(1, pi[i])
-} else {
-  target += (1 - w) * binomial_lpdf(1, pi[i])
-}
-```
-
-See the example for [`Zelig-relogit`](http://docs.zeligproject.org/en/latest/zelig-relogit.html)
+Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
+Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
 
 ### References
 
--   @Firth1993a proposes a penalized likelihood approach using the Jeffreys invariant prior
--   @KingZeng2001b and @KingZeng2001a apply an approach similar to the penalized likelihood approach for the similar problem of rare events
--   @Zorn2005a also suggests using the Firth logistic regression to avoid perfect separation
--   @Rainey2016a shows that Cauchy(0, 2.5) priors can be used
--   @GreenlandMansournia2015a provide another default prior to for binomial models: log F(1,1) and log F(2, 2) priors. These have the nice property that they are interpretable as additional observations.
-
 For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].
+
+[^ex-logit]: Example from [Zelig-logit](http://docs.zeligproject.org/en/latest/zelig-logit.html).

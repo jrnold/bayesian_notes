@@ -1,0 +1,91 @@
+# Heteroskedasticity
+
+Consider the linear regression model with normal errors,
+$$
+y_i \sim \dnorm\left(\ X \beta, \sigma_i^2 \right) .
+$$
+Note that since the term $\sigma_i$ is indexed by the observation, it can vary by observation.
+If $\sigma_i = 1$ for all $i$, then this corresponds to the classical homoskedastic linear regression.
+If $\sigma_i$ differs for each $i$, then it is a heteroskedastic regression.
+
+In frequentist estimation linear regressions with heteroskedastic are often estimated using OLS with heteroskedasticity-consistent (HC) standard errors.[^hc]
+However, HC standard errors are not a generative model, and in the Bayesian setting it is preferable to write a generative model that specifies a model for $\sigma^2$.
+
+## Weighted Regression
+
+A common case is "weighted" regression, where each $y_i$ represents the *mean* of $n_i$
+observations. Then the scale of each observation is
+$$
+\sigma_i = \omega / n_i ,
+$$
+where $\omega$ is a global scale.
+
+Alternatively, suppose each observation represents the *sum* of each $n_i$ observations.
+Then the scale of each observation is,
+$$
+\sigma_i = n_i \omega .
+$$
+
+## Modeling the Scale with Covariates
+
+The scale can also be modeled with covariates.
+
+It is common to model the log-transformation of the scale or variance to transform it to $\R$,
+$$
+\log \sigma_i = \dnorm(Z_i \gamma, \omega)
+$$
+where $Z_i$ are covariates used to the model the variance, which may or may not be the same as $X_i$.
+
+Another common model is the variance as a function of the mean,
+$$
+\begin{align}
+\log \sigma_i = f(\mu_i).
+\end{align}
+$$
+
+Consider the well-known normal approximation of the binomial distribution,
+$$
+\dnorm(n_i | N_i, \pi_i) \approx \dnorm(n_i | \pi N_i, \pi (1 - \pi) N_i) .
+$$
+At the cost of treating the outcome as continuous rather than discrete,
+this approximation can provide a flexible model for over- or under-dispersion, by adding a dispersion term $\delta \in R^{+}$,
+$$
+n_i \sim \dnorm(\pi N_i, \delta \pi (1 - \pi)) .
+$$
+A similar approximation can be applied to unbounded count models using the normal approximation to the Poisson, $\dpois(y_i | \lambda_i) \approx \dnrom(y_i | \lambda_i \lambda_i)$.
+
+## Prior Distribution
+
+We can apply an observation-level scales with a prior distribution.
+
+A flexible way to model these scales is to represent each scale, $\sigma_i$, as the product of a global scale, $\omega$, and an observation-level individual scale, $\lambda_i$,
+$$
+\sigma_i = \omega \lambda_i .
+$$
+This is called a *scale mixture of normal distributions*.
+
+The shape of the heteroskedasticity is determined by the prior distribution of $\lambda_i$.
+Suppose $\lambda_i$ is distributed
+$$
+1 / \lambda_i^2 \sim \dgamma(d / 2, d / 2) .
+$$
+This is equivalent to a regression model with Student-t errors.
+$$
+y_i \sim \dt\left(d, ., \omega \right) .
+$$
+Thus, "robust" regression models with Student-$t$ errors can be derived from a particular model of heteroskedastic normal errors.
+
+-   cite Stan
+-   implementation in Stan
+-   prior on degrees of freedom
+
+Another flexible model of heteroskedasticity is to apply a Dirichlet model to the local scales,
+$$
+\begin{aligned}[t]
+\lambda_i &\sim \ddirichlet(a, w), & \lambda_i \geq 0, \sum_i \lambda_i = 1 .
+\end{aligned}
+$$
+
+<!-- Geweke (1993, 2005) Koop (2003) -->
+
+[^hc]: See <https://arxiv.org/pdf/1101.1402.pdf> and  <http://econ.ucsb.edu/~startz/Bayesian%20Heteroskedasticity-Robust%20Regression.pdf>.

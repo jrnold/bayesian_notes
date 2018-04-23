@@ -20,6 +20,8 @@ rmd_files:
   - "robust.Rmd"
   - "generalized-linear-models.Rmd"
   - "binomial.Rmd"
+  - "separation.Rmd"
+  - "rare-events-logit.Rmd"
   # - "counts.Rmd"
   # - "categorical.Rmd"
   # - "shrinkage.Rmd"

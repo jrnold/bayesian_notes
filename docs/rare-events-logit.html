@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown 0.7.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
+  
+  
+  <meta name="github-repo" content="jrnold/bayesian_notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:site" content="@jrnld" />
+  
+  
+
+<meta name="author" content="Jeffrey B. Arnold">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="separation.html">
+<link rel="next" href="hierarchical-models.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/d3-3.3.8/d3.min.js"></script>
+<script src="libs/dagre-0.4.0/dagre-d3.min.js"></script>
+<link href="libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
+<script src="libs/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/chromatography-0.1/chromatography.js"></script>
+<script src="libs/DiagrammeR-binding-1.0.0/DiagrammeR.js"></script>
+<script src="libs/viz-0.3/viz.js"></script>
+<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Bayesian Notes</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>1</b> Bayesian Inference</a><ul>
+<li class="chapter" data-level="1.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bayesian-analysis"><i class="fa fa-check"></i><b>1.1</b> Bayesian Analysis</a></li>
+<li class="chapter" data-level="1.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>1.2</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="part"><span><b>I Theory</b></span></li>
+<li class="chapter" data-level="2" data-path="bayes-theorem.html"><a href="bayes-theorem.html"><i class="fa fa-check"></i><b>2</b> Bayes Theorem</a><ul>
+<li class="chapter" data-level="" data-path="bayes-theorem.html"><a href="bayes-theorem.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="2.1" data-path="bayes-theorem.html"><a href="bayes-theorem.html#introduction-to-bayes-theorem"><i class="fa fa-check"></i><b>2.1</b> Introduction to Bayes’ Theorem</a></li>
+<li class="chapter" data-level="2.2" data-path="bayes-theorem.html"><a href="bayes-theorem.html#examples"><i class="fa fa-check"></i><b>2.2</b> Examples</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="bayes-theorem.html"><a href="bayes-theorem.html#taxi-cab-problem"><i class="fa fa-check"></i><b>2.2.1</b> Taxi-Cab Problem</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="bayes-theorem.html"><a href="bayes-theorem.html#why-most-research-findings-are-false"><i class="fa fa-check"></i><b>2.3</b> Why most research findings are false</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="bayes-theorem.html"><a href="bayes-theorem.html#questions"><i class="fa fa-check"></i><b>2.3.1</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="bayes-theorem.html"><a href="bayes-theorem.html#measurement-error-and-rare-events-in-surveys"><i class="fa fa-check"></i><b>2.4</b> Measurement Error and Rare Events in Surveys</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html"><i class="fa fa-check"></i><b>3</b> Example: Predicting Names from Ages</a><ul>
+<li class="chapter" data-level="" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#prerequisites-1"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="3.1" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#statement-of-the-problem"><i class="fa fa-check"></i><b>3.1</b> Statement of the problem</a></li>
+<li class="chapter" data-level="3.2" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#data-wrangling"><i class="fa fa-check"></i><b>3.2</b> Data Wrangling</a></li>
+<li class="chapter" data-level="3.3" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#probability-of-age-given-name-and-sex"><i class="fa fa-check"></i><b>3.3</b> Probability of age given name and sex</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#questions-1"><i class="fa fa-check"></i><b>3.3.1</b> Questions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="example-predicting-names-from-ages.html"><a href="example-predicting-names-from-ages.html#references"><i class="fa fa-check"></i><b>3.3.2</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="naive-bayes.html"><a href="naive-bayes.html"><i class="fa fa-check"></i><b>4</b> Naive Bayes</a><ul>
+<li class="chapter" data-level="" data-path="naive-bayes.html"><a href="naive-bayes.html#prerequisites-2"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="4.1" data-path="naive-bayes.html"><a href="naive-bayes.html#introduction"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="naive-bayes.html"><a href="naive-bayes.html#examples-1"><i class="fa fa-check"></i><b>4.2</b> Examples</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="naive-bayes.html"><a href="naive-bayes.html#federalist-papers"><i class="fa fa-check"></i><b>4.2.1</b> Federalist Papers</a></li>
+<li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
+<li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="naive-bayes.html"><a href="naive-bayes.html#references-1"><i class="fa fa-check"></i><b>4.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="priors.html"><a href="priors.html"><i class="fa fa-check"></i><b>5</b> Priors</a><ul>
+<li class="chapter" data-level="5.1" data-path="priors.html"><a href="priors.html#levels-of-priors"><i class="fa fa-check"></i><b>5.1</b> Levels of Priors</a></li>
+<li class="chapter" data-level="5.2" data-path="priors.html"><a href="priors.html#conjugate-priors"><i class="fa fa-check"></i><b>5.2</b> Conjugate Priors</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="priors.html"><a href="priors.html#binomial-beta"><i class="fa fa-check"></i><b>5.2.1</b> Binomial-Beta</a></li>
+<li class="chapter" data-level="5.2.2" data-path="priors.html"><a href="priors.html#categorical-dirichlet"><i class="fa fa-check"></i><b>5.2.2</b> Categorical-Dirichlet</a></li>
+<li class="chapter" data-level="5.2.3" data-path="priors.html"><a href="priors.html#poisson-gamma"><i class="fa fa-check"></i><b>5.2.3</b> Poisson-Gamma</a></li>
+<li class="chapter" data-level="5.2.4" data-path="priors.html"><a href="priors.html#normal-with-known-variance"><i class="fa fa-check"></i><b>5.2.4</b> Normal with known variance</a></li>
+<li class="chapter" data-level="5.2.5" data-path="priors.html"><a href="priors.html#exponential-family"><i class="fa fa-check"></i><b>5.2.5</b> Exponential Family</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="priors.html"><a href="priors.html#improper-priors"><i class="fa fa-check"></i><b>5.3</b> Improper Priors</a></li>
+<li class="chapter" data-level="5.4" data-path="priors.html"><a href="priors.html#cromwells-rule"><i class="fa fa-check"></i><b>5.4</b> Cromwell’s Rule</a></li>
+<li class="chapter" data-level="5.5" data-path="priors.html"><a href="priors.html#asymptotics"><i class="fa fa-check"></i><b>5.5</b> Asymptotics</a></li>
+<li class="chapter" data-level="5.6" data-path="priors.html"><a href="priors.html#proper-and-improper-priors"><i class="fa fa-check"></i><b>5.6</b> Proper and Improper Priors</a></li>
+<li class="chapter" data-level="5.7" data-path="priors.html"><a href="priors.html#hyperpriors-and-hyperparameters"><i class="fa fa-check"></i><b>5.7</b> Hyperpriors and Hyperparameters</a></li>
+<li class="chapter" data-level="5.8" data-path="priors.html"><a href="priors.html#references-2"><i class="fa fa-check"></i><b>5.8</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>6</b> Estimation</a><ul>
+<li class="chapter" data-level="6.1" data-path="estimation-1.html"><a href="estimation-1.html#point-estimates"><i class="fa fa-check"></i><b>6.1</b> Point Estimates</a></li>
+<li class="chapter" data-level="6.2" data-path="estimation-1.html"><a href="estimation-1.html#credible-intervals"><i class="fa fa-check"></i><b>6.2</b> Credible Intervals</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="estimation-1.html"><a href="estimation-1.html#compared-to-confidence-intervals"><i class="fa fa-check"></i><b>6.2.1</b> Compared to confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="estimation-1.html"><a href="estimation-1.html#bayesian-decision-theory"><i class="fa fa-check"></i><b>6.3</b> Bayesian Decision Theory</a></li>
+</ul></li>
+<li class="part"><span><b>II Computation</b></span></li>
+<li class="chapter" data-level="7" data-path="bayesian-computation.html"><a href="bayesian-computation.html"><i class="fa fa-check"></i><b>7</b> Bayesian Computation</a><ul>
+<li class="chapter" data-level="7.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#how-to-calculate-a-posterior"><i class="fa fa-check"></i><b>7.1</b> How to calculate a posterior?</a></li>
+<li class="chapter" data-level="7.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#example-globe-tossing-model"><i class="fa fa-check"></i><b>7.2</b> Example: Globe-tossing model</a></li>
+<li class="chapter" data-level="7.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#quadrature"><i class="fa fa-check"></i><b>7.3</b> Quadrature</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#grid-approximation"><i class="fa fa-check"></i><b>7.3.1</b> Grid approximation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="bayesian-computation.html"><a href="bayesian-computation.html#functional-approximations"><i class="fa fa-check"></i><b>7.4</b> Functional Approximations</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#maximum-a-posteriori"><i class="fa fa-check"></i><b>7.4.1</b> Maximum A Posteriori</a></li>
+<li class="chapter" data-level="7.4.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#laplace-approximation"><i class="fa fa-check"></i><b>7.4.2</b> Laplace Approximation</a></li>
+<li class="chapter" data-level="7.4.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#variational-inference"><i class="fa fa-check"></i><b>7.4.3</b> Variational Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="bayesian-computation.html"><a href="bayesian-computation.html#sampling-methods"><i class="fa fa-check"></i><b>7.5</b> Sampling Methods</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="bayesian-computation.html"><a href="bayesian-computation.html#numerical-integration"><i class="fa fa-check"></i><b>7.5.1</b> Numerical Integration</a></li>
+<li class="chapter" data-level="7.5.2" data-path="bayesian-computation.html"><a href="bayesian-computation.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>7.5.2</b> Inverse transform sampling</a></li>
+<li class="chapter" data-level="7.5.3" data-path="bayesian-computation.html"><a href="bayesian-computation.html#direct-approximation"><i class="fa fa-check"></i><b>7.5.3</b> Direct approximation</a></li>
+<li class="chapter" data-level="7.5.4" data-path="bayesian-computation.html"><a href="bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>7.5.4</b> Rejection sampling</a></li>
+<li class="chapter" data-level="7.5.5" data-path="bayesian-computation.html"><a href="bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>7.5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="7.5.6" data-path="bayesian-computation.html"><a href="bayesian-computation.html#mcmc-methods"><i class="fa fa-check"></i><b>7.5.6</b> MCMC Methods</a></li>
+<li class="chapter" data-level="7.5.7" data-path="bayesian-computation.html"><a href="bayesian-computation.html#discarding-early-iterations"><i class="fa fa-check"></i><b>7.5.7</b> Discarding early iterations</a></li>
+<li class="chapter" data-level="7.5.8" data-path="bayesian-computation.html"><a href="bayesian-computation.html#monte-carlo-sampling"><i class="fa fa-check"></i><b>7.5.8</b> Monte Carlo Sampling</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html"><i class="fa fa-check"></i><b>8</b> MCMC Diagnostics</a><ul>
+<li class="chapter" data-level="" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#prerequisites-3"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="8.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#reparameterize-models"><i class="fa fa-check"></i><b>8.1</b> Reparameterize Models</a></li>
+<li class="chapter" data-level="8.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#convergence-diagnostics"><i class="fa fa-check"></i><b>8.2</b> Convergence Diagnostics</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#potential-scale-reduction-hatr"><i class="fa fa-check"></i><b>8.2.1</b> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#references-3"><i class="fa fa-check"></i><b>8.2.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#autocorrelation-effective-sample-size-and-mcse"><i class="fa fa-check"></i><b>8.3</b> Autocorrelation, Effective Sample Size, and MCSE</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#effective-sample-size"><i class="fa fa-check"></i><b>8.3.1</b> Effective Sample Size</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#thinning"><i class="fa fa-check"></i><b>8.4</b> Thinning</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#traceplots"><i class="fa fa-check"></i><b>8.4.1</b> Traceplots</a></li>
+<li class="chapter" data-level="8.4.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#monte-carlo-standard-error-mcse"><i class="fa fa-check"></i><b>8.4.2</b> Monte Carlo Standard Error (MCSE)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#hmc-nut-specific-diagnostics"><i class="fa fa-check"></i><b>8.5</b> HMC-NUT Specific Diagnostics</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#divergent-transitions"><i class="fa fa-check"></i><b>8.5.1</b> Divergent transitions</a></li>
+<li class="chapter" data-level="8.5.2" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#maximum-tree-depth"><i class="fa fa-check"></i><b>8.5.2</b> Maximum Tree-depth</a></li>
+<li class="chapter" data-level="8.5.3" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#bayesian-fraction-of-missing-information"><i class="fa fa-check"></i><b>8.5.3</b> Bayesian Fraction of Missing Information</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="mcmc-diagnostics.html"><a href="mcmc-diagnostics.html#debugging-bayesian-computing"><i class="fa fa-check"></i><b>8.6</b> Debugging Bayesian Computing</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>9</b> Model Checking</a><ul>
+<li class="chapter" data-level="9.1" data-path="model-checking.html"><a href="model-checking.html#why-check-models"><i class="fa fa-check"></i><b>9.1</b> Why check models?</a></li>
+<li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
+<li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
+<li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
+<li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
+</ul></li>
+<li class="part"><span><b>III Models</b></span></li>
+<li class="chapter" data-level="10" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>10</b> Introduction to Stan and Linear Regression</a><ul>
+<li class="chapter" data-level="" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#prerequisites-4"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="10.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#ols-and-mle-linear-regression"><i class="fa fa-check"></i><b>10.1</b> OLS and MLE Linear Regression</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#bayesian-model-with-improper-priors"><i class="fa fa-check"></i><b>10.1.1</b> Bayesian Model with Improper priors</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#stan-model"><i class="fa fa-check"></i><b>10.2</b> Stan Model</a></li>
+<li class="chapter" data-level="10.3" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling-model-with-stan"><i class="fa fa-check"></i><b>10.3</b> Sampling Model with Stan</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#sampling"><i class="fa fa-check"></i><b>10.3.1</b> Sampling</a></li>
+<li class="chapter" data-level="10.3.2" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html#convergence-diagnostics-and-model-fit"><i class="fa fa-check"></i><b>10.3.2</b> Convergence Diagnostics and Model Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>11</b> Heteroskedasticity and Robust Regression</a><ul>
+<li class="chapter" data-level="" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-5"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="11.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>11.1</b> Linear Regression with Student t distributed errors</a></li>
+<li class="chapter" data-level="11.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>11.2</b> Heteroskedasticity</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>11.2.1</b> Covariates</a></li>
+<li class="chapter" data-level="11.2.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>11.2.2</b> Student-t Error</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-5"><i class="fa fa-check"></i><b>11.3</b> References</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>11.3.1</b> Quantile regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>12</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#count-models"><i class="fa fa-check"></i><b>12.1</b> Count Models</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson"><i class="fa fa-check"></i><b>12.1.1</b> Poisson</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-3"><i class="fa fa-check"></i><b>12.2</b> Example</a></li>
+<li class="chapter" data-level="12.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial"><i class="fa fa-check"></i><b>12.3</b> Negative Binomial</a></li>
+<li class="chapter" data-level="12.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#multinomial-categorical-models"><i class="fa fa-check"></i><b>12.4</b> Multinomial / Categorical Models</a></li>
+<li class="chapter" data-level="12.5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#gamma-regression"><i class="fa fa-check"></i><b>12.5</b> Gamma Regression</a></li>
+<li class="chapter" data-level="12.6" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#beta-regression"><i class="fa fa-check"></i><b>12.6</b> Beta Regression</a></li>
+<li class="chapter" data-level="12.7" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#references-6"><i class="fa fa-check"></i><b>12.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="binomial-models.html"><a href="binomial-models.html"><i class="fa fa-check"></i><b>13</b> Binomial Models</a><ul>
+<li class="chapter" data-level="13.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>13.1</b> Link Functions {link-function}</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>13.1.1</b> Stan</a></li>
+<li class="chapter" data-level="13.1.2" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>13.1.2</b> Example: Vote Turnout</a></li>
+<li class="chapter" data-level="13.1.3" data-path="binomial-models.html"><a href="binomial-models.html#robit"><i class="fa fa-check"></i><b>13.1.3</b> Robit</a></li>
+<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.4</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="separation.html"><a href="separation.html"><i class="fa fa-check"></i><b>14</b> Separation</a><ul>
+<li class="chapter" data-level="14.1" data-path="separation.html"><a href="separation.html#example-complete-separation-data"><i class="fa fa-check"></i><b>14.1</b> Example: Complete Separation Data</a></li>
+<li class="chapter" data-level="14.2" data-path="separation.html"><a href="separation.html#example-quasi-separation"><i class="fa fa-check"></i><b>14.2</b> Example: Quasi-Separation</a></li>
+<li class="chapter" data-level="14.3" data-path="separation.html"><a href="separation.html#example-support-of-aca-medicaid-expansion"><i class="fa fa-check"></i><b>14.3</b> Example: Support of ACA Medicaid Expansion</a></li>
+<li class="chapter" data-level="14.4" data-path="separation.html"><a href="separation.html#references-8"><i class="fa fa-check"></i><b>14.4</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="rare-events-logit.html"><a href="rare-events-logit.html"><i class="fa fa-check"></i><b>15</b> Rare Events Logit</a><ul>
+<li class="chapter" data-level="15.1" data-path="rare-events-logit.html"><a href="rare-events-logit.html#questions-2"><i class="fa fa-check"></i><b>15.1</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>16</b> Hierarchical Models</a><ul>
+<li class="chapter" data-level="" data-path="hierarchical-models.html"><a href="hierarchical-models.html#prerequisites-6"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="16.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#example-baseball-hits"><i class="fa fa-check"></i><b>16.1</b> Example: Baseball Hits</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="hierarchical-models.html"><a href="hierarchical-models.html#references-9"><i class="fa fa-check"></i><b>16.1.1</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>17</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="17.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>17.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>17.1.1</b> Data</a></li>
+<li class="chapter" data-level="17.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>17.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="17.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>17.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="17.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>17.1.4</b> Varying Slope Model</a></li>
+<li class="chapter" data-level="17.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>17.1.5</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="17.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>17.1.6</b> lme4</a></li>
+<li class="chapter" data-level="17.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm-1"><i class="fa fa-check"></i><b>17.1.7</b> rstanarm</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>17.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="17.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>17.3</b> ANOVA</a></li>
+<li class="chapter" data-level="17.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>17.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="17.5" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>17.5</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>17.5.1</b> How many groups?</a></li>
+<li class="chapter" data-level="17.5.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>17.5.2</b> Correlation between Predictors and Errors</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="multilevel-models.html"><a href="multilevel-models.html#references-10"><i class="fa fa-check"></i><b>17.6</b> References</a></li>
+</ul></li>
+<li class="part"><span><b>IV Appendix</b></span></li>
+<li class="chapter" data-level="18" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>18</b> Distributions</a></li>
+<li class="chapter" data-level="19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>19</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="19.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>19.1</b> Textbooks</a></li>
+<li class="chapter" data-level="19.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>19.2</b> Syllabi</a></li>
+<li class="chapter" data-level="19.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>19.3</b> Topics</a></li>
+<li class="chapter" data-level="19.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>19.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="19.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>19.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>19.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="19.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>19.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="19.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>19.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="19.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>19.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="19.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>19.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="19.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>19.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="19.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>19.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="19.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>19.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="19.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events"><i class="fa fa-check"></i><b>19.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="19.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>19.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="19.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>19.5.11</b> Shrinkage</a></li>
+</ul></li>
+<li class="chapter" data-level="19.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>19.6</b> Software</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>19.6.1</b> Stan</a></li>
+<li class="chapter" data-level="19.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>19.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="19.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>19.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="19.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>19.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="19.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>19.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="19.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>19.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="19.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>19.10</b> Inference</a><ul>
+<li class="chapter" data-level="19.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>19.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="19.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>19.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="19.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>19.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="19.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>19.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="19.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>19.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="19.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>19.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="19.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>19.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="19.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>19.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="19.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>19.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="19.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>19.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="19.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>19.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="19.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>19.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="19.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>19.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="19.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>19.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="19.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>19.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="19.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>19.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Updating: A Set of Bayesian Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\median}{median}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\logistic}{Logistic}
+\DeclareMathOperator{\logit}{Logit}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+% This follows BDA
+\newcommand{\dunif}{\mathrm{U}}
+\newcommand{\dnorm}{\mathrm{N}}
+\newcommand{\dlnorm}{\mathrm{lognormal}}
+\newcommand{\dmvnorm}{\mathrm{N}}
+\newcommand{\dgamma}{\mathrm{Gamma}}
+\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
+\newcommand{\dchisq}[1]{\chi^2_{#1}}
+\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
+\newcommand{\dexp}{\mathrm{Expon}}
+\newcommand{\dlaplace}{\mathrm{Laplace}}
+\newcommand{\dweibull}{\mathrm{Weibull}}
+\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
+\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
+\newcommand{\dlkj}{\mathrm{LkjCorr}}
+\newcommand{\dt}[1]{t_{#1}}
+\newcommand{\dbeta}{\mathrm{Beta}}
+\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
+\newcommand{\dlogistic}{\mathrm{Logistic}}
+\newcommand{\dllogistic}{\mathrm{Log-logistic}}
+\newcommand{\dpois}{\mathrm{Poisson}}
+\newcommand{\dBinom}{\mathrm{Bin}}
+\newcommand{\dmultinom}{\mathrm{Multinom}}
+\newcommand{\dnbinom}{\mathrm{Neg-bin}}
+\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
+\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
+\newcommand{\dcauchy}{\mathrm{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
+\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Reals}{\R}
+\newcommand{\RealPos}{\R^{+}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nats}{\N}
+
+\newcommand{\cia}{\perp\!\!\!\perp}
+\DeclareMathOperator*{\plim}{plim}
+\]
+<div id="rare-events-logit" class="section level1">
+<h1><span class="header-section-number">15</span> Rare Events Logit</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre>
+<p>There are two issues when estimating binary outcomes with an unbalanced outcome
+variable (many-0’s or many-1’s), called rare events.</p>
+<ol style="list-style-type: decimal">
+<li><p>Bias due to effective small sample size: The solution to this is the same as
+quasi-separation: a weakly informative prior on the coefficients.</p></li>
+<li><p>Case-control: Adding additional observations to the majority class adds little
+additional information. If it is costly to acquire training data, it is
+better to acquire something closer to a balanced training set: approximately
+equal numbers of 0’s and 1’s. The model can be adjusted for this bias.</p></li>
+</ol>
+<p>The finite-sample size bias can handled by the use of weakly informative priors
+as discussed in the chapter on separation.
+The current best-practice in Stan is to use the following weakly informative priors
+for the intercept and coefficients:
+<span class="math display">\[
+\begin{aligned}
+\alpha &amp;\sim \dnorm(0, 10)\\
+\beta_k &amp;\sim \dnorm(0, 2.5)
+\end{aligned}
+\]</span></p>
+<p>In binary outcome variables, sometimes it is useful to sample on the dependent variable.
+For example, <span class="citation">King and Zeng (2001b)</span> and <span class="citation">King and Zeng (2001a)</span> discuss applications with respect to conflicts in international relations.
+For most country-pairs, for most years, there is no conflict.
+If some data are costly to gather, it may be cost efficient to gather data for conflict-years and then randomly select a smaller number of non-conflict years on which to gather data.
+The sample will no longer be representative, but the estimates can be corrected to account for the data-gerating process.</p>
+<p>The reason this works well, is that if there are few 1’s, additional 0’s have little influence on the estimation (<span class="citation">King and Zeng (2001b)</span>).</p>
+<p><span class="citation">King and Zeng (2001b)</span> propose two corrections:</p>
+<ol style="list-style-type: decimal">
+<li>Prior correction</li>
+<li>Weighting observations</li>
+</ol>
+<p>The <em>prior correction</em> model adjust the intercept of the logit model to account for the difference between the sample and population proportions.
+Note that
+<span class="math display">\[
+\pi_i = \frac{1}{1 + \exp(-\alpha + \mat{X} \beta)}
+\]</span>
+An unbalanced sample only affects the intercept.
+If <span class="math inline">\(\alpha\)</span> is the intercept estimated on the sample, the prior corrected intercept <span class="math inline">\(\tilde{\alpha}\)</span> is,
+<span class="math display">\[
+\tilde{\alpha} = \alpha - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
+\]</span>
+This is a special case of using an <em>offset</em> in a generalized linear model.
+Since this constant is added to all observations it will not affect the estimation of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, but it will adjust the predicted probabilities for observations in the sample and new observations.</p>
+<p>Thus the complete specification of a prior-correction rare event logits with standard weakly informative priors is:
+<span class="math display">\[
+\begin{aligned}[t]
+y_i&amp; \sim \dbern(\pi_i) \\
+\pi_i &amp;= \invlogit(\eta_i) \\
+\eta_i &amp;= \tilde{\alpha} + X \beta  \\
+\tilde{\alpha} &amp;= \alpha - \ln \left(\frac{(1 - \tau) \bar{y}}{\tau (1 - \bar{y})}  \right) \\
+\alpha &amp;\sim \dnorm(0, 10)  \\
+\beta &amp;\sim \dnorm(0, 2.5)
+\end{aligned}
+\]</span>
+This is implemented in <code>relogit1.stan</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">mod_relogit1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/relogit1.stan&quot;</span>)
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/tools/config.hpp:13:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/config.hpp:39:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/config/compiler/clang.hpp:200:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]</span>
+<span class="co">#&gt; #  define BOOST_NO_CXX11_RVALUE_REFERENCES</span>
+<span class="co">#&gt;           ^</span>
+<span class="co">#&gt; &lt;command line&gt;:6:9: note: previous definition is here</span>
+<span class="co">#&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1</span>
+<span class="co">#&gt;         ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:1:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Core:531:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:2:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/LU:47:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Cholesky:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Jacobi:29:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Cholesky:43:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/QR:17:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Householder:27:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:5:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SVD:48:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Geometry:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Eigenvalues:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:36:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/operator_unary_plus.hpp:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/scal/fun/constants.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/constants/constants.hpp:13:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/tools/convert_from_string.hpp:15:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast.hpp:32:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast/try_lexical_convert.hpp:42:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast/detail/converter_lexical.hpp:52:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/container/container_fwd.hpp:61:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/container/detail/std_fwd.hpp:27:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]</span>
+<span class="co">#&gt; BOOST_MOVE_STD_NS_BEG</span>
+<span class="co">#&gt; ^</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;</span>
+<span class="co">#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD</span>
+<span class="co">#&gt;                                  ^</span>
+<span class="co">#&gt; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/__config:439:52: note: expanded from macro &#39;_LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD&#39;</span>
+<span class="co">#&gt; #define _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {</span>
+<span class="co">#&gt;                                                    ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:26:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseCore:66:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:27:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/OrderingMethods:71:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:29:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseCholesky:43:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:32:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseQR:35:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:33:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/IterativeLinearSolvers:46:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:609:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/rstan/include/rstan/rstaninc.hpp:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/rstan/include/rstan/stan_fit.hpp:36:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/services/optimize/bfgs.hpp:11:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/optimization/bfgs.hpp:9:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/optimization/lbfgs_update.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/circular_buffer.hpp:54:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/circular_buffer/details.hpp:20:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/move.hpp:30:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/iterator.hpp:27:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/iterator_traits.hpp:29:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]</span>
+<span class="co">#&gt; BOOST_MOVE_STD_NS_BEG</span>
+<span class="co">#&gt; ^</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;</span>
+<span class="co">#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD</span>
+<span class="co">#&gt;                                  ^</span>
+<span class="co">#&gt; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/__config:439:52: note: expanded from macro &#39;_LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD&#39;</span>
+<span class="co">#&gt; #define _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {</span>
+<span class="co">#&gt;                                                    ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:44:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:45:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: &#39;static&#39; function &#39;set_zero_all_adjoints_nested&#39; declared in header file should be declared &#39;static inline&#39; [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints_nested() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from file71d250cd9152.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;       size_t fft_next_good_size(size_t N) {</span>
+<span class="co">#&gt;              ^</span>
+<span class="co">#&gt; 19 warnings generated.</span></code></pre>
+<p>The <em>weighted likelihood</em> model weights the contributions of each observation to the likelihood with its probability of selection.
+As before, let <span class="math inline">\(\mean{y}\)</span> be the sample proportion of 1s in outcome, and
+<span class="math inline">\(\tau\)</span> be the known population proportion.
+The probability of selection, conditional on the outcome is,
+<span class="math display">\[
+w_i = 
+\begin{cases}
+\tau / \bar{y} &amp; \text{if } y_i = 1 \text{,} \\
+(1 - \tau) / (1 - \bar{y}) &amp; \text{if } y_i = 0 \text{.}
+\end{cases} 
+\]</span></p>
+<p>The log-likelihood is written as a weighted log-likelihood:
+<span class="math display">\[
+\begin{aligned}[t]
+\log L_w(\beta | y) &amp;= \sum_i w_i \log \dbern (\pi_i)
+\end{aligned}
+\]</span>
+In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation.</p>
+<p>This is implemented in <code>relogit2.stan</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">mod_relogit2 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/relogit2.stan&quot;</span>)
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/var.hpp:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/tools/config.hpp:13:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/config.hpp:39:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/config/compiler/clang.hpp:200:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]</span>
+<span class="co">#&gt; #  define BOOST_NO_CXX11_RVALUE_REFERENCES</span>
+<span class="co">#&gt;           ^</span>
+<span class="co">#&gt; &lt;command line&gt;:6:9: note: previous definition is here</span>
+<span class="co">#&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1</span>
+<span class="co">#&gt;         ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:1:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Core:531:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:2:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/LU:47:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Cholesky:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Jacobi:29:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Cholesky:43:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/QR:17:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Householder:27:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:5:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SVD:48:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Geometry:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:14:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Dense:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Eigenvalues:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:36:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/operator_unary_plus.hpp:7:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/scal/fun/constants.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/constants/constants.hpp:13:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/math/tools/convert_from_string.hpp:15:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast.hpp:32:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast/try_lexical_convert.hpp:42:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/lexical_cast/detail/converter_lexical.hpp:52:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/container/container_fwd.hpp:61:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/container/detail/std_fwd.hpp:27:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]</span>
+<span class="co">#&gt; BOOST_MOVE_STD_NS_BEG</span>
+<span class="co">#&gt; ^</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;</span>
+<span class="co">#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD</span>
+<span class="co">#&gt;                                  ^</span>
+<span class="co">#&gt; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/__config:439:52: note: expanded from macro &#39;_LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD&#39;</span>
+<span class="co">#&gt; #define _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {</span>
+<span class="co">#&gt;                                                    ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:26:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseCore:66:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:27:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/OrderingMethods:71:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:29:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseCholesky:43:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:32:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/SparseQR:35:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:83:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/Sparse:33:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/IterativeLinearSolvers:46:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]</span>
+<span class="co">#&gt;     #pragma clang diagnostic pop</span>
+<span class="co">#&gt;                              ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:595:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/rstan/include/rstan/rstaninc.hpp:3:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/rstan/include/rstan/stan_fit.hpp:36:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/services/optimize/bfgs.hpp:11:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/optimization/bfgs.hpp:9:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/optimization/lbfgs_update.hpp:6:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/circular_buffer.hpp:54:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/circular_buffer/details.hpp:20:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/move.hpp:30:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/iterator.hpp:27:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/iterator_traits.hpp:29:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]</span>
+<span class="co">#&gt; BOOST_MOVE_STD_NS_BEG</span>
+<span class="co">#&gt; ^</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;</span>
+<span class="co">#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD</span>
+<span class="co">#&gt;                                  ^</span>
+<span class="co">#&gt; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/__config:439:52: note: expanded from macro &#39;_LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD&#39;</span>
+<span class="co">#&gt; #define _LIBCPP_</span><span class="re">BEGIN</span><span class="co">_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {</span>
+<span class="co">#&gt;                                                    ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:44:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core.hpp:45:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints_nested.hpp:17:17: warning: &#39;static&#39; function &#39;set_zero_all_adjoints_nested&#39; declared in header file should be declared &#39;static inline&#39; [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;     static void set_zero_all_adjoints_nested() {</span>
+<span class="co">#&gt;                 ^</span>
+<span class="co">#&gt; In file included from file71d27a8f6682.cpp:8:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math.hpp:4:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/rev/mat.hpp:12:</span>
+<span class="co">#&gt; In file included from /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat.hpp:58:</span>
+<span class="co">#&gt; /Users/jrnold/Library/R/3.4/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:17:14: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]</span>
+<span class="co">#&gt;       size_t fft_next_good_size(size_t N) {</span>
+<span class="co">#&gt;              ^</span>
+<span class="co">#&gt; 19 warnings generated.</span></code></pre>
+<div id="questions-2" class="section level2">
+<h2><span class="header-section-number">15.1</span> Questions</h2>
+<ul>
+<li><p>Compare the estimates and efficiency of the two methods.</p></li>
+<li><p>How would you evalate the predictive distributions using cross-validation in case
+of unbalanced classes?</p></li>
+<li><p>Suppose that there is uncertainty about the population proportion, <span class="math inline">\(\tau\)</span>.
+Incorporate that uncertainty into the model by making <span class="math inline">\(\tau\)</span> a parameter
+and giving it a prior distribution.</p></li>
+<li><p>In the prior correction method, instead of adjust the intercept prior to
+sampling, it could be done after sampling. Calculate the corrected intercept
+to the generated quantities block. Does it change the estimates? Does it
+change the efficiency of sampling?</p></li>
+</ul>
+<p>See the example for <a href="http://docs.zeligproject.org/en/latest/zelig-relogit.html"><code>Zelig-relogit</code></a></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="separation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="hierarchical-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/rare-events-logit.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

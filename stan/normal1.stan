@@ -1,11 +1,9 @@
-// Logit Model
+// Linear Model with Normal Errors
 data {
   // number of observations
   int<lower=0> N;
   // response
-  // vectors are only real numbers
-  // need to use an array
-  int<lower = 0> y[N];
+  vector[N] y;
   // number of columns in the design matrix X
   int<lower=0> K;
   // design matrix X
@@ -14,6 +12,7 @@ data {
   // priors on alpha
   real<lower=0> scale_alpha;
   real<lower=0> scale_beta;
+  real<lower=0> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
@@ -22,18 +21,20 @@ parameters {
   // regression coefficient vector
   real alpha;
   vector[K] beta;
+  real<lower=0> sigma;
 }
 transformed parameters {
-  vector[N] eta;
+  vector[N] mu;
 
-  eta = alpha + X * beta;
+  mu = alpha + X * beta;
 }
 model {
   // priors
   alpha ~ normal(0.0, scale_alpha);
   beta ~ normal(0.0, scale_beta);
+  sigma ~ exponential(loc_sigma);
   // likelihood
-  y ~ poisson_log(eta);
+  y ~ normal(mu, sigma);
 }
 generated quantities {
   // simulate data from the posterior
@@ -41,9 +42,9 @@ generated quantities {
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
   for (i in 1:num_elements(y_rep)) {
-    y_rep[i] = poisson_rng(exp(eta[i]));
+    y_rep[i] = normal_rng(mu[i], sigma);
   }
   for (i in 1:num_elements(log_lik)) {
-    log_lik[i] = poisson_log_lpmf(y[i] | eta[i]);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
 }

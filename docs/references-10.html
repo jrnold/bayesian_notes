@@ -297,11 +297,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.1" data-path="binomial-models.html"><a href="binomial-models.html#link-functions-link-function"><i class="fa fa-check"></i><b>13.1</b> Link Functions {link-function}</a><ul>
 <li class="chapter" data-level="13.1.1" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>13.1.1</b> Stan</a></li>
 <li class="chapter" data-level="13.1.2" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>13.1.2</b> Example: Vote Turnout</a></li>
-<li class="chapter" data-level="13.1.3" data-path="binomial-models.html"><a href="binomial-models.html#separation"><i class="fa fa-check"></i><b>13.1.3</b> Separation</a></li>
-</ul></li>
-<li class="chapter" data-level="13.2" data-path="binomial-models.html"><a href="binomial-models.html#rare-events-logit"><i class="fa fa-check"></i><b>13.2</b> Rare Events Logit</a></li>
-<li class="chapter" data-level="13.3" data-path="binomial-models.html"><a href="binomial-models.html#case-control"><i class="fa fa-check"></i><b>13.3</b> Case Control</a><ul>
-<li class="chapter" data-level="13.3.1" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.3.1</b> References</a></li>
+<li class="chapter" data-level="13.1.3" data-path="binomial-models.html"><a href="binomial-models.html#robit"><i class="fa fa-check"></i><b>13.1.3</b> Robit</a></li>
+<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.4</b> References</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="hierarchical-models.html"><a href="hierarchical-models.html"><i class="fa fa-check"></i><b>14</b> Hierarchical Models</a><ul>
@@ -318,7 +315,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="15.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>15.1.4</b> Varying Slope Model</a></li>
 <li class="chapter" data-level="15.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>15.1.5</b> Group Level Predictors</a></li>
 <li class="chapter" data-level="15.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>15.1.6</b> lme4</a></li>
-<li class="chapter" data-level="15.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm"><i class="fa fa-check"></i><b>15.1.7</b> rstanarm</a></li>
+<li class="chapter" data-level="15.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm-1"><i class="fa fa-check"></i><b>15.1.7</b> rstanarm</a></li>
 </ul></li>
 <li class="chapter" data-level="15.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>15.2</b> Pooling of Hierarchical Parameters</a></li>
 <li class="chapter" data-level="15.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>15.3</b> ANOVA</a></li>
@@ -350,7 +347,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>17.5.11</b> Shrinkage</a></li>
 </ul></li>
 <li class="chapter" data-level="17.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>17.6</b> Software</a><ul>
-<li class="chapter" data-level="17.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-1"><i class="fa fa-check"></i><b>17.6.1</b> Stan</a></li>
+<li class="chapter" data-level="17.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>17.6.1</b> Stan</a></li>
 <li class="chapter" data-level="17.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>17.6.2</b> Diagrams</a></li>
 <li class="chapter" data-level="17.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>17.6.3</b> Priors</a></li>
 </ul></li>
@@ -483,9 +480,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Bafumi, Joseph, and Andrew Gelman. 2006. “Fitting Multilevel Models When Predictors and Group Effects Correlate.” <em>SSRN Electronic Journal</em>. Elsevier BV. <a href="https://doi.org/10.2139/ssrn.1010095" class="uri">https://doi.org/10.2139/ssrn.1010095</a>.</p>
 </div>
 <div>
-<p>Barrilleaux, Charles, and Carlisle Rainey. 2014. “The Politics of Need.” <em>State Politics &amp; Policy Quarterly</em> 14 (4). SAGE Publications:437–60. <a href="https://doi.org/10.1177/1532440014561644" class="uri">https://doi.org/10.1177/1532440014561644</a>.</p>
-</div>
-<div>
 <p>Bates, Douglas M. 2010. <em>lme4: Mixed-Effects Modeling with R</em>. <a href="http://lme4.r-forge.r-project.org/book/front.pdf" class="uri">http://lme4.r-forge.r-project.org/book/front.pdf</a>.</p>
 </div>
 <div>
@@ -567,9 +561,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Fink, Daniel. 1997. “A Compendium of Conjugate Priors.” <a href="https://www.johndcook.com//CompendiumOfConjugatePriors.pdf" class="uri">https://www.johndcook.com//CompendiumOfConjugatePriors.pdf</a>.</p>
 </div>
 <div>
-<p>Firth, David. 1993. “Bias Reduction of Maximum Likelihood Estimates.” <em>Biometrika</em> 80 (1). Oxford University Press (OUP):27–38. <a href="https://doi.org/10.1093/biomet/80.1.27" class="uri">https://doi.org/10.1093/biomet/80.1.27</a>.</p>
-</div>
-<div>
 <p>Flegal, James M., Murali Haran, and Galin L. Jones. 2008. “Markov Chain Monte Carlo: Can We Trust the Third Significant Figure?” <em>Statistical Science</em> 23 (2). Institute of Mathematical Statistics:250–60. <a href="https://doi.org/10.1214/08-sts257" class="uri">https://doi.org/10.1214/08-sts257</a>.</p>
 </div>
 <div>
@@ -636,9 +627,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Ghosh, Joyee, and Andrew E. Ghattas. 2015. “Bayesian Variable Selection Under Collinearity.” <em>The American Statistician</em> 69 (3). Informa UK Limited:165–73. <a href="https://doi.org/10.1080/00031305.2015.1031827" class="uri">https://doi.org/10.1080/00031305.2015.1031827</a>.</p>
 </div>
 <div>
-<p>Ghosh, Joyee, Yingbo Li, and Robin Mitra. 2015. “On the Use of Cauchy Prior Distributions for Bayesian Logistic Regression,” July. <a href="http://arxiv.org/abs/1507.07170v2" class="uri">http://arxiv.org/abs/1507.07170v2</a>.</p>
-</div>
-<div>
 <p>Gilardi, Fabrizio. 2010. “Who Learns from What in Policy Diffusion Processes?” <em>American Journal of Political Science</em> 54 (3). [Midwest Political Science Association, Wiley]:650–66. <a href="http://www.jstor.org/stable/27821944" class="uri">http://www.jstor.org/stable/27821944</a>.</p>
 </div>
 <div>
@@ -649,9 +637,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>Goldstein, Harvey, Min Yang, Rumana Omar, Rebecca Turner, and Simon Thompson. 2000. “Meta-Analysis Using Multilevel Models with an Application to the Study of Class Size Effects.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 49 (3). Wiley-Blackwell:399–412. <a href="https://doi.org/10.1111/1467-9876.00200" class="uri">https://doi.org/10.1111/1467-9876.00200</a>.</p>
-</div>
-<div>
-<p>Greenland, Sander, and Mohammad Ali Mansournia. 2015. “Penalization, Bias Reduction, and Default Priors in Logistic and Related Categorical and Survival Regressions.” <em>Statistics in Medicine</em> 34 (23). Wiley-Blackwell:3133–43. <a href="https://doi.org/10.1002/sim.6537" class="uri">https://doi.org/10.1002/sim.6537</a>.</p>
 </div>
 <div>
 <p>Grimmer, Justin. 2011. “An Introduction to Bayesian Inference via Variational Approximations.” <em>Political Analysis</em> 19 (01). Cambridge University Press (CUP):32–47. <a href="https://doi.org/10.1093/pan/mpq027" class="uri">https://doi.org/10.1093/pan/mpq027</a>.</p>
@@ -697,12 +682,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>King, Gary. 1998. <em>Unifying Political Methodology: The Likelihood Theory of Statistical Inference</em>. UNIV OF MICHIGAN PR.</p>
-</div>
-<div>
-<p>King, Gary, and Langche Zeng. 2001a. “Logistic Regression in Rare Events Data.” <em>Political Analysis</em> 9 (2). [Oxford University Press, Society for Political Methodology]:137–63. <a href="http://www.jstor.org/stable/25791637" class="uri">http://www.jstor.org/stable/25791637</a>.</p>
-</div>
-<div>
-<p>———. 2001b. “Explaining Rare Events in International Relations.” <em>International Organization</em> 55 (3). Cambridge University Press (CUP):693–715. <a href="https://doi.org/10.1162/00208180152507597" class="uri">https://doi.org/10.1162/00208180152507597</a>.</p>
 </div>
 <div>
 <p>Kotz, Samuel, N. Balakrishnan, and Norman L. Johnson. 2000. <em>Continuous Multivariate Distributions, Volume 1: Models and Applications</em>. 2nd ed. Wiley Series in Probability and Statistics. Wiley-Interscience.</p>
@@ -769,9 +748,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>Rabe-Hesketh, Sophia, and Anders Skrondal. 2012. <em>Multilevel and Longitudinal Modeling Using Stata, Volumes I and II</em>. Stata Press. <a href="https://www.amazon.com/Multilevel-Longitudinal-Modeling-Using-Volumes-ebook/dp/B06XWHYLZT?SubscriptionId=0JYN1NVW651KCA56C102&amp;tag=techkie-20&amp;linkCode=xm2&amp;camp=2025&amp;creative=165953&amp;creativeASIN=B06XWHYLZT" class="uri">https://www.amazon.com/Multilevel-Longitudinal-Modeling-Using-Volumes-ebook/dp/B06XWHYLZT?SubscriptionId=0JYN1NVW651KCA56C102&amp;tag=techkie-20&amp;linkCode=xm2&amp;camp=2025&amp;creative=165953&amp;creativeASIN=B06XWHYLZT</a>.</p>
-</div>
-<div>
-<p>Rainey, Carlisle. 2016. “Dealing with Separation in Logistic Regression Models.” <em>Political Analysis</em> 24 (03). Cambridge University Press (CUP):339–55. <a href="https://doi.org/10.1093/pan/mpw014" class="uri">https://doi.org/10.1093/pan/mpw014</a>.</p>
 </div>
 <div>
 <p>Ranganath, R., S. Gerrish, and D. M. Blei. 2014. “Black box variational inference.” <em>ArXiv E-Prints</em>, December. <a href="https://arxiv.org/abs/1401.0118" class="uri">https://arxiv.org/abs/1401.0118</a>.</p>
@@ -844,9 +820,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>Yu, Keming, and Jin Zhang. 2005. “A Three-Parameter Asymmetric Laplace Distribution and Its Extension.” <em>Communications in Statistics - Theory and Methods</em> 34 (9-10). Informa UK Limited:1867–79. <a href="https://doi.org/10.1080/03610920500199018" class="uri">https://doi.org/10.1080/03610920500199018</a>.</p>
-</div>
-<div>
-<p>Zorn, Christopher. 2005. “A Solution to Separation in Binary Response Models.” <em>Political Analysis</em> 13 (2). [Oxford University Press, Society for Political Methodology]:157–70. <a href="https://doi.org/10.1093/pan/mpi009" class="uri">https://doi.org/10.1093/pan/mpi009</a>.</p>
 </div>
 </div>
 </div>

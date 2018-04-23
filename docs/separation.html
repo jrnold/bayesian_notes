@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="introduction-to-stan-and-linear-regression.html">
-<link rel="next" href="generalized-linear-models.html">
+<link rel="prev" href="binomial-models.html">
+<link rel="next" href="rare-events-logit.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -463,196 +463,212 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="heteroskedasticity-and-robust-regression" class="section level1">
-<h1><span class="header-section-number">11</span> Heteroskedasticity and Robust Regression</h1>
-<div id="prerequisites-5" class="section level2 unnumbered">
-<h2>Prerequisites</h2>
+<div id="separation" class="section level1">
+<h1><span class="header-section-number">14</span> Separation</h1>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;rubbish&quot;</span>)</code></pre>
-</div>
-<div id="linear-regression-with-student-t-distributed-errors" class="section level2">
-<h2><span class="header-section-number">11.1</span> Linear Regression with Student t distributed errors</h2>
-<p>Like OLS, Bayesian linear regression with normally distributed errors is
-sensitive to outliers.
-This is because the normal distribution has narrow tail probabilities,
-with 99.8% of the probability within three standard deviations.
-Thus, if we estimate</p>
-<p>This plots the normal, Double Exponential (Laplace), and Student-t (<span class="math inline">\(df = 4\)</span>)
-distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point.
-Higher surprise is a lower log-likelihood. Both the Student-t and Double
-Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>
-This means that outliers impose less of a penalty on the log-posterior models
-using these distributions, and the regression line would need to move less to
-incorporate those observations since the error distribution will not consider them as unusual.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)
-<span class="kw">bind_rows</span>(
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> <span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span>, <span class="dt">colour =</span> distr)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre>
-<p><img src="robust_files/figure-html/unnamed-chunk-2-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)
-<span class="kw">bind_rows</span>(
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> <span class="kw">dnorm</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Normal&quot;</span>),
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> <span class="kw">dt</span>(z, <span class="dv">4</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Student-t (df = 4)&quot;</span>),
-  <span class="kw">tibble</span>(<span class="dt">z =</span> z,
-         <span class="dt">p =</span> VGAM<span class="op">::</span><span class="kw">dlaplace</span>(z, <span class="dv">0</span>, <span class="dv">1</span>),
-         <span class="dt">distr =</span> <span class="st">&quot;Double Exponential&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">-log(p)</span><span class="st">`</span> =<span class="st"> </span><span class="op">-</span><span class="kw">log</span>(p)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> z, <span class="dt">y =</span> p, <span class="dt">colour =</span> distr)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre>
-<p><img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_t</code></pre>
-<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// beta priorreal b_loc;real&lt;lower = 0.0&gt; b_scale;// sigma priorreal sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// simulate data from the posteriorvector[n] y_rep;// log-likelihood valuesvector[n] log_lik;for (i in 1:n) {y_rep[i] = student_t_rng(nu, mu[i], sigma);log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);}}”)))</p>
-<pre class="sourceCode r"><code class="sourceCode r">unionization &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/western1995/unionization.tsv&quot;</span>,
-         <span class="dt">col_types =</span> <span class="kw">cols</span>(
-              <span class="dt">country =</span> <span class="kw">col_character</span>(),
-              <span class="dt">union_density =</span> <span class="kw">col_double</span>(),
-              <span class="dt">left_government =</span> <span class="kw">col_double</span>(),
-              <span class="dt">labor_force_size =</span> <span class="kw">col_number</span>(),
-              <span class="dt">econ_conc =</span> <span class="kw">col_double</span>()
-            ))
-mod_data &lt;-
-<span class="st">  </span><span class="kw">lm_preprocess</span>(union_density <span class="op">~</span><span class="st"> </span>left_government <span class="op">+</span>
-<span class="st">                  </span><span class="kw">log</span>(labor_force_size) <span class="op">+</span><span class="st"> </span>econ_conc,
-                <span class="dt">data =</span> unionization)
-
-mod_data &lt;-<span class="st"> </span><span class="kw">within</span>(mod_data, {
-  b_loc &lt;-<span class="st"> </span><span class="dv">0</span>
-  b_scale &lt;-<span class="st"> </span><span class="dv">1000</span>
-  sigma_scale &lt;-<span class="st"> </span><span class="kw">sd</span>(y)
-})</code></pre>
-<p>The <code>max_treedepth</code> parameter needed to be increased because in some runs it was hitting the maximum tree depth.
-This is likely due to the wide tails of the Student t distribution.</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_t_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_t, <span class="dt">data =</span> mod_data,
-                      <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">max_treedepth =</span> <span class="dv">11</span>))</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_t_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary
-<span class="co">#&gt;        mean se_mean      sd    2.5%     25%    50%     75%   97.5% n_eff</span>
-<span class="co">#&gt; b[1] 89.656 1.96521 67.2067 -41.182  46.908 89.599 134.636 217.195  1170</span>
-<span class="co">#&gt; b[2]  0.276 0.00164  0.0819   0.118   0.222  0.275   0.328   0.445  2488</span>
-<span class="co">#&gt; b[3] -5.991 0.12507  4.3510 -14.187  -8.863 -5.928  -3.186   2.628  1210</span>
-<span class="co">#&gt; b[4]  3.080 0.66199 22.7704 -40.144 -12.161  3.213  17.466  48.781  1183</span>
-<span class="co">#&gt;      Rhat</span>
-<span class="co">#&gt; b[1]    1</span>
-<span class="co">#&gt; b[2]    1</span>
-<span class="co">#&gt; b[3]    1</span>
-<span class="co">#&gt; b[4]    1</span></code></pre>
-<p>Compare those results when using a model with</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_normal</code></pre>
-<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“data {// number of observationsint n;// response vectorvector[n] y;// number of columns in the design matrix Xint k;// design matrix Xmatrix [n, k] X;// // beta prior// real b_loc;// real&lt;lower = 0.0&gt; b_scale;// // sigma prior// real sigma_scale;}parameters {// mu is the observation fitted/predicted value// also called yhatvector[n] mu;mu = X * b;}quantities {// // simulate data from the posterior// vector[n] y_rep;// // log-likelihood posterior// vector[n] log_lik;// for (i in 1:n) {// y_rep[i] = normal_rng(mu[i], sigma);// log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);// }}”)))</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_normal_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod_normal, <span class="dt">data =</span> mod_data)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod_normal_fit, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>))<span class="op">$</span>summary
-<span class="co">#&gt;        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff</span>
-<span class="co">#&gt; b[1] 96.906 2.06260 63.1921 -25.1126  55.553 95.214 137.380 228.769   939</span>
-<span class="co">#&gt; b[2]  0.270 0.00209  0.0848   0.0986   0.214  0.269   0.327   0.435  1643</span>
-<span class="co">#&gt; b[3] -6.412 0.13431  4.1895 -14.9459  -9.154 -6.350  -3.588   1.752   973</span>
-<span class="co">#&gt; b[4]  0.582 0.68171 21.1558 -42.5470 -12.443  0.907  14.464  40.923   963</span>
-<span class="co">#&gt;      Rhat</span>
-<span class="co">#&gt; b[1] 1.01</span>
-<span class="co">#&gt; b[2] 1.00</span>
-<span class="co">#&gt; b[3] 1.01</span>
-<span class="co">#&gt; b[4] 1.01</span></code></pre>
-</div>
-<div id="heteroskedasticity" class="section level2">
-<h2><span class="header-section-number">11.2</span> Heteroskedasticity</h2>
-<p>In applied regression, heteroskedasticity consistent or robust standard errors are often used.</p>
-<p>However, there is straightforwardly direct translation of HC standard error to
-regression model this in a Bayesian setting. The sandwich method of estimating
-HC errors uses the same point estimates for the regression coefficients as OLS,
-but estimates the standard errors of those coefficients in a second stage from
-the OLS residuals. Disregarding differences in frequentist vs. Bayesian
-inference, it is clear that a direct translation of that method could not be
-fully Bayesian since the coefficients and errors are not estimated jointly.</p>
-<p>In a linear normal regression model with heteroskedasticity, each observation
-has its own scale parameter, <span class="math inline">\(\sigma_i\)</span>,
-<span class="math display">\[
-\begin{aligned}[t]
-y_i &amp;\sim \dnorm(X \beta, \sigma_i) .
-\end{aligned}
-\]</span>
-It should be clear that without proper priors this model is not identified,
-meaning that the posterior distribution is improper. To estimate this model we
-have to apply some model to the scale terms, <span class="math inline">\(\sigma_i\)</span>. In fact, you can think
-of homoskedasticity as the simplest such model; assuming that all <span class="math inline">\(\sigma_i = \sigma\)</span>. A more general model of <span class="math inline">\(\sigma_i\)</span> should encode any information the
-analyst has about the scale terms. This can be a distribution or functions of
-covariates for how we think observations may have different values.</p>
-<div id="covariates" class="section level3">
-<h3><span class="header-section-number">11.2.1</span> Covariates</h3>
-<p>A simple model of heteroskedasticity is if the observations can be split into
-groups. Suppose the observations are partitioned into <span class="math inline">\(k = 1, \dots, K\)</span> groups,
-and <span class="math inline">\(k[i]\)</span> is the group of observation <span class="math inline">\(i\)</span>,
-<span class="math display">\[
-\sigma_i = \sigma_{k[i]}
-\]</span></p>
-<p>Another choice would be to model the scale term with a regression model, for example,
-<span class="math display">\[
-\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
-\]</span></p>
-</div>
-<div id="student-t-error" class="section level3">
-<h3><span class="header-section-number">11.2.2</span> Student-t Error</h3>
-<p>The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.</p>
-<p>A reparameterization that will be used quite often is to rewrite a normal
-distributions with unequal scale parameters as the product of a common global
-scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters,
-<span class="math inline">\(\lambda_i\)</span>,<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>
-<span class="math display">\[
-y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
-\]</span>
-If the local variance parameters are distributed inverse-gamma,
-<span class="math display">\[
-\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
-\]</span>
-then the above is equivalent to a regression with errors distributed Student-t errors with <span class="math inline">\(\nu\)</span> degrees of freedom,
-<span class="math display">\[
-y_i \sim \dt{\nu}(X \beta, \sigma) .
-\]</span></p>
-<p><strong>Example:</strong> Simulate Student-t distribution with <span class="math inline">\(\nu\)</span> degrees of freedom as a scale mixture of normal. For *s in 1:S$,</p>
-<ol style="list-style-type: decimal">
-<li>Simulate <span class="math inline">\(z_s \sim \dgamma(\nu / 2, \nu / 2)\)</span></li>
-<li><span class="math inline">\(x_s = 1 / \sqrt{z_s}2\)</span> is draw from <span class="math inline">\(\dt{\nu}(0, 1)\)</span>.</li>
-</ol>
-<p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
-</div>
-</div>
-<div id="references-5" class="section level2">
-<h2><span class="header-section-number">11.3</span> References</h2>
-<p>For more on robust regression see <span class="citation">A. Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span>, and <span class="citation">Stan Development Team (2016 Sec 8.4)</span>.</p>
-<p>For more on heteroskedasticity see <span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.
-<span class="citation">Stan Development Team (2016)</span> discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.</p>
-<div id="quantile-regression" class="section level3">
-<h3><span class="header-section-number">11.3.1</span> Quantile regression</h3>
+<span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</code></pre>
+<p>Separation is when a predictor perfectly predicts a binary response variable <span class="citation">(Rainey 2016, <span class="citation">@Zorn2005a</span>)</span>.</p>
 <ul>
-<li><span class="citation">Benoit and Poel (2017)</span></li>
-<li><span class="citation">Yu and Zhang (2005)</span> for the three-parameter asymmetric Laplace distribution</li>
+<li><em>complete separation</em>: the predictor perfectly predicts both 0’s and 1’s.</li>
+<li><em>quasi-complete separation</em>: the predictor perfectly predicts either 0’s or 1’s.</li>
 </ul>
-
+<p>This is related and similar to identification in MLE and multicollinearity in OLS.</p>
+<p>The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.</p>
+<p>Using a weakly informative prior such as those suggested by is sufficient to solve separation,
+<span class="math display">\[
+\beta_k \sim \dnorm(0, 2.5)
+\]</span>
+where all the columns of <span class="math inline">\(\code{x}\)</span> are assumed to mean zero, unit variance (or otherwise standardized).
+The half-Cauchy prior, <span class="math inline">\(\dhalfcauchy(0, 2.5)\)</span>, suggested in <span class="citation">Gelman et al. (2008)</span> is insufficiently informative to to deal with separation <span class="citation">(Ghosh, Li, and Mitra 2015)</span>, but finite-variance weakly informative Student-t or Normal distributions will work.</p>
+<p>These are the priors suggested by <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">Stan</a> and
+used by default in <strong>rstanarm</strong> <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
+<div id="example-complete-separation-data" class="section level2">
+<h2><span class="header-section-number">14.1</span> Example: Complete Separation Data</h2>
+<p>The following data is an example of data with complete separation.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<pre class="sourceCode r"><code class="sourceCode r">data1 &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span>y, <span class="op">~</span>x1, <span class="op">~</span>x2,
+  <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>,
+  <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>,
+  <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">-1</span>,
+  <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">-1</span>,
+  <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>,
+  <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">4</span>,
+  <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1</span>,
+  <span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">0</span>  
+)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(data1, y, x1) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(x1) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(y, p, <span class="dt">fill =</span> <span class="dv">0</span>)
+<span class="co">#&gt; # A tibble: 7 x 3</span>
+<span class="co">#&gt; # Groups:   x1 [7]</span>
+<span class="co">#&gt;      x1   `0`   `1`</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    1.    1.    0.</span>
+<span class="co">#&gt; 2    2.    1.    0.</span>
+<span class="co">#&gt; 3    3.    1.    0.</span>
+<span class="co">#&gt; 4    5.    0.    1.</span>
+<span class="co">#&gt; 5    6.    0.    1.</span>
+<span class="co">#&gt; 6   10.    0.    1.</span>
+<span class="co">#&gt; # ... with 1 more row</span></code></pre>
+<p>The variable <code>x1</code> perfectly separates <code>y</code>, since when <code>x1 &lt;= 3</code>, <code>y = 0</code>,
+and when <code>x1 &gt; 3</code>, <code>y = 1</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> data1, <span class="dt">family =</span> <span class="kw">binomial</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summary</span>()
+<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; glm(formula = y ~ x1 + x2, family = binomial(), data = data1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Deviance Residuals: </span>
+<span class="co">#&gt;         1          2          3          4          5          6  </span>
+<span class="co">#&gt; -2.10e-08  -1.40e-05  -2.52e-06  -2.52e-06   1.56e-05   2.10e-08  </span>
+<span class="co">#&gt;         7          8  </span>
+<span class="co">#&gt;  2.10e-08   2.10e-08  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error z value Pr(&gt;|z|)</span>
+<span class="co">#&gt; (Intercept)    -66.10  183471.72       0        1</span>
+<span class="co">#&gt; x1              15.29   27362.84       0        1</span>
+<span class="co">#&gt; x2               6.24   81543.72       0        1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Null deviance: 1.1090e+01  on 7  degrees of freedom</span>
+<span class="co">#&gt; Residual deviance: 4.5454e-10  on 5  degrees of freedom</span>
+<span class="co">#&gt; AIC: 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 24</span></code></pre>
 </div>
+<div id="example-quasi-separation" class="section level2">
+<h2><span class="header-section-number">14.2</span> Example: Quasi-Separation</h2>
+<p>The following generated data is an example of quasi-separation.[^quasi-separation]</p>
+<pre class="sourceCode r"><code class="sourceCode r">data2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),
+  <span class="dt">x1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">11</span>),
+  <span class="dt">x2 =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="dv">4</span>)
+)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(data2, y, x1) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(x1) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(y, p, <span class="dt">fill =</span> <span class="dv">0</span>)
+<span class="co">#&gt; # A tibble: 8 x 3</span>
+<span class="co">#&gt; # Groups:   x1 [8]</span>
+<span class="co">#&gt;      x1   `0`   `1`</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    1. 1.00  0.   </span>
+<span class="co">#&gt; 2    2. 1.00  0.   </span>
+<span class="co">#&gt; 3    3. 0.667 0.333</span>
+<span class="co">#&gt; 4    4. 0.    1.00 </span>
+<span class="co">#&gt; 5    5. 0.    1.00 </span>
+<span class="co">#&gt; 6    6. 0.    1.00 </span>
+<span class="co">#&gt; # ... with 2 more rows</span></code></pre>
+<p>The variable <code>x1</code> almost perfectly separates <code>y</code>.
+When <code>x1 &lt; 3</code>, then <code>y = 0</code>.
+When <code>x1 &gt; 3</code>, then <code>y = 1</code>.
+Only when <code>x1 = 3</code>, does <code>y</code> takes values of either 0 or 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> data2, <span class="dt">family =</span> <span class="kw">binomial</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summary</span>()
+<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; glm(formula = y ~ x1 + x2, family = binomial(), data = data2)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Deviance Residuals: </span>
+<span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span>
+<span class="co">#&gt; -1.0042  -0.0001   0.0000   0.0000   1.4689  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error z value Pr(&gt;|z|)</span>
+<span class="co">#&gt; (Intercept)   -58.076  17511.903     0.0     1.00</span>
+<span class="co">#&gt; x1             19.178   5837.301     0.0     1.00</span>
+<span class="co">#&gt; x2             -0.121      0.610    -0.2     0.84</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Null deviance: 13.4602  on 9  degrees of freedom</span>
+<span class="co">#&gt; Residual deviance:  3.7792  on 7  degrees of freedom</span>
+<span class="co">#&gt; AIC: 9.779</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 21</span></code></pre>
+</div>
+<div id="example-support-of-aca-medicaid-expansion" class="section level2">
+<h2><span class="header-section-number">14.3</span> Example: Support of ACA Medicaid Expansion</h2>
+<p>This example is from <span class="citation">Rainey (2016)</span> from the original paper <span class="citation">Barrilleaux and Rainey (2014)</span>
+with replication code <a href="https://github.com/carlislerainey/separation">here</a>.
+Load the data included in the <strong>jrnold.bayes.notes</strong> package:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;politics_and_need&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;jrnold.bayes.notes&quot;</span>)</code></pre>
+<p>What happens when estimated with GLM?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(oppose_expansion <span class="op">~</span><span class="st"> </span>gop_governor <span class="op">+</span><span class="st"> </span>percent_favorable_aca <span class="op">+</span><span class="st"> </span>gop_leg <span class="op">+</span>
+<span class="st">         </span>percent_uninsured <span class="op">+</span><span class="st"> </span>bal2012 <span class="op">+</span><span class="st"> </span>multiplier <span class="op">+</span><span class="st"> </span>percent_nonwhite <span class="op">+</span>
+<span class="st">         </span>percent_metro,
+       <span class="dt">data =</span> politics_and_need, <span class="dt">family =</span> <span class="kw">binomial</span>()) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">summary</span>()
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; glm(formula = oppose_expansion ~ gop_governor + percent_favorable_aca + </span>
+<span class="co">#&gt;     gop_leg + percent_uninsured + bal2012 + multiplier + percent_nonwhite + </span>
+<span class="co">#&gt;     percent_metro, family = binomial(), data = politics_and_need)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Deviance Residuals: </span>
+<span class="co">#&gt;    Min      1Q  Median      3Q     Max  </span>
+<span class="co">#&gt; -1.738  -0.455   0.000   0.591   2.350  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                        Estimate Std. Error z value Pr(&gt;|z|)</span>
+<span class="co">#&gt; (Intercept)           -1.94e+01   3.22e+03   -0.01     1.00</span>
+<span class="co">#&gt; gop_governor           2.03e+01   3.22e+03    0.01     0.99</span>
+<span class="co">#&gt; percent_favorable_aca  7.31e-03   8.88e-02    0.08     0.93</span>
+<span class="co">#&gt; gop_leg                2.43e+00   1.48e+00    1.64     0.10</span>
+<span class="co">#&gt; percent_uninsured      1.12e-01   2.72e-01    0.41     0.68</span>
+<span class="co">#&gt; bal2012               -7.12e-04   1.14e-02   -0.06     0.95</span>
+<span class="co">#&gt; multiplier            -3.22e-01   1.08e+00   -0.30     0.77</span>
+<span class="co">#&gt; percent_nonwhite       4.52e-02   8.25e-02    0.55     0.58</span>
+<span class="co">#&gt; percent_metro         -7.75e-02   4.74e-02   -1.64     0.10</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Null deviance: 62.687  on 49  degrees of freedom</span>
+<span class="co">#&gt; Residual deviance: 31.710  on 41  degrees of freedom</span>
+<span class="co">#&gt; AIC: 49.71</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 19</span></code></pre>
+<p>For Stan, preprocess the data:</p>
+<pre class="sourceCode r"><code class="sourceCode r">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(oppose_expansion <span class="op">~</span><span class="st"> </span>gop_governor <span class="op">+</span><span class="st"> </span>percent_favorable_aca <span class="op">+</span><span class="st"> </span>
+<span class="st">                </span>gop_leg <span class="op">+</span><span class="st"> </span>percent_uninsured <span class="op">+</span><span class="st"> </span>bal2012 <span class="op">+</span><span class="st"> </span>multiplier <span class="op">+</span>
+<span class="st">                </span>percent_nonwhite <span class="op">+</span><span class="st"> </span>percent_metro,
+              <span class="dt">data =</span> politics_and_need) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">step_center</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">step_scale</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">prep</span>(politics_and_need, <span class="dt">retain =</span> <span class="ot">TRUE</span>)
+
+X &lt;-<span class="st"> </span><span class="kw">juice</span>(rec, <span class="dt">composition =</span> <span class="st">&quot;matrix&quot;</span>)
+y &lt;-<span class="st"> </span><span class="kw">juice</span>(rec, <span class="dt">composition =</span> <span class="st">&quot;matrix&quot;</span>)</code></pre>
+<p>Estimate with <strong>rstanarm</strong>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">f &lt;-oppose_expansion <span class="op">~</span><span class="st"> </span>gop_governor <span class="op">+</span><span class="st"> </span>percent_favorable_aca <span class="op">+</span><span class="st"> </span>
+<span class="st">      </span>gop_leg <span class="op">+</span><span class="st"> </span>percent_uninsured <span class="op">+</span><span class="st"> </span>bal2012 <span class="op">+</span><span class="st"> </span>multiplier <span class="op">+</span>
+<span class="st">      </span>percent_nonwhite <span class="op">+</span><span class="st"> </span>percent_metro
+fit1 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span class="dt">data =</span> politics_and_need, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</code></pre>
+<p>What if no prior is used? Compare estimates and efficiency.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(f, <span class="dt">data =</span> politics_and_need, <span class="dt">prior =</span> <span class="ot">NULL</span>, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</code></pre>
+</div>
+<div id="references-8" class="section level2">
+<h2><span class="header-section-number">14.4</span> References</h2>
+<p><span class="citation">Rainey (2016)</span> provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values.
+Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).</p>
+<p><span class="citation">Firth (1993)</span> suggests a data-driven Jeffreys invariant prior. This prior was also recommended in <span class="citation">Zorn (2005)</span>.</p>
+<p><span class="citation">Greenland and Mansournia (2015)</span> suggest a log-F prior distribution which has an intuitive interpretation related to the number of observations.</p>
+
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="7">
-<li id="fn7"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p>See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a>
-for a visualization of a Student-t distribution a mixture of Normal distributions,
-and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation
-of the Student t distribution as a mixture of normal distributions.
-This scale mixture of normal representation will also be used with shrinkage
-priors on the regression coefficients.<a href="heteroskedasticity-and-robust-regression.html#fnref8" class="footnote-back">↩</a></p></li>
+<ol start="12">
+<li id="fn12"><p><a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">FAQ: What is Complete or Quasi-Complete Separation in Logistic/Probit Regression and How do We Deal With Them?</a><a href="separation.html#fnref12" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -660,8 +676,8 @@ priors on the regression coefficients.<a href="heteroskedasticity-and-robust-reg
           </div>
         </div>
       </div>
-<a href="introduction-to-stan-and-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="generalized-linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="binomial-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rare-events-logit.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -681,7 +697,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/robust.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/separation.Rmd",
 "text": "Edit"
 },
 "download": null,

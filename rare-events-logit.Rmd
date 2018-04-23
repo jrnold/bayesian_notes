@@ -1,0 +1,113 @@
+# Rare Events Logit
+
+```{r message=FALSE}
+library("rstan")
+library("tidyverse")
+```
+
+There are two issues when estimating binary outcomes with an unbalanced outcome
+variable (many-0's or many-1's), called rare events.
+
+1.  Bias due to effective small sample size: The solution to this is the same as
+    quasi-separation: a weakly informative prior on the coefficients.
+
+1.  Case-control: Adding additional observations to the majority class adds little
+    additional information. If it is costly to acquire training data, it is 
+    better to acquire something closer to a balanced training set: approximately 
+    equal numbers of 0's and 1's. The model can be adjusted for this bias.
+
+The finite-sample size bias can handled by the use of weakly informative priors
+as discussed in the chapter on separation.
+The current best-practice in Stan is to use the following weakly informative priors
+for the intercept and coefficients:
+$$
+\begin{aligned}
+\alpha &\sim \dnorm(0, 10)\\
+\beta_k &\sim \dnorm(0, 2.5)
+\end{aligned}
+$$
+
+In binary outcome variables, sometimes it is useful to sample on the dependent variable.
+For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.
+For most country-pairs, for most years, there is no conflict.
+If some data are costly to gather, it may be cost efficient to gather data for conflict-years and then randomly select a smaller number of non-conflict years on which to gather data.
+The sample will no longer be representative, but the estimates can be corrected to account for the data-gerating process.
+
+The reason this works well, is that if there are few 1's, additional 0's have little influence on the estimation (@KingZeng2001a).
+
+@KingZeng2001a propose two corrections:
+
+1.  Prior correction
+1.  Weighting observations
+
+The *prior correction* model adjust the intercept of the logit model to account for the difference between the sample and population proportions.
+Note that
+$$
+\pi_i = \frac{1}{1 + \exp(-\alpha + \mat{X} \beta)}
+$$
+An unbalanced sample only affects the intercept.
+If $\alpha$ is the intercept estimated on the sample, the prior corrected intercept $\tilde{\alpha}$ is,
+$$
+\tilde{\alpha} = \alpha - \ln \left(\frac{1 - \tau}{\tau} \frac{\bar{y}}{1 - \bar{y}} \right)
+$$
+This is a special case of using an *offset* in a generalized linear model.
+Since this constant is added to all observations it will not affect the estimation of $\alpha$ and $\beta$, but it will adjust the predicted probabilities for observations in the sample and new observations.
+
+Thus the complete specification of a prior-correction rare event logits with standard weakly informative priors is:
+$$
+\begin{aligned}[t]
+y_i& \sim \dbern(\pi_i) \\
+\pi_i &= \invlogit(\eta_i) \\
+\eta_i &= \tilde{\alpha} + X \beta  \\
+\tilde{\alpha} &= \alpha - \ln \left(\frac{(1 - \tau) \bar{y}}{\tau (1 - \bar{y})}  \right) \\
+\alpha &\sim \dnorm(0, 10)  \\
+\beta &\sim \dnorm(0, 2.5)
+\end{aligned}
+$$
+This is implemented in `relogit1.stan`:
+```{r message=FALSE}
+mod_relogit1 <- stan_model("stan/relogit1.stan")
+```
+
+The *weighted likelihood* model weights the contributions of each observation to the likelihood with its probability of selection.
+As before, let $\mean{y}$ be the sample proportion of 1s in outcome, and 
+$\tau$ be the known population proportion.
+The probability of selection, conditional on the outcome is,
+$$
+w_i = 
+\begin{cases}
+\tau / \bar{y} & \text{if } y_i = 1 \text{,} \\
+(1 - \tau) / (1 - \bar{y}) & \text{if } y_i = 0 \text{.}
+\end{cases} 
+$$
+
+The log-likelihood is written as a weighted log-likelihood:
+$$
+\begin{aligned}[t]
+\log L_w(\beta | y) &= \sum_i w_i \log \dbern (\pi_i)
+\end{aligned}
+$$
+In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation.
+
+This is implemented in `relogit2.stan`:
+```{r message=FALSE}
+mod_relogit2 <- stan_model("stan/relogit2.stan")
+```
+
+## Questions
+
+-   Compare the estimates and efficiency of the two methods.
+
+-   How would you evalate the predictive distributions using cross-validation in case
+    of unbalanced classes?
+
+-   Suppose that there is uncertainty about the population proportion, $\tau$.
+    Incorporate that uncertainty into the model by making $\tau$ a parameter
+    and giving it a prior distribution.
+
+-   In the prior correction method, instead of adjust the intercept prior to 
+    sampling, it could be done after sampling. Calculate the corrected intercept
+    to the generated quantities block. Does it change the estimates? Does it
+    change the efficiency of sampling?
+
+See the example for [`Zelig-relogit`](http://docs.zeligproject.org/en/latest/zelig-relogit.html)
