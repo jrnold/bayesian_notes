@@ -4,7 +4,19 @@
 \name{votechoice}
 \alias{votechoice}
 \title{Vote Choice in the 2004 US Presidential Election}
-\format{A data frame with 1,000 rows and 12 columns.}
+\format{A data frame with 1,000 rows and 12 columns.
+\tabular{lll}{
+\code{caseid} \tab \code{integer} \tab Survey identifier \cr
+\code{ideol7b} \tab \code{factor} \tab Ideology \cr
+\code{retecon} \tab \code{factor} \tab Retrospective economic evaluations \cr
+\code{partyid} \tab \code{factor} \tab Party identification \cr
+\code{bushiraq} \tab \code{factor} \tab Approval of Handling of Iraq War \cr
+\code{white} \tab \code{logical} \tab Is White? \cr
+\code{female} \tab \code{logical} \tab Is Female? \cr
+\code{education} \tab \code{factor} \tab Education level \cr
+\code{income} \tab \code{factor} \tab 1-23 where 1 = less than \$2,999 and 23 = \$120,000+ \cr
+\code{bushvote} \tab \code{logical} \tab Voted for bush
+}}
 \source{
 Hanmer, M. J.,  Kalkan, K. O. (2012)
  \dQuote{Replication data for: Behind the Curve: Clarifying the Best Approach to Calculating Predicted Probabilities and Marginal Effects from Limited Dependent Variable Models.}

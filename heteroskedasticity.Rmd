@@ -1,5 +1,29 @@
 # Heteroskedasticity
 
+A reparameterization that will be used quite often is to rewrite a normal
+distributions with unequal scale parameters as the product of a common global
+scale parameter ($\sigma$), and observation specific local scale parameters,
+$\lambda_i$,[^globalmixture]
+$$
+y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
+$$
+If the local variance parameters are distributed inverse-gamma,
+$$
+\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+$$
+then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
+$$
+y_i \sim \dt\left(\nu, X \beta, \sigma\right) .
+$$
+
+
+**Example:** Simulate Student-$t$ distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
+
+1.  Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
+1.  $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
+
+When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
+
 Consider the linear regression model with normal errors,
 $$
 y_i \sim \dnorm\left(\ X \beta, \sigma_i^2 \right) .
@@ -86,6 +110,40 @@ $$
 \end{aligned}
 $$
 
+### Example: 
+
+```{r}
+data("Duncan", package = "carData")
+```
+
+```{r}
+rec <- recipe(prestige ~ income + education + type, data = Duncan) %>%
+  step_dummy(type) %>%
+  step_center(everything()) %>%
+  step_scale(everything()) %>%
+  prep(data = Duncan, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- juice(rec, all_outcomes(), composition = "matrix") %>%
+  drop()
+```
+
+```{r}
+duncan_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y
+)
+```
+
+
 <!-- Geweke (1993, 2005) Koop (2003) -->
 
 [^hc]: See <https://arxiv.org/pdf/1101.1402.pdf> and  <http://econ.ucsb.edu/~startz/Bayesian%20Heteroskedasticity-Robust%20Regression.pdf>.
+
+[^globalmixture]: See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/)
+    for a visualization of a Student-t distribution a mixture of Normal distributions,
+    and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation
+    of the Student t distribution as a mixture of normal distributions.
+    This scale mixture of normal representation will also be used with shrinkage
+    priors on the regression coefficients.

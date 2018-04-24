@@ -30,7 +30,7 @@ model {
   // priors
   b ~ normal(b_loc, b_scale);
   sigma ~ cauchy(0, sigma_scale);
-  nu ~ gamma(2, 0.1);
+
   // likelihood
   y ~ student_t(nu, mu, sigma);
 }

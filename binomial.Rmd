@@ -192,6 +192,73 @@ $$
 Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
 Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
 
+### Calculating Average Marginal Effects
+
+The marginal effect of a continuous predictor for a binomial model with link function $F$ is,
+$$
+ME_k(x) = \frac{\partial F(\alpha + x'\beta)}{\partial x_k} = f(\alpha + X \beta) \beta_k
+$$
+
+The average marginal effect (AME) is the marginal effect averaged over the sample,
+$$
+AME_k = \frac{1}{n} \sum_i ME_k(x_i)
+$$
+The marginal effect at the meane (MEM) is the marginal effect evaluated at the mean values of $x$,
+$$
+MEM_k = ME_k(\bar{x})
+$$
+Note that because of Jensen's inequality, generally, $MEM \neq AME$.
+
+```{r}
+data("votechoice", package = "jrnold.bayes.notes")
+```
+
+```{r}
+f <- presvote ~ retecon + white + female + age + educ1_7 + income + partyid + 
+  bushiraq
+rec <- recipe(f, data = votechoice) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  prep(data = votechoice, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+
+```{r cache.extra=tools::md5sum("stan/bernoulli_logit_1.stan"), message = FALSE}
+mod_logit <- stan_model("stan/bernoulli_logit_1.stan")
+```
+
+```{r}
+votechoice_data <- list(
+  X = X,
+  y = y,
+  N = nrow(X),
+  K = ncol(X),
+  scale_beta = 2.5,
+  scale_alpha = 10,
+  use_log_lik = FALSE,
+  use_y_rep = TRUE
+)
+```
+
+
+```{r}
+fit_votechoice <- sampling(mod_logit, data = votechoice_data)
+```
+
+```{r}
+
+
+with_mcmc_iter(fit_votechoice, {
+   t(rowMeans(beta %*% t(plogis(alpha + X %*% beta))))
+}, data = votechoice_data)
+
+```
+
+
+
+
+
 ### References
 
 For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].
