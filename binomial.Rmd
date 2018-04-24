@@ -211,10 +211,15 @@ Note that because of Jensen's inequality, generally, $MEM \neq AME$.
 
 ```{r}
 data("votechoice", package = "jrnold.bayes.notes")
+votechoice <- votechoice %>%
+  # convert factors to numbers
+  mutate_at(vars(retecon, partyid, bushiraq, ideol7b, educ1_7),             as.integer) %>%
+  mutate_at(vars(bushvote, white, female), as.integer)
+                 
 ```
 
 ```{r}
-f <- presvote ~ retecon + white + female + age + educ1_7 + income + partyid + 
+f <- bushvote ~ retecon + white + female + age + educ1_7 + income + partyid + 
   bushiraq
 rec <- recipe(f, data = votechoice) %>%
   step_center(all_predictors()) %>%
@@ -222,6 +227,7 @@ rec <- recipe(f, data = votechoice) %>%
   prep(data = votechoice, retain = TRUE)
 X <- juice(rec, all_predictors(), composition = "matrix")
 y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+
 ```
 
 ```{r cache.extra=tools::md5sum("stan/bernoulli_logit_1.stan"), message = FALSE}
@@ -247,7 +253,6 @@ fit_votechoice <- sampling(mod_logit, data = votechoice_data)
 ```
 
 ```{r}
-
 
 with_mcmc_iter(fit_votechoice, {
    t(rowMeans(beta %*% t(plogis(alpha + X %*% beta))))

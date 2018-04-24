@@ -1,55 +1,66 @@
+// Linear Model with Student-t Errors
 data {
   // number of observations
-  int n;
-  // response vector
-  vector[n] y;
+  int<lower=0> N;
+  // response
+  vector[N] y;
   // number of columns in the design matrix X
-  int k;
+  int<lower=0> K;
   // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
+  // should not include an intercept
+  matrix [N, K] X;
+  // priors on alpha
+  real<lower=0.> scale_alpha;
+  real<lower=0.> scale_beta;
+  real<lower=0.> loc_sigma;
+  // keep responses
+  int<lower=0, upper=1> use_y_rep;
+  int<lower=0, upper=1> use_log_lik;
 }
 parameters {
   // regression coefficient vector
-  vector[k] b;
-  // 1 / \lambda^2
-  vector<lower = 0.0>[n] inv_lambda2;
-  real<lower = 1.0> nu;
+  real alpha;
+  vector[K] beta;
+  // regression scale
+  real<lower=0.> omega;
+  // 1 / lambda_i^2
+  vector<lower = 0.0>[N] inv_lambda2;
+  // degrees of freedom;
+  // limit df = 2 so that there is a finite variance
+  real<lower=2.> nu;
 }
 transformed parameters {
-  // mu is the observation fitted/predicted value
-  vector[n] mu;
-  //
-  mu = X * b;
-  // need to use elmentwise division
-  tau = sigma ./ sqrt(inv_lambda2);
+  vector[N] mu;
+
+  mu = alpha + X * beta;
 }
 model {
   real half_nu;
-  real<lower = 0.0>[N] sigma;
+  vector[N] sigma;
 
-  half_nu = 0.5 * nu;
   // priors
-  b ~ normal(b_loc, b_scale);
+  alpha ~ normal(0.0, scale_alpha);
+  beta ~ normal(0.0, scale_beta);
+  sigma ~ exponential(loc_sigma);
   nu ~ gamma(2, 0.1);
-  sigma ~ cauchy(0, sigma_scale);
-
-  // likelihood
-  y ~ normal(mu, tau);
+  half_nu = 0.5 * nu;
+  inv_lambda2 ~ gamma(half_nu, half_nu);
+  // observation variances
+  for (n in 1:N) {
+    sigma[n] = omega / sqrt(inv_lambda2[n]);
+  }
+  // likelihood with obs specific scales
+  y ~ normal(mu, sigma);
 }
 generated quantities {
   // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood values
-  vector[n] log_lik;
-  // use a single loop since both y_rep and log_lik are elementwise
-  for (i in 1:n) {
-    y_rep[i] = student_t_rng(nu, mu[i], sigma);
-    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
+  vector[N * use_y_rep] y_rep;
+  // log-likelihood posterior
+  vector[N * use_log_lik] log_lik;
+  for (n in 1:num_elements(y_rep)) {
+    y_rep[n] = student_t_rng(nu, mu[n], omega);
   }
-
+  for (n in 1:num_elements(log_lik)) {
+    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega);
+  }
 }

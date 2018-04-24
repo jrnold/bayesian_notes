@@ -2,10 +2,11 @@
 
 ## Prerequisites
 
-The `r rpkg("haven")` package is used to read Stata `.dta` files.
 ```{r}
-library("rubbish")
-library("haven")
+library("bayz")
+library("jrnold.bayes.notes")
+library("rstan")
+library("tidyverse")
 ```
 
 ## Introduction
@@ -39,14 +40,12 @@ $f(\theta^{(1)}), \dots, f(\theta^{(S)})$ are a sample from $p(f(\theta) | y)$.
 
 This is not easy for methods like MLE that produce point estimates:
 
--   Even in OLS, non-linear functions coefficients generally require either the Delta method or bootstrapping to calculate confidence intervals.
--   @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals
--   See @Rainey2016b on "transformation induced bias"
--   See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code
+-   Even in OLS, estimation of non-linear functions of requires either the Delta method or bootstrapping to calculate confidence intervals.
+-   @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals for interaction terms.
+-   See @Rainey2016b on "transformation induced bias".
+-   See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code.
 
-## Marginal Effects
-
-### Example: Marginal Effect Plot for X
+## Marginal Effects of Interactions
 
 @BerryGolderMilton2012a replicates @Alexseev2006a as an example of a model with an interaction between $X$ and $Z$.
 $$
@@ -58,13 +57,15 @@ $$
 $$
 Since there is an interaction, the marginal effect of $X$ is not simply
 the coefficient $\beta_z$, but is a function of another predictor, $Z$.
-Point estimates of the marginal effects with interactions are relatively easy to construct, but confidence intervals for the MLE estimates quickly involve multiple terms and either the Delta method approximation or bootstrapping to calculate.
+Point estimates of the marginal effects with interactions are relatively easy to construct, but confidence intervals quickly involve multiple terms.
+This article provides equations for commonly used interactions, but either the Delta method approximation or bootstrapping would be needed to calculate more complicated functions.
 
 We will consider this problem from a Bayesian estimation perspective, and calculate point estimates (posterior mean) and credible intervals of the marginal effects.
 
 The particular example is @Alexseev2006a, which analyzes how changes in the ethnic composition of Russian regions affected the vote share of the extreme Russian nationalist Zhirinovsky Bloc in 2003 Russian State Duma elections.[^alexseev1]
 ```{r}
-alexseev <- read_dta("data/alexseev.dta")
+data("alexseev", package = "jrnold.bayes.notes") 
+alexseev <- filter(alexseev, !is.na(region))
 ```
 
 [alexseev1]: Some of the replication code and material can be found on [Matt Golder's website](http://mattgolder.com/interactions).
@@ -73,10 +74,10 @@ One claim of @Alexseev2006a was that support for anti-immigrant parties depends 
 To test that hypothesis, @Alexseev2006a estimates the following model,
 $$
 \begin{multline}
-\mathtt{xenovote}_i = \beta_0 + \beta_s \mathtt{slavicshare}_i +
-\beta_{n} \mathtt{changenonslav} + \\
-\beta_{sn} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) +
-\gamma z_{i} + \epsilon_{i},
+\mathtt{xenovote}_i = \alpha + \beta_1 \mathtt{slavicshare}_i +
+\beta_{2} \mathtt{changenonslav} + \\
+\beta_{3} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) +
+z_{i}' \beta_{4:k}  + \epsilon_{i},
 \end{multline}
 $$
 where $z_i$ is a vector of control variables.
@@ -85,65 +86,75 @@ where $z_i$ is a vector of control variables.
 -   `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
 -   `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proportion of non-Slavic groups in the region.
 
-The model was estimated by OLS,[^alexseev2]
+Model the xenophobic vote share using a linear model with normal errors and weakly informative priors.
+$$
+\begin{aligned}
+y_i &\sim \dnorm(\mu_i, \sigma) \\
+\mu_i &= \alpha + \beta_1 \mathtt{slavicshare}_i + \beta_2 \mathtt{changenonslave}_i \\
+    &\quad + \beta_3 \mathtt{slavicshare}_i \times \mathtt{changenonslave}_i +
+    z_i' \beta_{4:k} \\
+\sigma &\sim \dexp(1) \\
+\alpha &\sim \dnorm(0, 10) \\
+\beta_k &\sim \dnorm(0, 2.5)
+\end{aligned}
+$$
+where $z_i$ is a vector of other covariates for observation $i$, and $\beta_{4:k}$ is the corresponding vector of covariates for those other covariates. 
+Note that the actual order of columns and coefficients will be different in the 
+analysis due to the order in which the data are processed.
+
+Preprocess the data into a centered and scaled design matrix, `X`, and a scaled response, `y`:
 ```{r}
-mod_f <- (xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 + unemp02 +
-            apt9200 + vsall03 + brdcont)
-lm(mod_f, data = alexseev)
+rec <- recipe(xenovote ~ slavicshare + changenonslav + inc9903 + eduhi02 + unemp02 + apt9200,
+                   vsall03 + brdcont, data = alexseev) %>%
+  step_interact(~ slavicshare * changenonslav) %>%
+  step_center(all_predictors(), all_outcomes()) %>%
+  step_scale(all_predictors(), all_outcomes()) %>%
+  prep(data = alexseev, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+```{r}
+xeno_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y,
+  scale_beta = 2.5,
+  scale_alpha = 10,
+  loc_sigma = 1,
+  use_y_rep = 0,
+  use_log_lik = 0
+)
 ```
 
-[^alexseev2]: The original model used cluster robust standard errors, which will be ignored for now.
-
-Use the `lm_preprocess` function in the [rubbish](https://jrnold.github.com/rubbish) package to turn the model formula into a list with relevant data.
-```{r}
-mod_data <- lm_preprocess(mod_f, data = alexseev)[c("X", "y")]
-
-mod_data <- within(mod_data, {
-  n <- nrow(X)
-  k <- ncol(X)
-  M <- 100
-  changenonslav <- seq(min(X[, "changenonslav"]),
-                       max(X[, "changenonslav"]),
-                       length.out = M)
-  idx_b_slavicshare <- which(colnames(X) == "slavicshare")
-  idx_b_slavicshare_changenonslav <-  # nolint
-    which(colnames(X) == "slavicshare:changenonslav")
-  b_loc <- 0
-  # data appropriate prior
-  b_scale <- max(apply(X, 2, sd)) * 3
-  sigma_scale <- sd(y)
-})
-```
 ```{r include = FALSE}
-mod <- stan_model("stan/ex-alexseev.stan")
+mod <- stan_model("stan/lm_normal_1.stan", verbose = FALSE)
 ```
 ```{r cache=FALSE}
 mod
 ```
 
 ```{r include=FALSE}
-mod_fit <- sampling(mod, data = mod_data)
-mod_fit
+fit <- sampling(mod, data = xeno_data)
+fit
 ```
 
-The function `r rdoc("rstan", "extract")` extracts parameters from
-the `r rdoc("rstan", "stanfit")` object as a list with an element for each parameter.
+Now we are interested in calculating the marginal effect of `xenovote` with respect to `slavicshare`,
+$$
+\frac{\partial \mu }{\partial \mathtt{slavicshare}} = \beta_1 + \beta_3 \mathtt{changenonslav} ,
+$$
+which is not a scalar, but instead, a function of $\mathtt{changenonslav}$.
+We will calculate the values of this partial on a uniform grid of values of
+`changenonslav` between the minimum and maximum values of `changenonslav`.
 ```{r}
-dydx_all <-
-  rstan::extract(mod_fit, pars = "dydx")$dydx
+changenonslav_grid <- tibble(changenonslav = 
+                               seq(min(alexseev$changenonslav),
+                                   max(alexseev$changenonslav),
+                                   length.out = 20))
+bake(rec, newdata = changenonslav_grid)
 ```
+
 To make it easier to use with `ggplot`, convert it to a data frame with columns `.id` (number), `changeonslav` (original value of `changeonslav` passed to the sampler), and `value` (the value of the marginal effect).
-```{r}
-dydx_all <-
-  dydx_all %>%
-  as.tibble() %>%
-  mutate(.iter = row_number()) %>%
-  gather(.id, value, -.iter) %>%
-  # merge with original values of changenonslav
-  left_join(tibble(.id = paste0("V", seq_along(mod_data$changenonslav)),
-            changenonslav = mod_data$changenonslav),
-            by = ".id")
-```
 
 Since values for a marginal effect line is generated for each iteration, the posterior distribution of $\partial E(\mathtt{xenovote}|.) / \partial slavicshare$ can be plotted as lines.
 Since the number of lines would be too many to display effectively, plot `r 2 ^ 8` of them:
