@@ -274,12 +274,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>11</b> Heteroskedasticity and Robust Regression</a><ul>
 <li class="chapter" data-level="" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-5"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="11.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>11.1</b> Linear Regression with Student t distributed errors</a></li>
-<li class="chapter" data-level="11.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>11.2</b> Heteroskedasticity</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>11.2.1</b> Covariates</a></li>
-<li class="chapter" data-level="11.2.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>11.2.2</b> Student-t Error</a></li>
-</ul></li>
-<li class="chapter" data-level="11.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-5"><i class="fa fa-check"></i><b>11.3</b> References</a><ul>
-<li class="chapter" data-level="11.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>11.3.1</b> Quantile regression</a></li>
+<li class="chapter" data-level="11.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-5"><i class="fa fa-check"></i><b>11.2</b> References</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>11.2.1</b> Quantile regression</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>12</b> Generalized Linear Models</a><ul>
@@ -298,7 +294,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.1.1" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>13.1.1</b> Stan</a></li>
 <li class="chapter" data-level="13.1.2" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>13.1.2</b> Example: Vote Turnout</a></li>
 <li class="chapter" data-level="13.1.3" data-path="binomial-models.html"><a href="binomial-models.html#robit"><i class="fa fa-check"></i><b>13.1.3</b> Robit</a></li>
-<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.4</b> References</a></li>
+<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#calculating-average-marginal-effects"><i class="fa fa-check"></i><b>13.1.4</b> Calculating Average Marginal Effects</a></li>
+<li class="chapter" data-level="13.1.5" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.5</b> References</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="separation.html"><a href="separation.html"><i class="fa fa-check"></i><b>14</b> Separation</a><ul>
@@ -566,75 +563,13 @@ This is likely due to the wide tails of the Student t distribution.</p>
 <span class="co">#&gt; b[3] 1.01</span>
 <span class="co">#&gt; b[4] 1.01</span></code></pre>
 </div>
-<div id="heteroskedasticity" class="section level2">
-<h2><span class="header-section-number">11.2</span> Heteroskedasticity</h2>
-<p>In applied regression, heteroskedasticity consistent or robust standard errors are often used.</p>
-<p>However, there is straightforwardly direct translation of HC standard error to
-regression model this in a Bayesian setting. The sandwich method of estimating
-HC errors uses the same point estimates for the regression coefficients as OLS,
-but estimates the standard errors of those coefficients in a second stage from
-the OLS residuals. Disregarding differences in frequentist vs. Bayesian
-inference, it is clear that a direct translation of that method could not be
-fully Bayesian since the coefficients and errors are not estimated jointly.</p>
-<p>In a linear normal regression model with heteroskedasticity, each observation
-has its own scale parameter, <span class="math inline">\(\sigma_i\)</span>,
-<span class="math display">\[
-\begin{aligned}[t]
-y_i &amp;\sim \dnorm(X \beta, \sigma_i) .
-\end{aligned}
-\]</span>
-It should be clear that without proper priors this model is not identified,
-meaning that the posterior distribution is improper. To estimate this model we
-have to apply some model to the scale terms, <span class="math inline">\(\sigma_i\)</span>. In fact, you can think
-of homoskedasticity as the simplest such model; assuming that all <span class="math inline">\(\sigma_i = \sigma\)</span>. A more general model of <span class="math inline">\(\sigma_i\)</span> should encode any information the
-analyst has about the scale terms. This can be a distribution or functions of
-covariates for how we think observations may have different values.</p>
-<div id="covariates" class="section level3">
-<h3><span class="header-section-number">11.2.1</span> Covariates</h3>
-<p>A simple model of heteroskedasticity is if the observations can be split into
-groups. Suppose the observations are partitioned into <span class="math inline">\(k = 1, \dots, K\)</span> groups,
-and <span class="math inline">\(k[i]\)</span> is the group of observation <span class="math inline">\(i\)</span>,
-<span class="math display">\[
-\sigma_i = \sigma_{k[i]}
-\]</span></p>
-<p>Another choice would be to model the scale term with a regression model, for example,
-<span class="math display">\[
-\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
-\]</span></p>
-</div>
-<div id="student-t-error" class="section level3">
-<h3><span class="header-section-number">11.2.2</span> Student-t Error</h3>
-<p>The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.</p>
-<p>A reparameterization that will be used quite often is to rewrite a normal
-distributions with unequal scale parameters as the product of a common global
-scale parameter (<span class="math inline">\(\sigma\)</span>), and observation specific local scale parameters,
-<span class="math inline">\(\lambda_i\)</span>,<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>
-<span class="math display">\[
-y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
-\]</span>
-If the local variance parameters are distributed inverse-gamma,
-<span class="math display">\[
-\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
-\]</span>
-then the above is equivalent to a regression with errors distributed Student-t errors with <span class="math inline">\(\nu\)</span> degrees of freedom,
-<span class="math display">\[
-y_i \sim \dt{\nu}(X \beta, \sigma) .
-\]</span></p>
-<p><strong>Example:</strong> Simulate Student-t distribution with <span class="math inline">\(\nu\)</span> degrees of freedom as a scale mixture of normal. For *s in 1:S$,</p>
-<ol style="list-style-type: decimal">
-<li>Simulate <span class="math inline">\(z_s \sim \dgamma(\nu / 2, \nu / 2)\)</span></li>
-<li><span class="math inline">\(x_s = 1 / \sqrt{z_s}2\)</span> is draw from <span class="math inline">\(\dt{\nu}(0, 1)\)</span>.</li>
-</ol>
-<p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
-</div>
-</div>
 <div id="references-5" class="section level2">
-<h2><span class="header-section-number">11.3</span> References</h2>
+<h2><span class="header-section-number">11.2</span> References</h2>
 <p>For more on robust regression see <span class="citation">A. Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span>, and <span class="citation">Stan Development Team (2016 Sec 8.4)</span>.</p>
 <p>For more on heteroskedasticity see <span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.
 <span class="citation">Stan Development Team (2016)</span> discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.</p>
 <div id="quantile-regression" class="section level3">
-<h3><span class="header-section-number">11.3.1</span> Quantile regression</h3>
+<h3><span class="header-section-number">11.2.1</span> Quantile regression</h3>
 <ul>
 <li><span class="citation">Benoit and Poel (2017)</span></li>
 <li><span class="citation">Yu and Zhang (2005)</span> for the three-parameter asymmetric Laplace distribution</li>
@@ -647,12 +582,6 @@ y_i \sim \dt{\nu}(X \beta, \sigma) .
 <hr />
 <ol start="7">
 <li id="fn7"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="heteroskedasticity-and-robust-regression.html#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p>See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a>
-for a visualization of a Student-t distribution a mixture of Normal distributions,
-and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation
-of the Student t distribution as a mixture of normal distributions.
-This scale mixture of normal representation will also be used with shrinkage
-priors on the regression coefficients.<a href="heteroskedasticity-and-robust-regression.html#fnref8" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

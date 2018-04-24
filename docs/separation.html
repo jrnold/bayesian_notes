@@ -274,12 +274,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html"><i class="fa fa-check"></i><b>11</b> Heteroskedasticity and Robust Regression</a><ul>
 <li class="chapter" data-level="" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#prerequisites-5"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="11.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#linear-regression-with-student-t-distributed-errors"><i class="fa fa-check"></i><b>11.1</b> Linear Regression with Student t distributed errors</a></li>
-<li class="chapter" data-level="11.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#heteroskedasticity"><i class="fa fa-check"></i><b>11.2</b> Heteroskedasticity</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#covariates"><i class="fa fa-check"></i><b>11.2.1</b> Covariates</a></li>
-<li class="chapter" data-level="11.2.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#student-t-error"><i class="fa fa-check"></i><b>11.2.2</b> Student-t Error</a></li>
-</ul></li>
-<li class="chapter" data-level="11.3" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-5"><i class="fa fa-check"></i><b>11.3</b> References</a><ul>
-<li class="chapter" data-level="11.3.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>11.3.1</b> Quantile regression</a></li>
+<li class="chapter" data-level="11.2" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#references-5"><i class="fa fa-check"></i><b>11.2</b> References</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="heteroskedasticity-and-robust-regression.html"><a href="heteroskedasticity-and-robust-regression.html#quantile-regression"><i class="fa fa-check"></i><b>11.2.1</b> Quantile regression</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>12</b> Generalized Linear Models</a><ul>
@@ -298,7 +294,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.1.1" data-path="binomial-models.html"><a href="binomial-models.html#stan"><i class="fa fa-check"></i><b>13.1.1</b> Stan</a></li>
 <li class="chapter" data-level="13.1.2" data-path="binomial-models.html"><a href="binomial-models.html#example-vote-turnout"><i class="fa fa-check"></i><b>13.1.2</b> Example: Vote Turnout</a></li>
 <li class="chapter" data-level="13.1.3" data-path="binomial-models.html"><a href="binomial-models.html#robit"><i class="fa fa-check"></i><b>13.1.3</b> Robit</a></li>
-<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.4</b> References</a></li>
+<li class="chapter" data-level="13.1.4" data-path="binomial-models.html"><a href="binomial-models.html#calculating-average-marginal-effects"><i class="fa fa-check"></i><b>13.1.4</b> Calculating Average Marginal Effects</a></li>
+<li class="chapter" data-level="13.1.5" data-path="binomial-models.html"><a href="binomial-models.html#references-7"><i class="fa fa-check"></i><b>13.1.5</b> References</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="separation.html"><a href="separation.html"><i class="fa fa-check"></i><b>14</b> Separation</a><ul>
@@ -486,7 +483,7 @@ The half-Cauchy prior, <span class="math inline">\(\dhalfcauchy(0, 2.5)\)</span>
 used by default in <strong>rstanarm</strong> <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
 <div id="example-complete-separation-data" class="section level2">
 <h2><span class="header-section-number">14.1</span> Example: Complete Separation Data</h2>
-<p>The following data is an example of data with complete separation.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<p>The following data is an example of data with complete separation.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
 <pre class="sourceCode r"><code class="sourceCode r">data1 &lt;-<span class="st"> </span><span class="kw">tribble</span>(
   <span class="op">~</span>y, <span class="op">~</span>x1, <span class="op">~</span>x2,
   <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>,
@@ -667,8 +664,8 @@ Since the results are highly sensitive to the prior, multiple priors should be t
 </div>
 <div class="footnotes">
 <hr />
-<ol start="12">
-<li id="fn12"><p><a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">FAQ: What is Complete or Quasi-Complete Separation in Logistic/Probit Regression and How do We Deal With Them?</a><a href="separation.html#fnref12" class="footnote-back">↩</a></p></li>
+<ol start="11">
+<li id="fn11"><p><a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">FAQ: What is Complete or Quasi-Complete Separation in Logistic/Probit Regression and How do We Deal With Them?</a><a href="separation.html#fnref11" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
