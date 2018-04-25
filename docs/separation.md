@@ -1,7 +1,7 @@
 
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -22,24 +22,12 @@ Separation is when a predictor perfectly predicts a binary response variable [@R
 
 This is related and similar to identification in MLE and multicollinearity in OLS.
 
-The general solution is to penalize the likelihood, which in a Bayesian context is equivalent to placing a proper prior on the coefficient of the separating variable.
-
-Using a weakly informative prior such as those suggested by is sufficient to solve separation,
-$$
-\beta_k \sim \dnorm(0, 2.5)
-$$
-where all the columns of $\code{x}$ are assumed to mean zero, unit variance (or otherwise standardized).
-The half-Cauchy prior, $\dhalfcauchy(0, 2.5)$, suggested in @GelmanJakulinPittauEtAl2008a is insufficiently informative to  to deal with separation [@GhoshLiMitra2015a], but finite-variance weakly informative Student-t or Normal distributions will work.
-
-These are the priors suggested by [Stan](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and 
-used by default in **rstanarm** [rstanarm](https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm).
-
 ## Example: Complete Separation Data
 
 The following data is an example of data with complete separation.[^fake-separation]
 
 ```r
-data1 <- tribble(
+complete_sep <- tribble(
   ~y, ~x1, ~x2,
   0, 1, 3,
   0, 2, 2,
@@ -54,10 +42,10 @@ data1 <- tribble(
 
 
 ```r
-count(data1, y, x1) %>%
+count(complete_sep, y, x1) %>%
   group_by(x1) %>%
   mutate(p = n / sum(n)) %>%
-  select(-n) %>% 
+  select(-n) %>%
   spread(y, p, fill = 0)
 #> # A tibble: 7 x 3
 #> # Groups:   x1 [7]
@@ -71,18 +59,21 @@ count(data1, y, x1) %>%
 #> 6   10.    0.    1.
 #> # ... with 1 more row
 ```
-
 The variable `x1` perfectly separates `y`, since when `x1 <= 3`, `y = 0`,
 and when `x1 > 3`, `y = 1`.
 
+The binomial likelihood with perfectly separated data is not identified.
+
+If we estimate a binomial model with this data, it will warn that some observations
+have predicted probabilities close to zero or one.
 
 ```r
-glm(y ~ x1 + x2, data = data1, family = binomial()) %>%
-  summary()
+fit_cs1 <- glm(y ~ x1 + x2, data = complete_sep, family = binomial())
 #> Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+summary(fit_cs1)
 #> 
 #> Call:
-#> glm(formula = y ~ x1 + x2, family = binomial(), data = data1)
+#> glm(formula = y ~ x1 + x2, family = binomial(), data = complete_sep)
 #> 
 #> Deviance Residuals: 
 #>         1          2          3          4          5          6  
@@ -104,26 +95,29 @@ glm(y ~ x1 + x2, data = data1, family = binomial()) %>%
 #> 
 #> Number of Fisher Scoring iterations: 24
 ```
+Additionally, the standard errors are implausibly large.
 
 ## Example: Quasi-Separation
 
 The following generated data is an example of quasi-separation.[^quasi-separation]
 
-
 ```r
-data2 <- tibble(
+quasi_sep <- tibble(
   y = c(0, 0, 0, 0, 1, 1, 1, 1, 1, 1),
   x1 = c(1, 2, 3, 3, 3, 4, 5, 6, 10, 11),
   x2 = c(3, 0, -1, 4, 1, 0, 2, 7, 3, 4)
 )
 ```
 
+The variable `x1` *almost* separates `y`.
+When `x1 < 3`, `y = 0`, and when `x1 > 3`, `y = 1`.
+Only when `x1 = 3`, does `y` takes values of both 0 and 1.
 
 ```r
-count(data2, y, x1) %>%
+count(quasi_sep, y, x1) %>%
   group_by(x1) %>%
   mutate(p = n / sum(n)) %>%
-  select(-n) %>% 
+  select(-n) %>%
   spread(y, p, fill = 0)
 #> # A tibble: 8 x 3
 #> # Groups:   x1 [8]
@@ -138,19 +132,14 @@ count(data2, y, x1) %>%
 #> # ... with 2 more rows
 ```
 
-The variable `x1` almost perfectly separates `y`.
-When `x1 < 3`, then `y = 0`.
-When `x1 > 3`, then `y = 1`.
-Only when `x1 = 3`, does `y` takes values of either 0 or 1.
-
 
 ```r
-glm(y ~ x1 + x2, data = data2, family = binomial()) %>%
-  summary()
+fit_qs1 <- glm(y ~ x1 + x2, data = quasi_sep, family = binomial())
 #> Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+summary(fit_qs1)
 #> 
 #> Call:
-#> glm(formula = y ~ x1 + x2, family = binomial(), data = data2)
+#> glm(formula = y ~ x1 + x2, family = binomial(), data = quasi_sep)
 #> 
 #> Deviance Residuals: 
 #>     Min       1Q   Median       3Q      Max  
@@ -171,6 +160,88 @@ glm(y ~ x1 + x2, data = data2, family = binomial()) %>%
 #> Number of Fisher Scoring iterations: 21
 ```
 
+## Weak Priors
+
+While the likelihood is unidentified, weakly informative priors on the regression coefficients will deal with separation.
+$$
+\beta_k \sim \dnorm(0, 2.5)
+$$
+where all the columns of $\code{x}$ are assumed to have unit variance (or be otherwise standardized).
+The half-Cauchy prior, $\dhalfcauchy(0, 2.5)$, suggested in @GelmanJakulinPittauEtAl2008a is insufficiently informative to  to deal with separation [@GhoshLiMitra2015a], but finite-variance weakly informative Student-t or Normal distributions will work.
+
+These are the priors suggested by [Stan](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) and
+used by default in **rstanarm** [rstanarm](https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm).
+
+When estimated with `stan_glm()`, the coefficients of both the complete separation and quasi-separated data are finite.
+
+```r
+fit_cs2 <- stan_glm(y ~ x1 + x2, data = complete_sep, family = binomial())
+summary(fit_cs2)
+#> 
+#> Model Info:
+#> 
+#>  function:     stan_glm
+#>  family:       binomial [logit]
+#>  formula:      y ~ x1 + x2
+#>  algorithm:    sampling
+#>  priors:       see help('prior_summary')
+#>  sample:       4000 (posterior sample size)
+#>  observations: 8
+#>  predictors:   3
+#> 
+#> Estimates:
+#>                 mean   sd    2.5%   25%   50%   75%   97.5%
+#> (Intercept)    -6.2    2.7 -12.1   -7.8  -5.9  -4.3  -1.6  
+#> x1              1.1    0.4   0.3    0.8   1.0   1.3   2.1  
+#> x2              0.9    0.8  -0.5    0.3   0.8   1.3   2.5  
+#> mean_PPD        0.5    0.1   0.2    0.4   0.5   0.6   0.8  
+#> log-posterior  -8.4    1.4 -11.8   -9.1  -8.1  -7.4  -6.9  
+#> 
+#> Diagnostics:
+#>               mcse Rhat n_eff
+#> (Intercept)   0.1  1.0  2090 
+#> x1            0.0  1.0  2114 
+#> x2            0.0  1.0  2412 
+#> mean_PPD      0.0  1.0  3796 
+#> log-posterior 0.0  1.0  1641 
+#> 
+#> For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
+```
+
+```r
+fit_qs2 <- stan_glm(y ~ x1 + x2, data = quasi_sep, family = binomial())
+summary(fit_qs2)
+#> 
+#> Model Info:
+#> 
+#>  function:     stan_glm
+#>  family:       binomial [logit]
+#>  formula:      y ~ x1 + x2
+#>  algorithm:    sampling
+#>  priors:       see help('prior_summary')
+#>  sample:       4000 (posterior sample size)
+#>  observations: 10
+#>  predictors:   3
+#> 
+#> Estimates:
+#>                 mean   sd    2.5%   25%   50%   75%   97.5%
+#> (Intercept)    -3.7    1.9  -7.6   -4.9  -3.6  -2.3  -0.2  
+#> x1              1.1    0.5   0.2    0.7   1.1   1.4   2.2  
+#> x2              0.0    0.4  -0.7   -0.2   0.0   0.3   0.9  
+#> mean_PPD        0.6    0.2   0.3    0.5   0.6   0.7   0.9  
+#> log-posterior -10.5    1.3 -13.8  -11.1 -10.2  -9.5  -9.0  
+#> 
+#> Diagnostics:
+#>               mcse Rhat n_eff
+#> (Intercept)   0.0  1.0  2746 
+#> x1            0.0  1.0  1596 
+#> x2            0.0  1.0  2469 
+#> mean_PPD      0.0  1.0  3688 
+#> log-posterior 0.0  1.0  1509 
+#> 
+#> For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
+```
+
 ## Example: Support of ACA Medicaid Expansion
 
 This example is from @Rainey2016a from the original paper @BarrilleauxRainey2014a
@@ -181,19 +252,35 @@ Load the data included in the **jrnold.bayes.notes** package:
 data("politics_and_need", package = "jrnold.bayes.notes")
 ```
 
-What happens when estimated with GLM?
+The observations are the governors of the US states.
+The outcome variable is their votes on the Affordable Care Act (ACA) Medicaid Expansion.
+The dataset includes multiple predictors, including whether the governor is a Republican (`gop_governor`).
+Add Democratic governors supported the expansion (`gop_governor == 0`),
+and only Republican governors (`gop_governor == 1`) opposed it (though not all).
 
 ```r
-glm(oppose_expansion ~ gop_governor + percent_favorable_aca + gop_leg +
+count(politics_and_need, gop_governor, oppose_expansion)
+#> # A tibble: 3 x 3
+#>   gop_governor oppose_expansion     n
+#>          <dbl>            <dbl> <int>
+#> 1           0.               0.    20
+#> 2           1.               0.    14
+#> 3           1.               1.    16
+```
+This is a case of quasi-separation.
+
+What happens when this model is estimated with MLE by `glm()`?
+
+```r
+aca_fmla <-
+  oppose_expansion ~ gop_governor + percent_favorable_aca + gop_leg +
          percent_uninsured + bal2012 + multiplier + percent_nonwhite +
-         percent_metro,
-       data = politics_and_need, family = binomial()) %>%
-      summary()
+         percent_metro
+fit_aca1 <- glm(aca_fmla, data = politics_and_need, family = binomial())
+summary(fit_aca1)
 #> 
 #> Call:
-#> glm(formula = oppose_expansion ~ gop_governor + percent_favorable_aca + 
-#>     gop_leg + percent_uninsured + bal2012 + multiplier + percent_nonwhite + 
-#>     percent_metro, family = binomial(), data = politics_and_need)
+#> glm(formula = aca_fmla, family = binomial(), data = politics_and_need)
 #> 
 #> Deviance Residuals: 
 #>    Min      1Q  Median      3Q     Max  
@@ -220,38 +307,81 @@ glm(oppose_expansion ~ gop_governor + percent_favorable_aca + gop_leg +
 #> Number of Fisher Scoring iterations: 19
 ```
 
-For Stan, preprocess the data:
+Now estimate with **rstanarm** using the default weakly informative priors.
 
 ```r
-rec <- recipe(oppose_expansion ~ gop_governor + percent_favorable_aca + 
-                gop_leg + percent_uninsured + bal2012 + multiplier +
-                percent_nonwhite + percent_metro,
-              data = politics_and_need) %>%
-  step_center(all_predictors()) %>%
-  step_scale(all_predictors()) %>%
-  prep(politics_and_need, retain = TRUE)
-
-X <- juice(rec, composition = "matrix")
-y <- juice(rec, composition = "matrix")
+fit_aca2 <- stan_glm(aca_fmla, data = politics_and_need,
+                     family = "binomial",
+                     show_messages = FALSE, refresh = -1,
+                     verbose = FALSE)
 ```
-
-
-Estimate with **rstanarm**.
 
 ```r
-f <-oppose_expansion ~ gop_governor + percent_favorable_aca + 
-      gop_leg + percent_uninsured + bal2012 + multiplier +
-      percent_nonwhite + percent_metro
-fit1 <- stan_glm(f, data = politics_and_need, family = "binomial")
+summary(fit_aca2)
+#> 
+#> Model Info:
+#> 
+#>  function:     stan_glm
+#>  family:       binomial [logit]
+#>  formula:      oppose_expansion ~ gop_governor + percent_favorable_aca + gop_leg + 
+#> 	   percent_uninsured + bal2012 + multiplier + percent_nonwhite + 
+#> 	   percent_metro
+#>  algorithm:    sampling
+#>  priors:       see help('prior_summary')
+#>  sample:       4000 (posterior sample size)
+#>  observations: 50
+#>  predictors:   9
+#> 
+#> Estimates:
+#>                         mean   sd    2.5%   25%   50%   75%   97.5%
+#> (Intercept)            -3.6    5.1 -13.6   -6.9  -3.6  -0.2   6.5  
+#> gop_governor            3.9    1.6   1.2    2.8   3.8   4.9   7.2  
+#> percent_favorable_aca   0.0    0.1  -0.2   -0.1   0.0   0.0   0.1  
+#> gop_leg                 2.4    1.3   0.0    1.5   2.3   3.2   5.1  
+#> percent_uninsured       0.1    0.2  -0.2    0.0   0.1   0.2   0.5  
+#> bal2012                 0.0    0.0   0.0    0.0   0.0   0.0   0.0  
+#> multiplier             -0.3    1.0  -2.3   -0.9  -0.3   0.4   1.8  
+#> percent_nonwhite        0.0    0.1  -0.1    0.0   0.0   0.1   0.1  
+#> percent_metro          -0.1    0.0  -0.1   -0.1  -0.1   0.0   0.0  
+#> mean_PPD                0.3    0.1   0.2    0.3   0.3   0.4   0.4  
+#> log-posterior         -33.3    2.4 -38.9  -34.6 -32.9 -31.6 -29.8  
+#> 
+#> Diagnostics:
+#>                       mcse Rhat n_eff
+#> (Intercept)           0.1  1.0  2754 
+#> gop_governor          0.0  1.0  2598 
+#> percent_favorable_aca 0.0  1.0  3106 
+#> gop_leg               0.0  1.0  3302 
+#> percent_uninsured     0.0  1.0  2520 
+#> bal2012               0.0  1.0  2774 
+#> multiplier            0.0  1.0  3142 
+#> percent_nonwhite      0.0  1.0  2253 
+#> percent_metro         0.0  1.0  3371 
+#> mean_PPD              0.0  1.0  4000 
+#> log-posterior         0.1  1.0  1385 
+#> 
+#> For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
 
-What if no prior is used? Compare estimates and efficiency.
+### Questions
 
-```r
-fit2 <- stan_glm(f, data = politics_and_need, prior = NULL, family = "binomial")
-```
+-   Estimate the model using `stan_glm()` with a flat prior, and a Student-t
+    distribution with `df = 3`. Compare the coefficient estimates and the
+    efficiency ($\hat{R}$, ESS).
+
+-   @GhoshLiMitra2015a suggest that a Half-Cauchy prior distribution is
+    insufficient for dealing with separation. Try estimating this model with
+    a Cauchy prior with a scale of 2.5. Compare the coefficient estimates
+    and efficiency ($\hat{R}$, ESS).
+
+-   See the other application in @Rainey2016a on nuclear proliferation and
+    war. Replicate the analysis with the informative, skeptical, and
+    enthusiastic priors.  The data can be found at [carlislerainey/priors-for-separation](https://github.com/carlislerainey/priors-for-separation/tree/master/bm-replication).
 
 ## References
+
+See @AlbertAnderson1984a, @HeinzeSchemper2002a, and @Heinze2006a for discussion
+about separation.
 
 @Rainey2016a provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values.
 Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).

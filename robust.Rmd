@@ -3,7 +3,7 @@ output: html_document
 editor_options:
   chunk_output_type: console
 ---
-# Heteroskedasticity and Robust Regression
+# Robust Regression
 
 ## Prerequisites {-}
 
@@ -13,23 +13,20 @@ library("tidyverse")
 library("rubbish")
 ```
 
-## Linear Regression with Student t distributed errors
-
 Like OLS, Bayesian linear regression with normally distributed errors is
-sensitive to outliers. 
-This is because the normal distribution has narrow tail probabilities, 
-with 99.8% of the probability within three standard deviations.
-Thus, if we estimate 
+sensitive to outliers.
+This is because the normal distribution has narrow tail probabilities,
+with approximately 99.8% of the probability within three standard deviations.
 
+[Robust regression](https://en.wikipedia.org/wiki/Robust_regression) refers to regression methods which are less sensitive to outliers.
+Bayesian robust regression uses distributions with wider tails than the normal instead of the normal.
 This plots the normal, Double Exponential (Laplace), and Student-t ($df = 4$)
 distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
-Higher surprise is a lower log-likelihood. Both the Student-t and Double
-Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
-This means that outliers impose less of a penalty on the log-posterior models
-using these distributions, and the regression line would need to move less to
-incorporate those observations since the error distribution will not consider them as unusual.
+Both the Student-$t$ and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
+This means that outliers will have less of an affect on the log-posterior of models using these distributions.
+The regression line would need to move less  incorporate those observations since the error distribution will not consider them as unusual.
 
-```{r}
+```{r echo=FALSE}
 z <- seq(-6, 6, length.out = 100)
 bind_rows(
   tibble(z = z,
@@ -46,7 +43,7 @@ bind_rows(
   geom_line()
 ```
 
-```{r}
+```{r echo=FALSE}
 z <- seq(-6, 6, length.out = 100)
 bind_rows(
   tibble(z = z,
@@ -61,68 +58,62 @@ bind_rows(
   mutate(`-log(p)` = -log(p)) %>%
   ggplot(aes(x = z, y = p, colour = distr)) +
   geom_line()
-
 ```
 
-[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
+## Student-t distribution
 
-```{r include=FALSE}
-mod_t <- stan_model("stan/lm_student_t.stan")
-```
-```{r cache=FALSE}
-mod_t
-```
+## Robit
 
-```{r}
-unionization <- read_tsv("data/western1995/unionization.tsv",
-         col_types = cols(
-              country = col_character(),
-              union_density = col_double(),
-              left_government = col_double(),
-              labor_force_size = col_number(),
-              econ_conc = col_double()
-            ))
-mod_data <-
-  lm_preprocess(union_density ~ left_government +
-                  log(labor_force_size) + econ_conc,
-                data = unionization)
+In a binomial regression, use a Student-t distribution with a low degrees of freedom instead of the logit and/or probit.
 
-mod_data <- within(mod_data, {
-  b_loc <- 0
-  b_scale <- 1000
-  sigma_scale <- sd(y)
-})
+$$
+\begin{aligned}[t]
+y_i &\sim \dBinom(\pi_i) & y_i \in \{0, 1\} \\
+\pi_i &= \int_{-\infty}^{\eta_i} \dt(x | \nu, 0, 1) dx & \pi_i \in (0, 1), \nu \in \R^{+} \\
+\eta_i &= \alpha + x_i' \beta & \eta_i, \alpha, \beta_k \in \R \\
+\end{aligned}
+$$
+where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$.
 
-```
+## Examples
 
-The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum tree depth.
-This is likely due to the wide tails of the Student t distribution.
-```{r}
-mod_t_fit <- sampling(mod_t, data = mod_data,
-                      control = list(max_treedepth = 11))
-```
+Estimate some examples with known outliers and compare to using a normal
+See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
+associated **jrnold.bayes.notes** package.
 
-```{r output=FALSE}
-summary(mod_t_fit, pars = c("b"))$summary
-```
+## Quantile regression
 
-Compare those results when using a model with
-```{r include=FALSE}
-mod_normal <- stan_model("stan/lm.stan")
-```
-```{r}
-mod_normal
-```
+A different form of robust regression and one that often serves a different purpose is quantile regression.
 
-```{r}
-mod_normal_fit <- sampling(mod_normal, data = mod_data)
-```
+[Least absolute deviation](https://en.wikipedia.org/wiki/Least_absolute_deviations) (LAD) regression minimizes the following objective function,
+$$
+\hat{\beta}_{LAD} = \arg \min_{\beta} \sum | y_i - \alpha - X \beta | .
+$$
+The Bayesian analog is the [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution),
+$$
+\dlaplace(x | \mu, \sigma) = \frac{1}{2 \sigma} \left( - \frac{|x - \mu|}{\sigma} \right) .
+$$
+The Laplace distribution is analogous to least absolute deviations because the kernel of the distribution is $|x - \mu|$, so minimizing the likelihood will also minimize the least absolute distances.
 
-```{r}
-summary(mod_normal_fit, pars = c("b"))$summary
-```
+Thus, a linear regression with Laplace errors is analogous to a median regression.
+$$
+\begin{aligned}[t]
+y_i &\sim \dlaplace\left( \alpha + X \beta, \sigma \right)
+\end{aligned}
+$$
+This can be generalized to other quantiles using the asymmetric Laplace distribution [@BenoitPoel2017a, @YuZhang2005a].
 
+### Questions
 
+1.  OLS is a model of the conditional mean $E(y | x)$. A linear model with
+    normal errors is a model of the outcomes $p(y | x)$. How would you estimate
+    the conditional mean, median, and quantile functions from the linear-normal
+    model? What role would quantile regression play? Hint: See @BenoitPoel2017a [Sec. 3.4].
+
+1.  Implement the asymmetric Laplace distribution in Stan in two ways:
+
+    -   Write a user function to calculate the log-PDF
+    -   Implement it as a scale-mixture of normal distributions
 
 ## References
 
@@ -131,7 +122,4 @@ For more on robust regression see @GelmanHill2007a [sec 6.6], @BDA3 [ch 17], and
 For more on heteroskedasticity see @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
 @Stan2016a discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.
 
-### Quantile regression
-
--   @BenoitPoel2017a
--   @YuZhang2005a for the three-parameter asymmetric Laplace distribution
+[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.

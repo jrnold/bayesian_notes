@@ -12,9 +12,7 @@ data {
   matrix [N, K] X;
   // priors on alpha
   real<lower=0> scale_alpha;
-  real loc_alpha;
   real<lower=0> scale_beta;
-  real loc_beta;
   real<lower=0> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
@@ -22,20 +20,26 @@ data {
 }
 parameters {
   // regression coefficient vector
-  real alpha;
-  vector[K] beta;
-  real<lower=0> sigma;
+  real alpha_raw;
+  vector[K] beta_raw;
+  real<lower=0> sigma_raw;
 }
 transformed parameters {
   vector[N] mu;
+  real alpha;
+  vector[K] beta_raw;
+  real<lower=0> sigma_raw;
 
+  beta = beta_raw .* sd_X * sd_y;
+  alpha = alpha_raw * sd_y;
+  sigma = sigma_raw * sd_y;
   mu = alpha + X * beta;
 }
 model {
   // priors
-  alpha ~ normal(loc_alpha, scale_alpha);
-  beta ~ normal(loc_beta, scale_beta);
-  sigma ~ exponential(loc_sigma);
+  alpha ~ normal(0., 1.);
+  beta ~ normal(0., 1.);
+  sigma ~ exponential(1.);
   // likelihood
   y ~ normal(mu, sigma);
 }

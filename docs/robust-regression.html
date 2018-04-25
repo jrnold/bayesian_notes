@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="bayesian-inference.html">
+<link rel="prev" href="separation.html">
+<link rel="next" href="heteroskedasticity.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -257,7 +257,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#average-predictive-comparisons"><i class="fa fa-check"></i><b>9.3</b> Average Predictive Comparisons</a></li>
+<li class="chapter" data-level="9.4" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.4</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>III Models</b></span></li>
 <li class="chapter" data-level="10" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>10</b> Introduction to Stan and Linear Regression</a><ul>
@@ -347,7 +348,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.6" data-path="multilevel-models.html"><a href="multilevel-models.html#references-11"><i class="fa fa-check"></i><b>18.6</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span></li>
-<li class="chapter" data-level="19" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>19</b> Distributions</a></li>
+<li class="chapter" data-level="19" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>19</b> Distributions</a><ul>
+<li class="chapter" data-level="19.0.1" data-path="distributions.html"><a href="distributions.html#beta-distribution"><i class="fa fa-check"></i><b>19.0.1</b> Beta Distribution</a></li>
+<li class="chapter" data-level="19.0.2" data-path="distributions.html"><a href="distributions.html#gamma-distribution"><i class="fa fa-check"></i><b>19.0.2</b> Gamma Distribution</a></li>
+</ul></li>
 <li class="chapter" data-level="20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>20</b> Annotated Bibliography</a><ul>
 <li class="chapter" data-level="20.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>20.1</b> Textbooks</a></li>
 <li class="chapter" data-level="20.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>20.2</b> Syllabi</a></li>
@@ -475,24 +479,103 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="header">
-<h1 class="title">Updating: A Set of Bayesian Notes</h1>
-<p class="author"><em>Jeffrey B. Arnold</em></p>
+<div id="robust-regression" class="section level1">
+<h1><span class="header-section-number">14</span> Robust Regression</h1>
+<div id="prerequisites-5" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;rubbish&quot;</span>)</code></pre>
+<p>Like OLS, Bayesian linear regression with normally distributed errors is
+sensitive to outliers.
+This is because the normal distribution has narrow tail probabilities,
+with approximately 99.8% of the probability within three standard deviations.</p>
+<p><a href="https://en.wikipedia.org/wiki/Robust_regression">Robust regression</a> refers to regression methods which are less sensitive to outliers.
+Bayesian robust regression uses distributions with wider tails than the normal instead of the normal.
+This plots the normal, Double Exponential (Laplace), and Student-t (<span class="math inline">\(df = 4\)</span>)
+distributions all with mean 0 and scale 1, and the surprise (<span class="math inline">\(- log(p)\)</span>) at each point.
+Both the Student-<span class="math inline">\(t\)</span> and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+This means that outliers will have less of an affect on the log-posterior of models using these distributions.
+The regression line would need to move less incorporate those observations since the error distribution will not consider them as unusual.</p>
+<p><img src="robust_files/figure-html/unnamed-chunk-2-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>Notes on Bayesian methods - written to supplement CS&amp;SS/STAT 564: Bayesian Statistics for the Social Sciences.</p>
-<p>These notes largely focus on the application and theory necessary for quantitative social scientists to successfully apply Bayesian statistical methods.</p>
-<p>I also don’t hesitate to link to those who have already explained things well, and focus my efforts on places where I haven’t found good explanations (or explanations I understand), or places where I need to write notes to deepen my own understanding.</p>
+<div id="student-t-distribution" class="section level2">
+<h2><span class="header-section-number">14.1</span> Student-t distribution</h2>
+</div>
+<div id="robit-1" class="section level2">
+<h2><span class="header-section-number">14.2</span> Robit</h2>
+<p>In a binomial regression, use a Student-t distribution with a low degrees of freedom instead of the logit and/or probit.</p>
+<p><span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dBinom(\pi_i) &amp; y_i \in \{0, 1\} \\
+\pi_i &amp;= \int_{-\infty}^{\eta_i} \dt(x | \nu, 0, 1) dx &amp; \pi_i \in (0, 1), \nu \in \R^{+} \\
+\eta_i &amp;= \alpha + x_i&#39; \beta &amp; \eta_i, \alpha, \beta_k \in \R \\
+\end{aligned}
+\]</span>
+where <span class="math inline">\(\nu\)</span> is given a low degrees of freedom <span class="math inline">\(\nu \in [3, 7]\)</span>.</p>
+</div>
+<div id="examples-2" class="section level2">
+<h2><span class="header-section-number">14.3</span> Examples</h2>
+<p>Estimate some examples with known outliers and compare to using a normal
+See the data examples <code>income_ineq</code>, <code>unionization</code>, and <code>econ_growth</code> in the
+associated <strong>jrnold.bayes.notes</strong> package.</p>
+</div>
+<div id="quantile-regression" class="section level2">
+<h2><span class="header-section-number">14.4</span> Quantile regression</h2>
+<p>A different form of robust regression and one that often serves a different purpose is quantile regression.</p>
+<p><a href="https://en.wikipedia.org/wiki/Least_absolute_deviations">Least absolute deviation</a> (LAD) regression minimizes the following objective function,
+<span class="math display">\[
+\hat{\beta}_{LAD} = \arg \min_{\beta} \sum | y_i - \alpha - X \beta | .
+\]</span>
+The Bayesian analog is the <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a>,
+<span class="math display">\[
+\dlaplace(x | \mu, \sigma) = \frac{1}{2 \sigma} \left( - \frac{|x - \mu|}{\sigma} \right) .
+\]</span>
+The Laplace distribution is analogous to least absolute deviations because the kernel of the distribution is <span class="math inline">\(|x - \mu|\)</span>, so minimizing the likelihood will also minimize the least absolute distances.</p>
+<p>Thus, a linear regression with Laplace errors is analogous to a median regression.
+<span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dlaplace\left( \alpha + X \beta, \sigma \right)
+\end{aligned}
+\]</span>
+This can be generalized to other quantiles using the asymmetric Laplace distribution <span class="citation">(Benoit and Poel 2017, <span class="citation">@YuZhang2005a</span>)</span>.</p>
+<div id="questions-3" class="section level3">
+<h3><span class="header-section-number">14.4.1</span> Questions</h3>
+<ol style="list-style-type: decimal">
+<li><p>OLS is a model of the conditional mean <span class="math inline">\(E(y | x)\)</span>. A linear model with
+normal errors is a model of the outcomes <span class="math inline">\(p(y | x)\)</span>. How would you estimate
+the conditional mean, median, and quantile functions from the linear-normal
+model? What role would quantile regression play? Hint: See <span class="citation">Benoit and Poel (2017 Sec. 3.4)</span>.</p></li>
+<li><p>Implement the asymmetric Laplace distribution in Stan in two ways:</p>
+<ul>
+<li>Write a user function to calculate the log-PDF</li>
+<li>Implement it as a scale-mixture of normal distributions</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="references-8" class="section level2">
+<h2><span class="header-section-number">14.5</span> References</h2>
+<p>For more on robust regression see <span class="citation">Gelman and Hill (2007 sec 6.6)</span>, <span class="citation">Gelman et al. (2013 ch 17)</span>, and <span class="citation">Stan Development Team (2016 Sec 8.4)</span>.</p>
+<p>For more on heteroskedasticity see <span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.
+<span class="citation">Stan Development Team (2016)</span> discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.</p>
 
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>The Double Exponential distribution still has a thinner tail than the Student-t at higher values.<a href="robust-regression.html#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="bayesian-inference.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="separation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="heteroskedasticity.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -512,7 +595,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/index.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/robust.Rmd",
 "text": "Edit"
 },
 "download": null,

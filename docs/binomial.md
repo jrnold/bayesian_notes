@@ -261,7 +261,6 @@ votechoice_data <- list(
 ```
 
 
-
 ```r
 fit_votechoice <- sampling(mod_logit, data = votechoice_data)
 ```

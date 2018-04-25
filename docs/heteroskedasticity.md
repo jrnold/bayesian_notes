@@ -1,3 +1,4 @@
+
 # Heteroskedasticity
 
 Consider the linear regression model with normal errors,
@@ -123,14 +124,23 @@ $$
 ### Examples: Duncan 
 
 Estimate the linear regression with the Duncan data using heteroskedastic errors.
-```{r}
+
+```r
 data("Duncan", package = "carData")
 ```
-```{r}
+
+```r
 lm(prestige ~ income + education + type, data = Duncan)
+#> 
+#> Call:
+#> lm(formula = prestige ~ income + education + type, data = Duncan)
+#> 
+#> Coefficients:
+#> (Intercept)       income    education     typeprof       typewc  
+#>      -0.185        0.598        0.345       16.658      -14.661
 ```
 
-Also see some of the examples in the `r rpkg("hett")` package.
+Also see some of the examples in the **[hett](https://cran.r-project.org/package=hett)** package.
 
 ## References
 

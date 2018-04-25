@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="bayesian-inference.html">
+<link rel="prev" href="robust-regression.html">
+<link rel="next" href="rare-events-logit.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -257,7 +257,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#average-predictive-comparisons"><i class="fa fa-check"></i><b>9.3</b> Average Predictive Comparisons</a></li>
+<li class="chapter" data-level="9.4" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.4</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>III Models</b></span></li>
 <li class="chapter" data-level="10" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>10</b> Introduction to Stan and Linear Regression</a><ul>
@@ -347,7 +348,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.6" data-path="multilevel-models.html"><a href="multilevel-models.html#references-11"><i class="fa fa-check"></i><b>18.6</b> References</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span></li>
-<li class="chapter" data-level="19" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>19</b> Distributions</a></li>
+<li class="chapter" data-level="19" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>19</b> Distributions</a><ul>
+<li class="chapter" data-level="19.0.1" data-path="distributions.html"><a href="distributions.html#beta-distribution"><i class="fa fa-check"></i><b>19.0.1</b> Beta Distribution</a></li>
+<li class="chapter" data-level="19.0.2" data-path="distributions.html"><a href="distributions.html#gamma-distribution"><i class="fa fa-check"></i><b>19.0.2</b> Gamma Distribution</a></li>
+</ul></li>
 <li class="chapter" data-level="20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>20</b> Annotated Bibliography</a><ul>
 <li class="chapter" data-level="20.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>20.1</b> Textbooks</a></li>
 <li class="chapter" data-level="20.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>20.2</b> Syllabi</a></li>
@@ -475,24 +479,155 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\cia}{\perp\!\!\!\perp}
 \DeclareMathOperator*{\plim}{plim}
 \]
-<div id="header">
-<h1 class="title">Updating: A Set of Bayesian Notes</h1>
-<p class="author"><em>Jeffrey B. Arnold</em></p>
+<div id="heteroskedasticity" class="section level1">
+<h1><span class="header-section-number">15</span> Heteroskedasticity</h1>
+<p>Consider the linear regression model with normal errors,
+<span class="math display">\[
+y_i \sim \dnorm\left(\ X \beta, \sigma_i^2 \right) .
+\]</span>
+Note that since the term <span class="math inline">\(\sigma_i\)</span> is indexed by the observation, it can vary by observation.
+If <span class="math inline">\(\sigma_i = 1\)</span> for all <span class="math inline">\(i\)</span>, then this corresponds to the classical homoskedastic linear regression.
+If <span class="math inline">\(\sigma_i\)</span> differs for each <span class="math inline">\(i\)</span>, then it is a heteroskedastic regression.</p>
+<p>In frequentist estimation linear regressions with heteroskedastic are often estimated using OLS with heteroskedasticity-consistent (HC) standard errors.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+However, HC standard errors are not a generative model, and in the Bayesian setting it is preferable to write a generative model that specifies a model for <span class="math inline">\(\sigma^2\)</span>.</p>
+<div id="weighted-regression" class="section level2">
+<h2><span class="header-section-number">15.1</span> Weighted Regression</h2>
+<p>A common case is “weighted” regression, where each <span class="math inline">\(y_i\)</span> represents the <em>mean</em> of <span class="math inline">\(n_i\)</span>
+observations. Then the scale of each observation is
+<span class="math display">\[
+\sigma_i = \omega / n_i ,
+\]</span>
+where <span class="math inline">\(\omega\)</span> is a global scale.</p>
+<p>Alternatively, suppose each observation represents the <em>sum</em> of each <span class="math inline">\(n_i\)</span> observations.
+Then the scale of each observation is,
+<span class="math display">\[
+\sigma_i = n_i \omega .
+\]</span></p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>Notes on Bayesian methods - written to supplement CS&amp;SS/STAT 564: Bayesian Statistics for the Social Sciences.</p>
-<p>These notes largely focus on the application and theory necessary for quantitative social scientists to successfully apply Bayesian statistical methods.</p>
-<p>I also don’t hesitate to link to those who have already explained things well, and focus my efforts on places where I haven’t found good explanations (or explanations I understand), or places where I need to write notes to deepen my own understanding.</p>
+<div id="modeling-the-scale-with-covariates" class="section level2">
+<h2><span class="header-section-number">15.2</span> Modeling the Scale with Covariates</h2>
+<p>The scale can also be modeled with covariates.</p>
+<p>It is common to model the log-transformation of the scale or variance to transform it to <span class="math inline">\(\R\)</span>,
+<span class="math display">\[
+\log \sigma_i = \dnorm(Z_i \gamma, \omega)
+\]</span>
+where <span class="math inline">\(Z_i\)</span> are covariates used to the model the variance, which may or may not be the same as <span class="math inline">\(X_i\)</span>.</p>
+<p>Another common model is the variance as a function of the mean,
+<span class="math display">\[
+\begin{align}
+\log \sigma_i = f(\mu_i).
+\end{align}
+\]</span></p>
+<p>Consider the well-known normal approximation of the binomial distribution,
+<span class="math display">\[
+\dnorm(n_i | N_i, \pi_i) \approx \dnorm(n_i | \pi N_i, \pi (1 - \pi) N_i) .
+\]</span>
+At the cost of treating the outcome as continuous rather than discrete,
+this approximation can provide a flexible model for over- or under-dispersion, by adding a dispersion term <span class="math inline">\(\delta \in R^{+}\)</span>,
+<span class="math display">\[
+n_i \sim \dnorm(\pi N_i, \delta \pi (1 - \pi)) .
+\]</span>
+A similar approximation can be applied to unbounded count models using the normal approximation to the Poisson, <span class="math inline">\(\dpois(y_i | \lambda_i) \approx \dnorm(y_i | \lambda_i \lambda_i)\)</span>.</p>
+</div>
+<div id="prior-distributions" class="section level2">
+<h2><span class="header-section-number">15.3</span> Prior Distributions</h2>
+<p>A reparameterization that will be used quite often is to rewrite a normal
+distributions with unequal scale parameters as the product of a common global
+scale parameter (<span class="math inline">\(\omega\)</span>), and observation specific local scale parameters,
+<span class="math inline">\(\lambda_i\)</span>,<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+<span class="math display">\[
+y_i \sim \dnorm(X\beta, \lambda_i \omega) .
+\]</span>
+If the local variance parameters are distributed inverse-gamma,
+<span class="math display">\[
+\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+\]</span>
+then the above is equivalent to a regression with errors distributed Student-t errors with <span class="math inline">\(\nu\)</span> degrees of freedom,
+<span class="math display">\[
+y_i \sim \dt\left(\nu, X \beta, \sigma\right) .
+\]</span></p>
+<p>Note that if a random variable <span class="math inline">\(X\)</span> is distributed inverse-gamma, it is equivalent
+to <span class="math inline">\(1 / X\)</span> being distributed gamma. In this example,
+<span class="math display">\[
+\dinvgamma(\lambda^2 | \nu / 2, \nu / 2) = \dgamma\left(\frac{1}{\lambda^2} \middle| \nu / 2, \nu / 2\right) =  
+\]</span></p>
+<p><strong>Example:</strong> Simulate Student-<span class="math inline">\(t\)</span> distribution with <span class="math inline">\(\nu\)</span> degrees of freedom as a scale mixture of normal. For *s in 1:S$,</p>
+<ol style="list-style-type: decimal">
+<li>Simulate <span class="math inline">\(z_s \sim \dgamma(\nu / 2, \nu / 2)\)</span></li>
+<li><span class="math inline">\(x_s = 1 / \sqrt{z_s}2\)</span> is draw from <span class="math inline">\(\dt{\nu}(0, 1)\)</span>.</li>
+</ol>
+<p>When using R, ensure that you are using the correct parameterization of the gamma distribution. <strong>Left to reader</strong></p>
+<p>We can also model heteroskedasticity by placing a prior distribution on the variances.</p>
+<p><span class="math display">\[
+\sigma_i = \omega \lambda_i .
+\]</span>
+Thus, the heteroskedastic likelihood is,
+<span class="math display">\[
+y_i \sim \dnorm\left( \mu_i, \omega^2 \lambda_i^2\right)
+\]</span>
+Note that since the number of <span class="math inline">\(\lambda_i\)</span> parameters are equal to the number of observations, this model will not have a proper posterior distribution without a proper prior distribution.
+However, if a proper prior is placed on <span class="math inline">\(\lambda_i\)</span>, then the posterior distribution for this model exists.</p>
+<p>Suppose <span class="math inline">\(1 / \lambda_i^2\)</span> is distributed with a specific gamma distribution,
+<span class="math display">\[
+1 / \lambda_i^2 \sim \dgamma(d / 2, d / 2) .
+\]</span>
+This
+<span class="math display">\[
+\dt(y_i | \nu, \mu_i, \omega) = \int \dnorm(y | \mu_i, \omega^2 \lambda^2) \dinvgamma(\nu / 2, \nu / 2)  d  \lambda^2
+\]</span></p>
+<p>This is equivalent to a regression model with Student-t errors.
+<span class="math display">\[
+y_i \sim \dt\left(d, ., \omega \right) .
+\]</span>
+Thus, “robust” regression models with Student-<span class="math inline">\(t\)</span> errors can be derived from a particular model of heteroskedastic normal errors.</p>
+<p>We could also apply other prior distributions to the
+Another flexible model of heteroskedasticity is to apply a Dirichlet model to the local scales,
+<span class="math display">\[
+\begin{aligned}[t]
+\lambda_i &amp;\sim \ddirichlet(a, w), &amp; \lambda_i \geq 0, \sum_i \lambda_i = 1 .
+\end{aligned}
+\]</span></p>
+<div id="examples-duncan" class="section level3">
+<h3><span class="header-section-number">15.3.1</span> Examples: Duncan</h3>
+<p>Estimate the linear regression with the Duncan data using heteroskedastic errors.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;Duncan&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;carData&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(prestige <span class="op">~</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> Duncan)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = prestige ~ income + education + type, data = Duncan)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt; (Intercept)       income    education     typeprof       typewc  </span>
+<span class="co">#&gt;      -0.185        0.598        0.345       16.658      -14.661</span></code></pre>
+<p>Also see some of the examples in the <strong><a href="https://cran.r-project.org/package=hett">hett</a></strong> package.</p>
+</div>
+</div>
+<div id="references-9" class="section level2">
+<h2><span class="header-section-number">15.4</span> References</h2>
+<p>For more on heteroskedasticity see <span class="citation">Gelman et al. (2013 Sec. 14.7)</span> for models with unequal variances and correlations.</p>
+<p><span class="citation">Stan Development Team (2016)</span> discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.</p>
 
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>See <a href="https://arxiv.org/pdf/1101.1402.pdf" class="uri">https://arxiv.org/pdf/1101.1402.pdf</a> and <a href="http://econ.ucsb.edu/~startz/Bayesian%20Heteroskedasticity-Robust%20Regression.pdf">http://econ.ucsb.edu/~startz/Bayesian%20Heteroskedasticity-Robust%20Regression.pdf</a>.<a href="heteroskedasticity.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See <a href="http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/">this</a>
+for a visualization of a Student-t distribution a mixture of Normal distributions,
+and <a href="https://www.johndcook.com/t_normal_mixture.pdf">this</a> for a derivation
+of the Student t distribution as a mixture of normal distributions.
+This scale mixture of normal representation will also be used with shrinkage
+priors on the regression coefficients.<a href="heteroskedasticity.html#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="bayesian-inference.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="robust-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rare-events-logit.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -512,7 +647,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/jrnold/bayesian_notes/edit/master/index.Rmd",
+"link": "https://github.com/jrnold/bayesian_notes/edit/master/heteroskedasticity.Rmd",
 "text": "Edit"
 },
 "download": null,

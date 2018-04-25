@@ -36,6 +36,7 @@ model {
   alpha ~ normal(0.0, scale_alpha);
   beta ~ normal(0.0, scale_beta);
   sigma ~ exponential(loc_sigma);
+  // see Stan prior distribution suggestions
   nu ~ gamma(2, 0.1);
   // likelihood
   y ~ student_t(nu, mu, sigma);

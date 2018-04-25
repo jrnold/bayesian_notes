@@ -33,7 +33,7 @@ In binary outcome variables, sometimes it is useful to sample on the dependent v
 For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.
 For most country-pairs, for most years, there is no conflict.
 If some data are costly to gather, it may be cost efficient to gather data for conflict-years and then randomly select a smaller number of non-conflict years on which to gather data.
-The sample will no longer be representative, but the estimates can be corrected to account for the data-gerating process.
+The sample will no longer be representative, but the estimates can be corrected to account for the data-generating process.
 
 The reason this works well, is that if there are few 1's, additional 0's have little influence on the estimation (@KingZeng2001a).
 
@@ -586,7 +586,7 @@ mod_relogit2 <- stan_model("stan/relogit2.stan")
 
 -   Compare the estimates and efficiency of the two methods.
 
--   How would you evalate the predictive distributions using cross-validation in case
+-   How would you evaluate the predictive distributions using cross-validation in case
     of unbalanced classes?
 
 -   Suppose that there is uncertainty about the population proportion, $\tau$.
