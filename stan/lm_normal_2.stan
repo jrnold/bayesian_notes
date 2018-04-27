@@ -12,7 +12,7 @@ data {
   matrix [N, K] X;
   // priors on alpha
   real<lower=0> scale_alpha;
-  real<lower=0> scale_beta;
+  real[K]<lower=0> scale_beta;
   real<lower=0> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;

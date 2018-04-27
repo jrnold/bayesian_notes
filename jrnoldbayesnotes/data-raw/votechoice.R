@@ -4,7 +4,7 @@ suppressPackageStartupMessages({
   library("tidyverse")
 })
 
-votechoice <- read_dta("data-raw/Hanmer Kalkan AJPS NES example.dta") %>%
+votechoice <- read_dta("data-raw/Hanmer_Kalkan_AJPS_NES_example.dta") %>%
   mutate_if(is.labelled, as_factor) %>%
   filter(!is.na(exptrnout2)) %>%
   select(-exptrnout2) %>%

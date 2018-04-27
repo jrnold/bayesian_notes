@@ -8,7 +8,7 @@ library("tidyverse")
 There are two issues when estimating binary outcomes with an unbalanced outcome
 variable (many-0's or many-1's), called rare events.
 
-1.  Bias due to effective small sample size: The solution to this is the same as
+1.  Bias due to an effective small sample size: The solution to this is the same as
     quasi-separation: a weakly informative prior on the coefficients.
 
 1.  Case-control: Adding additional observations to the majority class adds little
@@ -26,6 +26,7 @@ $$
 \beta_k &\sim \dnorm(0, 2.5)
 \end{aligned}
 $$
+The Normal priors could be replaced Student-$t$ priors with finite variance could also be used.
 
 In binary outcome variables, sometimes it is useful to sample on the dependent variable.
 For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.

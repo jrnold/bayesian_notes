@@ -12,4 +12,4 @@ col_types <- cols(
 )
 income_ineq <- read_tsv(here::here("data-raw/western1995/income_ineq.tsv"),
                         col_types = col_types, na = "")
-usethis::use_data(income_ineq)
+usethis::use_data(income_ineq, overwrite = TRUE)

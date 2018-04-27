@@ -35,10 +35,11 @@ Common statistics used to summarize the posterior distribution:
 
 It is also easy to conduct inference on functions of the posterior distribution.
 
-Suppose $\theta^{(1)}, \dots, \theta^{(S)}$ are a sample from $p(\theta | y)$, the
+Suppose $\theta^{(1)}, \dots, \theta^{(S)}$ are a sample from $p(\theta | y)$, then
 $f(\theta^{(1)}), \dots, f(\theta^{(S)})$ are a sample from $p(f(\theta) | y)$.
 
-This is not easy for methods like MLE that produce point estimates:
+This is useful in cases where the quantities of interest are not directly estimated by the 
+model.
 
 -   Even in OLS, estimation of non-linear functions of requires either the Delta method or bootstrapping to calculate confidence intervals.
 -   @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals for interaction terms.
@@ -102,17 +103,19 @@ where $z_i$ is a vector of other covariates for observation $i$, and $\beta_{4:k
 Note that the actual order of columns and coefficients will be different in the 
 analysis due to the order in which the data are processed.
 
-Preprocess the data into a centered and scaled design matrix, `X`, and a scaled response, `y`:
 ```{r}
-rec <- recipe(xenovote ~ slavicshare + changenonslav + inc9903 + eduhi02 + unemp02 + apt9200,
-                   vsall03 + brdcont, data = alexseev) %>%
-  step_interact(~ slavicshare * changenonslav) %>%
-  step_center(all_predictors(), all_outcomes()) %>%
-  step_scale(all_predictors(), all_outcomes()) %>%
-  prep(data = alexseev, retain = TRUE)
-X <- juice(rec, all_predictors(), composition = "matrix")
-y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+fmla <- xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 +
+  unemp02 + apt9200 + vsall03 + brdcont
 ```
+```{r}
+fit1 <- stan_glm(fmla, data = alexseev)
+```
+
+```{r}
+with_mcmc_iter(fit1, {
+})
+```
+
 ```{r}
 xeno_data <- list(
   X = X,

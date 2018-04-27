@@ -27,7 +27,7 @@ federalist_wordcounts <- federalist_wordcounts %>%
   mutate(count = as.integer(count)) %>%
   arrange(number, term)
 
-use_data(federalist_wordcounts, overwrite = TRUE)
+usethis::use_data(federalist_wordcounts, overwrite = TRUE)
 
 federalist <- select(federalist, -text)
-use_data(federalist, overwrite = TRUE)
+usethis::use_data(federalist, overwrite = TRUE)

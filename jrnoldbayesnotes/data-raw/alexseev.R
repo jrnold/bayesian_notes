@@ -1,5 +1,6 @@
 # Create data/alexseev.rda
 suppressPackageStartupMessages({
+  library("tidyverse")
   library("haven")
 })
 

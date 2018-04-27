@@ -15,7 +15,7 @@
 \code{female} \tab \code{logical} \tab Is Female? \cr
 \code{education} \tab \code{factor} \tab Education level \cr
 \code{income} \tab \code{factor} \tab 1-23 where 1 = less than \$2,999 and 23 = \$120,000+ \cr
-\code{bushvote} \tab \code{logical} \tab Voted for bush
+\code{bushvote} \tab \code{logical} \tab Voted for Bush?
 }}
 \source{
 Hanmer, M. J.,  Kalkan, K. O. (2012)
@@ -28,7 +28,7 @@ Hanmer, M. J.,  Kalkan, K. O. (2012)
 votechoice
 }
 \description{
-A random sample of 1,000 observations from the 2004 National Election Survey
+A random sample of 383 observations from the 2004 National Election Survey
 with data on vote choice in the 2004 U.S. presidential election
 (George W. Bush or John Kerry).
 This is used as an example in Hanmer and Kalkan (2004).
