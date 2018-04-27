@@ -31,7 +31,7 @@ $$
 
 This does not mean that the order of data cannot matter to the estimates of parameters, only that the way in that the ordering affects the parameters needs to be included in the likelihood.
 
-# Estimating the bias in a coin
+## Estimating the bias in a coin
 
 How do you find the bias of a coin? 
 
@@ -119,13 +119,7 @@ $$
 
 Note that the mean of the posterior distribution can be written as a weighted average of the means
 
-
 The hyperpriors are interpreted as:
 
------------ ------------------------------------------------------------
-$\sigma_0$  total precision of $1 / \sigma_0^2$
-$\mu_0$     sample mean
------------ ------------------------------------------------------------
-
-
-
+| $\sigma_0$  | total precision of $1 / \sigma_0^2$
+| $\mu_0$     | sample mean
