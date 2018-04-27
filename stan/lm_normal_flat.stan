@@ -17,7 +17,7 @@ parameters {
   // regression coefficient vector
   real alpha;
   vector[K] beta;
-  real<lower=0> sigma;
+  real<lower=0.> sigma;
 }
 transformed parameters {
   vector[N] mu;

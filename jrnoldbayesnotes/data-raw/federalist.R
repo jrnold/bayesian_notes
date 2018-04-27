@@ -6,15 +6,15 @@ suppressPackageStartupMessages({
 })
 data("federalist", package = "corpus")
 
-federalist <- federalist %>%
+federalist_docs <- federalist %>%
   # add a document number
   mutate(number = row_number())
 
-federalist_wordcounts <- term_counts(federalist) %>%
+federalist_wordcounts <- term_counts(federalist_docs) %>%
   mutate(number = as.integer(text),
          term = as.character(term)) %>%
   select(-text) %>%
-  left_join(select(federalist, number, author), by = "number")
+  left_join(select(federalist_docs, number, author), by = "number")
 
 functionwords <- readLines("data-raw/functionwords.txt")
 
@@ -27,7 +27,9 @@ federalist_wordcounts <- federalist_wordcounts %>%
   mutate(count = as.integer(count)) %>%
   arrange(number, term)
 
-usethis::use_data(federalist_wordcounts, overwrite = TRUE)
+federalist <- list(
+  docs = select(federalist_docs, -text),
+  wordcounts = federalist_wordcounts
+)
 
-federalist <- select(federalist, -text)
 usethis::use_data(federalist, overwrite = TRUE)

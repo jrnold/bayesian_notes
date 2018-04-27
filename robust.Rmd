@@ -10,8 +10,12 @@ editor_options:
 ```{r setup,message=FALSE}
 library("rstan")
 library("tidyverse")
-library("rubbish")
+library("rstanarm")
+library("bayz")
+library("jrnold.bayes.notes")
 ```
+
+## Wide Tailed Distributions
 
 Like OLS, Bayesian linear regression with normally distributed errors is
 sensitive to outliers.
@@ -62,6 +66,81 @@ bind_rows(
 
 ## Student-t distribution
 
+The most commonly used Bayesian model for robust regression is a linear regression with independent Student-$t$ errors [@Geweke1993; @BDA3, Ch. 17]:
+$$
+y_i \sim \dt\left(\nu, \mu_i, \sigma \right)
+$$
+where $\nu \in \R^{+}$ is a degrees of freedom parameter, $\mu_i \in \R$ are observation specific locations often modeled with a regression, and and $\sigma \in R^{+}$ is a
+the scale parameter.
+
+Note that as $\nu \to \infty$, this model approaches an independent normal model, since
+the Student-t distribution asymptotically approaches the normal distribution as the degrees of freedom increases.
+For the value of $\nu$, either a low degrees of freedom $\nu \in (4, 6)$ can be used, or
+it can be given a prior distribution.
+For the Student-t distribution, the existence of various moments depends on the value of $\nu$: the mean exists for $\nu > 1$, variance for $\nu > 2$, and kurtosis for $\nu > 3$.
+As such, it is often useful to restrict the support of $\nu$ to at least 1 or 2 (or even higher) ensure the existence of a mean or variance.
+
+A reasonable prior distribution for the degrees of freedom parameter is a Gamma
+distribution with shape parameter 2, and an inverse-scale (rate) parameter of 0.1 [@JuarezSteel2010a,@Stan-prior-choices],
+$$
+\nu \sim \dgamma(2, 0.1) .
+$$
+```{r echo=FALSE}
+tibble(x = 0:50,
+       y = dgamma(x, shape = 2, rate = 0.1)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_line() +
+  labs(y = "Density", x = expression(nu))
+```
+This density places the majority of the prior mass for values $\nu < 50$, in which 
+the Student-$t$ distribution is substantively different from the Normal distribution,
+and also allows for all prior moments to exist.
+
+The Stan model that estimates this is `lm_student_t_1.stan`:
+```{r echo=FALSE}
+print_stanmodel("stan/lm_student_t_1.stan")
+```
+
+As noted in [Heteroskedasticity], the Student-t distribution can be represented as a 
+scale-mixture of normal distributions, where the inverse-variances (precisions) follow 
+a Gamma distribution,
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm\left(\mu_i, \omega^2 \lambda_i^2\right) \\
+\lambda^{-2} &\sim \dgamma(\nu / 2, \nu / 2)
+\end{aligned}
+$$
+The scale mixture distribution of normal parameterization of the Student t distribution is useful for computational reasons.
+A Stan model that implements this scale mixture of normal distribution representation of the Student-t distribution is `lm_student_t_2.stan`:
+```{r echo=FALSE}
+print_stanmodel("stan/lm_student_t_2.stan")
+```
+
+Another reparameterization of these models that is useful computationally is 
+The variance of the Student-t distribution is a function of the scale and the degree-of-freedom parameters. 
+Suppose $X \sim \dt(\nu, \mu, \sigma)$, then
+$$
+\Var(X) = \frac{\nu}{\nu - 2} \sigma^2.
+$$
+So variance of data can be fit better by *either* increasing $\nu$ or increasing the scale $\sigma$.
+This will create posterior correlations between the parameters, and make it more difficult to sample the posterior distribution.
+We can reparameterize the model to make $\sigma$ and $\nu$ less correlated by multiplying the scale by the degrees of freedom. 
+$$
+\begin{aligned}
+y_i \sim \dt\left(\nu, \mu_i, \sigma \sqrt{\frac{\nu - 2}{\nu}} \right)
+\end{aligned}
+$$
+In this model, changing the value of $\nu$ has no effect on the variance of $y$, since
+$$
+\Var(y_i) = \frac{\nu}{\nu - 2} \sigma^2 \frac{\nu - 2}{\nu} = \sigma^2 .
+$$
+
+### Examples
+
+Estimate some examples with known outliers and compare to using a normal
+See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
+associated **jrnold.bayes.notes** package.
+
 ## Robit
 
 In a binomial regression, use a Student-t distribution with a low degrees of freedom instead of the logit and/or probit.
@@ -74,12 +153,6 @@ y_i &\sim \dBinom(\pi_i) & y_i \in \{0, 1\} \\
 \end{aligned}
 $$
 where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$.
-
-## Examples
-
-Estimate some examples with known outliers and compare to using a normal
-See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
-associated **jrnold.bayes.notes** package.
 
 ## Quantile regression
 

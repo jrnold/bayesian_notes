@@ -1,10 +1,11 @@
-// Linear Model with Normal Errors -
-// version for non-scaled and centered data
 data {
   // number of observations
   int<lower=0> N;
   // response
-  vector[N] y;
+  // vectors are only real numbers
+  // need to use an array
+  int<lower=0> m[N];
+  int<lower=0,upper=max(m)> y[N];
   // number of columns in the design matrix X
   int<lower=0> K;
   // design matrix X
@@ -12,36 +13,27 @@ data {
   matrix [N, K] X;
   // priors on alpha
   real<lower=0.> scale_alpha;
-  vector<lower=0.>[K] scale_beta;
-  real<lower=0.> loc_sigma;
+  real<lower=0.> scale_beta;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
 }
 parameters {
   // regression coefficient vector
-  real alpha_z;
-  vector[K] beta_z;
-  real<lower=0.> sigma_z;
-}
-transformed parameters {
-  vector[N] mu;
   real alpha;
   vector[K] beta;
-  real<lower=0.> sigma;
+}
+transformed parameters {
+  vector[N] eta;
 
-  beta = beta_z .* scale_beta;
-  alpha = alpha_z * scale_alpha;
-  sigma = sigma_z * loc_sigma;
-  mu = alpha + X * beta;
+  eta = alpha + X * beta;
 }
 model {
   // priors
-  alpha_z ~ normal(0., 1.);
-  beta_z ~ normal(0., 1.);
-  sigma_z ~ exponential(1.);
+  alpha ~ normal(0., scale_alpha);
+  beta ~ normal(0., scale_beta);
   // likelihood
-  y ~ normal(mu, sigma);
+  y ~ binomial_logit(m, eta);
 }
 generated quantities {
   // simulate data from the posterior
@@ -49,9 +41,9 @@ generated quantities {
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
   for (i in 1:num_elements(y_rep)) {
-    y_rep[i] = normal_rng(mu[i], sigma);
+    y_rep[i] = binomial_rng(m[i], inv_logit(eta[i]));
   }
   for (i in 1:num_elements(log_lik)) {
-    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+    log_lik[i] = binomial_logit_lpmf(y[i] | m[i], eta[i]);
   }
 }

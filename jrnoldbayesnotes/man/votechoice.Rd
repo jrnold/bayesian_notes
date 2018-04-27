@@ -14,12 +14,15 @@
 \code{white} \tab \code{logical} \tab Is White? \cr
 \code{female} \tab \code{logical} \tab Is Female? \cr
 \code{education} \tab \code{factor} \tab Education level \cr
-\code{income} \tab \code{factor} \tab 1-23 where 1 = less than \$2,999 and 23 = \$120,000+ \cr
+\code{income} \tab \code{factor} \tab 1-23 where 1 = less
+  than \$2,999 and 23 = \$120,000+ \cr
 \code{bushvote} \tab \code{logical} \tab Voted for Bush?
 }}
 \source{
 Hanmer, M. J.,  Kalkan, K. O. (2012)
- \dQuote{Replication data for: Behind the Curve: Clarifying the Best Approach to Calculating Predicted Probabilities and Marginal Effects from Limited Dependent Variable Models.}
+ \dQuote{Replication data for: Behind the Curve: Clarifying the Best
+         Approach to Calculating Predicted Probabilities and Marginal Effects
+         from Limited Dependent Variable Models.}
  \url{https://hdl.handle.net/1902.1/18542},
  Harvard Dataverse, V2,
  \verb{UNF:5:m5jfkzRK4z7smtwB6ijZxQ==}.
@@ -35,8 +38,10 @@ This is used as an example in Hanmer and Kalkan (2004).
 }
 \references{
 Hanmer, M. J., Kalkan, K. O. (2013)
-  \dQuote{Behind the Curve: Clarifying the Best Approach to Calculating Predicted Probabilities and Marginal Effects from Limited Dependent Variable Models.}
+  \dQuote{Behind the Curve: Clarifying the Best Approach to
+          Calculating Predicted Probabilities and Marginal Effects from
+          Limited Dependent Variable Models.}
   \emph{American Journal of Political Science}.
-  \href{https://dx.doi.org/10.1111/j.1540-5907.2012.00602.x http://dx.doi.org/10.1111/j.1540-5907.2012.00602.x}{doi:10.1111/j.1540-5907.2012.00602.x}.
+  \href{https://dx.doi.org/10.1111/j.1540-5907.2012.00602.x}{doi:10.1111/j.1540-5907.2012.00602.x}.
 }
 \keyword{datasets}

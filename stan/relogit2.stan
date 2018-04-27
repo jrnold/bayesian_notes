@@ -13,11 +13,11 @@ data {
   // should not include an intercept
   matrix [N, K] X;
   // priors on alpha
-  real<lower=0> scale_alpha;
-  real<lower=0> scale_beta;
+  real<lower=0.> scale_alpha;
+  real<lower=0.> scale_beta;
   // rare-event logit correction
   // population proportion of outcomes
-  real<lower=0, upper=1> tau;
+  real<lower=0., upper=1.> tau;
   // need to pass mean of y since it is hard to cast integer to real types
   // in stan
   real y_mean;
@@ -27,10 +27,14 @@ data {
 }
 transformed data {
   // weights
-  real w_0;
-  real w_1;
-  w_0 = tau / y_mean;
-  w_1 = (1. - tau) / (1. - y_mean);
+  vector[N] w;
+  for (n in 1:N) {
+    if (y[n]) {
+      w[n] = tau / y_mean;
+    } else {
+      w[n] = (1. - tau) / (1. - y_mean);
+    }
+  }
 }
 parameters {
   // regression coefficient vector
@@ -48,12 +52,8 @@ model {
   alpha ~ normal(0.0, scale_alpha);
   beta ~ normal(0.0, scale_beta);
   // manually calculate the weighted log-likelihood
-  for (i in 1:N) {
-    if (y[i]) {
-      target += w_0 * bernoulli_logit_lpmf(y[i] | eta[i]);
-    } else {
-      target += w_1 * bernoulli_logit_lpmf(y[i] | eta[i]);
-    }
+  for (n in 1:N) {
+    target += w[n] * bernoulli_logit_lpmf(y[n] | eta[n]);
   }
 }
 generated quantities {

@@ -1,4 +1,4 @@
-# Naive Bayes 
+# Naive Bayes
 
 ## Prerequisites {-}
 
@@ -36,7 +36,7 @@ harder to model and estimate a $K$-variate distribution, $p(x_1, \dots, x_K | y)
 Using independence, we can rewrite the posterior distribution as,
 $$
 \begin{aligned}[t]
-p(y | x_1, \dots, x_k) &= \frac{p(y) p(x_1 | y) \cdots p(x_K | y)}{\sum_{j = 1}^{J} p(y) p(x_1 | y) \cdots p(x_K | y)} \\ 
+p(y | x_1, \dots, x_k) &= \frac{p(y) p(x_1 | y) \cdots p(x_K | y)}{\sum_{j = 1}^{J} p(y) p(x_1 | y) \cdots p(x_K | y)} \\
 &= \frac{p(y) \prod_{k = 1}^K p(x_k | y)}{\sum_{j = 1}^{J} p(y) \prod_{k = 1}^K p(x_k | y)}  \\
 &\propto p(y) \prod_{k = 1}^K p(x_k | y)
 \end{aligned}
@@ -48,7 +48,7 @@ To apply Naive Bayes to predict the class of data:
 
 1.  Find the maximum a posteriori (MAP) estimates of $\hat{p}(y)$ and $\hat{p}(x_k | y)$ for all $k \in 1, \dots, K$ using training data.
 
-1.  Predict the most likely class for new data with features $x_1, \dots, x_K$, 
+1.  Predict the most likely class for new data with features $x_1, \dots, x_K$,
     $$
     \hat{y} = \arg \max_y \hat{p}(y) \prod_{k = 1}^K \hat{p}(x_k | y)
     $$
@@ -79,7 +79,7 @@ The objective is to estimate the author of a document given features of that doc
 For this example, we will only use the counts of the 70 function words (and other) provided in the data.
 
 For a single document, let $y$ be the author of the document.
-Let $w$ be the total number of words in the document. 
+Let $w$ be the total number of words in the document.
 Let $x_1, dots, x_K \geq 0, \sum x_k = w$ be the counts of each word in our vocabulary.
 These word counts are our features.
 
@@ -161,14 +161,14 @@ pred_doc_author <- federalist_wordcounts %>%
   # note: + 1 only used in the estimation
   # log probabilties are used because probabilityes are small
   summarise(logp_doc_author = dmultinom(count, prob = theta, log = TRUE))
-  
+
 ```
 
 Calculate the posterior distribution by adding the prior probabilities of each author:
 ```{r}
 p_author_doc <-
-  left_join(pred_doc_author, 
-            select(p_author, author, pi), 
+  left_join(pred_doc_author,
+            select(p_author, author, pi),
             by = "author") %>%
   # do calculations on the log scale
   mutate(logp_author = log(pi),
@@ -182,7 +182,7 @@ p_author_doc <-
 Dataset with the probability that the document was written by Hamilton.
 ```{r}
 predictions <- p_author_doc %>%
-  filter(author == "Hamilton") %>% 
+  filter(author == "Hamilton") %>%
   select(number, p_author_doc) %>%
   mutate(pred = if_else(p_author_doc > 0.5, "Hamilton", "Madison")) %>%
   # add actual authors
@@ -191,7 +191,7 @@ predictions <- p_author_doc %>%
   mutate(correct = (author == pred)) %>%
   # no missing values in author
   mutate(author = if_else(is.na(author), "Unknown", author))
-  
+
 ```
 
 For documents with known authors, the Naive Bayes method predicts the actual author in all cases.
@@ -205,13 +205,13 @@ For the documents with an unknown author, it predicts most of them to have been 
 ```{r}
 filter(predictions, author == "Unknown") %>%
   ungroup() %>%
-  count(pred)  
+  count(pred)
 ```
 
 ```{r}
 ggplot(predictions, aes(x = number, colour = author, y = p_author_doc)) +
   geom_point() +
-  labs(y = expression(paste("P", group("(", paste("Hamilton", "|" ,"."), ")"))),
+  labs(y = expression(paste("P", group("(", paste("Hamilton", "|", "."), ")"))),
        x = "Federalist Number.",
        title = "Predicted Author of Federalist Papers") +
   theme(legend.position = "bottom")
@@ -274,7 +274,7 @@ $$
 p(x, y) = p(x | y) p(y) .
 $$
 
-Regression models only estimate $p(y | x)$ are *discriminative* models. 
+Regression models only estimate $p(y | x)$ are *discriminative* models.
 If we estimate the parameters of a regression model, we can cannot estimate the distribution of new $x$.
 
 Note that a discriminative model can be used to estimate the conditional distribution $p(y | x)$ since
@@ -306,7 +306,7 @@ p(\theta, \pi | y, x) &= \frac{p(y, x | \theta, \pi) p(\theta, \pi)}{p(y, x)}  &
 \end{aligned}
 $$
 
-The maximum a posteriori (MAP) estimator of $(\theta, \pi)$ is 
+The maximum a posteriori (MAP) estimator of $(\theta, \pi)$ is
 $$
 \begin{aligned}[t]
 \hat{\theta}, \hat{\pi} = \arg \max_{\theta, \pi} p( y | x, \theta, \pi) &= \arg \max_{\theta, \pi} p( x | y, \theta) p(y | \pi ) p(\theta) p(\pi)
@@ -321,7 +321,7 @@ $$
 $$
 
 For many distributions, the MAP estimators of their parameters has a closed form, and thus easy to estimate.
-That we factor $p(x | y, \theta)$ into conditionally independent distributions $p(x_1 | y, \theta_1)$, $p(x_2 | y, \theta_2)$, ..., allows us to choose these distributions to allow for particularly easy MAP estimators. 
+That we factor $p(x | y, \theta)$ into conditionally independent distributions $p(x_1 | y, \theta_1)$, $p(x_2 | y, \theta_2)$, ..., allows us to choose these distributions to allow for particularly easy MAP estimators.
 
 ### Prediction
 
@@ -339,23 +339,23 @@ However, the values of $\theta$ and $\pi$ are unknown.
 Generally, in Bayesian inference we would calculate the posterior predictive distribution by using the posterior distribution of $p(\theta, \pi | x, y)$.
 $$
 \begin{aligned}[t]
-p(\tilde{y} | \tilde{x}, x, y) 
+p(\tilde{y} | \tilde{x}, x, y)
 &= \int_{\pi}\int_{\theta}
-p(\tilde{y} | \tilde{x}, \theta, \pi) 
+p(\tilde{y} | \tilde{x}, \theta, \pi)
 p(\theta, \pi | y, x)\, d\theta \,d\pi \\
 &= \int_{\pi}\int_{\theta}
 \frac{p(\tilde{x} | \tilde{y}, \theta) p(\tilde{y} | \pi)}{p(\tilde{x} | \pi)}
 p(\theta, \pi | y, x)\, d\theta \,d\pi & \text{Bayes' Theorem} \\
 &= \int_{\pi}\int_{\theta}
 \frac{p(\tilde{x} | \tilde{y}, \theta) p(\tilde{y} | \pi)}{p(\tilde{x} | \theta, \pi)}
-p(\theta, \pi | y, x)\, d\theta \,d\pi 
+p(\theta, \pi | y, x)\, d\theta \,d\pi
 \end{aligned}
 $$
 
 However, in this case we will ignore the uncertainty inherent in estimating $\theta$ and $\pi$, and simply plug in the MAP estimators,
 $$
 \begin{aligned}[t]
-p(\tilde{y} | \tilde{x}, x, y) 
+p(\tilde{y} | \tilde{x}, x, y)
 &= p(\tilde{y} | \tilde{x}, \hat{\theta}, \hat{\pi}) \\
 &=\frac{p(\tilde{x} | \tilde{y}, \hat{\theta}) p(\tilde{y} | \hat{\pi})}{p(\tilde{x} | \hat{\pi}, \hat{\theta})} \\
 &\propto p(\tilde{x} | \tilde{y}, \hat{\theta}) p(\tilde{y} | \hat{\pi})

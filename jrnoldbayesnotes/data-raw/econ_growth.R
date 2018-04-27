@@ -14,4 +14,3 @@ econ_growth <-
   read_tsv(here::here("data-raw/western1995/econ_growth.tsv"),
            na = "", col_types = col_types)
 usethis::use_data(econ_growth, overwrite = TRUE)
-

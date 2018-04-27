@@ -17,4 +17,8 @@ Fake datasets illustrating complete separation
 (\code{CompleteSeparation}) and quasi-separation
 (\code{QuasiSeparation})
 }
+\examples{
+glm(y ~ x1 + x2, data = CompleteSeparation, family = binomial)
+glm(y ~ x1 + x2, data = QuasiSeparation, family = binomial)
+}
 \keyword{datasets}

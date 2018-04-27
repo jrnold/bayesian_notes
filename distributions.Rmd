@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Distributions
 
 The parameterizations and notations for distributions largely follow @BDA3 and @Stan2016a.

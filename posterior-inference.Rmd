@@ -6,6 +6,7 @@
 library("bayz")
 library("jrnold.bayes.notes")
 library("rstan")
+library("rstanarm")
 library("tidyverse")
 ```
 
@@ -38,7 +39,7 @@ It is also easy to conduct inference on functions of the posterior distribution.
 Suppose $\theta^{(1)}, \dots, \theta^{(S)}$ are a sample from $p(\theta | y)$, then
 $f(\theta^{(1)}), \dots, f(\theta^{(S)})$ are a sample from $p(f(\theta) | y)$.
 
-This is useful in cases where the quantities of interest are not directly estimated by the 
+This is useful in cases where the quantities of interest are not directly estimated by the
 model.
 
 -   Even in OLS, estimation of non-linear functions of requires either the Delta method or bootstrapping to calculate confidence intervals.
@@ -65,8 +66,10 @@ We will consider this problem from a Bayesian estimation perspective, and calcul
 
 The particular example is @Alexseev2006a, which analyzes how changes in the ethnic composition of Russian regions affected the vote share of the extreme Russian nationalist Zhirinovsky Bloc in 2003 Russian State Duma elections.[^alexseev1]
 ```{r}
-data("alexseev", package = "jrnold.bayes.notes") 
-alexseev <- filter(alexseev, !is.na(region))
+data("alexseev", package = "jrnold.bayes.notes")
+alexseev <- mutate(alexseev,
+                   brdcont = as.integer(brdcont))
+
 ```
 
 [alexseev1]: Some of the replication code and material can be found on [Matt Golder's website](http://mattgolder.com/interactions).
@@ -99,21 +102,28 @@ y_i &\sim \dnorm(\mu_i, \sigma) \\
 \beta_k &\sim \dnorm(0, 2.5)
 \end{aligned}
 $$
-where $z_i$ is a vector of other covariates for observation $i$, and $\beta_{4:k}$ is the corresponding vector of covariates for those other covariates. 
-Note that the actual order of columns and coefficients will be different in the 
-analysis due to the order in which the data are processed.
-
+where $z_i$ is a vector of other covariates for observation $i$, and $\beta_{4:k}$ is the corresponding vector of covariates for those other covariates.
+Note that the actual order of columns and coefficients will be different in the
 ```{r}
 fmla <- xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 +
   unemp02 + apt9200 + vsall03 + brdcont
 ```
-```{r}
+
+```{r message = FALSE,results='hide'}
 fit1 <- stan_glm(fmla, data = alexseev)
 ```
 
+### Stan Model
+
 ```{r}
-with_mcmc_iter(fit1, {
-})
+library("recipes")
+rec <- recipe(xenovote ~ slavicshare + changenonslav + inc9903 + eduhi02 +
+  unemp02 + apt9200 + vsall03 + brdcont,
+  data = alexseev) %>%
+  step_interact(~ slavicshare * changenonslav) %>%
+  prep(data = alexseev, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
 ```
 
 ```{r}
@@ -122,9 +132,9 @@ xeno_data <- list(
   N = nrow(X),
   K = ncol(X),
   y = y,
-  scale_beta = 2.5,
-  scale_alpha = 10,
-  loc_sigma = 1,
+  scale_beta = 2.5 * sd(y) * apply(X, 2, sd),
+  scale_alpha = 10 * sd(y),
+  loc_sigma = sd(y),
   use_y_rep = 0,
   use_log_lik = 0
 )
@@ -142,6 +152,34 @@ fit <- sampling(mod, data = xeno_data)
 fit
 ```
 
+```{r}
+i_changenonslav <- which(colnames(X) == "changenonslav")
+i_interact <- which(colnames(X) == "slavicshare_x_changenonslav")
+
+min_slavishare <- min(alexseev$slavicshare)
+max_slavicshare <- max(alexseev$slavicshare)
+slavicshare_grid <- seq(min_slavishare, max_slavicshare, length.out = 40)
+
+slav_x_change <- with_mcmc_iter(fit, {
+  tibble(slavicshare = slavicshare_grid,
+         dydx = beta[i_interact] * slavicshare + beta[i_changenonslav])
+}) %>%
+  bind_rows()
+```
+
+```{r}
+slav_x_change %>%
+  group_by(slavicshare) %>%
+  summarise(q2.5 = quantile(dydx, 0.025),
+            q97.5 = quantile(dydx, 0.975),
+            mean = mean(dydx)) %>%
+  ggplot(aes(x = mean, y = mean, ymin = q2.5, ymax = q97.5)) +
+  geom_ribbon(alpha = 0.3) +
+  geom_line() +
+  geom_hline(yintercept = 0, size = 2, colour = "white")
+
+```
+
 Now we are interested in calculating the marginal effect of `xenovote` with respect to `slavicshare`,
 $$
 \frac{\partial \mu }{\partial \mathtt{slavicshare}} = \beta_1 + \beta_3 \mathtt{changenonslav} ,
@@ -150,7 +188,7 @@ which is not a scalar, but instead, a function of $\mathtt{changenonslav}$.
 We will calculate the values of this partial on a uniform grid of values of
 `changenonslav` between the minimum and maximum values of `changenonslav`.
 ```{r}
-changenonslav_grid <- tibble(changenonslav = 
+changenonslav_grid <- tibble(changenonslav =
                                seq(min(alexseev$changenonslav),
                                    max(alexseev$changenonslav),
                                    length.out = 20))
@@ -222,3 +260,27 @@ The plot above also includes a rug with the observed values of `changenonslav` i
 -   **Q:** Construct the same plot but for Figure 5(b) in
     @BerryGolderMilton2012a, which displays the marginal effects
     of $\Delta$ *non-Slavic* on *Xenophobic* voting.
+
+## Average Marginal Effects
+
+```{r}
+data("votechoice", package = "jrnold.bayes.notes")
+```
+
+```{r message=FALSE}
+mod_bernoulli_1 <- stan_model("stan/bernoulli_logit_1.stan", verbose = FALSE)
+```
+
+```{r}
+votechoice <- votechoice %>%
+  mutate_at(vars(white, female, bushvote), as.integer)
+
+rec <- recipe(bushvote ~ retecon + white + female + age + educ1_7, income + 
+              partyid + bushiraq,
+       data = votechoice) %>%
+  step_dummy(retecon) %>%
+  step_dummy(educ1_7) %>%
+  prep(data = votechoice, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```

@@ -69,3 +69,11 @@ knit_print.stanmodel <- function(x, options) {
     htmltools::tags$pre(class = "stan")
   knitr::asis_output(code_html)
 }
+
+print_stanmodel <- function(path) {
+  header <- glue::glue("// {basename(path)}")
+  stringr::str_c(c(header, readLines(path)), collapse = "\n") %>%
+    htmltools::HTML() %>%
+    htmltools::tags$code() %>%
+    htmltools::tags$pre(class = "stan")
+}

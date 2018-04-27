@@ -55,10 +55,13 @@ age_distr <- life_table %>%
   filter(year == YEAR) %>%
   select(-year)
 ```
+
 ```{r}
 glimpse(life_table)
 ```
+
 However, the `p_alive` column of `age_distr` only provides the probability of being alive in `r YEAR` conditional on having been born in a given year (and sex),
+
 ```{r fig.cap="Probability"}
 ggplot(age_distr,
        aes(x = birthyear, y = p_alive, color = sex)) +
@@ -67,8 +70,10 @@ ggplot(age_distr,
   labs(y = expression(paste("P", group("(", paste(alive, "|", year), ")"))),
        x = "Year of Birth")
 ```
+
 We need the number born each year to be able to calculate the number alive in each year, and the age distribution. 
 Suppose that the number born in each year was equal, the age distribution would be:
+
 ```{r}
 age_distr %>%
   group_by(sex) %>%
@@ -82,6 +87,7 @@ ggplot(aes(x = age, y = p, color = sex)) +
 
 As a proxy for the number born each year we'll use the proportion of Social Security applicants each year, provided by the `babynames::applicants`.
 Since the baby-name information will also come from the Social Security data this is no less restrictive.
+
 ```{r fig.caption="Number of Social Security Applicants per year."}
 ggplot(babynames::applicants, aes(x = year, y = n_all / 1e6, color = sex)) +
   geom_point() +
@@ -89,9 +95,11 @@ ggplot(babynames::applicants, aes(x = year, y = n_all / 1e6, color = sex)) +
   labs(x = "", y = "SSA Applicants (mn)") +
   theme(legend.pos = "bottom")  
 ```
+
 Clearly, the number of births is not constant per year.
 
 Join the SSA applicant numbers and calculate the probability of each age by sex in `r YEAR`.
+
 ```{r age_distr_2}
 age_distr <- left_join(age_distr,
                        rename(babynames::applicants, n_apps = n_all),
@@ -106,6 +114,7 @@ age_distr <- left_join(age_distr,
 
 After accounting for different numbers of births in each year, the
 age distribution is different.
+
 ```{r}
 ggplot(age_distr, aes(x = age, y = p_age, color = sex)) +
   geom_point() +
@@ -115,16 +124,20 @@ ggplot(age_distr, aes(x = age, y = p_age, color = sex)) +
 ```
 
 The `babynames` dataset has the number in each sex born each year with a given name (and registered by the SSA).
+
 ```{r}
 glimpse(babynames)
 ```
+
 The column `prop` is the proportion of people of that gender with that name born in each year, $P(\text{name} | \text{age}, \text{sex})$.
 
 ```{r babynames}
 baby_names <- babynames::babynames
 ```
+
 Also, since the SSA only releases names with > 5 individuals in a year, add
 an additional entry for each year for babies born and given rare names.
+
 ```{r babynames_other}
 babynames_other <- baby_names %>%
   group_by(sex, year) %>%
@@ -134,6 +147,7 @@ babynames_other <- baby_names %>%
   select(sex, year, prop, name, n, prop) %>%
   ungroup()
 ```
+
 ```{r babynames2}
 baby_names <- bind_rows(baby_names, babynames_other)
 ```
@@ -151,7 +165,9 @@ $$
 name <- "Emma"
 sex <- "F"
 ```
+
 Filter `babynames` to only include observations for the name "`r name`" and sex "`r name`":
+
 ```{r p_name_age}
 p_name_age <- baby_names %>%
   filter(name == !!name, sex == !!sex) %>%
@@ -164,6 +180,7 @@ ggplot(p_name_age, aes(x = year, y = prop)) +
   geom_line() +
   labs(x = "", y = "Proportion births")
 ```
+
 The popularity of the name Emma first declined, then increased.
 However, very few of those born when Emma was first popular are likely to still be alive.
 
@@ -182,6 +199,7 @@ posterior <-
 ```
 
 Let's plot the prior ($P(age)$), likelihood ($P(name | age)$),  and posterior ($P(name | age)$).
+
 ```{r plot_posterior}
 posterior %>%
   select(age, post, likelihood, prior) %>%
@@ -218,22 +236,23 @@ baby_names_joint <- baby_names %>%
 
 Calculate $p(name, sex)$ by summing the probabilities of all
 combinations of age and sex.
+
 ```{r}
 p_name_sex <- baby_names_joint %>%
   group_by(name, sex) %>%
   summarise(prop = sum(prop))
 ```
+
 Calculate,
 $$
-p(age | name, sex) = \frac{p(age, name, sex)}{p(name, sex)}
+p(\text{age} | \text{name}, \text{sex}) = \frac{p(\text{age}, \text{name}, \text{sex})}{p(\text{name}, \text{sex})}
 $$
+
 ```{r}
 inner_join(baby_names_joint, 
            select(p_name_sex, name, sex, p_name_sex = prop),
            by = c("name", "sex")) %>%
   mutate(p_age = prop / p_name_sex)
-  
-  
 ```
 
 ### Questions

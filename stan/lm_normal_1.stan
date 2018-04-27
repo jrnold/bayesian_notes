@@ -10,9 +10,9 @@ data {
   // should not include an intercept
   matrix [N, K] X;
   // priors on alpha
-  real<lower=0> scale_alpha;
-  vector[K]<lower=0> scale_beta;
-  real<lower=0> loc_sigma;
+  real<lower=0.> scale_alpha;
+  vector<lower=0.>[K] scale_beta;
+  real<lower=0.> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
@@ -21,7 +21,7 @@ parameters {
   // regression coefficient vector
   real alpha;
   vector[K] beta;
-  real<lower=0> sigma;
+  real<lower=0.> sigma;
 }
 transformed parameters {
   vector[N] mu;
@@ -30,8 +30,8 @@ transformed parameters {
 }
 model {
   // priors
-  alpha ~ normal(0.0, scale_alpha);
-  beta ~ normal(0.0, scale_beta);
+  alpha ~ normal(0., scale_alpha);
+  beta ~ normal(0., scale_beta);
   sigma ~ exponential(loc_sigma);
   // likelihood
   y ~ normal(mu, sigma);

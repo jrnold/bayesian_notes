@@ -11,6 +11,7 @@ library("rstan")
 library("rstanarm")
 library("tidyverse")
 library("recipes")
+library("jrnold.bayes.notes")
 ```
 
 Separation is when a predictor perfectly predicts a binary response variable [@Rainey2016a, @Zorn2005a].
@@ -21,17 +22,17 @@ For classification problems, there are three cases.
 -   *quasi-complete separation*: the predictor perfectly predicts either 0's or 1's.
 -   *overlap*: the predictor does not perfectly predict either 0's or 1's.
 
-Both **complete separation** and **quasi-complete** separtion cause problems for binomial maximum likelihood estimators.
+Both **complete separation** and **quasi-complete** separation cause problems for binomial maximum likelihood estimators.
 
 ## Example: Complete Separation Data
 
 The following data is an example of data with complete separation.[^fake-separation]
 ```{r}
-jrnold.bayes.notes::QuasiSeparation
+CompleteSeparation
 ```
 
 ```{r}
-count(complete_sep, y, x1) %>%
+count(CompleteSeparation, y, x1) %>%
   group_by(x1) %>%
   mutate(p = n / sum(n)) %>%
   select(-n) %>%
@@ -40,16 +41,17 @@ count(complete_sep, y, x1) %>%
 The variable `x1` perfectly separates `y`, since when `x1 <= 3`, `y = 0`,
 and when `x1 > 3`, `y = 1`.
 
+The MLE of the binomial likelihood with a logistic link function for this data has a finite log-likelihood, but the optimal line is a step function. This pushes the coefficient for the separating variable to $\infty$.
 ```{r}
-library("ggplot2")
-ggplot(complete_sep, aes(x = x, y = y)) + 
-  geom_point()
+ggplot(CompleteSeparation, aes(x = x1, y = y)) +
+  geom_point() +
+  geom_smooth(method = "glm", formula = y ~ x, se = FALSE,
+              method.args = list(family = binomial()), colour = "gray")
 ```
 
-If we estimate a binomial model with this data, it will warn that some observations
-have predicted probabilities close to zero or one.
+If we estimate a binomial model with this data, it will warn that some observations have predicted probabilities close to zero or one.
 ```{r fit_cs1}
-fit_cs1 <- glm(y ~ x1 + x2, data = complete_sep, family = binomial())
+fit_cs1 <- glm(y ~ x1 + x2, data = CompleteSeparation, family = binomial())
 summary(fit_cs1)
 ```
 Additionally, the standard errors are implausibly large.
@@ -58,22 +60,31 @@ Additionally, the standard errors are implausibly large.
 
 The following generated data is an example of quasi-separation.[^quasi-separation]
 ```{r}
-jrnold.bayes.notes::CompleteSeparation
+knitr::kable(QuasiSeparation)
 ```
 
 The variable `x1` *almost* separates `y`.
 When `x1 < 3`, `y = 0`, and when `x1 > 3`, `y = 1`.
 Only when `x1 = 3`, does `y` takes values of both 0 and 1.
 ```{r}
-count(quasi_sep, y, x1) %>%
+count(QuasiSeparation, y, x1) %>%
   group_by(x1) %>%
   mutate(p = n / sum(n)) %>%
   select(-n) %>%
   spread(y, p, fill = 0)
 ```
 
+In the quasi-separation case, like the complete separation case, the best line is something close to a step function.
+Unlike the **complete separation** case, the coefficient for the separating variable takes a finite, but very large value.
 ```{r}
-fit_qs1 <- glm(y ~ x1 + x2, data = quasi_sep, family = binomial())
+ggplot(QuasiSeparation, aes(x = x1, y = y)) +
+  geom_point() +
+  geom_smooth(method = "glm", formula = y ~ x, se = FALSE,
+              method.args = list(family = binomial()), colour = "gray")
+```
+
+```{r}
+fit_qs1 <- glm(y ~ x1 + x2, data = QuasiSeparation, family = binomial())
 summary(fit_qs1)
 ```
 
@@ -91,11 +102,12 @@ used by default in **rstanarm** `r rdoc("rstanarm", "stan_glm")`.
 
 When estimated with `stan_glm()`, the coefficients of both the complete separation and quasi-separated data are finite.
 ```{r message=FALSE}
-fit_cs2 <- stan_glm(y ~ x1 + x2, data = complete_sep, family = binomial())
+fit_cs2 <- stan_glm(y ~ x1 + x2, data = CompleteSeparation,
+                    family = binomial())
 summary(fit_cs2)
 ```
 ```{r}
-fit_qs2 <- stan_glm(y ~ x1 + x2, data = quasi_sep, family = binomial())
+fit_qs2 <- stan_glm(y ~ x1 + x2, data = QuasiSeparation, family = binomial())
 summary(fit_qs2)
 ```
 
@@ -114,7 +126,7 @@ The dataset includes multiple predictors, including whether the governor is a Re
 Add Democratic governors supported the expansion (`gop_governor == 0`),
 and only Republican governors (`gop_governor == 1`) opposed it (though not all).
 ```{r}
-count(politics_and_need, gop_governor, oppose_expansion)
+# count(politics_and_need, gop_governor, oppose_expansion)
 ```
 This is a case of quasi-separation.
 

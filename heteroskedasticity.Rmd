@@ -112,6 +112,11 @@ y_i \sim \dt\left(d, ., \omega \right) .
 $$
 Thus, "robust" regression models with Student-$t$ errors can be derived from a particular model of heteroskedastic normal errors.
 
+The Stan model that estimates this is `lm_student_t_1.stan`:
+```{r echo=FALSE}
+print_stanmodel("stan/lm_student_t_1.stan")
+```
+
 We could also apply other prior distributions to the 
 Another flexible model of heteroskedasticity is to apply a Dirichlet model to the local scales,
 $$

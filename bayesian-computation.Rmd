@@ -260,7 +260,8 @@ In the water example, there is no reason to do this.
 However, there could be cases where it is possible to calculate the
 ```{r}
 theta_grid <- seq(0, 1, length.out = 512)
-w <- dbeta(theta_grid, prior$a, prior$b) * dbinom(y, size = n, prob = theta_grid)
+w <- (dbeta(theta_grid, prior$a, prior$b) *
+      dbinom(y, size = n, prob = theta_grid))
 theta_direct <- sample(theta_grid, size = 512, replace = TRUE, prob = w)
 ```
 
@@ -394,7 +395,7 @@ sum(theta * w) / sum(w)
 The effective sample size of this sample is,
 ```{r}
 w_tilde <- w / sum(w)
-1 / sum(w_tilde^2)
+1 / sum(w_tilde ^ 2)
 ```
 
 Finally, to draw a new sample from this, we can draw without replacement,

@@ -1,6 +1,6 @@
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 # Binomial Models
@@ -203,7 +203,7 @@ The average marginal effect (AME) is the marginal effect averaged over the sampl
 $$
 AME_k = \frac{1}{n} \sum_i ME_k(x_i)
 $$
-The marginal effect at the meane (MEM) is the marginal effect evaluated at the mean values of $x$,
+The marginal effect at the mean (MEM) is the marginal effect evaluated at the mean values of $x$,
 $$
 MEM_k = ME_k(\bar{x})
 $$
@@ -213,13 +213,14 @@ Note that because of Jensen's inequality, generally, $MEM \neq AME$.
 data("votechoice", package = "jrnold.bayes.notes")
 votechoice <- votechoice %>%
   # convert factors to numbers
-  mutate_at(vars(retecon, partyid, bushiraq, ideol7b, educ1_7),             as.integer) %>%
+  mutate_at(vars(retecon, partyid, bushiraq, ideol7b, educ1_7),
+            as.integer) %>%
   mutate_at(vars(bushvote, white, female), as.integer)
-                 
+
 ```
 
 ```{r}
-f <- bushvote ~ retecon + white + female + age + educ1_7 + income + partyid + 
+f <- bushvote ~ retecon + white + female + age + educ1_7 + income + partyid +
   bushiraq
 rec <- recipe(f, data = votechoice) %>%
   step_center(all_predictors()) %>%
@@ -252,11 +253,9 @@ fit_votechoice <- sampling(mod_logit, data = votechoice_data)
 ```
 
 ```{r}
-
 with_mcmc_iter(fit_votechoice, {
    t(rowMeans(beta %*% t(plogis(alpha + X %*% beta))))
 }, data = votechoice_data)
-
 ```
 
 ### References

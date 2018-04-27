@@ -10,4 +10,4 @@ CompleteSeparation <- tribble(
   1, 10, 1,
   1, 11, 0
 )
-usethis::use_data(CompleteSeparation, overwrite=TRUE)
+usethis::use_data(CompleteSeparation, overwrite = TRUE)

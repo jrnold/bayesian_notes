@@ -1,4 +1,3 @@
-// Poisson GLM
 data {
   // number of observations
   int<lower=0> N;
@@ -12,8 +11,8 @@ data {
   // should not include an intercept
   matrix [N, K] X;
   // priors on alpha
-  real<lower=0> scale_alpha;
-  real<lower=0> scale_beta;
+  real<lower=0.> scale_alpha;
+  real<lower=0.> scale_beta;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
@@ -30,8 +29,8 @@ transformed parameters {
 }
 model {
   // priors
-  alpha ~ normal(0.0, scale_alpha);
-  beta ~ normal(0.0, scale_beta);
+  alpha ~ normal(0., scale_alpha);
+  beta ~ normal(0., scale_beta);
   // likelihood
   y ~ bernoulli_logit(eta);
 }

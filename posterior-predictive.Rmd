@@ -1,9 +1,14 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Model Checking
 
 ## Why check models?
 
--   In theory---Bayesian model should include all relevant substantive knowledge and subsume all possible theories.
--   In practice---it won't. We need to check how the model fits data.
+-   In theory, a Bayesian model should include all relevant substantive knowledge and subsume all possible theories.
+-   In practice, it won't. We need to check how the model fits data.
 
 The question is not whether a model is "true"; it isn't [@Box1976a].
 The question is whether it is good enough for the purposes of the analysis.

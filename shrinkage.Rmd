@@ -357,6 +357,7 @@ f <- lpsa ~ lcavol + lweight + age + lbph + svi + lcp +
   gleason + pgg45 - 1L
 ```
 
+
 ```{r}
 prostate_data <- lm_preprocess(f, data = prostate)[c("y", "X")] %>%
   within({
@@ -434,6 +435,7 @@ plot_coefpath_loo <- function(x) {
     facet_wrap(~ parameter, scale = "free_y", ncol = 1)
 }
 ```
+
 ```{r}
 plot_coefpath_loo(coefpath_normal)
 ```
@@ -459,6 +461,7 @@ The mean estimate of $\tau$ is higher than the best estimate, and there is some 
 ```{r}
 mod_lm_coef_normal_2 <- stan_model("stan/lm-coef-normal-2.stan")
 ```
+
 ```{r}
 fit_normal <- sampling(mod_lm_coef_normal_2, data = prostate_data, refresh = -1,
                  control = list(adapt_delta = 0.99))
@@ -572,9 +575,11 @@ coefpath_hs <- map(tau_values,
 ```{r}
 plot_coefpaths(coefpath_hs)
 ```
+
 ```{r}
 plot_coefpaths(coefpath_hs, "mode")
 ```
+
 ```{r}
 get_best_tau(coefpath_hs)
 ```
