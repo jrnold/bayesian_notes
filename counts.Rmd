@@ -97,20 +97,8 @@ mod_poisson1 <- stan_model("stan/poisson1.stan")
 
 ```{r}
 data("sanction", package = "Zelig")
-
-f <- num ~ coop + target - 1
-reg_model_data <- lm_preprocess(f, data = sanction)
-
-sanction_data <-
-  list(X = autoscale(reg_model_data$X),
-       y = reg_model_data$y)
-sanction_data$N <- nrow(sanction_data$X)
-sanction_data$K <- ncol(sanction_data$X)
 ```
 
-```{r result='hide'}
-fit_sanction_pois <- sampling(mod_poisson1, data = sanction_data)
-```
 
 ## Negative Binomial
 
@@ -159,28 +147,7 @@ Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-
 
 Continuing the [economic sanctions example](#ex-econ-sanctions-2) of @Martin1992a.
 
-```{r results='hide'}
-mod_negbin1 <- stan_model("stan/negbin1.stan")
-```
 
-```{r result='hide'}
-fit_sanction_nb <- sampling(mod_negbin1, data = sanction_data,
-                            control = list(adapt_delta  = 0.95))
-```
-
-```{r}
-summary(fit_sanction_nb, par = c("a", "b", "phi"))$summary
-```
-
-We can compare the
-```{r message=FALSE}
-loo_sanction_pois <- loo(extract_log_lik(fit_sanction_pois, "log_lik"))
-# loo_sanction_nb <- loo(extract_log_lik(fit_sanction_nb, "log_lik"))
-```
-
-```{r}
-# loo::compare(loo_sanction_pois, loo_sanction_nb)
-```
 
 ### References
 

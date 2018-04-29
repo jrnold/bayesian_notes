@@ -4,7 +4,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Separation
+# Separation {#separtion}
+
+## Prerquisites {-}
 
 ```{r message=FALSE}
 library("rstan")
@@ -13,6 +15,8 @@ library("tidyverse")
 library("recipes")
 library("jrnold.bayes.notes")
 ```
+
+## Introduction
 
 Separation is when a predictor perfectly predicts a binary response variable [@Rainey2016a, @Zorn2005a].
 
@@ -24,7 +28,7 @@ For classification problems, there are three cases.
 
 Both **complete separation** and **quasi-complete** separation cause problems for binomial maximum likelihood estimators.
 
-## Example: Complete Separation Data
+## Complete Separation
 
 The following data is an example of data with complete separation.[^fake-separation]
 ```{r}
@@ -56,7 +60,7 @@ summary(fit_cs1)
 ```
 Additionally, the standard errors are implausibly large.
 
-## Example: Quasi-Separation
+## Quasi-Separation
 
 The following generated data is an example of quasi-separation.[^quasi-separation]
 ```{r}
@@ -151,7 +155,7 @@ fit_aca2 <- stan_glm(aca_fmla, data = politics_and_need,
 summary(fit_aca2)
 ```
 
-### Questions
+## Questions
 
 -   Estimate the model using `stan_glm()` with a flat prior, and a Student-t
     distribution with `df = 3`. Compare the coefficient estimates and the

@@ -1,20 +1,26 @@
-# Rare Events Logit
+# Rare Events
+
+## Prerequisites {-}
 
 ```{r message=FALSE}
 library("rstan")
 library("tidyverse")
 ```
 
-There are two issues when estimating binary outcomes with an unbalanced outcome
-variable (many-0's or many-1's), called rare events.
+## Introduction
+
+There are two issues when estimating model with a binary outcomes and rare events.
 
 1.  Bias due to an effective small sample size: The solution to this is the same as
-    quasi-separation: a weakly informative prior on the coefficients.
+    quasi-separation, a weakly informative prior on the coefficients, 
+    as discussed in the [Separation] chapter.
 
 1.  Case-control: Adding additional observations to the majority class adds little
     additional information. If it is costly to acquire training data, it is 
     better to acquire something closer to a balanced training set: approximately 
     equal numbers of 0's and 1's. The model can be adjusted for this bias.
+
+## Finite-Sample Bias
 
 The finite-sample size bias can handled by the use of weakly informative priors
 as discussed in the chapter on separation.
@@ -26,7 +32,9 @@ $$
 \beta_k &\sim \dnorm(0, 2.5)
 \end{aligned}
 $$
-The Normal priors could be replaced Student-$t$ priors with finite variance could also be used.
+The Normal priors could be replaced by Student-$t$ priors with finite variance.
+
+## Case Control
 
 In binary outcome variables, sometimes it is useful to sample on the dependent variable.
 For example, @KingZeng2001a and @KingZeng2001b discuss applications with respect to conflicts in international relations.
@@ -66,8 +74,8 @@ y_i& \sim \dbern(\pi_i) \\
 \end{aligned}
 $$
 This is implemented in `relogit1.stan`:
-```{r message=FALSE}
-mod_relogit1 <- stan_model("stan/relogit1.stan")
+```{r echo=FALSE}
+print_stanmodel("stan/relogit1.stan")
 ```
 
 The *weighted likelihood* model weights the contributions of each observation to the likelihood with its probability of selection.
@@ -91,8 +99,8 @@ $$
 In Stan, this can be implemented by directly weighting the log-posterior contributions of each observation.
 
 This is implemented in `relogit2.stan`:
-```{r message=FALSE}
-mod_relogit2 <- stan_model("stan/relogit2.stan")
+```{r echo=FALSE}
+print_stanmodel("stan/relogit2.stan")
 ```
 
 ## Questions
