@@ -14,8 +14,6 @@ $$
 \text{Bayes factor}(H_2; H_1) = \frac{p(y | H_2)}{p(y | H_1)} = \frac{\int p(\theta_2 | H_2) p(y | \theta_2, H_2) d \theta_2 }{\int p(\theta_1 | H_2) p(y | \theta_1, H_2) d \theta_1}
 $$
 
-
-
 Problems with Bayes' Factors
 
 -   It depends heavily on the choice of prior.

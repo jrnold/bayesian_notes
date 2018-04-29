@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Introduction to Stan and Linear Regression
 
 This chapter is an introduction to writing and running a Stan model in R.
@@ -10,6 +15,7 @@ for similar content.
 ```{r setup,message=FALSE}
 library("rstan")
 library("tidyverse")
+library("recipes")
 ```
 
 For this section we will use the `duncan` dataset included in the **carData** package.
@@ -166,17 +172,12 @@ generated quantities {
 
 The file `lm0.stan` is a Stan model for the linear regression model previously defined.
 
-```{r echo=FALSE, results="markup", comment="", lang = "stan"}
-cat(readLines("stan/lm.stan"), sep = "\n")
+```{r echo=FALSE}
+print_stanmodel("stan/lm_normal_1.stan")
 ```
 
 ```{r message=FALSE,results='hide'}
-library("rstan")
-mod1 <- stan_model("stan/lm.stan")
-```
-
-```{r cache=FALSE}
-mod1
+mod1 <- stan_model("stan/lm_normal_1.stan")
 ```
 
 See the [Stan Modeling Language User's Guide and Reference Manual](http://mc-stan.org/documentation/) for details of the Stan Language.
@@ -200,14 +201,7 @@ See
 
 ### Sampling
 
-In order to sample from the model, we need to at least give it the values for the data to use: `n`, `k`, `y`, `X`, and the data associated with the priors.
-
-```{r}
-mod1_data <- list(
-  y = Duncan$prestige,
-  n = nrow(Duncan)
-)
-```
+In order to sample from the model, we need to at least give it the values for the data to use: ``, `k`, `y`, `X`, and the data associated with the priors.
 
 The data types in Stan are all numeric (either integers or reals), but they
 include matrices and vectors. However, there is nothing like a data frame in
@@ -215,43 +209,43 @@ Stan. Whereas in the R function `lm` we can provide a formula and a data set
 for where to look for objects, and the function will create the appropriate $X$
 matrix for the regression, we will need to create that matrix
 ourselves---expanding categorical variables to indicator variables, and
-expanding interactions and other functions of the predictors. However, we need
-to do that all manually. The function `r rdoc("stats", "model.matrix")` is the
-workhorse function used in `lm` and many other R functions to convert a formula
-into the matrix used in estimation.
+expanding interactions and other functions of the predictors.
 
 ```{r}
-X <- model.matrix(prestige ~ type + income + education, data = Duncan)
-mod1_data$X <- X
-mod1_data$k <- ncol(X)
+rec <- recipe(prestige ~ income + education + type, data = Duncan) %>%
+  step_dummy(type) %>%
+  prep(data = Duncan, retain = TRUE) 
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+
+```{r}
+mod1_data <- list(
+  X = X,
+  K = ncol(X),
+  N = nrow(X),
+  y = y,
+  use_y_rep = FALSE,
+  use_log_lik = FALSE
+)
 ```
 
 We still need to provide the values for the prior distributions.
 For specific values of the prior distributions, assume uninformative priors for `beta` by setting the mean to zero and the variances to large numbers.
-$$
-\beta_k \sim \dnorm(0, 1000)
-$$
 
 ```{r}
-# mod1_data$b_loc <- 0
-# mod1_data$b_scale <- 1000
-```
-
-For prior of the regression scale parameter $\sigma$, use a half-Cauchy distribution with a large scale parameter, which is a good choice for the priors of scale parameters.
-<!--
-In this case, `prestige` has values between 0 and 100.
-This is like a proportion (actually, it is a proportion x 100), so ignoring the covariates, the maximum variance of a distribution would be if `prestige = 50`, when the standard deviation would be $\sqrt{p * (1 - p)} = 50$. So a scale parameter of 50 is appropriate,
--->
-$$
-\sigma \sim \dhalfcauchy(0, 50)
-$$
-```{r}
-# mod1_data$sigma_scale <- 50
+mod1_data$scale_alpha <- sd(y) * 10
+mod1_data$scale_beta <- apply(X, 2, sd) * sd(y) * 2.5
+mod1_data$loc_sigma <- sd(y)
 ```
 
 Now, sample from the posterior, using the function `sampling`:
 ```{r results='hide'}
 mod1_fit <- sampling(mod1, data = mod1_data)
+```
+
+```{r}
+summary(mod1_fit)
 ```
 
 ### Convergence Diagnostics and Model Fit

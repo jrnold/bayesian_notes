@@ -1,0 +1,302 @@
+
+# Bayes Theorem
+
+This document contains a discussion and several examples of Bayes' Theorem.
+
+## Prerequisites {-}
+
+
+```r
+library("tidyverse")
+library("babynames")
+```
+
+## Introduction to Bayes' Theorem
+
+For events, $A$ and $B$,
+$$
+\underbrace{\Pr(A | B)}_{\text{posterior}} = \frac{\overbrace{\Pr(B | A)}^{\text{likelihood}} \overbrace{\Pr(A)}^{\text{prior}}}{\underbrace{\Pr(B)}_{\text{marginal likelihood}}},
+$$
+where $\Pr(B) \neq 0$.
+
+For discrete random variables $X$ which takes values in the set $\mathcal{X}$ and $Y$ which takes values in the set $\mathcal{Y}$,
+Bayes' Theorem can be written as,
+$$
+p_{Y|X}(X = x|Y = y) = \frac{p_{Y|X}(Y = y|X = x) p_X(X = x)}{p_Y(Y = y)} = \frac{p_{Y|X}(Y = y|X = x) p_X(X = x)}{\sum_{x \in \mathcal{x}} p_{Y|X}(Y = y|X = x) p_X(X = x)}
+$$
+
+For continuous random variables $X$ with support $X$ and $Y$ with support $\mathcal{Y}$,
+Bayes' Theorem can be written as,
+$$
+  p_{Y|X}(x|Y = y) = \frac{p_{Y|X = x}(y) p_X(x)}{p_Y(y)} = \frac{p_{Y|X = x}(y) p_X(x)}{\int_{x \in \mathcal{x}} p_{Y|X = x}(y) p_X(x) dx}
+$$
+Though there are deeper differences between discrete and continuous probability theory, the primary difference in the equations for Bayes' Theorem with discrete or continuous random variables is whether summation or integration is used to calculate the marginal likelihood.
+
+## Examples
+
+### Taxi-Cab Problem
+
+> Suppose you were told that a taxi-cab was involved in a hit-and-run accident one night.
+> Of the taxi-cabs in the city, 85% belonged to the Green company and 15% to the Blue company.
+> You are then asked to estimate the likelihood that the hit-and-run accident involved a green taxi-cab (all else being equal).[^taxicab]
+
+What is the probability that the taxi-cab involved in the hit and run is blue?
+It is 85%, since we have no other information.
+
+> You are then told that an eyewitness had identified the cab as a blue cab.
+> But when her ability to identify cabs under appropriate visibility conditions was tested, she was wrong 20% of the time.
+> What is the probability that the cab is blue?
+
+Let $H_B$ ($H_G$) be the event that a blue (green) cab committed the hit and run.
+Let $W_B$ ($W_G$) be the event that the witness reported that a blue (green) cab committed the hit and run.
+
+We are interested in $\Pr(H_B | W_B)$, the probability that a blue cab committed the hit and run given that the witness reported a blue cab committing the hit and run.
+$$
+\Pr(H_B | W_B) = \frac{\Pr(W_B | H_B) \Pr(H_B)}{\Pr(W_B)} = \frac{\Pr(W_B | H_B) \Pr(H_B)}{\Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_G) \Pr(H_G)}.
+$$
+
+The prior probabilities of the color of the cab come are the proportions of cabs in the city,
+$$
+\begin{aligned}
+\Pr(H_B) &= 0.15 ,\\
+\Pr(H_G) &= 0.85 .
+\end{aligned}
+$$
+
+The conditional probabilities are,
+$$
+\begin{aligned}[t]
+p(W_B | H_B) &= 0.8 , \\
+p(W_B | H_G) &= 0.2 .
+\end{aligned}
+$$
+
+The marginal likelihood (model evidence) is the overall probability that a cab is reported to be blue.
+This considers both the probabilities that a witness reports that the cab is blue when it is blue and reports that it is blue when it is green.
+$$
+\begin{aligned}[t]
+\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_B) \Pr(H_B)
+\end{aligned}
+$$
+
+To calculate the posterior distribution, put the prior and likelihoods into a table.
+
+```r
+cabs <- tribble(
+~ color, ~ prior, ~ likelihood,
+"blue",      0.15,        0.8,
+"green",     0.85,        0.2
+)
+```
+
+Calculate the marginal probability.
+
+```r
+cabs %>%
+mutate(
+marginal = sum(likelihood * prior),
+posterior = likelihood * prior / marginal
+)
+#> # A tibble: 2 x 5
+#>   color prior likelihood marginal posterior
+#>   <chr> <dbl>      <dbl>    <dbl>     <dbl>
+#> 1 blue   0.15        0.8     0.29     0.414
+#> 2 green  0.85        0.2     0.29     0.586
+```
+
+1.  Suppose that you know that all cabs in the city are blue or green, but you don't know the proportions of them.
+You use the [principle of indifference](https://en.wikipedia.org/wiki/Principle_of_indifference) to assign prior probabilities of,
+$$
+\begin{aligned}[t]
+p(H_B) = p(H_G) = 0.5 .
+\end{aligned}
+$$
+    Suppose the witness reports that a blue cab hit the citizen, what is the probability that the cab committing the hit and run was blue.
+
+1.  A common answer to this question is "blue". This mistake is often due to
+ignoring the prior probability of an event, and interpreting $P(H_B | W_B) = P(W_B | H_B)$. This is called the [base-rate fallacy](https://en.wikipedia.org/wiki/Base_rate_fallacy)?
+    What prior does the base-rate fallacy correspond to?
+    In other words, what prior is needed such that $\Pr(H_B | W_B) = \Pr(W_B | H_B)$.
+
+1.  Suppose that there was was perfectly reliable video evidence of the hit and run, such that $\Pr(W_B | H_B) = 1$ and $\Pr(W_B | H_G) = 0$.
+What is the probability that the cab committing the hit and run was blue?
+
+1.  Suppose that the witness reports that the cab was "yellow".
+    You know that there are no yellow cabs in the city, thus $\Pr(H_Y) = 0$.
+    What is the probability that the cab committing the hit and run was
+    yellow, given that the witness reports it being yellow?
+    What level of accuracy would you require from the witness such that
+    you believed that the cab committing the hit and run was yellow.
+
+1.  What level of accuracy would be required from the witness such that
+    it is more probable that a green cab committed the hit and run 
+    than a blue cab?
+
+1.  There have been various proposals to quantify what is meant by
+    "[beyond a reasonable doubt](https://doi.org/10.1093/lpr/mgl015)".
+    But for the purpose of this question, let's suppose that beyond a
+    reasonable doubt is a probability greater or equal to 0.8. What
+    level of accuracy is required from the witness to meet the
+    reasonable doubt standard?
+
+## Why most research findings are false
+
+Consider this simplified mode of scientific research.
+Let $H$ ($\lnot H$) be the event that a hypothesis is true (false).
+Let $D$ ($\lnot D$) be the result of a hypothesis test of $H$.[^ioannidis]
+
+Suppose that the test uses statistical significance level of $\alpha = 0.05$
+Since statistical significance controls the presence of type I error,
+$$
+P(H | \lnot D) = \alpha = 0.05
+$$
+
+```r
+alpha <- 0.05
+```
+
+Suppose that the test uses a power level of $\beta = 0.8$.
+Since power is $1 - \Pr(\text{Type II error})$,
+$$
+\Pr(H | D) = \beta = 0.8
+$$
+
+```r
+beta <- 0.8
+```
+
+Given that information, suppose that you observe $D$. Can you calculate $\Pr(H | D)$?
+
+No. By Bayes' Theorem,
+$$
+  \Pr(H | D) = \frac{\Pr(D | H) \Pr(H)}{\Pr(D)}
+$$
+We cannot calculate this because we do not know $\Pr(H)$.
+
+Suppose that a priori, many hypotheses are false.
+We will set $\Pr(H)$ to the following value, but will explore how the posterior changes with respect to different values of it.
+$$
+  \Pr(H) = 0.1 .
+$$
+
+With this information we can calculate
+$$
+  \Pr(H | D) = \frac{\Pr(D | H) \Pr(H)}{\Pr(D | H) \Pr(H) + \Pr(D | \lnot H) \Pr(\lnot H)}
+$$
+
+
+```r
+p_theta <- 0.1
+science <- tribble(
+  ~ theta,     ~ x,       ~ prior, ~ likelihood,
+  TRUE,    TRUE,       p_theta,         beta,
+  TRUE,   FALSE,       p_theta,     1 - beta,
+  FALSE,    TRUE,   1 - p_theta,        alpha,
+  FALSE,   FALSE,   1 - p_theta,    1 - alpha
+)
+```
+
+Calculate the posterior probability for each value of `theta`,
+for the different cases of `x`:
+  
+  ```r
+  group_by(science, x) %>%
+  mutate(marginal   = sum(likelihood * prior),
+         posterior = likelihood * prior / marginal
+  ) %>%
+  arrange(x)
+  #> # A tibble: 4 x 6
+  #> # Groups:   x [2]
+  #>   theta x     prior likelihood marginal posterior
+  #>   <lgl> <lgl> <dbl>      <dbl>    <dbl>     <dbl>
+  #> 1 TRUE  FALSE   0.1      0.200    0.875    0.0229
+  #> 2 FALSE FALSE   0.9      0.95     0.875    0.977 
+  #> 3 TRUE  TRUE    0.1      0.8      0.125    0.64  
+  #> 4 FALSE TRUE    0.9      0.05     0.125    0.36
+  ```
+
+### Questions
+
+1.  $p$-value hacking is a process by which a research ensures that their test has a statistically significant result? What term does this affect? If you know a study was p-value hacked, what is the posterior distribution
+
+1.  Suppose a paper finds support for a novel and counter-intuitive theory. What parameter would that affect? Would it result in a higher or lower posterior probability?
+
+1.  Suppose a paper conducts a test of a well-established theory. What parameter would that affect? Would it result in a higher or lower posterior probability?
+
+1.  There are [some arguments](https://osf.io/preprints/psyarxiv/mky9j) that the $p$-value threshold should be reduced to $\alpha = 0.005$. What is the posterior probability of $\Pr(H | D)$ in that case?
+
+1.  Given the other parameters, what value of $\alpha$ would you need so that $\Pr(H | D) \geq 0.95$ ?
+
+1.  Many studies are under-powered. For example, [this paper](https://www.nature.com/articles/nrn3475) finds that empirically, many neuroscience experiments have powers of 8% to 31%. Suppose that the experiment has a power of 20%. What is the posterior probability $\Pr(H | D)$?
+
+1.  Given the other parameters, what value of $\beta$ would you need so that $\Pr(H | D) \geq 0.95$ ?
+
+1.  Given the original parameters, how many times would you have to replicate a study to get $P(H | D_1, \dots, D_k) \geq 0.95$?
+
+1.  Suppose you run a study twice. Does $P(H | D_1, \lnot D_2) = P(H | D_1, \lnot D_2)$? In other words, does the order in which evidence is received matter?
+
+1.  A study produces a statistically significant result, with a $p$-value of 0.01. The PI explains the results to the press saying that there is only a 1% chance that the findings are false. Is that interpretation of the p-value correct? If not, why not?
+
+1.  Calculate the [Kullback-Leibler](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) divergence between  
+    $$
+    KL(\Pr(H|D) || \Pr(H)) = \sum \Pr(H | D) \log \frac{\Pr(H | D)}
+    $$
+
+Which event has more information, $D$ or $\lnot D$?
+
+## Measurement Error and Rare Events in Surveys
+
+Suppose a survey includes 20,000 respondents.[^cces]
+Of them 19,500 are citizens and 500 are not.
+Suppose that 99.9% of the time, the survey question response is correct (citizens respond that they are citizens, and non-citizens respond that they are non-citizens).
+The survey against voting records, which provides the estimate $P(v = 1 | c = 0) = 0.7$
+
+What is the probability of being a non-citizen given that a person reported being a non-citizen?
+
+
+```r
+sample_size <- 20000
+non_citizens <- 500
+p_non_citizen <- non_citizens / 20000
+accuracy <- 0.999
+prior_citizen <- 0.5
+
+tribble(
+  ~ citizen_reported, ~ citizen,           ~ prior,  ~ likelihood,
+  TRUE,      TRUE,     prior_citizen,      accuracy,
+  TRUE,     FALSE,     prior_citizen,  1 - accuracy,
+  FALSE,     TRUE, 1 - prior_citizen,      accuracy,
+  FALSE,    FALSE, 1 - prior_citizen,  1 - accuracy
+)
+#> # A tibble: 4 x 4
+#>   citizen_reported citizen prior likelihood
+#>   <lgl>            <lgl>   <dbl>      <dbl>
+#> 1 TRUE             TRUE      0.5      0.999
+#> 2 TRUE             FALSE     0.5      0.001
+#> 3 FALSE            TRUE      0.5      0.999
+#> 4 FALSE            FALSE     0.5      0.001
+```
+
+1.  Given a respondent responded that they were a non-citizen, what is the probability that they are actually a non-citizen?
+
+1.  How many citizens do you expect to respond that they are non-citizens?
+
+1.  How many non-citizens do you expect to respond that they are citizens?
+
+1.  Is the prior reasonable? How would you choose a better prior? How much would
+it affect the results?
+  
+
+1.  Suppose that citizens vote with 70% probability, and non-citizens never vote.
+
+    1.  With these assumptions, what is the probability that they are a non-citizen given that they voted?
+    1.  What is the probability that someone voted given that they reported being a non-citizen in the survey?
+
+1.  What is the implication for studying rare events, such as non-citizen voting using surveys (not designed for that)?
+
+[^ioannidis]: This example is derived from Ioannides, John P. A. (2005) "[Why Most Published Research Findings Are False](http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020124)", *PLOS Medicine*.
+
+[^taxicab]: Example from Tversky, D. Kahneman, Evidential impact of base rates, in *Judgment under uncertainty: Heuristics and biases*, D. Kahneman, P. Slovic, A. Tversky (editors), Cambridge University Press, 1982.
+
+[^cces]: This example is from Stephen Ansolabehere,
+Samantha Luks, Brian F. Schaffner, [The Perils of Cherry Picking Low Frequency Events in Large Sample Surveys](https://cces.gov.harvard.edu/news/perils-cherry-picking-low-frequency-events-large-sample-surveys).

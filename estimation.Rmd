@@ -2,7 +2,7 @@
 
 ## Point Estimates
 
-Bayesian point estimators use the following recipe: 
+Bayesian point estimators use the following recipe:
 
 1.  define a loss function that penalizes guesses
 1.  take the expected value of that loss function over the parameter of interest
@@ -62,27 +62,27 @@ $$
 
 The credible interval is not uniquely defined.
 There may be multiple intervals that satisfy the definition of a credible interval.
-The most common are the 
+The most common are the
 
 -   **equal-tailed interval**: $(F^{-1}(p / 2), F^{-1}((1 - p) / 2))$ where $F^{-1}$ is the quantile function of $\theta$.
     The 95% credible interval would use the 2.5% and 97.5% quantiles.
 
--   **highest posterior density interval**: The shortest credible interval. 
+-   **highest posterior density interval**: The shortest credible interval.
     If the distribution is not unimodal and symmetric, the HPD interval is not the same as the equal-tailed interval.
 
 Generally it is fine to use the equal-tailed interval. This is what Stan reports by default.
 
 The HPD
 
--   is harder to calculate. 
+-   is harder to calculate.
 
 -   may not be a convex interval if it is a multimodal distribution. (Though that may be a desirable feature.)
 
 -   unlike the central interval, not invariant under transformation. For some function $g$,
-    if $CI_{HPD}(\theta) = (a, b)$, then generally $CI(g(\theta)) \neq (g(a), g(b))$. 
+    if $CI_{HPD}(\theta) = (a, b)$, then generally $CI(g(\theta)) \neq (g(a), g(b))$.
     However, for the equal-tailed interval, $CI(g(\theta)) = (g(a), g(b))$.
 
-How to calculate? 
+How to calculate?
 
 For the equal-tailed credible interval:
 
@@ -92,11 +92,11 @@ For the equal-tailed credible interval:
 For example, the 95% credible interval for a standard normal distribution is,
 ```{r}
 p <- 0.95
-qnorm(c((1 - p) / 2, 1 - (1 - p) / 2))
+qnorm(c( (1 - p) / 2, 1 - (1 - p) / 2))
 ```
 The 95% credible interval for a sample drawn from a normal distribution is,
 ```{r}
-quantile(rnorm(100), prob = c((1 - p) / 2, 1 - (1 - p) / 2))
+quantile(rnorm(100), prob = c( (1 - p) / 2, 1 - (1 - p) / 2))
 ```
 
 There are multiple functions in multiple packages that calculate the HPD interval.

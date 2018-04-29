@@ -99,7 +99,6 @@ mod_poisson1 <- stan_model("stan/poisson1.stan")
 data("sanction", package = "Zelig")
 ```
 
-
 ## Negative Binomial
 
 The [Negative Binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) model is also used for unbounded count data,
@@ -146,8 +145,6 @@ Also, `rstanarm` supports Poisson and [negative binomial models](https://cran.r-
 ### Example: Economic Sanctions II {ex-econ-sanctions-2}
 
 Continuing the [economic sanctions example](#ex-econ-sanctions-2) of @Martin1992a.
-
-
 
 ### References
 

@@ -87,21 +87,21 @@ bball1970_data <- list(
 ```
 Create a list to store models:
 ```{r}
-# models <- list()
+models <- list()
 ```
 
 ```{r results='hide'}
 models[["nopool"]] <- stan_model("stan/binomial-no-pooling.stan")
 ```
 ```{r}
-# models[["nopool"]]
+models[["nopool"]]
 ```
 
 ```{r results='hide'}
 models[["pool"]] <- stan_model("stan/binomial-complete-pooling.stan")
 ```
 ```{r}
-# models[["pool"]]
+models[["pool"]]
 ```
 
 ```{r results='hide'}

@@ -64,13 +64,9 @@ The authorship of the remaining 15 papers is (was) disputed between Hamilton and
 In an early example of empirical Bayesian statistics and computational NLP, F. Mosteller and D. L. Wallace used naive Bayes to classify the disputed articles and conclude that there is strong evidence to suggest that Madison wrote all the disputed articles.
 
 Data on the federalist papers is contained in two datasets included in the **jrnold.bayes.notes** package.
-The dataset `federalist` contains metadata on each document, including the author and title.
-The dataset `federalist_wordcounts` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens (`"OTHER"`).
+The dataset `federalist$docs` contains metadata on each document, including the author and title.
+The dataset `federalist$wordcounts` contains word counts of 70 function words used by Mosteller and Wallace in their analysis, and the count of all other tokens (`"OTHER"`).
 
-We will load both files
-```{r federalst_wordcounts,message=FALSE}
-data("federalist_wordcounts", package = "jrnold.bayes.notes")
-```
 ```{r federalist,message=FALSE}
 data("federalist", package = "jrnold.bayes.notes")
 ```
@@ -112,7 +108,7 @@ This is the number of documents in class $j$ divided by the total number of docu
 
 Calculate the proportion of documents written by Hamilton and Madison:
 ```{r}
-p_author <- federalist %>%
+p_author <- federalist$docs %>%
   filter(author %in% c("Hamilton", "Madison")) %>%
   count(author) %>%
   mutate(pi = (n + 1) / sum(n + 1))
@@ -126,7 +122,7 @@ $$
 The estimator $\hat{\theta}_{k}^{(j)}$ is the fraction of times that word $k$ appears among all words in all documents in category $j$.
 
 ```{r p_words_author}
-p_words_author <- federalist_wordcounts %>%
+p_words_author <- federalist$wordcounts %>%
   # keep only Hamilton and Madison
   filter(author %in% c("Hamilton", "Madison")) %>%
   # count terms used by each author
@@ -148,7 +144,7 @@ Now that we've estimated $\hat{p}(y | x)$ and $\hat{p}(y)$ we can predict the cl
 
 Calculate the probability of each class, $p(y_{test} | x_{test}, \hat{theta})$, for all documents given the learned parameters $\theta$.
 ```{r}
-pred_doc_author <- federalist_wordcounts %>%
+pred_doc_author <- federalist$wordcounts %>%
   # keep only Hamilton, Madison, and undetermined
   filter(!author %in% "Jay") %>%
   # remove actual author
@@ -186,7 +182,7 @@ predictions <- p_author_doc %>%
   select(number, p_author_doc) %>%
   mutate(pred = if_else(p_author_doc > 0.5, "Hamilton", "Madison")) %>%
   # add actual authors
-  left_join(select(federalist, author, number), by = "number") %>%
+  left_join(select(federalist$docs, author, number), by = "number") %>%
   # for those with authors, is it correct
   mutate(correct = (author == pred)) %>%
   # no missing values in author

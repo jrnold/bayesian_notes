@@ -17,19 +17,15 @@ data("kerrich", package = "datums")
 data("prussian", package = "pscl")
 ```
 
-```{r}
-
-```
-
 Choose a prior equivalent to 1 kick in two years.
 Estimate the posterior distribution
 
-Often a gamma prior with $\alpha \approx 0$ and $\beta \approx 0$, what is the reasoning for this? "uninformative prior" look like? 
+Often a gamma prior with $\alpha \approx 0$ and $\beta \approx 0$, what is the reasoning for this? "uninformative prior" look like?
 
-What is the posterior distribution? 
+What is the posterior distribution?
 
 Sequentially estimate the posterior distribution.
 
 1.  Estimate the posterior distribution
 1.  Estimate the prior
-1.  Estimate the posterior 
+1.  Estimate the posterior

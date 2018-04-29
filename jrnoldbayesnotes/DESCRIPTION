@@ -14,11 +14,15 @@ LazyData: true
 Depends:
     R (>= 3.4.0)
 Imports:
+    babynames,
     bayesplot,
     bayz,
     ggmcmc,
     interactionTest,
+    glmnet,
+    here,
     loo,
+    mvtnorm,
     pscl,
     recipes,
     rstan,
@@ -34,5 +38,11 @@ RoxygenNote: 6.0.1
 Suggests:
     bookdown,
     corpus,
+    DiagrammeR,
+    lintr,
+    pandocfilters,
+    rex,
+    R6,
+    servr,
     spelling
 Language: en-US

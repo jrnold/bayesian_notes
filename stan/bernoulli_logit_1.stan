@@ -10,9 +10,9 @@ data {
   // design matrix X
   // should not include an intercept
   matrix [N, K] X;
-  // priors on alpha
+  // priors on regression coefficients
   real<lower=0.> scale_alpha;
-  real<lower=0.> scale_beta;
+  vector<lower=0.>[K] scale_beta;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;

@@ -1,5 +1,14 @@
 # Generalized Linear Models
 
+## Prerequisites {-}
+
+```{r message=FALSE}
+library("rstan")
+library("tidyverse")
+```
+
+## Introduction
+
 Generalized linear models (GLMs) are a class of commonly used models.
 In GLMs, the mean is specified as a function of a linear model of predictors,
 $$
@@ -104,60 +113,7 @@ The outcome variable is the number of countries imposing sanctions.
 data("sanction", package = "Zelig")
 ```
 
-```{r}
-library("rstan")
-library("tidyverse")
-library("magrittr")
-
-URL <- "https://raw.githubusercontent.com/carlislerainey/priors-for-separation/master/br-replication/data/need.csv" # nolint
-
-autoscale <- function(x, center = TRUE, scale = TRUE) {
-  nvals <- length(unique(x))
-  if (nvals <= 1) {
-    out <- x
-  } else if (nvals == 2) {
-    out <- if (scale) {
-      (x - min(x, na.rm = TRUE)) / diff(range(x, finite = TRUE))
-    } else x
-    if (center) {
-      out <- x - mean(x)
-    }
-  } else {
-    out <- if (center) {
-      x - mean(x, na.rm = TRUE)
-    } else x
-    out <- if (scale) out / sd(out, na.rm = TRUE)
-  }
-  out
-}
-
-
-f <- (oppose_expansion ~ dem_governor + obama_win + gop_leg +
-        percent_uninsured + income + percent_nonwhite + percent_metro)
-
-br <- read_csv(URL) %>%
-  mutate(oppose_expansion = 1 - support_expansion,
-         dem_governor = -1 * gop_governor,
-         obama_win = as.integer(obama_share >= 0.5),
-         percent_nonwhite = percent_black + percent_hispanic) %>%
-  rename(gop_leg = legGOP) %>%
-  # keep only variables in the formula
-  model.frame(f, data = .) %>%
-  # drop missing values (if any?)
-  drop_na()
-
-br_scaled <- br %>%
-  # Autoscale all vars but response
-  mutate_at(vars(-oppose_expansion), autoscale)
-
-glm(f, data = br, family = "binomial") %>% summary()
-
-library("rstanarm")
-
-fit1 <- stan_glm(f, data = br, family = "binomial")
-
-fit2 <- stan_glm(f, data = br, prior = NULL, family = "binomial")
-```
+TODO
 
 ## Negative Binomial
 

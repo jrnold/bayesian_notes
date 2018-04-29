@@ -5,6 +5,8 @@ editor_options:
 ---
 # Binomial Models
 
+## Prerequisites {-}
+
 ```{r setup,message=FALSE}
 library("rstan")
 library("rstanarm")
@@ -12,6 +14,8 @@ library("tidyverse")
 library("recipes")
 library("bayz")
 ```
+
+## Introduction
 
 Binomial models are used to an outcome that is a bounded integer,
 $$
@@ -121,14 +125,14 @@ You can load it with
 data("turnout", package = "ZeligData")
 ```
 
-#### Stan
+### Stan
 
 A general Stan model for estimating logit models is:
 ```{r include=FALSE}
-mod1 <- stan_model("stan/logit1.stan")
+mod1 <- stan_model("stan/bernoulli_logit_1.stan")
 ```
-```{r}
-mod1
+```{r echo=FALSE,results='asis'}
+print_stanmodel("stan/bernoulli_logit_1.stan")
 ```
 
 ```{r}
@@ -144,8 +148,6 @@ turnout <- mutate(turnout, white = as.numeric(race == "white"))
 rec_turnout <- recipe(vote ~ income + age + white,
                       data = turnout) %>%
   step_poly(age, options = list(degree = 2)) %>%
-  step_center(all_predictors()) %>%
-  step_scale(all_predictors()) %>%
   prep(data = turnout, retain = TRUE)
 X <- juice(rec_turnout, all_predictors(), composition = "matrix")
 y <- juice(rec_turnout, all_outcomes(), composition = "matrix") %>%
@@ -159,7 +161,7 @@ mod1_data <- list(
   K = ncol(X),
   y = y,
   scale_alpha = 10,
-  scale_beta = 2.5,
+  scale_beta = 2.5 * apply(X, 2, sd),
   use_y_rep = FALSE,
   use_log_lik = TRUE
 )
@@ -178,87 +180,7 @@ The **rstanarm** package can estimate binomial models using the function `stan_g
 fit2 <- stan_glm(vote ~ income + age + white, data = turnout)
 ```
 
-### Robit
-
-The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
-For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
-$$
-\begin{aligned}[t]
-y_i &\sim \dbin \left(n_i, \pi_i \right) \\
-\pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | d, 0, (d - 2)/ d) dx \\
-\eta_i &= \alpha + X \beta
-\end{aligned}
-$$
-Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
-Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
-
-### Calculating Average Marginal Effects
-
-The marginal effect of a continuous predictor for a binomial model with link function $F$ is,
-$$
-ME_k(x) = \frac{\partial F(\alpha + x'\beta)}{\partial x_k} = f(\alpha + X \beta) \beta_k
-$$
-
-The average marginal effect (AME) is the marginal effect averaged over the sample,
-$$
-AME_k = \frac{1}{n} \sum_i ME_k(x_i)
-$$
-The marginal effect at the mean (MEM) is the marginal effect evaluated at the mean values of $x$,
-$$
-MEM_k = ME_k(\bar{x})
-$$
-Note that because of Jensen's inequality, generally, $MEM \neq AME$.
-
-```{r}
-data("votechoice", package = "jrnold.bayes.notes")
-votechoice <- votechoice %>%
-  # convert factors to numbers
-  mutate_at(vars(retecon, partyid, bushiraq, ideol7b, educ1_7),
-            as.integer) %>%
-  mutate_at(vars(bushvote, white, female), as.integer)
-
-```
-
-```{r}
-f <- bushvote ~ retecon + white + female + age + educ1_7 + income + partyid +
-  bushiraq
-rec <- recipe(f, data = votechoice) %>%
-  step_center(all_predictors()) %>%
-  step_scale(all_predictors()) %>%
-  prep(data = votechoice, retain = TRUE)
-X <- juice(rec, all_predictors(), composition = "matrix")
-y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
-
-```
-
-```{r cache.extra=tools::md5sum("stan/bernoulli_logit_1.stan"), message = FALSE}
-mod_logit <- stan_model("stan/bernoulli_logit_1.stan")
-```
-
-```{r}
-votechoice_data <- list(
-  X = X,
-  y = y,
-  N = nrow(X),
-  K = ncol(X),
-  scale_beta = 2.5,
-  scale_alpha = 10,
-  use_log_lik = FALSE,
-  use_y_rep = TRUE
-)
-```
-
-```{r}
-fit_votechoice <- sampling(mod_logit, data = votechoice_data)
-```
-
-```{r}
-with_mcmc_iter(fit_votechoice, {
-   t(rowMeans(beta %*% t(plogis(alpha + X %*% beta))))
-}, data = votechoice_data)
-```
-
-### References
+## References
 
 For general references on binomial models see @Stan2016a [Sec. 8.5], @McElreath2016a [Ch 10], @GelmanHill2007a [Ch. 5; Sec 6.4-6.5], @Fox2016a [Ch. 14], and @BDA3 [Ch. 16].
 

@@ -1,5 +1,14 @@
 # Heteroskedasticity
 
+## Prerequisites {-}
+
+```{r message=FALSE}
+library("rstan")
+library("tidyverse")
+```
+
+## Introduction
+
 Consider the linear regression model with normal errors,
 $$
 y_i \sim \dnorm\left(\ X \beta, \sigma_i^2 \right) .
@@ -69,7 +78,7 @@ $$
 $$
 then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
 $$
-y_i \sim \dt\left(\nu, X \beta, \sigma\right) .
+y_i \sim \dt\left(\nu, X \beta, \sigma \right) .
 $$
 
 Note that if a random variable $X$ is distributed inverse-gamma, it is equivalent
@@ -81,7 +90,7 @@ $$
 **Example:** Simulate Student-$t$ distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
 
 1.  Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
-1.  $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
+1.  $x_s = 1 / \sqrt{z_s}$ is draw from $\dt(\nu, 0, 1)$.
 
 When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
 
@@ -132,12 +141,12 @@ Estimate the linear regression with the Duncan data using heteroskedastic errors
 data("Duncan", package = "carData")
 ```
 
-```{r message=FALSE}
-mod_norm <- stan_model("stan/lm_normal_1.stan")
+```{r message=FALSE,results='hide'}
+mod_norm <- stan_model("stan/lm_normal_1.stan", verbose = FALSE)
 ```
 
-```{r message=FALSE}
-mod_norm <- stan_model("stan/lm_student_t_1.stan")
+```{r message=FALSE,results='hide'}
+mod_t <- stan_model("stan/lm_student_t_1.stan", verbose = FALSE)
 ```
 
 ## Exercises

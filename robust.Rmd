@@ -106,8 +106,8 @@ scale-mixture of normal distributions, where the inverse-variances (precisions) 
 a Gamma distribution,
 $$
 \begin{aligned}[t]
-y_i &\sim \dnorm\left(\mu_i, \omega^2 \lambda_i^2\right) \\
-\lambda^{-2} &\sim \dgamma(\nu / 2, \nu / 2)
+y_i &\sim \dnorm\left(\mu_i, \omega^2 \lambda_i^2 \right) \\
+\lambda^{-2} &\sim \dgamma\left(\nu / 2, \nu / 2\right)
 \end{aligned}
 $$
 The scale mixture distribution of normal parameterization of the Student t distribution is useful for computational reasons.
@@ -141,20 +141,20 @@ Estimate some examples with known outliers and compare to using a normal
 See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
 associated **jrnold.bayes.notes** package.
 
-
-
 ## Robit
 
-In a binomial regression, use a Student-t distribution with a low degrees of freedom instead of the logit and/or probit.
-
+The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
+For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
 $$
 \begin{aligned}[t]
-y_i &\sim \dBinom(\pi_i) & y_i \in \{0, 1\} \\
-\pi_i &= \int_{-\infty}^{\eta_i} \dt(x | \nu, 0, 1) dx & \pi_i \in (0, 1), \nu \in \R^{+} \\
-\eta_i &= \alpha + x_i' \beta & \eta_i, \alpha, \beta_k \in \R \\
+y_i &\sim \dbin \left(n_i, \pi_i \right) \\
+\pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | \nu, 0, (\nu - 2)/ \nu) dx \\
+\eta_i &= \alpha + X \beta
 \end{aligned}
 $$
-where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$.
+Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
+Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
+Where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$, or a prior distribution.
 
 ## Quantile regression
 

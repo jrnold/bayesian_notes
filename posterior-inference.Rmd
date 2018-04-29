@@ -66,10 +66,8 @@ We will consider this problem from a Bayesian estimation perspective, and calcul
 
 The particular example is @Alexseev2006a, which analyzes how changes in the ethnic composition of Russian regions affected the vote share of the extreme Russian nationalist Zhirinovsky Bloc in 2003 Russian State Duma elections.[^alexseev1]
 ```{r}
-data("alexseev", package = "jrnold.bayes.notes")
-alexseev <- mutate(alexseev,
-                   brdcont = as.integer(brdcont))
-
+data("duma", package = "jrnold.bayes.notes")
+duma <- mutate(duma, brdcont = as.integer(brdcont))
 ```
 
 [alexseev1]: Some of the replication code and material can be found on [Matt Golder's website](http://mattgolder.com/interactions).
@@ -110,7 +108,10 @@ fmla <- xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 +
 ```
 
 ```{r message = FALSE,results='hide'}
-fit1 <- stan_glm(fmla, data = alexseev)
+fit1 <- stan_glm(fmla, data = duma)
+```
+```{r}
+summary(fit1)
 ```
 
 ### Stan Model
@@ -167,19 +168,6 @@ slav_x_change <- with_mcmc_iter(fit, {
   bind_rows()
 ```
 
-```{r}
-slav_x_change %>%
-  group_by(slavicshare) %>%
-  summarise(q2.5 = quantile(dydx, 0.025),
-            q97.5 = quantile(dydx, 0.975),
-            mean = mean(dydx)) %>%
-  ggplot(aes(x = mean, y = mean, ymin = q2.5, ymax = q97.5)) +
-  geom_ribbon(alpha = 0.3) +
-  geom_line() +
-  geom_hline(yintercept = 0, size = 2, colour = "white")
-
-```
-
 Now we are interested in calculating the marginal effect of `xenovote` with respect to `slavicshare`,
 $$
 \frac{\partial \mu }{\partial \mathtt{slavicshare}} = \beta_1 + \beta_3 \mathtt{changenonslav} ,
@@ -187,52 +175,28 @@ $$
 which is not a scalar, but instead, a function of $\mathtt{changenonslav}$.
 We will calculate the values of this partial on a uniform grid of values of
 `changenonslav` between the minimum and maximum values of `changenonslav`.
-```{r}
-changenonslav_grid <- tibble(changenonslav =
-                               seq(min(alexseev$changenonslav),
-                                   max(alexseev$changenonslav),
-                                   length.out = 20))
-bake(rec, newdata = changenonslav_grid)
-```
 
-To make it easier to use with `ggplot`, convert it to a data frame with columns `.id` (number), `changeonslav` (original value of `changeonslav` passed to the sampler), and `value` (the value of the marginal effect).
-
-Since values for a marginal effect line is generated for each iteration, the posterior distribution of $\partial E(\mathtt{xenovote}|.) / \partial slavicshare$ can be plotted as lines.
-Since the number of lines would be too many to display effectively, plot `r 2 ^ 8` of them:
 ```{r}
-dydx_all %>%
-  filter(.iter %in% sample(unique(.iter), 2 ^ 8)) %>%
-  ggplot(aes(x = changenonslav, y = value, group = .iter)) +
-  geom_line(alpha = 0.3) +
-  ylab("Marginal effect of slavic share") +
-  xlab(paste(expression(Delta, "non-Slavic Share")))
-```
-
-Alternatively, we can summarize the posterior distribution of the marginal effects with a line (posterior mean) and credible interval regions (50%, 90%):
-```{r}
-dydx_summary <-
-  dydx_all %>%
-  group_by(changenonslav) %>%
-  summarise(mean = mean(value),
-            q5 = quantile(value, 0.05),
-            q25 = quantile(value, 0.25),
-            q75 = quantile(value, 0.75),
-            q95 = quantile(value, 0.95))
+interacts <- slav_x_change %>%
+  group_by(slavicshare) %>%
+  summarise(q2.5 = quantile(dydx, 0.025),
+            q97.5 = quantile(dydx, 0.975),
+            mean = mean(dydx))
 ggplot() +
-  modelr::geom_ref_line(h = 0) +
-  geom_ribbon(data = dydx_summary,
-              mapping = aes(x = changenonslav, ymin = q5, ymax = q95),
-              alpha = 0.2) +
-  geom_ribbon(data = dydx_summary,
-              mapping = aes(x = changenonslav, ymin = q25, ymax = q75),
-              alpha = 0.2) +
-  geom_line(data = dydx_summary,
-            mapping = aes(x = changenonslav, y = mean),
-            colour = "blue") +
-  geom_rug(data = alexseev, mapping = aes(x = changenonslav), sides = "b") +
-  ylab("Marginal effect of slavic share") +
-  xlab(expression(paste(Delta, "non-Slavic Share")))
+  geom_ribbon(data = interacts,
+              mapping = aes(x = slavicshare, ymin = q2.5, ymax = q97.5),
+              alpha = 0.3) +
+  geom_line(data = interacts,
+            mapping = aes(x = slavicshare, y = mean),
+            alpha = 0.3) +
+  geom_hline(yintercept = 0, size = 2, colour = "white") +
+  geom_rug(data = alexseev, mapping = aes(x = slavicshare), sides = "b") +
+  xlab("Slavic-share (%)") +
+  ylab(expression(paste("Marginal effect of ", Delta, " non-Slavic Share"))) +
+  theme_gray()
+
 ```
+
 The plot above also includes a rug with the observed values of `changenonslav` in the sample.
 
 -   **Q:** For each value of `changenonslav`, what is the probability that the
@@ -263,8 +227,37 @@ The plot above also includes a rug with the observed values of `changenonslav` i
 
 ## Average Marginal Effects
 
+The marginal effect of a continuous predictor for a binomial model with link function $F$ is,
+$$
+ME_k(x) = \frac{\partial F(\alpha + x'\beta)}{\partial x_k} = f(\alpha + X \beta) \beta_k
+$$
+
+The average marginal effect (AME) is the marginal effect averaged over the sample,
+$$
+AME_k = \frac{1}{n} \sum_i ME_k(x_i)
+$$
+The marginal effect at the mean (MEM) is the marginal effect evaluated at the mean values of $x$,
+$$
+MEM_k = ME_k(\bar{x})
+$$
+Note that because of Jensen's inequality, generally, $MEM \neq AME$.
+
 ```{r}
 data("votechoice", package = "jrnold.bayes.notes")
+votechoice <- votechoice %>%
+  mutate_at(vars(white, female, bushvote), as.integer) %>%
+  mutate_at(vars(retecon, educ1_7, ideol7b, partyid, bushiraq), as.numeric)
+```
+
+This replicates the example in Hanmer et al.
+```{r}
+glm(bushvote ~ retecon + white + female + age + educ1_7 + income +
+              partyid + bushiraq + ideol7b,
+       data = mutate(votechoice,
+                     retecon = (retecon - 3) / 2,
+                     partyid = partyid - 1,
+                     bushiraq = (bushiraq - 1) / 3),
+    family = binomial())
 ```
 
 ```{r message=FALSE}
@@ -272,15 +265,54 @@ mod_bernoulli_1 <- stan_model("stan/bernoulli_logit_1.stan", verbose = FALSE)
 ```
 
 ```{r}
-votechoice <- votechoice %>%
-  mutate_at(vars(white, female, bushvote), as.integer)
-
-rec <- recipe(bushvote ~ retecon + white + female + age + educ1_7, income + 
-              partyid + bushiraq,
+rec <- recipe(bushvote ~ retecon + partyid + bushiraq + ideol7b + white +
+              female + age + educ1_7 + income,
        data = votechoice) %>%
-  step_dummy(retecon) %>%
-  step_dummy(educ1_7) %>%
+  step_poly(age, options = list(degree = 2)) %>%
   prep(data = votechoice, retain = TRUE)
 X <- juice(rec, all_predictors(), composition = "matrix")
 y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+
+```{r}
+votechoice_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y,
+  scale_alpha = 10,
+  scale_beta = apply(X, 2, sd) * 2.5,
+  use_y_rep = 0,
+  use_log_lik = 0
+)
+```
+
+```{r message=FALSE, results='hide}
+fit2 <- sampling(mod_bernoulli_1, data = votechoice_data)
+```
+
+Calculate the average marginal effect and the marginal effect at the mean for the difference between `retecon = 1` ("Much worse") and `retecon = 4` ("Same"):
+```{r}
+X1 <- bake(rec, all_predictors(),
+           newdata = mutate(votechoice, retecon = 1),
+           composition = "matrix")
+X1_mean <- bake(rec, all_predictors(),
+                newdata =  mutate(summarise_all(votechoice, mean),
+                                 retecon = 1),
+                composition = "matrix")
+
+X2 <- bake(rec, all_predictors(),
+           newdata = mutate(votechoice, retecon = 3),
+           composition = "matrix")
+X2_mean <- bake(rec, all_predictors(),
+                newdata = mutate(summarise_all(votechoice, mean),
+                                 retecon = 3),
+                composition = "matrix")
+
+marfx <- with_mcmc_iter(fit2, {
+  tibble(ame = mean(plogis(alpha + X2 %*% beta) - plogis(alpha + X1 %*% beta)),
+         mem = as.numeric(plogis(alpha + X2_mean %*% beta) -
+           plogis(alpha + X1_mean %*% beta)))
+}) %>%
+  bind_rows()
 ```

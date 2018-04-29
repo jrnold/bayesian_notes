@@ -6,7 +6,7 @@ editor_options:
 
 # Separation {#separtion}
 
-## Prerquisites {-}
+## Prerequisites {-}
 
 ```{r message=FALSE}
 library("rstan")

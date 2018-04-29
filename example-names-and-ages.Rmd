@@ -1,4 +1,4 @@
-# Example: Predicting Names from Ages 
+# Example: Predicting Names from Ages
 
 ## Prerequisites {-}
 
@@ -49,7 +49,7 @@ life_table <- babynames::lifetables %>%
 For this analysis, we only need the age distribution in `r YEAR`.
 ```{r age_distr}
 age_distr <- life_table %>%
-  mutate(year = birthyear + age, 
+  mutate(year = birthyear + age,
          # convert sex to character to avoid join warning
          sex = as.character(sex)) %>%
   filter(year == YEAR) %>%
@@ -71,7 +71,7 @@ ggplot(age_distr,
        x = "Year of Birth")
 ```
 
-We need the number born each year to be able to calculate the number alive in each year, and the age distribution. 
+We need the number born each year to be able to calculate the number alive in each year, and the age distribution.
 Suppose that the number born in each year was equal, the age distribution would be:
 
 ```{r}
@@ -93,7 +93,7 @@ ggplot(babynames::applicants, aes(x = year, y = n_all / 1e6, color = sex)) +
   geom_point() +
   geom_line() +
   labs(x = "", y = "SSA Applicants (mn)") +
-  theme(legend.pos = "bottom")  
+  theme(legend.pos = "bottom")
 ```
 
 Clearly, the number of births is not constant per year.
@@ -109,7 +109,7 @@ age_distr <- left_join(age_distr,
   mutate(p_age = n_alive / sum(n_alive)) %>%
   ungroup() %>%
   arrange(sex, age)
-                 
+
 ```
 
 After accounting for different numbers of births in each year, the
@@ -157,7 +157,7 @@ baby_names <- bind_rows(baby_names, babynames_other)
 Consider someone with the name of "Emma" and sex is "female".
 What is the posterior distribution of their age,
 $$
-p(\text{age} | \text{name} = \text{"Emma"}, \text{sex} = \text{"F"}) = 
+p(\text{age} | \text{name} = \text{"Emma"}, \text{sex} = \text{"F"}) =
 p(\text{name} = \text{"Emma"} | \text{age}, \text{sex} = \text{"F"}) p(\text{age} | \text{sex} = \text{"F"}) .
 $$
 
@@ -186,7 +186,7 @@ However, very few of those born when Emma was first popular are likely to still 
 
 ```{r posterior}
 posterior <-
-  left_join(p_name_age, 
+  left_join(p_name_age,
             select(filter(age_distr, sex == !!sex), birthyear, prior = p_age),
             by = c(year = "birthyear")) %>%
   rename(likelihood = prop) %>%
@@ -206,8 +206,8 @@ posterior %>%
   gather(variable, value, -age) %>%
   mutate(variable = recode(variable, post = "P(age | name)",
                            likelihood = "P(name | age)", prior = "P(age)"),
-         variable = factor(variable, 
-                           levels = c("P(age)", "P(name | age)", 
+         variable = factor(variable,
+                           levels = c("P(age)", "P(name | age)",
                                       "P(age | name)"))) %>%
   ggplot(aes(y = value, x = age)) +
   geom_line() +
@@ -224,7 +224,7 @@ $$
 ```{r}
 baby_names_joint <- baby_names %>%
   # add probability that the person is alive
-  left_join(select(age_distr, age, sex, birthyear, p_alive), 
+  left_join(select(age_distr, age, sex, birthyear, p_alive),
             by = c("sex", year = "birthyear")) %>%
   # calculate number alive
   filter(year >= 1900) %>%
@@ -249,7 +249,7 @@ p(\text{age} | \text{name}, \text{sex}) = \frac{p(\text{age}, \text{name}, \text
 $$
 
 ```{r}
-inner_join(baby_names_joint, 
+inner_join(baby_names_joint,
            select(p_name_sex, name, sex, p_name_sex = prop),
            by = c("name", "sex")) %>%
   mutate(p_age = prop / p_name_sex)
@@ -262,9 +262,9 @@ inner_join(baby_names_joint,
 1.  Consider a rare name - what is the probability in years in which there is no sample. How does that affect the analysis? What would you do about it?
 
     ```{r}
-    filter(baby_names, sex == "M") %>% 
-      count(name) %>% 
-      filter(nn == 1) %>% 
+    filter(baby_names, sex == "M") %>%
+      count(name) %>%
+      filter(nn == 1) %>%
       sample_n(1)
     ```
 
@@ -273,7 +273,7 @@ inner_join(baby_names_joint,
 ### References
 
 This example is derived from [How to Tell Someone’s Age When All You Know Is Her Name](https://fivethirtyeight.com/features/how-to-tell-someones-age-when-all-you-know-is-her-name/).
-    
+
 Inferring characteristics of individuals given their name are common. See these related packages:
 
 -   [gender](https://github.com/ropensci/gender):     An R package for predicting gender from a name using historical name data.

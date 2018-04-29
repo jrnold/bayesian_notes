@@ -65,7 +65,7 @@ Since this constant is added to all observations it will not affect the estimati
 Thus the complete specification of a prior-correction rare event logits with standard weakly informative priors is:
 $$
 \begin{aligned}[t]
-y_i& \sim \dbern(\pi_i) \\
+y_i& \sim \dbernoulli(\pi_i) \\
 \pi_i &= \invlogit(\eta_i) \\
 \eta_i &= \tilde{\alpha} + X \beta  \\
 \tilde{\alpha} &= \alpha - \ln \left(\frac{(1 - \tau) \bar{y}}{\tau (1 - \bar{y})}  \right) \\

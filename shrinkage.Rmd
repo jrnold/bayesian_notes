@@ -357,7 +357,6 @@ f <- lpsa ~ lcavol + lweight + age + lbph + svi + lcp +
   gleason + pgg45 - 1L
 ```
 
-
 ```{r}
 prostate_data <- lm_preprocess(f, data = prostate)[c("y", "X")] %>%
   within({

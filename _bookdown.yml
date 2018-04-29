@@ -22,7 +22,7 @@ rmd_files:
   - "separation.Rmd"
   - "robust.Rmd"
   - "heteroskedasticity.Rmd"
-  - "rare-events-logit.Rmd"
+  - "rare-events.Rmd"
   # - "counts.Rmd"
   # - "categorical.Rmd"
   # - "shrinkage.Rmd"
