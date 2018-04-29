@@ -14,9 +14,11 @@ $$
 \text{Bayes factor}(H_2; H_1) = \frac{p(y | H_2)}{p(y | H_1)} = \frac{\int p(\theta_2 | H_2) p(y | \theta_2, H_2) d \theta_2 }{\int p(\theta_1 | H_2) p(y | \theta_1, H_2) d \theta_1}
 $$
 
+
+
 Problems with Bayes' Factors
 
--   It depends heavily on the choice ov prior.
+-   It depends heavily on the choice of prior.
 -   It is not (easily) defined for improper priors
 -   There is an implicit assumption that one of the competing models is correct
 
@@ -34,8 +36,9 @@ $$
 -   requires that $p$ (number of parameters) is well-defined
 -   number of observations $n$ is well-defined
 -   MLE exists
+-   Still does not make sense if the priors are improper.
 
-Computationally, estimating the marginal likelihood
+Computationally, estimating the marginal likelihood is **very difficult** in most cases.
 $$
 p(y | H_1) = \int p(y | \theta, H_1) p(\theta | H_1) d \theta
 $$
@@ -68,8 +71,6 @@ $$
 BF_{01}(t_n) = (1 = n)^{1/2} \exp(-n t^2_n / 2[1 + n]).
 $$
 -->
-
-See [Bayesian Estimation supersedes the t-test](http://www.indiana.edu/~kruschke/BEST/BEST.pdf)
 
 <!--
 - http://doingbayesiandataanalysis.blogspot.com/2017/02/equivalence-testing-two-one-sided-test.html

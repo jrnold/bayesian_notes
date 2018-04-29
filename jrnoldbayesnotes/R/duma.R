@@ -27,5 +27,5 @@
 #'
 #' Berry, W. D., Golder, M., Milton, D. \dQuote{\href{https://dx.doi.org/10.1017/S0022381612000199}{Improving Tests of Theories Positing Interaction}.}
 #' \emph{Journal of Politics}
-"alexseev"
+"duma"
 # nolint end

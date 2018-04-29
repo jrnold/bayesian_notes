@@ -1,5 +1,5 @@
 DATASETS = QuasiSeparation.rda CompleteSeparation.rda \
-	alexseev.rda econ_growth.rda income_ineq.rda \
+	duma.rda econ_growth.rda income_ineq.rda \
 	votechoice.rda unionization.rda federalist.rda \
 	politics_and_need.rda
 
@@ -12,7 +12,7 @@ data/QuasiSeparation.rda: data-raw/QuasiSeparation.R
 data/CompleteSeparation.rda: data-raw/CompleteSeparation.R
 	RScript $<
 
-data/alexseev.rda: data-raw/alexseev.R data-raw/alexseev.dta
+data/duma.rda: data-raw/duma.R data-raw/alexseev.dta
 	RScript $<
 
 data/econ_growth.rda: data-raw/econ_growth.R data-raw/western1995/econ_growth.tsv

@@ -141,6 +141,8 @@ Estimate some examples with known outliers and compare to using a normal
 See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
 associated **jrnold.bayes.notes** package.
 
+
+
 ## Robit
 
 In a binomial regression, use a Student-t distribution with a low degrees of freedom instead of the logit and/or probit.
