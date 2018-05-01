@@ -47,7 +47,70 @@ model.
 -   See @Rainey2016b on "transformation induced bias".
 -   See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code.
 
-## Marginal Effects of Interactions
+## Marginal Effects
+
+One quantity of interest in regression models are marginal effects of predictors.
+Consider the regression model, where the outcome $y$ is a function of a vector of observed data $x$, and parameters $\theta$, $y = f(x, z, \theta)$.
+
+The *marginal effect* of a continuous variable $x_j$ is,
+$$
+ME(j, x, \theta) = \frac{\partial{}f(x, \theta)}{\partial{}x_j}
+$$
+
+In the case of a linear regression,
+$$
+E(y) = \alpha + x' \beta,
+$$
+and the marginal effect of a predictor is its coefficient,
+$$
+ME(j, x, \alpha, \beta) = \frac{\partial} {\partial{}x_j} (\alpha + x' \beta) = \beta_j .
+$$
+
+However, for nonlinear models, including other GLMs and regression models in which the variable is included in nonlinear funtions, the marginal effect depends on the values of $x$, and is a function of the data rather than constant.
+
+For example, for a logit model, the expected value of the outcome is,
+$$
+p = \Pr(y = 1) = \frac{1}{1 + \exp(-\alpha - x' \beta)} .
+$$
+The marginal effect with respect to predictor $x_j$ is,
+$$
+ME(x_j, x_{-j}, \alpha, \beta) = \beta_k p (1 - p) .
+$$
+The marginal effect depends on $p$, which depends on the values of $x$ where the marginal effect is being evaluated.
+
+The *Marginal effect at representative values* (MER) is the marginal effect taken at a representative value of $x$, $x^{*}$,[^margins]
+$$
+MER(x_k, x^{*}) = \left. \frac{\partial f(\theta, x)}{\partial{}x_k} \right|_{x = x^{*}} .
+$$
+The *marginal effect at the mean* (MEM) is a special and most common case of a MER, in which the marginal effect is evaluated with all variables set to their means (or modes/medians for discrete variables):
+$$
+MER(y, x_k, \bar{x}) = \left. \frac{\partial f(\theta, x)}{\partial{}x_k} \right|_{x = \bar{x}} .
+$$
+The *average marginal effect* (AME) calculates the marginal effects of averaged over the sample:
+$$
+AME(y, x_k) = \sum_{i = 1}^n \left. \frac{\partial f(\theta, x)}{\partial x_k} \right|_{x = x_i}
+$$
+This definition could be extended to a population, to include weights, or to be calculated for sub-samples or sub-populations.
+
+Discrete changes, perhaps because the predictor is discrete, are called either *partial effects* or *first differences*.
+The *partial effect at a representative value* (PER) with respect to the variable $j$ is the difference in the function with $j$ set $x_j + \Delta x_j$ and
+set to $x_j$, with all other predictors held at some representative values, $\tilde{x}_{-j}$,
+$$
+PEM(j, x_j, \Delta x_j, \tilde{x}_{-j}, \theta) = E(f(\theta, x_k + \Delta x_k, \tilde{x}_{-j})) - E(f(\theta, x_k, \tilde{x}_{-j})) .
+$$
+When $\tilde{x}_k$ are the mean values of those other predictors, this is called the *partial effect at the mean*.
+
+The *average partial effect* (APE) are partial effects averaged at all common predictors,
+$$
+APE(j, x_j, \Delta x_j, \theta) = \frac{1}{n} \sum_{i = 1}^{n} f(x_j + \Delta x_j, \tilde{x}_{-j, i}, \theta) - f(x_j, x_{-j, i}, \theta) , 
+$$
+where $x_{-j, i}$ are the observed values of $j$ (excluding predictor $j$) for observation $i$.
+
+In all of the previous calculations of these marginal effects, there is no incorporation of uncertainty about the marginal effects.
+They are evaluated at a single parameter value.
+However, this can simply be averaged over the samples.
+
+## Interactions
 
 @BerryGolderMilton2012a replicates @Alexseev2006a as an example of a model with an interaction between $X$ and $Z$.
 $$
@@ -316,3 +379,17 @@ marfx <- with_mcmc_iter(fit2, {
 }) %>%
   bind_rows()
 ```
+
+```{r}
+summarise_all(marfx)
+```
+
+<!--
+
+-   Examples from Stata margins documentation
+-   Examples from margins package
+-   Examples from Rainey separation
+
+-->
+
+[^margins]: This largely follows the nomenclature of Stata's implementation of marginal effects in its `margins` command. See the *Stata Reference Manual* (v 14), `margins`, p. 1405.

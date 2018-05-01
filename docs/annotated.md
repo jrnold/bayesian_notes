@@ -53,7 +53,7 @@ This is less an annotated and more of a citation and link dump while I move the 
 
 -   Lynch, Scott M. 2007. *Introduction to Applied Bayesian Statistics and Estimation for Social Scientists*
 
--   Lunn, Jackson, Best, Thomas, and Spiegelhalter (2012) *The BUGS Book: A Practical Introduction to Bayesian Analysis* [@LunnEtAl2012a]
+-   Lunn, Jackson, Best, Thomas, and Spiegelhalter (2012) *The BUGS Book: A Practical Introduction to Bayesian Analysis* [@LunnJacksonBestEtAl2012a]
 
 -   Peter Hoff. 2009. *A First Course in Bayesian Statistical Methods* [@Hoff2009a]
 

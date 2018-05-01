@@ -1,0 +1,143 @@
+# Model Checking 
+
+See @BDA3 [Ch. 6]
+
+-   Bayes rule provides a coherent method to update beliefs about parameters given data.
+-   But this assumes that the "model is correct".
+-   So there must be some external check the adequecy of the model
+-   The model includes the sampling districtuion, the prior, the likelihood ... everything that is specified. 
+    Much attention is paid to the prior, but the likelihood is often more suspect.
+    
+    
+## Sensitivity Analysis and Model Improvement
+
+From @BDA3 [Sec 6.1]
+
+-   *Sensitivity analysis*: how much do posterior inferences chagne when other reasonable models are used?
+-   In theory, everything could be included in super model that incorporates all possible models. However, this is infeasible.
+
+## Judging Models by their Practical Implications
+
+From @BDA3 [Sec 6.1]
+
+-  Cannot judge models by "true of false". All models are false.
+-  "Do the model's deficiencies have a noticeable effect on the substantive inferences?" [@BDA3, p. 142]
+
+## Do the Model Inferences Make Sense? 
+
+-   External validation: Check for discrepencies between predictions and future data. If we don't have future data, we can approximate it with data on hand using cross-validation.
+-   Choices in defining predictive qualities: A single model can be used to make different predictions.
+-   Posterior predictive checking: $p(\tilde{y} | y)$
+
+## Posterior Predictive Checking
+
+-   If model fits, replicated data should look similar to observed data. In other words, the "observed data should look plausible under the posterior predictive distribution"
+-   The way *similar* is defined is dependent on the way the model is used.
+-   Example: Newcomb's speed of light data. See the list of examples on @BDA [p. 145]
+-   Notation for replications. $y^{rep}$ is *replicated* data that *could have been observed*.  
+    Distinguish between $y^{rep}$ and $\tilde{y}$: $\tilde{y}$ is any future observable value of vector of observable quantities, while $y^{rep}$ is a replication like $y$.
+    $$
+    p(y^{rep} | y) = \int p(y^{rep} | \theta) p(\theta | y) d\theta
+    $$
+    
+-   *Test quantities*. Discrepency between model and data is defined by *test quantities*. A *discrepency measure*, $T(y, \theta)$ is a scalar summary of parameters and data.
+    A *test statistic*, $T(y)$, is a test quantity that depends only on the data.
+    In Bayesian analysis, extend this to allow for dependencies through the posterior distribution.
+    
+    
+-   *Tail-area probabilities*:
+
+    -   *Classical p-values*: 
+      
+        $$
+        p_C = \Pr(T(y^{rep}) \geq T(y) | \theta)
+        $$
+
+        Probability is taken ove the distribution of $y^{rep}$ with $\theta$ fixed. The theta can be fixed at a null hypothesis or a point estimate like the MLE.
+        
+    -   *Posterior predictive p-values*:  The test quantity is a function of both 
+    
+        $$
+        \begin{aligned}[t]
+        p_B &= \Pr(T(y^{rep}, \theta) \geq T(y, \theta) | y) \\
+        &= \int \int I_{T(y^{rep}, \theta) \geq T(y, \theta)} p(y^{rep} | \theta) p(\theta | y) d y^{rep} d\theta
+        \end{aligned}
+        $$
+        where $I$ is the indicator function. Note that
+        $p(y^{rep} | \theta, y) = p(y^{rep} | \theta)$.
+        
+        These can be calcualted easily using simulation.
+        Suppose we have $S$ simulations from $p(\theta | y)$, then draw one $y^{rep}$ from the predictive distribution for each simulated $\theta$.
+        This is a draw from the joint posterior density, $p(y^{rep} ,\theta | y)$.
+        The posterior p-value is the proportion of these $S$ simualations which the test quantity equals or exceeds its realized value.
+        $$
+        p_B = \frac{1}{S} \sum_{s = 1}^{S} T(y^{rep, s}, \theta^s) \geq T(y, \theta^s) .
+        $$
+
+-   *Choosing test-quantities*:  Values other than $p$-values can be chosen. This depends on the domain. But useful to choose ones that indicate maginitude.
+    
+-   *Multiple comparisons*:  Not needed. Not concerned about Type I error.  If multiple comparisons needed, use a hierarchical model.
+    
+-   *Limitations of posterior tests*: Rejecting a model is not the end of the analysis. Even if model seems appropriate for drawing inferences, the next step may be more rigorous. A model may work for some purposes, but be poor for others.
+
+
+-   $P$-values and $u$-values.  
+
+    -   In Bayesian models, the uncertainty over $\theta$ probagates to the distribution of $T(y | \theta)$.
+
+    -   $u$-value: Any function of the data that has a $U(0, 1)$ samplign distribuiton
+        
+    -   A $u$-value can be averaged over $\theta$, but it is *not* Bayesian, in that it is not interpreted as a posterior probability
+    
+    -   A posteiror predictive $p$-value is a probability statement.
+    
+    -   $p$-value is to $u$-value as the posterior interval is to the classical confidence interval. Bayesian $p$ values are not generally $u$-values.
+    
+
+-   *Model checking and the likelihood principle*: 
+
+    -   In Bayesian model, all inference depend only on data through the likelihood.
+    
+    -   We can ignore the sampling of the data in the posterior inferences.
+    
+    -   However, the sampling rule is relevant for posterior predictive checks.
+        
+    -   Even if likelihoods are the same, a model can fit some data collection methods well, and not others.
+    
+  
+-   *Marginal predictive checks*: Probability of each marginal prediction, $p(\tilde{y}_i | y)$ separately, and compare distributions to data to find outliers or check calibration.
+
+
+-   *Cross-validaton predictive distributions*:
+
+    $$
+    p_i = \Pr(y_i^{rep} \leq y_i | y_{-i})
+    $$
+    
+    For continous distributions, the inference given all other points:
+    
+    -   uniform: well-calibrated
+    -   concentrated near 0 and 1: data overdispersed relative to the model
+    -   concentrated near 0.5: data underdispersed.
+    
+-   *Conditional posterior predictive ordinate (CPO)*,
+    $$
+    CPO_i = p(y_i | y_{-i})
+    $$
+    gives low value for unlikely observations given the current model.
+    
+## Graphical posterior predictive checks
+
+Display real data alongside simulated data:
+
+-   Direct display of all the data
+-   Display data summaries or parameter inferences
+-   Graphs of residuals or other measures of discrepency
+
+    
+    
+    
+-   
+    
+
+    

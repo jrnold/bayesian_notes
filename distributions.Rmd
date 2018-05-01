@@ -8,7 +8,7 @@ editor_options:
 The parameterizations and notations for distributions largely follow @BDA3 and @Stan2016a.
 
 The Wikipedia [List of Probability Distributions](https://en.wikipedia.org/wiki/List_of_probability_distributions) is a fairly complete reference.
-Standard references of probability distributions are [@JohnsonKotzBalakrishnan1994a;@JohnsonKotzBalakrishnan1995a;@KotzBalakrishnanJohnson2000a;@JohnsonKotzBalakrishnan1997a;@WimmerAltmann1999a;@ForbesEtAl2010a;@Asquith2011a].
+Standard references of probability distributions are [@JohnsonKotzBalakrishnan1994a;@JohnsonKotzBalakrishnan1995a;@KotzBalakrishnanJohnson2000a;@JohnsonKotzBalakrishnan1997a;@WimmerAltmann1999a;@ForbesEvansHastingsEtAl2010a;@Asquith2011a].
 
 The [Probability Distributions](https://cran.r-project.org/web/views/Distributions.html) CRAN task view contains both links and descriptions of probability distributions and as such serves as a useful list of probability distributions.
 

@@ -368,7 +368,7 @@ $$
 \tilde{w}(\theta^s) = \frac{w(\theta^S)}{\sum_{s' = 1}^S w(\theta^{s'})}.
 $$
 
-The **loo** package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights [@VehtariGelmanGabry2015a;@VehtariGelmanGabry2016a].
+The **loo** package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights [@VehtariGelmanGabry2015a;@VehtariGelmanGabry2017a].
 
 *Importance resampling* (or *sampling-importance resampling*) obtains independent samples with equal weights.
 
@@ -393,7 +393,7 @@ Other notes
 
 -   Sequential Monte Carlo (SMC) is a variant that is particularly useful for
     updating posterior distributions when the data arrives sequentially---either
-    real time or because it involves time series data [@CarvalhoEtAl2010a].
+    real time or because it involves time series data [@CarvalhoJohannesLopesEtAl2010a].
 
 -   To update a model when a similar posterior is available. E.g. the posterior
     distribution for leave-one-out cross validation [@VehtariGelmanGabry2015a].

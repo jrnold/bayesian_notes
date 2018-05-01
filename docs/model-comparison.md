@@ -1,3 +1,4 @@
+
 # Model Comparison
 
 Don't check, but compare.
@@ -47,7 +48,7 @@ Several methods to estimate expected log posterior predictive density (elpd)
 
 What should you use? 
 
--   Use the Pareto Smoothed Importance Sampling LOO [@VehtariGelmanGabry2015a] implemented in the `r rpkg("loo")` package:
+-   Use the Pareto Smoothed Importance Sampling LOO [@VehtariGelmanGabry2015a] implemented in the **[loo](https://cran.r-project.org/package=loo)** package:
 
     -   It is computationally efficient as it doesn't require completely 
         re-fitting the model, unlike actual cross-validation
