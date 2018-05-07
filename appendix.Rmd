@@ -286,8 +286,12 @@ $$
 This implies the following relationships between their means and variances,
 $$
 \begin{aligned}[t]
-E(\alpha) &= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} , \\
-E(\tilde{\alpha}) &= \frac{E(\alpha) - \bar{Y} + \beta \bar{X} }{\sigma_Y}
+E(\alpha) &= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \frac{\sigma_Y}{\sigma_X} E(\tilde{\beta}) \bar{X} , &
+V(\alpha) &= \sigma_{Y}^2 V(\tilde{\alpha}) + \frac{\sigma_Y^2}{\sigma_X^2} V(\tilde{\beta}) \bar{X}^2 , \\
+ &= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \bar{X} E(\beta) , &
+ &= \sigma_{Y}^2 V(\tilde{\alpha}) + \bar{X}^2 V(\beta) , \\
+E(\tilde{\alpha}) &= \frac{E(\alpha) - \bar{Y} + E(\beta) \bar{X} }{\sigma_Y} , &
+V(\tilde{\alpha}) &= \sigma_Y^{-2} \left[ V(\alpha) + \bar{X}^2 V(\beta) \right]
 \end{aligned}
 $$
 For example, a weakly informative prior on $\tilde{\alpha}$ implies a prior on $\alpha$,
