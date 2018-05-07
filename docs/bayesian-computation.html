@@ -260,11 +260,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> Model Comparison</a><ul>
-<li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#continuous-model-expansion"><i class="fa fa-check"></i><b>10.1</b> Continuous model expansion</a></li>
-<li class="chapter" data-level="10.2" data-path="model-comparison.html"><a href="model-comparison.html#posterior-predictive-criteria"><i class="fa fa-check"></i><b>10.2</b> Posterior Predictive Criteria</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="model-comparison.html"><a href="model-comparison.html#summary-and-advice"><i class="fa fa-check"></i><b>10.2.1</b> Summary and Advice</a></li>
-<li class="chapter" data-level="10.2.2" data-path="model-comparison.html"><a href="model-comparison.html#expected-log-predictive-density"><i class="fa fa-check"></i><b>10.2.2</b> Expected Log Predictive Density</a></li>
+<li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#models"><i class="fa fa-check"></i><b>10.1</b> Models</a></li>
+<li class="chapter" data-level="10.2" data-path="model-comparison.html"><a href="model-comparison.html#classes-of-model-spaces"><i class="fa fa-check"></i><b>10.2</b> Classes of Model Spaces</a></li>
+<li class="chapter" data-level="10.3" data-path="model-comparison.html"><a href="model-comparison.html#continuous-model-expansion"><i class="fa fa-check"></i><b>10.3</b> Continuous model expansion</a></li>
+<li class="chapter" data-level="10.4" data-path="model-comparison.html"><a href="model-comparison.html#discrete-model-expansion"><i class="fa fa-check"></i><b>10.4</b> Discrete Model Expansion</a></li>
+<li class="chapter" data-level="10.5" data-path="model-comparison.html"><a href="model-comparison.html#out-of-sample-predictive-accuracy"><i class="fa fa-check"></i><b>10.5</b> Out-of-sample predictive accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="model-comparison.html"><a href="model-comparison.html#stacking"><i class="fa fa-check"></i><b>10.6</b> Stacking</a></li>
+<li class="chapter" data-level="10.7" data-path="model-comparison.html"><a href="model-comparison.html#posterior-predictive-criteria"><i class="fa fa-check"></i><b>10.7</b> Posterior Predictive Criteria</a><ul>
+<li class="chapter" data-level="10.7.1" data-path="model-comparison.html"><a href="model-comparison.html#summary-and-advice"><i class="fa fa-check"></i><b>10.7.1</b> Summary and Advice</a></li>
+<li class="chapter" data-level="10.7.2" data-path="model-comparison.html"><a href="model-comparison.html#expected-log-predictive-density"><i class="fa fa-check"></i><b>10.7.2</b> Expected Log Predictive Density</a></li>
 </ul></li>
+<li class="chapter" data-level="10.8" data-path="model-comparison.html"><a href="model-comparison.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>10.8</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="10.9" data-path="model-comparison.html"><a href="model-comparison.html#pseudo-bma"><i class="fa fa-check"></i><b>10.9</b> Pseudo-BMA</a></li>
+<li class="chapter" data-level="10.10" data-path="model-comparison.html"><a href="model-comparison.html#loo-cv-via-importance-sampling"><i class="fa fa-check"></i><b>10.10</b> LOO-CV via importance sampling</a></li>
+<li class="chapter" data-level="10.11" data-path="model-comparison.html"><a href="model-comparison.html#selection-induced-bias"><i class="fa fa-check"></i><b>10.11</b> Selection induced Bias</a></li>
 </ul></li>
 <li class="part"><span><b>III Models</b></span></li>
 <li class="chapter" data-level="11" data-path="introduction-to-stan-and-linear-regression.html"><a href="introduction-to-stan-and-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Introduction to Stan and Linear Regression</a><ul>
@@ -391,7 +400,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
 <li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
 </ul></li>
-<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
 <li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
 <li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
 <li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
@@ -799,7 +808,7 @@ where <span class="math inline">\(\tilde{w}\)</span> are the normalized weights,
 <span class="math display">\[
 \tilde{w}(\theta^s) = \frac{w(\theta^S)}{\sum_{s&#39; = 1}^S w(\theta^{s&#39;})}.
 \]</span></p>
-<p>The <strong>loo</strong> package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights <span class="citation">(Vehtari, Gelman, and Gabry 2015, 2017)</span>.</p>
+<p>The <strong>loo</strong> package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights <span class="citation">(Vehtari, Gelman, and Gabry 2015, 2017a)</span>.</p>
 <p><em>Importance resampling</em> (or <em>sampling-importance resampling</em>) obtains independent samples with equal weights.</p>
 <p>Draw <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from the approximate distribution <span class="math inline">\(g\)</span>.</p>
 <p>Then to draw a sample of size <span class="math inline">\(k &lt; S\)</span>, sample <em>without replacement</em>
@@ -839,9 +848,8 @@ proposal distribution for <span class="math inline">\(p(\theta | y)\)</span>.</p
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">w_tilde &lt;-<span class="st"> </span>w <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)</a>
 <a class="sourceLine" id="cb58-2" data-line-number="2"><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w_tilde <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb58-3" data-line-number="3"><span class="co">#&gt; [1] 215</span></a></code></pre></div>
-<p>Finally, to draw a new sample from this, we can draw without replacement,</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">S2 &lt;-<span class="st"> </span><span class="dv">256</span></a>
-<a class="sourceLine" id="cb59-2" data-line-number="2">post_sir1 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
+<p>Finally, to draw a new sample from this, we can draw without replacement (works if the new sample size is much smaller than the original),</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">post_sir1 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
 <p>or with replacement,</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">post_sir2 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
 <p>depending on our purposes.</p>

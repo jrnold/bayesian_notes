@@ -16,7 +16,7 @@ The problem is how we can specify "good enough" criteria, and how we can check t
 
 See @GelmanMengStern1996a, @Gelman2007a, @Gelman2009a, @BDA3 [Ch. 6],
 @GelmanShalizi2012a, @Kruschke2013b, @GelmanShalizi2012b, @Gelman2014a for a
-more discussion of the motivation and use of posterior predictive checks.b
+more discussion of the motivation and use of posterior predictive checks.
 
 ## Posterior Predictive Checks
 

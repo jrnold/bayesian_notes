@@ -36,13 +36,14 @@ $$
 -   MLE exists
 -   Still does not make sense if the priors are improper.
 
-Computationally, estimating the marginal likelihood is **very difficult** in most cases.
+Computationally, estimating the marginal likelihood is very difficult in most cases.
+The marginal likelihood for a model $M$ is defined as
 $$
-p(y | H_1) = \int p(y | \theta, H_1) p(\theta | H_1) d \theta
+p(y | M) = \int p(y | \theta, M) p(\theta | M) d \theta .
 $$
-@KassRaftery1995 discuss some of these issues. 
+@KassRaftery1995 discuss some of the computational issues. 
 None of the methods are particularly good; e.g. the estimator suggested by @KassRaftery1995 has an [infinite variance](https://radfordneal.wordpress.com/2008/08/17/the-harmonic-mean-of-the-likelihood-worst-monte-carlo-method-ever/).
-This is one reason why most estimators of the posterior distribution avoid calculating the marginal likelihood.
+The difficulty of calculating the marginal likelihood why most estimators of the posterior distribution only calculate a value proportional to the posterior distribution and avoid calculating the marginal likelihood.
 
 Notes:
 

@@ -428,11 +428,10 @@ w_tilde <- w / sum(w)
 #> [1] 215
 ```
 
-Finally, to draw a new sample from this, we can draw without replacement,
+Finally, to draw a new sample from this, we can draw without replacement (works if the new sample size is much smaller than the original),
 
 ```r
-S2 <- 256
-post_sir1 <- sample(theta, replace = TRUE, prob = w)
+post_sir1 <- sample(theta, size = S / 2, replace = TRUE, prob = w)
 ```
 or with replacement,
 
