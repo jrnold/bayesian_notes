@@ -1,0 +1,16 @@
+digraph conjugate_gamma {
+  node[shape = box, fontname = Helvetica]
+  gamma[label = Gamma]
+  normal[label = Normal]
+  poisson[label = Poisson]
+  lognormal[label = lognormal]
+  exp[label = Exponential]
+
+  gamma -> gamma [label = "β"]
+  normal -> normal [label = "μ"]
+  normal -> gamma [label = "τ"]
+  lognormal -> gamma [label = "τ"]
+  lognormal -> normal [label = "μ"]
+  exp -> gamma [label = "μ"]
+  poisson -> gamma [label = "𝛌"]
+}

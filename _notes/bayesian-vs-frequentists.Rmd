@@ -1,0 +1,105 @@
+# Types of Inference
+
+- Frequentists: Neymann/Pearson/Wald. Sampling is infinite and decision rules can be sharp.
+- Bayesians: Parameters are random variables, and state of the world can always be updated.
+- Likelihoodists: (Fisher) Single sample inference based on maximizing the likelihood
+function. Almost Bayesians.
+
+# Differences between Bayesians and Non-Bayesians
+
+What is fixed?
+
+- Frequentists 
+
+  - Data are a repeatable random sample
+  - Parameters remain constant during this repeatable process
+  - Parameters are fixed
+  
+- Bayesian
+
+  - Data are observed from the realized
+sample
+  - Parameters are unknown and described probabilistically
+  - Data are fixed
+  
+### General Inference
+
+- Point estimates and standard errors or $(1 - \alpha) \times 100 \%$ confidence intervals
+- Deduction from $P(\text{data}|$H_0$), by setting $\alpha$ in advance.
+- Accept $H_1$ if $P(\text{data}|H_0) < \alpha$
+- Accept $H_0$ if $P(\text{data}|H_0) \geq \alpha$
+  
+Bayesian
+
+- Induction from $P(\theta | \text{data})$ starting with $P(\theta)$
+- Summarize posterior distribution with means and quantiles
+- Highest probability density regions
+
+- Frequentist: $P(\text{data} | H_0)$, the sampling distribution given the null hypothesis
+- Bayesian: 
+
+  - $P(\text{data} | \theta)$ - posterior distribution
+  - $P(\theta)$ is the prior distribution of the parameter
+  
+  
+## Intervals
+
+- Frequentist 95% Confidence Interval: In repeated sampling, 95% of the realized intervals cover the true parameter.
+- Bayesian: For these data, with probability 90%, the parameter is in the interval.
+
+These are different probabilities even if the equation used to calculate them may be the same sometimes.
+
+## Where do priors come from?
+
+- Previous studies, published work
+- Researcher intuition.
+- Substantive Experts
+- Convenience (conjugacy, vagueness)
+- Nonparametrics and other data sources
+
+# So why did frequency win?
+
+- 1950-1990: very little Bayesian analysis
+- Preference for automated, “cookbook” type procedures
+- Bayesian statistics needs lots of computation
+
+# History of Bayesian Statistics
+
+- Reverend Thomas Bayes (1702-
+1761).
+- Pierre Simon Laplace.
+- Pearson (Karl), Fisher, Neyman and Pearson (Egon), Wald.
+- Jeffreys, de Finetti, Good, Savage, Lindley, Zellner.
+- A world divided (mainly over practicality).
+- Gelfand and Smith (1990) popularize MCMC
+
+    - practical problems
+    - complex models
+
+## Differences between Bayesians and Frequentists
+
+-   parameters of interest are fixed and unchanging under realistic circumstances
+-   no information prior to model specification
+-   data treated as if from a controlled experiment
+-   repeatibility is most important, even if we make assumptions
+
+Bayesian
+
+-  treat knowledge of world is probabilistic
+-  prior information is important
+-  all statistical models are subjective (e.g., the specification of the likelihood function)
+
+Frequentist:
+
+-   Evaluative Paradigm
+-   Repeatability can be Important
+
+Bayesian:
+
+-   Modeling Paradigm
+-   Inference can be appropriate
+
+
+### References
+
+Derived from George Casella, [Bayesians and Frequentists Models, Assumptions, and Inference](http://archived.stat.ufl.edu/casella/Talks/BayesRefresher.pdf) (slides)

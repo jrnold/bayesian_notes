@@ -1,0 +1,17 @@
+# Conditional Probabilities
+
+> If Linda is a thirty-one year old single woman who is
+> outspoken on social issues such as disarmament
+> and equal rights, which of the following statements
+> is more likely to be true? (Tversky and Kahneman,
+1974)
+> 
+> 1. Linda is a bank teller.
+> 2. Linda is a bank teller and active in the feminist
+movement.
+
+The answer is 2. The marginal probability $\Pr(A)$ is at least as large as the joint probability $\Pr(A \land B)$
+
+> A town has two hospitals: one large and one small. Assuming there is an equal number of boys and girls born every year in the United States, which hospital is more likely to have close to 50 percent girls and 50 percent boys born on any given day?
+
+The larger town. Small samples have larger sampling errors.

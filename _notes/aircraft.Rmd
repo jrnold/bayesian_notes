@@ -1,0 +1,64 @@
+
+The primary quantities are
+$$
+\begin{aligned}
+P_{i1} = P(i \text{ hits and survival}) \\
+= Q_i \cdot \lambda_i
+\end{aligned}
+$$
+where
+$$
+\begin{aligned}
+Q_i & = P(\text{survival} | i \text{ hits}) , \\
+\lambda_i & = P(i \text{ hits}) ,
+\end{aligned}
+$$
+and 
+$$
+P_0^* = P(\text{not surviving}) = 1 - \sum_{i = 0}^\infty P_{i1} .
+$$
+Observations are assumed independent.
+Then the data are
+$$
+\begin{aligned}
+X_{i1E = \text{the number of aircraft receiving $i$ hits and surviving}} \\
+X_0^* = n - \sum_{i = 0}^\infty X_{i1} = \text{the number that do not survive}.
+\end{aligned}
+$$
+
+The likelihood is
+$$
+L(P) = \left( \prod_{i = 0}^\infty P_{i1}^{X_{i1}} \right) (P_0^*)^{X_0^*} \\
+ = \left[ \prod_{i = 0}^\infty (Q_i \cdot \lambda_i)^{X_0^*}  \right]
+ \left[ 1 -  \sum_{i = 0}^\infty (Q_i \cdot \lambda_i ) \right]^{X_0^*}
+$$
+The additional assumptions are
+
+1. $Q_i = q^i$: i.i.d. survival of each hit.
+2. $P_{i1} = 0$ for $i \geq 6$ (probability of surviving number of hits not observed is zero)
+
+
+## Vulnerability areas of aircraft
+
+- $\gamma_i(i_1, \dots, i_k)$: conditional probability that area $m$ receives $i_m$ hits given a total of $i = \sum_{m = 1}^k i_m$ hits. Known.
+- $Q_i(i_1, \dots, i_k)$ probability that aircraft is not downed given $i_m$ hits to area $m$, with $\sum_{m = 1}^k i_m = i$.
+
+Let $q(i)$ bet he rob that one hit on area $i$ will not down an aircraft, and $\gamma(i)$ is the conditional probability that area $i$ is hit given that one hit occured,
+$$
+Q_i(i_1, \dots, i_k) = \prod_{m = 1}^k \left[ q(m) \right]^{im}
+$$
+$$
+\gamma_i(i_1, \dots, i_k) = \frac{i!}{\prod_{m = 1}^k i_m !} \prod_{m = 1}^k \left[ \gamma(m) \right]^{i_m}
+$$
+where $\sum_{m = 1}^k i_m = i$ and $\delta(i)$is the probabiity that area $i$ is hit, given that the aircraft received exactly one hit and did not down it.
+
+By defitition,
+$$
+\delta(i) = \frac{\gamma(i) q(i)}{\sum_{i = 1}^k \gamma(i) q(i)}
+$$
+p(area i is hit | not downed) = (area i is hit) (probability one hit on i wont' down i)
+
+Suppose that $q(i)$ 
+
+-   @MangelSamaniego1984a
+-  @Berger1984a

@@ -1,0 +1,31 @@
+# nolint start
+#' Xenophobic Vote Share in 2003 Russian Duma Elections
+#'
+#' Data from the 2003 Russian State Duma elections, focusing on the
+#' vote share of the Russian nationalist Zhirinovsky Bloc (Alexseev 2006).
+#'
+#' @format A data frame with 72 observations and 11 variables.
+#' \tabular{lll}{
+#'   \code{region} \tab \code{integer} \tab Russian region \cr
+#'   \code{xenovote} \tab \code{numeric} \tab LDPR vote share in 2003 \cr
+#'   \code{slavicshare} \tab \code{numeric} \tab percent of Slavic population in 1989 \cr
+#'   \code{changeonslav} \tab \code{numeric} \tab Percentage-point change of the proportion non-Slavic \cr
+#'   \code{inc9903} \tab \code{numeric} \tab average income, change from 1999 to 2003 \cr
+#'   \code{eduhi02} \tab \code{numeric} \tab higher education, 2002 \cr
+#'   \code{enemp02} \tab \code{numeric} \tab unemployment, 2002 \cr
+#'   \code{apt9200} \tab \code{numeric} \tab privatized apartments from 1992 to 2003 \cr
+#'   \code{vsall03} \tab \code{numeric} \tab vote "against all" in 2003 \cr
+#'   \code{brdcont} \tab \code{logical} \tab location along Russia's borders with disputed areas
+#' }
+#'
+#' @source \url{http://mattgolder.com/files/interactions/interaction1.zip}
+#'
+#' @references
+#' <http://mattgolder.com/interactions>
+#'
+#' Alexseev, M. A. (2006) \dQuote{Ballot-Box Vigilantism: Ethnic Population Shifts and Xenophobic Voting in Post-Soviet Russia.} \emph{Political Behavior}.
+#'
+#' Berry, W. D., Golder, M., Milton, D. \dQuote{\href{https://dx.doi.org/10.1017/S0022381612000199}{Improving Tests of Theories Positing Interaction}.}
+#' \emph{Journal of Politics}
+"duma"
+# nolint end

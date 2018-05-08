@@ -1,3 +1,0 @@
-# Covariance Matrices
-
-- See @LeonardHsu1992a

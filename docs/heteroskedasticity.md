@@ -1,0 +1,229 @@
+
+# Heteroskedasticity
+
+## Prerequisites {-}
+
+
+```r
+library("rstan")
+library("tidyverse")
+```
+
+## Introduction
+
+Consider the linear regression model with normal errors,
+$$
+y_i \sim \dnorm\left(\ X \beta, \sigma_i^2 \right) .
+$$
+Note that since the term $\sigma_i$ is indexed by the observation, it can vary by observation.
+If $\sigma_i = 1$ for all $i$, then this corresponds to the classical homoskedastic linear regression.
+If $\sigma_i$ differs for each $i$, then it is a heteroskedastic regression.
+
+In frequentist estimation linear regressions with heteroskedastic are often estimated using OLS with heteroskedasticity-consistent (HC) standard errors.[^hc]
+However, HC standard errors are not a generative model, and in the Bayesian setting it is preferable to write a generative model that specifies a model for $\sigma^2$.
+
+## Weighted Regression
+
+A common case is "weighted" regression, where each $y_i$ represents the *mean* of $n_i$
+observations. Then the scale of each observation is
+$$
+\sigma_i = \omega / n_i ,
+$$
+where $\omega$ is a global scale.
+
+Alternatively, suppose each observation represents the *sum* of each $n_i$ observations.
+Then the scale of each observation is,
+$$
+\sigma_i = n_i \omega .
+$$
+
+## Modeling the Scale with Covariates
+
+The scale can also be modeled with covariates.
+
+It is common to model the log-transformation of the scale or variance to transform it to $\R$,
+$$
+\log \sigma_i = \dnorm(Z_i \gamma, \omega)
+$$
+where $Z_i$ are covariates used to the model the variance, which may or may not be the same as $X_i$.
+
+Another common model is the variance as a function of the mean,
+$$
+\begin{align}
+\log \sigma_i = f(\mu_i).
+\end{align}
+$$
+
+Consider the well-known normal approximation of the binomial distribution,
+$$
+\dnorm(n_i | N_i, \pi_i) \approx \dnorm(n_i | \pi N_i, \pi (1 - \pi) N_i) .
+$$
+At the cost of treating the outcome as continuous rather than discrete,
+this approximation can provide a flexible model for over- or under-dispersion, by adding a dispersion term $\delta \in R^{+}$,
+$$
+n_i \sim \dnorm(\pi N_i, \delta \pi (1 - \pi)) .
+$$
+A similar approximation can be applied to unbounded count models using the normal approximation to the Poisson, $\dpois(y_i | \lambda_i) \approx \dnorm(y_i | \lambda_i \lambda_i)$.
+
+## Prior Distributions
+
+A reparameterization that will be used quite often is to rewrite a normal
+distributions with unequal scale parameters as the product of a common global
+scale parameter ($\omega$), and observation specific local scale parameters,
+$\lambda_i$,[^globalmixture]
+$$
+y_i \sim \dnorm(X\beta, \lambda_i \omega) .
+$$
+If the local variance parameters are distributed inverse-gamma,
+$$
+\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+$$
+then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
+$$
+y_i \sim \dt\left(\nu, X \beta, \sigma \right) .
+$$
+
+Note that if a random variable $X$ is distributed inverse-gamma, it is equivalent
+to $1 / X$ being distributed gamma. In this example,
+$$
+\dinvgamma(\lambda^2 | \nu / 2, \nu / 2) = \dgamma\left(\frac{1}{\lambda^2} \middle| \nu / 2, \nu / 2\right) =  
+$$
+
+**Example:** Simulate Student-$t$ distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
+
+1.  Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
+1.  $x_s = 1 / \sqrt{z_s}$ is draw from $\dt(\nu, 0, 1)$.
+
+When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
+
+We can also model heteroskedasticity by placing a prior distribution on the variances.
+
+$$
+\sigma_i = \omega \lambda_i .
+$$
+Thus, the heteroskedastic likelihood is,
+$$
+y_i \sim \dnorm\left( \mu_i, \omega^2 \lambda_i^2\right)
+$$
+Note that since the number of $\lambda_i$ parameters are equal to the number of observations, this model will not have a proper posterior distribution without a proper prior distribution.
+However, if a proper prior is placed on $\lambda_i$, then the posterior distribution for this model exists.
+
+Suppose $1 / \lambda_i^2$ is distributed with a specific gamma distribution,
+$$
+1 / \lambda_i^2 \sim \dgamma(d / 2, d / 2) .
+$$
+This 
+$$
+\dt(y_i | \nu, \mu_i, \omega) = \int \dnorm(y | \mu_i, \omega^2 \lambda^2) \dinvgamma(\nu / 2, \nu / 2)  d  \lambda^2
+$$
+
+This is equivalent to a regression model with Student-t errors.
+$$
+y_i \sim \dt\left(d, ., \omega \right) .
+$$
+Thus, "robust" regression models with Student-$t$ errors can be derived from a particular model of heteroskedastic normal errors.
+
+The Stan model that estimates this is `lm_student_t_1.stan`:
+<!--html_preserve--><pre class="stan">
+<code>// lm_student_t_1.stan
+// Linear Model with Student-t Errors
+data {
+  // number of observations
+  int<lower=0> N;
+  // response
+  vector[N] y;
+  // number of columns in the design matrix X
+  int<lower=0> K;
+  // design matrix X
+  // should not include an intercept
+  matrix [N, K] X;
+  // priors on alpha
+  real<lower=0.> scale_alpha;
+  vector<lower=0.>[K] scale_beta;
+  real<lower=0.> loc_sigma;
+  // keep responses
+  int<lower=0, upper=1> use_y_rep;
+  int<lower=0, upper=1> use_log_lik;
+}
+parameters {
+  // regression coefficient vector
+  real alpha;
+  vector[K] beta;
+  real<lower=0.> sigma;
+  // degrees of freedom;
+  // limit df = 2 so that there is a finite variance
+  real<lower=2.> nu;
+}
+transformed parameters {
+  vector[N] mu;
+
+  mu = alpha + X * beta;
+}
+model {
+  // priors
+  alpha ~ normal(0.0, scale_alpha);
+  beta ~ normal(0.0, scale_beta);
+  sigma ~ exponential(loc_sigma);
+  // see Stan prior distribution suggestions
+  nu ~ gamma(2, 0.1);
+  // likelihood
+  y ~ student_t(nu, mu, sigma);
+}
+generated quantities {
+  // simulate data from the posterior
+  vector[N * use_y_rep] y_rep;
+  // log-likelihood posterior
+  vector[N * use_log_lik] log_lik;
+  for (i in 1:num_elements(y_rep)) {
+    y_rep[i] = student_t_rng(nu, mu[i], sigma);
+  }
+  for (i in 1:num_elements(log_lik)) {
+    log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
+  }
+}</code>
+</pre><!--/html_preserve-->
+
+We could also apply other prior distributions to the 
+Another flexible model of heteroskedasticity is to apply a Dirichlet model to the local scales,
+$$
+\begin{aligned}[t]
+\lambda_i &\sim \ddirichlet(a, w), & \lambda_i \geq 0, \sum_i \lambda_i = 1 .
+\end{aligned}
+$$
+
+### Examples: Duncan 
+
+Estimate the linear regression with the Duncan data using heteroskedastic errors.
+
+```r
+data("Duncan", package = "carData")
+```
+
+
+```r
+mod_norm <- stan_model("stan/lm_normal_1.stan", verbose = FALSE)
+```
+
+
+```r
+mod_t <- stan_model("stan/lm_student_t_1.stan", verbose = FALSE)
+```
+
+## Exercises
+
+-   Estimate examples in the **[hett](https://cran.r-project.org/package=hett)** package with Stan.
+
+## References
+
+For more on heteroskedasticity see @BDA3 [Sec. 14.7] for models with unequal variances and correlations. 
+
+@Stan2016a discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.
+
+[^hc]: See <https://arxiv.org/pdf/1101.1402.pdf> and  <http://econ.ucsb.edu/~startz/Bayesian%20Heteroskedasticity-Robust%20Regression.pdf>.
+
+[^globalmixture]: See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/)
+    for a visualization of a Student-t distribution a mixture of Normal distributions,
+    and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation
+    of the Student t distribution as a mixture of normal distributions.
+    This scale mixture of normal representation will also be used with shrinkage
+    priors on the regression coefficients.

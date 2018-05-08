@@ -1,625 +1,287 @@
 
-# Heteroskedasticity and Robust Regression
+---
+output: html_document
+editor_options:
+  chunk_output_type: console
+---
+# Robust Regression
 
-## Prerequisites
-
-**[VGAM](https://cran.r-project.org/package=VGAM)** is needed for the Laplace distribution.
-
-```r
-library("VGAM")
-```
-
-
-## Linear Regression with Student t distributed errors
-
-
-Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
-The normal distribution has narrow tail probabilities.
-
-This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
-Higher surprise is a lower log-likelihood.
-Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
-This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
-
+## Prerequisites {-}
 
 
 ```r
-z <- seq(-6, 6, length.out = 100)
-bind_rows(
-  tibble(z = z,
-         p = dnorm(z, 0, 1),
-         distr = "Normal"),
-  tibble(z = z,
-         p = dt(z, 4),
-         distr = "Student-t (df = 4)"),
-  tibble(z = z,
-         p = VGAM::dlaplace(z, 0, 1),
-         distr = "Double Exponential")) %>%
-  mutate(`-log(p)` = -log(p)) %>%
-  ggplot(aes(x = z, y = `-log(p)`, colour = distr)) + 
-  geom_line()
-      
+library("rstan")
+library("tidyverse")
+library("rstanarm")
+library("bayz")
+library("jrnold.bayes.notes")
 ```
+
+## Wide Tailed Distributions
+
+Like OLS, Bayesian linear regression with normally distributed errors is
+sensitive to outliers.
+This is because the normal distribution has narrow tail probabilities,
+with approximately 99.8% of the probability within three standard deviations.
+
+[Robust regression](https://en.wikipedia.org/wiki/Robust_regression) refers to regression methods which are less sensitive to outliers.
+Bayesian robust regression uses distributions with wider tails than the normal instead of the normal.
+This plots the normal, Double Exponential (Laplace), and Student-t ($df = 4$)
+distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
+Both the Student-$t$ and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
+This means that outliers will have less of an affect on the log-posterior of models using these distributions.
+The regression line would need to move less  incorporate those observations since the error distribution will not consider them as unusual.
+
+<img src="robust_files/figure-html/unnamed-chunk-2-1.png" width="70%" style="display: block; margin: auto;" />
 
 <img src="robust_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
 
+## Student-t distribution
 
-```r
-z <- seq(-6, 6, length.out = 100)
-bind_rows(
-  tibble(z = z,
-         p = dnorm(z, 0, 1),
-         distr = "Normal"),
-  tibble(z = z,
-         p = dt(z, 4),
-         distr = "Student-t (df = 4)"),
-  tibble(z = z,
-         p = VGAM::dlaplace(z, 0, 1),
-         distr = "Double Exponential")) %>%
-  mutate(`-log(p)` = -log(p)) %>%
-  ggplot(aes(x = z, y = p, colour = distr)) + 
-  geom_line()
-      
-```
+The most commonly used Bayesian model for robust regression is a linear regression with independent Student-$t$ errors [@Geweke1993; @BDA3, Ch. 17]:
+$$
+y_i \sim \dt\left(\nu, \mu_i, \sigma \right)
+$$
+where $\nu \in \R^{+}$ is a degrees of freedom parameter, $\mu_i \in \R$ are observation specific locations often modeled with a regression, and and $\sigma \in R^{+}$ is a
+the scale parameter.
 
+Note that as $\nu \to \infty$, this model approaches an independent normal model, since
+the Student-t distribution asymptotically approaches the normal distribution as the degrees of freedom increases.
+For the value of $\nu$, either a low degrees of freedom $\nu \in (4, 6)$ can be used, or
+it can be given a prior distribution.
+For the Student-t distribution, the existence of various moments depends on the value of $\nu$: the mean exists for $\nu > 1$, variance for $\nu > 2$, and kurtosis for $\nu > 3$.
+As such, it is often useful to restrict the support of $\nu$ to at least 1 or 2 (or even higher) ensure the existence of a mean or variance.
+
+A reasonable prior distribution for the degrees of freedom parameter is a Gamma
+distribution with shape parameter 2, and an inverse-scale (rate) parameter of 0.1 [@JuarezSteel2010a,@Stan-prior-choices],
+$$
+\nu \sim \dgamma(2, 0.1) .
+$$
 <img src="robust_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" />
+This density places the majority of the prior mass for values $\nu < 50$, in which 
+the Student-$t$ distribution is substantively different from the Normal distribution,
+and also allows for all prior moments to exist.
 
-
-
-[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
-
-
-
-```r
-mod_t
-```
-
-<pre>
-  <code class="stan">data {
+The Stan model that estimates this is `lm_student_t_1.stan`:
+<!--html_preserve--><pre class="stan">
+<code>// lm_student_t_1.stan
+// Linear Model with Student-t Errors
+data {
   // number of observations
-  int n;
-  // response vector
-  vector[n] y;
+  int<lower=0> N;
+  // response
+  vector[N] y;
   // number of columns in the design matrix X
-  int k;
+  int<lower=0> K;
   // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
+  // should not include an intercept
+  matrix [N, K] X;
+  // priors on alpha
+  real<lower=0.> scale_alpha;
+  vector<lower=0.>[K] scale_beta;
+  real<lower=0.> loc_sigma;
+  // keep responses
+  int<lower=0, upper=1> use_y_rep;
+  int<lower=0, upper=1> use_log_lik;
 }
 parameters {
   // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-  real<lower = 1.0> nu;
+  real alpha;
+  vector[K] beta;
+  real<lower=0.> sigma;
+  // degrees of freedom;
+  // limit df = 2 so that there is a finite variance
+  real<lower=2.> nu;
 }
 transformed parameters {
-  // mu is the observation fitted/predicted value
-  // also called yhat
-  vector[n] mu;
-  mu = X * b;
+  vector[N] mu;
+
+  mu = alpha + X * beta;
 }
 model {
   // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
+  alpha ~ normal(0.0, scale_alpha);
+  beta ~ normal(0.0, scale_beta);
+  sigma ~ exponential(loc_sigma);
+  // see Stan prior distribution suggestions
   nu ~ gamma(2, 0.1);
   // likelihood
   y ~ student_t(nu, mu, sigma);
 }
 generated quantities {
   // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood values
-  vector[n] log_lik;
-  for (i in 1:n) {
+  vector[N * use_y_rep] y_rep;
+  // log-likelihood posterior
+  vector[N * use_log_lik] log_lik;
+  for (i in 1:num_elements(y_rep)) {
     y_rep[i] = student_t_rng(nu, mu[i], sigma);
+  }
+  for (i in 1:num_elements(log_lik)) {
     log_lik[i] = student_t_lpdf(y[i] | nu, mu[i], sigma);
   }
-
 }</code>
-</pre>
+</pre><!--/html_preserve-->
 
-
-
-```r
-unionization <- read_tsv("data/western1995/unionization.tsv",
-         col_types = cols(
-              country = col_character(),
-              union_density = col_double(),
-              left_government = col_double(),
-              labor_force_size = col_number(),
-              econ_conc = col_double()
-            ))
-mod_data <- lm_preprocess(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
-                                   
-mod_data <- within(mod_data, {
-  b_loc <- 0
-  b_scale <- 1000
-  sigma_scale <- sd(y)
-})
-```
-
-The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum tree depth.
-This is likely due to the wide tails of the Student t distribution.
-
-```r
-mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11))
-#> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 3.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.916274 seconds (Warm-up)
-#>                0.793757 seconds (Sampling)
-#>                1.71003 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 1
-#>                                                                                          count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.5e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.895086 seconds (Warm-up)
-#>                0.851101 seconds (Sampling)
-#>                1.74619 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 2
-#>                                                                                          count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.959192 seconds (Warm-up)
-#>                0.806953 seconds (Sampling)
-#>                1.76615 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 3
-#>                                                                                     count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is 0, but must be > 0!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-#> 
-#> SAMPLING FOR MODEL 'lm_student_t' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.4e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.883576 seconds (Warm-up)
-#>                0.731602 seconds (Sampling)
-#>                1.61518 seconds (Total)
-#> The following numerical problems occurred the indicated number of times on chain 4
-#>                                                                                          count
-#> Exception thrown at line 35: student_t_lpdf: Scale parameter is inf, but must be finite!     1
-#> When a numerical problem occurs, the Hamiltonian proposal gets rejected.
-#> See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
-#> If the number in the 'count' column is small, there is no need to ask about this message on stan-users.
-```
-
-
-```r
-summary(mod_t_fit, pars = c("b"))$summary
-#>        mean se_mean     sd    2.5%    25%    50%     75%  97.5% n_eff Rhat
-#> b[1] 90.924 2.19841 66.781 -44.196  47.81 91.762 133.164 223.22   923    1
-#> b[2]  0.273 0.00162  0.083   0.103   0.22  0.275   0.328   0.43  2626    1
-#> b[3] -6.082 0.13953  4.322 -14.791  -8.92 -6.101  -3.263   2.57   959    1
-#> b[4]  2.763 0.74224 22.668 -43.434 -11.60  2.445  17.292  48.50   933    1
-```
-
-Compare those results when using a model with 
-
-
-```r
-mod_normal
-```
-
-<pre>
-  <code class="stan">data {
+As noted in [Heteroskedasticity], the Student-t distribution can be represented as a 
+scale-mixture of normal distributions, where the inverse-variances (precisions) follow 
+a Gamma distribution,
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm\left(\mu_i, \omega^2 \lambda_i^2 \right) \\
+\lambda^{-2} &\sim \dgamma\left(\nu / 2, \nu / 2\right)
+\end{aligned}
+$$
+The scale mixture distribution of normal parameterization of the Student t distribution is useful for computational reasons.
+A Stan model that implements this scale mixture of normal distribution representation of the Student-t distribution is `lm_student_t_2.stan`:
+<!--html_preserve--><pre class="stan">
+<code>// lm_student_t_2.stan
+// Linear Model with Student-t Errors
+data {
   // number of observations
-  int n;
-  // response vector
-  vector[n] y;
+  int<lower=0> N;
+  // response
+  vector[N] y;
   // number of columns in the design matrix X
-  int k;
+  int<lower=0> K;
   // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
+  // should not include an intercept
+  matrix [N, K] X;
+  // priors on alpha
+  real<lower=0.> scale_alpha;
+  vector<lower=0.>[K] scale_beta;
+  real<lower=0.> loc_sigma;
+  // keep responses
+  int<lower=0, upper=1> use_y_rep;
+  int<lower=0, upper=1> use_log_lik;
 }
 parameters {
   // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
+  real alpha;
+  vector[K] beta;
+  // regression scale
+  real<lower=0.> omega;
+  // 1 / lambda_i^2
+  vector<lower = 0.0>[N] inv_lambda2;
+  // degrees of freedom;
+  // limit df = 2 so that there is a finite variance
+  real<lower=2.> nu;
 }
 transformed parameters {
-  // mu is the observation fitted/predicted value
-  // also called yhat
-  vector[n] mu;
-  mu = X * b;
+  vector[N] mu;
+
+  mu = alpha + X * beta;
 }
 model {
+  real half_nu;
+  vector[N] sigma;
+
   // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  // likelihood
+  alpha ~ normal(0.0, scale_alpha);
+  beta ~ normal(0.0, scale_beta);
+  sigma ~ exponential(loc_sigma);
+  nu ~ gamma(2, 0.1);
+  half_nu = 0.5 * nu;
+  inv_lambda2 ~ gamma(half_nu, half_nu);
+  // observation variances
+  for (n in 1:N) {
+    sigma[n] = omega / sqrt(inv_lambda2[n]);
+  }
+  // likelihood with obs specific scales
   y ~ normal(mu, sigma);
 }
 generated quantities {
   // simulate data from the posterior
-  vector[n] y_rep;
+  vector[N * use_y_rep] y_rep;
   // log-likelihood posterior
-  vector[n] log_lik;
-  for (i in 1:n) {
-    y_rep[i] = normal_rng(mu[i], sigma);
-    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+  vector[N * use_log_lik] log_lik;
+  for (n in 1:num_elements(y_rep)) {
+    y_rep[n] = student_t_rng(nu, mu[n], omega);
+  }
+  for (n in 1:num_elements(log_lik)) {
+    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega);
   }
 }</code>
-</pre>
+</pre><!--/html_preserve-->
 
-
-```r
-mod_normal_fit <- sampling(mod_normal, data = mod_data)
-#> 
-#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 1).
-#> 
-#> Gradient evaluation took 2.7e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.57835 seconds (Warm-up)
-#>                0.504448 seconds (Sampling)
-#>                1.0828 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 2).
-#> 
-#> Gradient evaluation took 1.2e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.533096 seconds (Warm-up)
-#>                0.469512 seconds (Sampling)
-#>                1.00261 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 3).
-#> 
-#> Gradient evaluation took 1.1e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.516238 seconds (Warm-up)
-#>                0.602928 seconds (Sampling)
-#>                1.11917 seconds (Total)
-#> 
-#> 
-#> SAMPLING FOR MODEL 'lm' NOW (CHAIN 4).
-#> 
-#> Gradient evaluation took 1.9e-05 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0.19 seconds.
-#> Adjust your expectations accordingly!
-#> 
-#> 
-#> Iteration:    1 / 2000 [  0%]  (Warmup)
-#> Iteration:  200 / 2000 [ 10%]  (Warmup)
-#> Iteration:  400 / 2000 [ 20%]  (Warmup)
-#> Iteration:  600 / 2000 [ 30%]  (Warmup)
-#> Iteration:  800 / 2000 [ 40%]  (Warmup)
-#> Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#> Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#> Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#> Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#> Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#> Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#> Iteration: 2000 / 2000 [100%]  (Sampling)
-#> 
-#>  Elapsed Time: 0.525881 seconds (Warm-up)
-#>                0.422686 seconds (Sampling)
-#>                0.948567 seconds (Total)
-```
-
-
-```r
-summary(mod_normal_fit, pars = c("b"))$summary
-#>        mean se_mean      sd     2.5%     25%    50%     75%   97.5% n_eff
-#> b[1] 95.987 2.41105 63.9174 -27.7095  53.147 95.592 137.966 223.008   703
-#> b[2]  0.270 0.00194  0.0842   0.0979   0.217  0.273   0.326   0.434  1891
-#> b[3] -6.356 0.15521  4.2031 -14.8646  -9.116 -6.339  -3.532   1.768   733
-#> b[4]  0.858 0.80219 21.5103 -41.1619 -13.309  0.972  15.252  43.658   719
-#>      Rhat
-#> b[1] 1.01
-#> b[2] 1.00
-#> b[3] 1.01
-#> b[4] 1.01
-```
-
-
-### Double Exponential (Laplace) Errors
-
-An alternative form of "robust" regression is to use the Double Exponential (Laplace) distributions for the errors.
-
-This is the equivalent to least median regression, where the regression line is the median (50% quantile)
-
-
-```r
-mod_dbl_exp
-```
-
-<pre>
-  <code class="stan">data {
-  // number of observations
-  int n;
-  // response vector
-  vector[n] y;
-  // number of columns in the design matrix X
-  int k;
-  // design matrix X
-  matrix [n, k] X;
-  // beta prior
-  real b_loc;
-  real<lower = 0.0> b_scale;
-  // sigma prior
-  real sigma_scale;
-}
-parameters {
-  // regression coefficient vector
-  vector[k] b;
-  // scale of the regression errors
-  real<lower = 0.0> sigma;
-}
-transformed parameters {
-  // mu is the observation fitted/predicted value
-  vector[n] mu;
-  // tau are obs-level scale params
-  mu = X * b;
-}
-model {
-  // priors
-  b ~ normal(b_loc, b_scale);
-  sigma ~ cauchy(0, sigma_scale);
-  // likelihood
-  y ~ double_exponential(mu, sigma);
-}
-generated quantities {
-  // simulate data from the posterior
-  vector[n] y_rep;
-  // log-likelihood values
-  vector[n] log_lik;
-  // use a single loop since both y_rep and log_lik are elementwise
-  for (i in 1:n) {
-    y_rep[i] = double_exponential_rng(mu[i], sigma);
-    log_lik[i] = double_exponential_lpdf(y[i] | mu[i], sigma);
-  }
-
-}</code>
-</pre>
-
-
-
-```r
-summary(mod_dbl_exp_fit, par = c("b"))$summary
-#>        mean se_mean      sd    2.5%    25%    50%     75%   97.5% n_eff
-#> b[1] 60.671 2.58294 72.5324 -84.418 15.896 56.321 105.938 207.022   789
-#> b[2]  0.298 0.00217  0.0815   0.126  0.248  0.304   0.354   0.442  1415
-#> b[3] -4.303 0.15685  4.4911 -13.482 -7.160 -4.100  -1.555   4.641   820
-#> b[4] 13.381 0.91373 25.6984 -38.570 -2.215 14.588  29.270  64.348   791
-#>      Rhat
-#> b[1]    1
-#> b[2]    1
-#> b[3]    1
-#> b[4]    1
-```
-
-
-Model comparison
-
-```r
-loo_t <- loo(extract_log_lik(mod_normal_fit, "log_lik"))
-#> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-
-#> diagnostic') for details.
-loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
-#> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-
-#> diagnostic') for details.
-loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
-```
-
-
-
-## Heteroskedasticity
-
-In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.
-
-However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. 
-Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.
-
-In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, $\sigma_i$,
+Another reparameterization of these models that is useful computationally is 
+The variance of the Student-t distribution is a function of the scale and the degree-of-freedom parameters. 
+Suppose $X \sim \dt(\nu, \mu, \sigma)$, then
 $$
-\begin{aligned}[t]
-y_i &\sim \dnorm(X \beta, \sigma_i) .
+\Var(X) = \frac{\nu}{\nu - 2} \sigma^2.
+$$
+So variance of data can be fit better by *either* increasing $\nu$ or increasing the scale $\sigma$.
+This will create posterior correlations between the parameters, and make it more difficult to sample the posterior distribution.
+We can reparameterize the model to make $\sigma$ and $\nu$ less correlated by multiplying the scale by the degrees of freedom. 
+$$
+\begin{aligned}
+y_i \sim \dt\left(\nu, \mu_i, \sigma \sqrt{\frac{\nu - 2}{\nu}} \right)
 \end{aligned}
 $$
-It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper.
-To estimate this model we have to apply some model to the scale terms, $\sigma_i$.
-In fact, you can think of homoskedasticity as the simplest such model; assuming that all $\sigma_i = \sigma$.
-A more general model of $\sigma_i$ should encode any information the analyst has about the scale terms.
-This can be a distribution or functions of covariates for how we think observations may have different values.
-
-### Covariates
-
-A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into $k = 1, \dots, K$ groups, and $k[i]$ is the group of observation $i$,
+In this model, changing the value of $\nu$ has no effect on the variance of $y$, since
 $$
-\sigma_i = \sigma_{k[i]}
+\Var(y_i) = \frac{\nu}{\nu - 2} \sigma^2 \frac{\nu - 2}{\nu} = \sigma^2 .
 $$
 
-Another choice would be to model the scale term with a regression model, for example,
+### Examples
+
+Estimate some examples with known outliers and compare to using a normal
+See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
+associated **jrnold.bayes.notes** package.
+
+## Robit
+
+The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
+For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
 $$
-\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
+\begin{aligned}[t]
+y_i &\sim \dbin \left(n_i, \pi_i \right) \\
+\pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | \nu, 0, (\nu - 2)/ \nu) dx \\
+\eta_i &= \alpha + X \beta
+\end{aligned}
 $$
+Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
+Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
+Where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$, or a prior distribution.
 
+## Quantile regression
 
-### Student-t Error
+A different form of robust regression and one that often serves a different purpose is quantile regression.
 
-The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.
-
-A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+[Least absolute deviation](https://en.wikipedia.org/wiki/Least_absolute_deviations) (LAD) regression minimizes the following objective function,
 $$
-y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
+\hat{\beta}_{LAD} = \arg \min_{\beta} \sum | y_i - \alpha - X \beta | .
 $$
-If the local variance parameters are distributed inverse-gamma,
+The Bayesian analog is the [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution),
 $$
-\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
+\dlaplace(x | \mu, \sigma) = \frac{1}{2 \sigma} \left( - \frac{|x - \mu|}{\sigma} \right) .
 $$
-then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
+The Laplace distribution is analogous to least absolute deviations because the kernel of the distribution is $|x - \mu|$, so minimizing the likelihood will also minimize the least absolute distances.
+
+Thus, a linear regression with Laplace errors is analogous to a median regression.
 $$
-y_i \sim \dt{\nu}(X \beta, \sigma) .
+\begin{aligned}[t]
+y_i &\sim \dlaplace\left( \alpha + X \beta, \sigma \right)
+\end{aligned}
 $$
+This can be generalized to other quantiles using the asymmetric Laplace distribution [@BenoitPoel2017a, @YuZhang2005a].
 
+### Questions
 
-[^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
+1.  OLS is a model of the conditional mean $E(y | x)$. A linear model with
+    normal errors is a model of the outcomes $p(y | x)$. How would you estimate
+    the conditional mean, median, and quantile functions from the linear-normal
+    model? What role would quantile regression play? Hint: See @BenoitPoel2017a [Sec. 3.4].
 
+1.  Implement the asymmetric Laplace distribution in Stan in two ways:
 
-**Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
-
-1. Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
-2. $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
-
-When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
-
+    -   Write a user function to calculate the log-PDF
+    -   Implement it as a scale-mixture of normal distributions
 
 ## References
 
-### Robust regression 
+For more on robust regression see @GelmanHill2007a [sec 6.6], @BDA3 [ch 17], and @Stan2016a [Sec 8.4].
 
-- See @GelmanHill2007a [sec 6.6], @BDA3 [ch 17]
-- @Stan2016a [Sec 8.4] for the Stan example using a Student-t distribution
+For more on heteroskedasticity see @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
+@Stan2016a discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.
 
-### Heteroskedasticity
-
-- @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
-- @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
-
-### Qunatile regression
-
-- @BenoitPoel2017a
-- @YuZhang2005a for the three-parameter asymmetric Laplace distribution
+[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.

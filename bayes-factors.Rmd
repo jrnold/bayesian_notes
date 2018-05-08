@@ -1,0 +1,82 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Bayes Factors
+
+The Bayes factor is the ratio of the marginal probability model under one model to the marginal density under a second model.
+$$
+\frac{p(H_2 | y)}{p(H_1 | y)} = \frac{p(H_2)}{p(H_1)} \times \text{Bayes factor}(H_2; H_1)
+$$
+where
+$$
+\text{Bayes factor}(H_2; H_1) = \frac{p(y | H_2)}{p(y | H_1)} = \frac{\int p(\theta_2 | H_2) p(y | \theta_2, H_2) d \theta_2 }{\int p(\theta_1 | H_2) p(y | \theta_1, H_2) d \theta_1}
+$$
+
+Problems with Bayes' Factors
+
+-   It depends heavily on the choice of prior.
+-   It is not (easily) defined for improper priors
+-   There is an implicit assumption that one of the competing models is correct
+
+@KassRaftery1995 suggest BIC as an approximation for Bayes Factors.
+$$
+BIC = \overbrace{-2 \ln \mathcal{L}(\hat{\theta} | y)}^{\text{in-sample fit}} + \overbrace{p \ln (n)}^{\text{overfitting penalty}}
+$$
+where $p$ is the number of free parameters, $n$is the number of observations, and $\mathcal{L}(\hat{\theta} |y)$ is the MLE. This is 
+Difference in $BIC$ can be used to compare models.
+As $n \to \infty$, this difference in $BIC$ approaches the Bayes Factor. As $n \to \infty$,
+$$
+BIC_{H_2} - BIC_{H_1} \approx -2 \ln (\text{Bayes factor}(H_2; H_2)) .
+$$
+
+-   requires that $p$ (number of parameters) is well-defined
+-   number of observations $n$ is well-defined
+-   MLE exists
+-   Still does not make sense if the priors are improper.
+
+Computationally, estimating the marginal likelihood is very difficult in most cases.
+The marginal likelihood for a model $M$ is defined as
+$$
+p(y | M) = \int p(y | \theta, M) p(\theta | M) d \theta .
+$$
+@KassRaftery1995 discuss some of the computational issues. 
+None of the methods are particularly good; e.g. the estimator suggested by @KassRaftery1995 has an [infinite variance](https://radfordneal.wordpress.com/2008/08/17/the-harmonic-mean-of-the-likelihood-worst-monte-carlo-method-ever/).
+The difficulty of calculating the marginal likelihood why most estimators of the posterior distribution only calculate a value proportional to the posterior distribution and avoid calculating the marginal likelihood.
+
+Notes:
+
+-   Bayes factors work better for discrete hypotheses/models than for continuous hypotheses/models. For the latter, use continuous model expansion [@BDA3, Sec 7.5].
+
+<!--
+## Lindley's Paradox
+
+Given a sample of size $n$ from a normal distribution $\mathcal{N}(\theta, \sigma^2)$ with a known variance $\sigma^2$, testing whether or not the null hypothesis $H_0: \theta = \theta_0$ on the mean means holds (against the alternative $H_1: \theta \neq \theta_0$).
+
+Frequentist. Summarize the dataset with the sufficient statistic,
+$$
+\bar{x}_n = \mathcal{N}(\theta, \sigma^2 / n)
+$$
+The test statistic is
+$$
+t_n = \sqrt{n}(\bar{x}_n - \theta_0 ) / \sigma
+$$
+which is distributed $t_n \sim \mathcal{N}(0, 1)$ under the null hypothesis.
+
+Suppose that the prior distribution of the parameters is $\theta \sim \mathcal{\theta_0, \sigma^2)$.
+The Bayes factor is
+$$
+BF_{01}(t_n) = (1 = n)^{1/2} \exp(-n t^2_n / 2[1 + n]).
+$$
+-->
+
+<!--
+- http://doingbayesiandataanalysis.blogspot.com/2017/02/equivalence-testing-two-one-sided-test.html
+-->
+
+## References
+
+-   @BDA3 [Sec 7.4]
+-   Kruschke (2015) [Bayes factors for tests of mean and effect size can be very different](http://doingbayesiandataanalysis.blogspot.com/2015/04/bayes-factors-for-tests-of-mean-and.html). doingbayesiandataanalysis.blogspot.com.
+-   [This Cross Validated](https://stats.stackexchange.com/questions/209810/computation-of-the-marginal-likelihood-from-mcmc-samples) post by Christian Robert has many useful references to the recent state of the art for calculating the marginal likelihood from MCMC samples.

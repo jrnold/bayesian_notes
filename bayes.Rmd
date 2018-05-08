@@ -1,0 +1,124 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Data order invariances
+
+Given the model, the order in which the data appears does not matter.
+Rather, it depends only on the likelihood.
+Suppose that the likelihood is defined as $p(y | \theta)$. 
+That, is saying that the likelihood of observing $y$ is only dependent on $\theta$, and independent of any other observations.
+In models with independent likelihoods of observations,
+$$
+p(y_1, y_2, \dots, y_n | \theta) = \prod_i p(y_i | \theta)
+$$
+the order in in which the observations $y_i$ appear does not matter to the posterior distribution.
+
+This is shown as follows:
+$$
+\begin{aligned}[t]
+p(\theta | y_1, y_2) &= \frac{p(y_1, y_2 | 
+\theta) p(\theta)}{\sum_{\theta^*} p(y_1, y_2 | \theta^*) p(\theta^*)} & \text{Bayes' Theorem} \\
+&= \frac{p(y_1, y_2 | 
+theta) p(\theta)}{\sum_{\theta^*} p(y_1, y_2 | \theta^*) p(\theta^*)} & \text{indpendence} \\
+&= \frac{p(y_1, y_2 | 
+\theta) p(\theta)}{\sum_{\theta^*} p(y_1, y_2 | \theta^*) p(\theta^*)} & \text{multiplication is commutative} \\
+\end{aligned}
+$$
+
+This does not mean that the order of data cannot matter to the estimates of parameters, only that the way in that the ordering affects the parameters needs to be included in the likelihood.
+
+## Estimating the bias in a coin
+
+How do you find the bias of a coin? 
+
+Suppose a coin 
+
+Let $y \in \{0, 1\}$ be the observed result of a coin flip, where $y = 1$ if the coin landed on heads, and $y = 0$ if the coin landed on tails.
+A coin has a single parameter $\theta \in (0, 1)$, which is the probability of landing on heads.
+In an unbiased coin, $\theta = 0.5$.
+
+The likelihood is represented as a Bernoulli distribution:
+$$
+p(y | \theta) = \mathrm{Bernoulli}(\theta) = \theta^y (1 - \theta)^{(1 - y)}
+$$
+
+For a prior on $\theta$, we will use a Beta distribution,
+$$
+p(\theta) = \mathrm{Beta}(\theta) = \frac{\theta^{\alpha - 1} (1 - \theta)^{\beta - 1}}{\mathrm{B}(\alpha, \beta)}
+$$
+where
+$$
+\mathrm{B}(\alpha, \beta) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha + \beta)} .
+$$
+
+Given the expected value of the Beta distribution,
+$$
+\E(p(\theta | \alpha, \beta)) = \frac{\alpha}{\alpha + \beta} .
+$$
+This suggests that the $\beta$ distribution can be thought of as the results of $\alpha + \beta$ observations with $\alpha$ successes and $\beta$ failures.
+
+For a Bernoulli likelihood and a beta prior distribution for its parameter, the posterior distribution of its parameters is also a Beta distribution,
+$$
+p(\theta | y) = \mathrm{Beta}(\alpha + y, \beta + (1 - y)) .
+$$
+Thus, the posterior distribution now represents $\alpha + y$ successes and $\beta + (1 - y)$ failures.
+
+In the example of Beta priors to the parameter in Binomial distributions, this makes it clear that the prior can be interpreted as a summary the previous data. 
+This is also clear in the equations of several other conjugate distributions in which the prior can be interpreted as observations.
+However, this is a general point ... even if it is hard to formulate exactly what results the prior corresponds to, it corresponds to *some* set of previous data.
+
+## Binomial
+
+Suppose that a coin is tossed $n$ times, and $y \in \{0, 1, \dots, n -1, n}$ is the number of heads in those $n$ tosses.
+$$
+p(y | \theta) = \mathrm{Binomial}(y | n, \theta)
+$$
+Then if $\theta$ has a Beta distribution prior distribution,
+$$
+p(\theta) = \mathrm{Beta}(\theta | \alpha, \beta)
+$$
+the posterior distribution of $\theta$ is,
+$$
+p(\theta | y) = \mathrm{Beta}(\alpha + y, \beta + (n - y)).
+$$
+As before, the prior can be interpreted as pseudo-observations representing $\alpha$ successes, and $\beta$ failures.
+
+## Normal Distribution
+
+Consider a likelihood,
+$$
+p(y_1, \dots, y_n | \mu, \sigma^2) = \prod_{i = 1}^n \mathrm{Normal}(y_i | \mu, \sigma^2)
+$$
+where the variance, $\sigma^2$, is known, and the mean, $\mu$, is unknown.
+Suppose the mean $\mu$ has a prior distribution,
+$$
+p(\mu) = \mathrm{Normal}(\mu_0, \sigma_0^2).
+$$
+Then the posterior distribution of the mean $\mu$ is
+$$
+p(\mu | y_1, \dots, y_n) = \mathrm{Normal}
+\left( 
+  \left(
+    \frac{1}{\frac{1}{\sigma_0^2} + 
+    \frac{n}{\sigma^2}} 
+  \right)
+  \left(
+    \frac{\mu_0}{\sigma_0^2} + 
+    \frac{\sum_{i = 1}^n y_i}{\sigma^2} 
+  \right),
+  \left(
+    \frac{1}{\sigma_0^2} +
+    \frac{n}{\sigma^2}
+  \right)^{-1}
+\right)
+$$
+
+Note that the mean of the posterior distribution can be written as a weighted average of the means
+
+The hyperpriors are interpreted as:
+
+| $\sigma_0$  | total precision of $1 / \sigma_0^2$
+| $\mu_0$     | sample mean

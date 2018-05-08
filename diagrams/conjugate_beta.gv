@@ -1,0 +1,13 @@
+digraph conjugate_beta {
+  node[shape = box, fontname = Helvetica]
+  geometric[label = Geometric]
+  beta[label = Beta]
+  binomial[label = Binomial]
+  bernoulli[label = Bernoulli]
+  negbin[label = "Negative Binomial"]
+
+  geometric -> beta [label = "p"]
+  binomial -> beta [label = "p"]
+  negbin -> beta [label = "p"]
+  bernoulli -> beta [label = "p"]
+}

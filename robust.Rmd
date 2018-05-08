@@ -1,26 +1,36 @@
-# Heteroskedasticity and Robust Regression
+---
+output: html_document
+editor_options:
+  chunk_output_type: console
+---
+# Robust Regression
 
-## Prerequisites
+## Prerequisites {-}
 
-`r rpkg("VGAM")` is needed for the Laplace distribution.
-```{r message=FALSE}
-library("VGAM")
+```{r setup,message=FALSE}
+library("rstan")
+library("tidyverse")
+library("rstanarm")
+library("bayz")
+library("jrnold.bayes.notes")
 ```
 
+## Wide Tailed Distributions
 
-## Linear Regression with Student t distributed errors
+Like OLS, Bayesian linear regression with normally distributed errors is
+sensitive to outliers.
+This is because the normal distribution has narrow tail probabilities,
+with approximately 99.8% of the probability within three standard deviations.
 
+[Robust regression](https://en.wikipedia.org/wiki/Robust_regression) refers to regression methods which are less sensitive to outliers.
+Bayesian robust regression uses distributions with wider tails than the normal instead of the normal.
+This plots the normal, Double Exponential (Laplace), and Student-t ($df = 4$)
+distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
+Both the Student-$t$ and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
+This means that outliers will have less of an affect on the log-posterior of models using these distributions.
+The regression line would need to move less  incorporate those observations since the error distribution will not consider them as unusual.
 
-Like OLS, Bayesian linear regression with normally distributed errors is sensitive to outliers.
-The normal distribution has narrow tail probabilities.
-
-This plots the normal, Double Exponential (Laplace), and Student-t (df = 4) distributions all with mean 0 and scale 1, and the surprise ($- log(p)$) at each point.
-Higher surprise is a lower log-likelihood.
-Both the Student-t and Double Exponential distributions have surprise values well below the normal in the ranges (-6, 6). [^tailareas]
-This means that outliers impose less of a penalty on the log-posterior models using these distributions, and the regression line would need to move less to incorporate those observations since the error distribution will not consider them as unusual.
-
-
-```{r}
+```{r echo=FALSE}
 z <- seq(-6, 6, length.out = 100)
 bind_rows(
   tibble(z = z,
@@ -33,12 +43,11 @@ bind_rows(
          p = VGAM::dlaplace(z, 0, 1),
          distr = "Double Exponential")) %>%
   mutate(`-log(p)` = -log(p)) %>%
-  ggplot(aes(x = z, y = `-log(p)`, colour = distr)) + 
+  ggplot(aes(x = z, y = `-log(p)`, colour = distr)) +
   geom_line()
-      
 ```
 
-```{r}
+```{r echo=FALSE}
 z <- seq(-6, 6, length.out = 100)
 bind_rows(
   tibble(z = z,
@@ -51,172 +60,141 @@ bind_rows(
          p = VGAM::dlaplace(z, 0, 1),
          distr = "Double Exponential")) %>%
   mutate(`-log(p)` = -log(p)) %>%
-  ggplot(aes(x = z, y = p, colour = distr)) + 
+  ggplot(aes(x = z, y = p, colour = distr)) +
   geom_line()
-      
 ```
 
+## Student-t distribution
 
+The most commonly used Bayesian model for robust regression is a linear regression with independent Student-$t$ errors [@Geweke1993; @BDA3, Ch. 17]:
+$$
+y_i \sim \dt\left(\nu, \mu_i, \sigma \right)
+$$
+where $\nu \in \R^{+}$ is a degrees of freedom parameter, $\mu_i \in \R$ are observation specific locations often modeled with a regression, and and $\sigma \in R^{+}$ is a
+the scale parameter.
 
-[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.
+Note that as $\nu \to \infty$, this model approaches an independent normal model, since
+the Student-t distribution asymptotically approaches the normal distribution as the degrees of freedom increases.
+For the value of $\nu$, either a low degrees of freedom $\nu \in (4, 6)$ can be used, or
+it can be given a prior distribution.
+For the Student-t distribution, the existence of various moments depends on the value of $\nu$: the mean exists for $\nu > 1$, variance for $\nu > 2$, and kurtosis for $\nu > 3$.
+As such, it is often useful to restrict the support of $\nu$ to at least 1 or 2 (or even higher) ensure the existence of a mean or variance.
 
-```{r include=FALSE}
-mod_t <- stan_model("stan/lm_student_t.stan")
+A reasonable prior distribution for the degrees of freedom parameter is a Gamma
+distribution with shape parameter 2, and an inverse-scale (rate) parameter of 0.1 [@JuarezSteel2010a,@Stan-prior-choices],
+$$
+\nu \sim \dgamma(2, 0.1) .
+$$
+```{r echo=FALSE}
+tibble(x = 0:50,
+       y = dgamma(x, shape = 2, rate = 0.1)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_line() +
+  labs(y = "Density", x = expression(nu))
 ```
-```{r cache=FALSE}
-mod_t
-```
+This density places the majority of the prior mass for values $\nu < 50$, in which 
+the Student-$t$ distribution is substantively different from the Normal distribution,
+and also allows for all prior moments to exist.
 
-
-```{r}
-unionization <- read_tsv("data/western1995/unionization.tsv",
-         col_types = cols(
-              country = col_character(),
-              union_density = col_double(),
-              left_government = col_double(),
-              labor_force_size = col_number(),
-              econ_conc = col_double()
-            ))
-mod_data <- lm_preprocess(union_density ~ left_government + log(labor_force_size) + econ_conc, data = unionization)
-                                   
-mod_data <- within(mod_data, {
-  b_loc <- 0
-  b_scale <- 1000
-  sigma_scale <- sd(y)
-})
-
-```
-
-The `max_treedepth` parameter needed to be increased because in some runs it was hitting the maximum tree depth.
-This is likely due to the wide tails of the Student t distribution.
-```{r}
-mod_t_fit <- sampling(mod_t, data = mod_data, control = list(max_treedepth = 11))
-```
-
-```{r output=FALSE}
-summary(mod_t_fit, pars = c("b"))$summary
+The Stan model that estimates this is `lm_student_t_1.stan`:
+```{r echo=FALSE}
+print_stanmodel("stan/lm_student_t_1.stan")
 ```
 
-Compare those results when using a model with 
-```{r include=FALSE}
-mod_normal <- stan_model("stan/lm.stan")
-```
-```{r cache=FALSE}
-mod_normal
-```
-
-```{r}
-mod_normal_fit <- sampling(mod_normal, data = mod_data)
-```
-
-```{r}
-summary(mod_normal_fit, pars = c("b"))$summary
-```
-
-
-### Double Exponential (Laplace) Errors
-
-An alternative form of "robust" regression is to use the Double Exponential (Laplace) distributions for the errors.
-
-This is the equivalent to least median regression, where the regression line is the median (50% quantile)
-```{r include=FALSE}
-mod_dbl_exp <- stan_model("stan/lm_dbl_exp.stan")
-```
-```{r cache=FALSE}
-mod_dbl_exp
-```
-
-```{r include=FALSE}
-mod_dbl_exp_fit <- sampling(mod_dbl_exp, data = mod_data)
-```
-```{r}
-summary(mod_dbl_exp_fit, par = c("b"))$summary
-```
-
-
-Model comparison
-```{r}
-loo_t <- loo(extract_log_lik(mod_normal_fit, "log_lik"))
-loo_normal <- loo(extract_log_lik(mod_t_fit, "log_lik"))
-loo_dbl_exp <- loo(extract_log_lik(mod_dbl_exp_fit, "log_lik"))
-```
-
-
-
-## Heteroskedasticity
-
-In applied regression, heteroskedasticity consistent (HC) or robust standard errors are often used.
-
-However, there is straightforwardly direct translation of HC standard error to regression model this in a Bayesian setting. The sandwich method of estimating HC errors uses the same point estimates for the regression coefficients as OLS, but estimates the standard errors of those coefficients in a second stage from the OLS residuals. 
-Disregarding differences in frequentist vs. Bayesian inference, it is clear that a direct translation of that method could not be fully Bayesian since the coefficients and errors are not estimated jointly.
-
-In a linear normal regression model with heteroskedasticity, each observation has its own scale parameter, $\sigma_i$,
+As noted in [Heteroskedasticity], the Student-t distribution can be represented as a 
+scale-mixture of normal distributions, where the inverse-variances (precisions) follow 
+a Gamma distribution,
 $$
 \begin{aligned}[t]
-y_i &\sim \dnorm(X \beta, \sigma_i) .
+y_i &\sim \dnorm\left(\mu_i, \omega^2 \lambda_i^2 \right) \\
+\lambda^{-2} &\sim \dgamma\left(\nu / 2, \nu / 2\right)
 \end{aligned}
 $$
-It should be clear that without proper priors this model is not identified, meaning that the posterior distribution is improper.
-To estimate this model we have to apply some model to the scale terms, $\sigma_i$.
-In fact, you can think of homoskedasticity as the simplest such model; assuming that all $\sigma_i = \sigma$.
-A more general model of $\sigma_i$ should encode any information the analyst has about the scale terms.
-This can be a distribution or functions of covariates for how we think observations may have different values.
+The scale mixture distribution of normal parameterization of the Student t distribution is useful for computational reasons.
+A Stan model that implements this scale mixture of normal distribution representation of the Student-t distribution is `lm_student_t_2.stan`:
+```{r echo=FALSE}
+print_stanmodel("stan/lm_student_t_2.stan")
+```
 
-### Covariates
-
-A simple model of heteroskedasticity is if the observations can be split into groups. Suppose the observations are partitioned into $k = 1, \dots, K$ groups, and $k[i]$ is the group of observation $i$,
+Another reparameterization of these models that is useful computationally is 
+The variance of the Student-t distribution is a function of the scale and the degree-of-freedom parameters. 
+Suppose $X \sim \dt(\nu, \mu, \sigma)$, then
 $$
-\sigma_i = \sigma_{k[i]}
+\Var(X) = \frac{\nu}{\nu - 2} \sigma^2.
 $$
-
-Another choice would be to model the scale term with a regression model, for example,
+So variance of data can be fit better by *either* increasing $\nu$ or increasing the scale $\sigma$.
+This will create posterior correlations between the parameters, and make it more difficult to sample the posterior distribution.
+We can reparameterize the model to make $\sigma$ and $\nu$ less correlated by multiplying the scale by the degrees of freedom. 
 $$
-\log(\sigma_i) \sim \dnorm(X \gamma, \tau)
+\begin{aligned}
+y_i \sim \dt\left(\nu, \mu_i, \sigma \sqrt{\frac{\nu - 2}{\nu}} \right)
+\end{aligned}
 $$
-
-
-### Student-t Error
-
-The Student-t distribution of error terms from the [Robust Regression] chapter is also model of heteroskedasticity.
-
-A reparameterization that will be used quite often is to rewrite a normal distributions with unequal scale parameters as the product of a common global scale parameter ($\sigma$), and observation specific local scale parameters, $\lambda_i$,[^globalmixture]
+In this model, changing the value of $\nu$ has no effect on the variance of $y$, since
 $$
-y_i \sim \dnorm(X\beta, \lambda_i \sigma) .
-$$
-If the local variance parameters are distributed inverse-gamma,
-$$
-\lambda^2 \sim \dinvgamma(\nu / 2, \nu / 2)
-$$
-then the above is equivalent to a regression with errors distributed Student-t errors with $\nu$ degrees of freedom,
-$$
-y_i \sim \dt{\nu}(X \beta, \sigma) .
+\Var(y_i) = \frac{\nu}{\nu - 2} \sigma^2 \frac{\nu - 2}{\nu} = \sigma^2 .
 $$
 
+### Examples
 
-[^globalmixture] See [this](http://www.sumsar.net/blog/2013/12/t-as-a-mixture-of-normals/) for a visualization of a Student-t distribution a mixture of Normal distributions, and [this](https://www.johndcook.com/t_normal_mixture.pdf) for a derivation of the Student t distribution as a mixture of normal distributions. This scale mixture of normal representation will also be used with shrinkage priors on the regression coefficients.
+Estimate some examples with known outliers and compare to using a normal
+See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
+associated **jrnold.bayes.notes** package.
 
+## Robit
 
-**Example:** Simulate Student-t distribution with $\nu$ degrees of freedom as a scale mixture of normal. For *s in 1:S$,
+The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
+For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
+$$
+\begin{aligned}[t]
+y_i &\sim \dbin \left(n_i, \pi_i \right) \\
+\pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | \nu, 0, (\nu - 2)/ \nu) dx \\
+\eta_i &= \alpha + X \beta
+\end{aligned}
+$$
+Since the variance of a random variable distributed Student-$t$ is $d / d - 2$, the scale fixes the variance of the distribution at 1.
+Fixing the variance of the Student-$t$ distribution is not necessary if $d$ is fixed, but is necessary if $d$ were modeled as a parameter.
+Where $\nu$ is given a low degrees of freedom $\nu \in [3, 7]$, or a prior distribution.
 
-1. Simulate $z_s \sim \dgamma(\nu / 2, \nu / 2)$
-2. $x_s = 1 / \sqrt{z_s}2$ is draw from $\dt{\nu}(0, 1)$.
+## Quantile regression
 
-When using R, ensure that you are using the correct parameterization of the gamma distribution. **Left to reader**
+A different form of robust regression and one that often serves a different purpose is quantile regression.
 
+[Least absolute deviation](https://en.wikipedia.org/wiki/Least_absolute_deviations) (LAD) regression minimizes the following objective function,
+$$
+\hat{\beta}_{LAD} = \arg \min_{\beta} \sum | y_i - \alpha - X \beta | .
+$$
+The Bayesian analog is the [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution),
+$$
+\dlaplace(x | \mu, \sigma) = \frac{1}{2 \sigma} \left( - \frac{|x - \mu|}{\sigma} \right) .
+$$
+The Laplace distribution is analogous to least absolute deviations because the kernel of the distribution is $|x - \mu|$, so minimizing the likelihood will also minimize the least absolute distances.
+
+Thus, a linear regression with Laplace errors is analogous to a median regression.
+$$
+\begin{aligned}[t]
+y_i &\sim \dlaplace\left( \alpha + X \beta, \sigma \right)
+\end{aligned}
+$$
+This can be generalized to other quantiles using the asymmetric Laplace distribution [@BenoitPoel2017a, @YuZhang2005a].
+
+### Questions
+
+1.  OLS is a model of the conditional mean $E(y | x)$. A linear model with
+    normal errors is a model of the outcomes $p(y | x)$. How would you estimate
+    the conditional mean, median, and quantile functions from the linear-normal
+    model? What role would quantile regression play? Hint: See @BenoitPoel2017a [Sec. 3.4].
+
+1.  Implement the asymmetric Laplace distribution in Stan in two ways:
+
+    -   Write a user function to calculate the log-PDF
+    -   Implement it as a scale-mixture of normal distributions
 
 ## References
 
-### Robust regression 
+For more on robust regression see @GelmanHill2007a [sec 6.6], @BDA3 [ch 17], and @Stan2016a [Sec 8.4].
 
-- See @GelmanHill2007a [sec 6.6], @BDA3 [ch 17]
-- @Stan2016a [Sec 8.4] for the Stan example using a Student-t distribution
+For more on heteroskedasticity see @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
+@Stan2016a discusses reparameterizing the Student t distribution as a mixture of gamma distributions in Stan.
 
-### Heteroskedasticity
-
-- @BDA3 [Sec. 14.7] for models with unequal variances and correlations.
-- @Stan2016a reparameterizes the Student t distribution as a mixture of gamma distributions in Stan.
-
-### Qunatile regression
-
-- @BenoitPoel2017a
-- @YuZhang2005a for the three-parameter asymmetric Laplace distribution
+[^tailareas]: The Double Exponential distribution still has a thinner tail than the Student-t at higher values.

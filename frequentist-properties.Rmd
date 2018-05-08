@@ -1,0 +1,13 @@
+# Frequentist Properties of Bayesian Estimators
+
+A Bayesian estimator can be evaluated using frequentist criteria.
+
+-   If the true value is included in the family of models, the posterior mean, median, and mode are all consistent and asymptotically unbiased under mild regularity conditions [@BDA3, p. 92].
+
+    -   *consistent*: as the point estimate $\hat{\theta}$ of $\theta_0$ is *consistent* if as $n \to infty$, $f(y)$ converges to a point mass at $\theta_0$.
+    -   *asymptotic unbiasedness*: As $n \to \infty$, $\E(\hat{\theta}) - \theta_0) / sd(\hat{\theta} | \theta_0) \to 0$
+
+-   *efficient* A point estimate is *efficient* if it has the lowest mean squared errors of all functions of $y$ that estimate $\theta$. Under mild regularity conditions, the posterior mean, median, and mode are asymptotically efficient.
+
+-   *confidence coverage*: A $100(1 - \alpha)%$ confidence region is a region, $C(y)$, that includes $\theta_0$ at least $100(1 - \alpha)%$ of the time.
+Asymptotically, a $100(1 - \alpha)%$ central posterior interval of $\theta$ is also a confidence interval.

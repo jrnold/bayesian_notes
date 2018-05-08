@@ -1,15 +1,7 @@
 suppressPackageStartupMessages({
-  library("knitr")
-  library("rstan")
-  library("rstanarm")
-  library("bayesplot")
-  library("loo")
-  library("tidyverse")
-  library("forcats")
-  library("stringr")
-  library("rubbish")
-  library("bayz")
 })
+# only load stuff that I use outside
+"%>%" <- magrittr::"%>%"
 
 set.seed(92508117 )
 options(digits = 3)
@@ -19,7 +11,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   cache = TRUE,
   out.width = "70%",
-  fig.align = 'center',
+  fig.align = "center",
   fig.width = 6,
   fig.asp = 0.618,  # 1 / phi
   fig.show = "hold"
@@ -28,57 +20,60 @@ knitr::opts_chunk$set(
 options(dplyr.print_min = 6,
         dplyr.print_max = 6)
 
-rstan_options(auto_write = TRUE)
+rstan::rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
 # Helpful Documentation functions
 rpkg_url <- function(pkg) {
-  paste0("https://cran.r-project.org/package=", pkg)
+  stringr::str_c("https://cran.r-project.org/package=", pkg)
 }
 
 rpkg <- function(pkg) {
-  paste0("**[", pkg, "](", rpkg_url(pkg), ")**")
+  stringr::str_c("**[", pkg, "](", rpkg_url(pkg), ")**")
 }
 
 rdoc_url <- function(pkg, fun) {
-  paste0("https://www.rdocumentation.org/packages/", pkg, "/topics/", fun)
+  stringr::str_c("https://www.rdocumentation.org/packages/", pkg, "/topics/", fun) # nolint
 }
 
 rdoc <- function(pkg, fun, full_name = FALSE) {
-  text <- if (full_name) paste0(pkg, "::", fun) else pkg
-  paste0("[", text, "](", rdoc_url(pkg, fun), ")")
+  text <- if (full_name) stringr::str_c(pkg, "::", fun) else pkg
+  stringr::str_c("[", text, "](", rdoc_url(pkg, fun), ")")
 }
 
 STAN_VERSION <- "2.14.0"
 STAN_URL <- "http://mc-stan.org/documentation/"
-STAN_MAN_URL <- paste0("https://github.com/stan-dev/stan/releases/download/v", STAN_VERSION, "/stan-reference-", STAN_VERSION, ".pdf")
+# nolint start
+STAN_MAN_URL <- stringr::str_c("https://github.com/stan-dev/stan/releases/download/v",
+                               STAN_VERSION, "/stan-reference-",
+                               STAN_VERSION, ".pdf")
+# nolint end
 
 standoc <- function(x = NULL) {
   if (!is.null(x)) {
     STAN_MAN_URL
   } else {
-    paste("[", x, "](", STAN_MAN_URL, ")")
+    stringr::str_c("[", x, "](", STAN_MAN_URL, ")")
   }
 }
 
 # placeholder for maybe linking directly to docs
 stanfunc <- function(x) {
-  paste0("`", x, "`")
+  stringr::str_c("`", x, "`")
 }
 
 knit_print.stanmodel <- function(x, options) {
-  code_str <- x@model_code
-  knitr::asis_output(as.character(htmltools::tags$pre(htmltools::tags$code(htmltools::HTML(code_str), class = "stan"))))
+  code_html <- x@model_code %>%
+    htmltools::HTML() %>%
+    htmltools::tags$code() %>%
+    htmltools::tags$pre(class = "stan")
+  knitr::asis_output(code_html)
 }
 
-# cat_line <- function (...)  {
-#   cat(..., "\n", sep = "")
-# }
-#
-# print.stanfit_summary <- function(x, n = 10, stats = NULL) {
-#   stats <- stats %||% colnames(x$summary)
-#   comment <- sprintf("stanfit_summary: %d paramters, %d chains",
-#                      nrow(x$summary), length(x$c_summary))
-#   cat_line(comment)
-#   print(head(x$summary[ , stats, drop = FALSE], n))
-# }
+print_stanmodel <- function(path) {
+  header <- glue::glue("// {basename(path)}")
+  stringr::str_c(c(header, readLines(path)), collapse = "\n") %>%
+    htmltools::HTML() %>%
+    htmltools::tags$code() %>%
+    htmltools::tags$pre(class = "stan")
+}

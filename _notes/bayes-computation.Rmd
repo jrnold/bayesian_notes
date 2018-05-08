@@ -1,0 +1,82 @@
+# Monte Carlo
+
+Introduction to Bayesian computation
+
+The question is how to 
+
+
+Normalized and unnormalized densities.
+
+-   Normalized density integrates to 1. $$p(\theta | y) = \frac{p(y|\theta) p(\theta)}{\int p(y | \theta) p(\theta) d \theta}$
+-   Unnormzalied Normalized density integrates to 1. $$p(\theta | y) = \frac{p(y|\theta) p(\theta)}{\int p(y | \theta) p(\theta) d \theta}$
+
+Log densities. Log probabilitie are almost always used in calculations in order to avoid floating point [underflows](https://en.wikipedia.org/wiki/Arithmetic_underflow) since the products of probabilities can become quite small.
+
+How to calculate a posterior distribution?
+
+1.  Analytically: Conjugate prriors
+2.  Deterministic Quadrature:
+3.  Sampling
+
+    1.  Direct approximation at a grid of points
+    1.  Rejection sampling
+    2.  Importance sampling
+    3.  Markov Chain Monte Carlo methods
+    
+        - Metropolis Hastings
+        - Gibbs
+        - Hamiltonian Monte Carlo with NUTS
+        
+
+4.  Functional approximation
+
+    1.  Laplace approximation
+    2.  Variational Bayes
+    3.  Expectation propogation
+  
+See [@BDA3 Sec 10.4]
+  
+## How many simulation draws are needed?
+
+Suppose you have $S$ simulations,
+
+Suppose that there are $S$ independent samples of $\theta$ from a distribution, with standard deviation $s_{\theta}$.
+
+Posterior means are estimated to a an accuracy of approximately $s_\theta / \sqrt{S}$ [@BDA3, p. 207].
+
+Posterior means are estimated to a an accuracy of approximately $sqrt{S}$ [@BDA3, p. 207].
+
+The best method to estimate the standard errors of means and quantiles is the **mcmcse** package.
+
+See @BDA3 [Sec 10.5]
+
+
+## Debugging Bayesian Computing
+
+
+See @BDA3 [Sec 10.7]
+
+1.   Pick reasonable values for the the `true` parameter values $\theta$.
+2.   Simulate a large fake dataset $y^{\text{fake}}$ from $p(y | \theta)$
+3.   Perform posterior inference about $\theta$ from $p(\theta | y^{\text{fake}})$
+4. Compare posterior inferences to the "true" $\theta$. 
+
+Notes
+
+-   requires proper prior distributions
+-   requires many draws of $\theta$; however, a s single draw can be useful for "debugging"
+
+See Cook, Gelman, and Robin (2006) for discussion of this.
+
+
+## Rejection Sampling
+
+-   Target density - P
+-   Proposal Density Q
+-   P and Q must be such that cQ* >= P^* for all x
+
+## Importance Sampling
+
+## Monte Carlo Estimates
+
+

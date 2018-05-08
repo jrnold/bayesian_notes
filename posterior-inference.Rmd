@@ -1,66 +1,136 @@
 # Posterior Inference
 
-## Prerequisites 
+## Prerequisites
 
-The `r rpkg("haven")` package is used to read Stata `.dta` files.
 ```{r}
-library("rubbish")
-library("haven")
+library("bayz")
+library("jrnold.bayes.notes")
+library("rstan")
+library("rstanarm")
+library("tidyverse")
 ```
 
 ## Introduction
 
 The posterior distribution is the probability distribution $\Pr(\theta | y)$.
 
-One we have the posterior distribution, or more often a sample from the posterior distribution, it is relatively easy to perform inference on any function of the posterior.
+One we have the posterior distribution, or more often a sample from the posterior
+distribution, it is relatively easy to perform inference on any function of the posterior.
 
 Common statistics used to summarize the posterior distribution:
 
-- mean: $\E(p(\theta | y)) \approx \frac{1}{S} \sum_{i = 1}^S \theta^{(s)}$
-- median: $\median(p(\theta | y)) \approx \median \theta^{(s)}$
-- quantiles: 2.5%, 5%, 25%, 50%, 75%, 95%, 97.5%
-- credible interval:
+-   mean: $\E(p(\theta | y)) \approx \frac{1}{S} \sum_{i = 1}^S \theta^{(s)}$
 
-    - central credible interval: the interval between the p/2% and 1 - p/2% quantiles
-    - highest posterior density interval: the narrowest interval containing p% of distribution
-    
-- marginal densities
+-   median: $\median(p(\theta | y)) \approx \median \theta^{(s)}$
+
+-   quantiles: 2.5%, 5%, 25%, 50%, 75%, 95%, 97.5%
+
+-   credible interval:
+
+    -   central credible interval: the interval between the $p/2%$ and $1 - p/2%$ quantiles
+    -   highest posterior density interval: the narrowest interval containing $p%$ of distribution
+
+-   marginal densities
 
 ## Functions of the Posterior Distribution
 
 It is also easy to conduct inference on functions of the posterior distribution.
 
-Suppose $\theta^{(1)}, \dots, \theta^{(S)}$ are a sample from $p(\theta | y)$, the
+Suppose $\theta^{(1)}, \dots, \theta^{(S)}$ are a sample from $p(\theta | y)$, then
 $f(\theta^{(1)}), \dots, f(\theta^{(S)})$ are a sample from $p(f(\theta) | y)$.
 
-This is not easy for methods like MLE that produce point estimates:
+This is useful in cases where the quantities of interest are not directly estimated by the
+model.
 
-- Even in OLS, non-linear functions coefficients generally require either the Delta method or bootstrapping to calculate confidence intervals.
-- @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals
-- See @Rainey2016b on "transformation induced bias"
-- See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code
+-   Even in OLS, estimation of non-linear functions of requires either the Delta method or bootstrapping to calculate confidence intervals.
+-   @BerryGolderMilton2012a, @Goldera,@BramborClarkGolder2006a discuss calculating confidence intervals for interaction terms.
+-   See @Rainey2016b on "transformation induced bias".
+-   See @Carpenter2016a on how reparameterization affects point estimates; this is a Stan Case study with working code.
 
 ## Marginal Effects
 
-### Example: Marginal Effect Plot for X
+One quantity of interest in regression models are marginal effects of predictors.
+Consider the regression model, where the outcome $y$ is a function of a vector of observed data $x$, and parameters $\theta$, $y = f(x, z, \theta)$.
+
+The *marginal effect* of a continuous variable $x_j$ is,
+$$
+ME(j, x, \theta) = \frac{\partial{}f(x, \theta)}{\partial{}x_j}
+$$
+
+In the case of a linear regression,
+$$
+E(y) = \alpha + x' \beta,
+$$
+and the marginal effect of a predictor is its coefficient,
+$$
+ME(j, x, \alpha, \beta) = \frac{\partial} {\partial{}x_j} (\alpha + x' \beta) = \beta_j .
+$$
+
+However, for nonlinear models, including other GLMs and regression models in which the variable is included in nonlinear funtions, the marginal effect depends on the values of $x$, and is a function of the data rather than constant.
+
+For example, for a logit model, the expected value of the outcome is,
+$$
+p = \Pr(y = 1) = \frac{1}{1 + \exp(-\alpha - x' \beta)} .
+$$
+The marginal effect with respect to predictor $x_j$ is,
+$$
+ME(x_j, x_{-j}, \alpha, \beta) = \beta_k p (1 - p) .
+$$
+The marginal effect depends on $p$, which depends on the values of $x$ where the marginal effect is being evaluated.
+
+The *Marginal effect at representative values* (MER) is the marginal effect taken at a representative value of $x$, $x^{*}$,[^margins]
+$$
+MER(x_k, x^{*}) = \left. \frac{\partial f(\theta, x)}{\partial{}x_k} \right|_{x = x^{*}} .
+$$
+The *marginal effect at the mean* (MEM) is a special and most common case of a MER, in which the marginal effect is evaluated with all variables set to their means (or modes/medians for discrete variables):
+$$
+MER(y, x_k, \bar{x}) = \left. \frac{\partial f(\theta, x)}{\partial{}x_k} \right|_{x = \bar{x}} .
+$$
+The *average marginal effect* (AME) calculates the marginal effects of averaged over the sample:
+$$
+AME(y, x_k) = \sum_{i = 1}^n \left. \frac{\partial f(\theta, x)}{\partial x_k} \right|_{x = x_i}
+$$
+This definition could be extended to a population, to include weights, or to be calculated for sub-samples or sub-populations.
+
+Discrete changes, perhaps because the predictor is discrete, are called either *partial effects* or *first differences*.
+The *partial effect at a representative value* (PER) with respect to the variable $j$ is the difference in the function with $j$ set $x_j + \Delta x_j$ and
+set to $x_j$, with all other predictors held at some representative values, $\tilde{x}_{-j}$,
+$$
+PEM(j, x_j, \Delta x_j, \tilde{x}_{-j}, \theta) = E(f(\theta, x_k + \Delta x_k, \tilde{x}_{-j})) - E(f(\theta, x_k, \tilde{x}_{-j})) .
+$$
+When $\tilde{x}_k$ are the mean values of those other predictors, this is called the *partial effect at the mean*.
+
+The *average partial effect* (APE) are partial effects averaged at all common predictors,
+$$
+APE(j, x_j, \Delta x_j, \theta) = \frac{1}{n} \sum_{i = 1}^{n} f(x_j + \Delta x_j, \tilde{x}_{-j, i}, \theta) - f(x_j, x_{-j, i}, \theta) , 
+$$
+where $x_{-j, i}$ are the observed values of $j$ (excluding predictor $j$) for observation $i$.
+
+In all of the previous calculations of these marginal effects, there is no incorporation of uncertainty about the marginal effects.
+They are evaluated at a single parameter value.
+However, this can simply be averaged over the samples.
+
+## Interactions
 
 @BerryGolderMilton2012a replicates @Alexseev2006a as an example of a model with an interaction between $X$ and $Z$.
 $$
 Y = \beta_0 + \beta_x X + \beta_z Z + \beta_{xz} X Z + \epsilon
 $$
-In this case, the hypothesis of interest involves the marginal effect of $X$ on $Y$, 
+In this case, the hypothesis of interest involves the marginal effect of $X$ on $Y$,
 $$
 \frac{\partial \E(Y|.)}{\partial X} = \beta_z + \beta_{xz} Z
 $$
-Since there is an interaction, the marginal effect of $X$ is not simply 
+Since there is an interaction, the marginal effect of $X$ is not simply
 the coefficient $\beta_z$, but is a function of another predictor, $Z$.
-Point estimates of the marginal effects with interactions are relatively easy to construct, but confidence intervals for the MLE estimates quickly involve multiple terms and either the Delta method approximation or bootstrapping to calculate.
+Point estimates of the marginal effects with interactions are relatively easy to construct, but confidence intervals quickly involve multiple terms.
+This article provides equations for commonly used interactions, but either the Delta method approximation or bootstrapping would be needed to calculate more complicated functions.
 
 We will consider this problem from a Bayesian estimation perspective, and calculate point estimates (posterior mean) and credible intervals of the marginal effects.
 
 The particular example is @Alexseev2006a, which analyzes how changes in the ethnic composition of Russian regions affected the vote share of the extreme Russian nationalist Zhirinovsky Bloc in 2003 Russian State Duma elections.[^alexseev1]
 ```{r}
-alexseev <- read_dta("data/alexseev.dta")
+data("duma", package = "jrnold.bayes.notes")
+duma <- mutate(duma, brdcont = as.integer(brdcont))
 ```
 
 [alexseev1]: Some of the replication code and material can be found on [Matt Golder's website](http://mattgolder.com/interactions).
@@ -69,120 +139,142 @@ One claim of @Alexseev2006a was that support for anti-immigrant parties depends 
 To test that hypothesis, @Alexseev2006a estimates the following model,
 $$
 \begin{multline}
-\mathtt{xenovote}_i = \beta_0 + \beta_s \mathtt{slavicshare}_i + 
-\beta_{n} \mathtt{changenonslav} + \\
-\beta_{sn} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) + 
-\gamma z_{i} + \epsilon_{i},
+\mathtt{xenovote}_i = \alpha + \beta_1 \mathtt{slavicshare}_i +
+\beta_{2} \mathtt{changenonslav} + \\
+\beta_{3} (\mathtt{slavicshare}_i \times \mathtt{changenonslav}_i) +
+z_{i}' \beta_{4:k}  + \epsilon_{i},
 \end{multline}
 $$
 where $z_i$ is a vector of control variables.
 
-- `xenovote`: Xenophobic voting. Share of vote for the Zhironovsky Bloc.
-- `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
-- `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proprotion of non-Slavic groups in the region.
+-   `xenovote`: Xenophobic voting. Share of vote for the [Zhirinovsky Bloc](https://en.wikipedia.org/wiki/Vladimir_Zhirinovsky).
+-   `slavicshare`: *Slavic Share.* Proportion Slavic in the district.
+-   `changenonslav`: $\Delta$ *non-Slavic Share* Change in the proportion of non-Slavic groups in the region.
 
-The model was estimated by OLS,[^alexseev2]
+Model the xenophobic vote share using a linear model with normal errors and weakly informative priors.
+$$
+\begin{aligned}
+y_i &\sim \dnorm(\mu_i, \sigma) \\
+\mu_i &= \alpha + \beta_1 \mathtt{slavicshare}_i + \beta_2 \mathtt{changenonslave}_i \\
+    &\quad + \beta_3 \mathtt{slavicshare}_i \times \mathtt{changenonslave}_i +
+    z_i' \beta_{4:k} \\
+\sigma &\sim \dexp(1) \\
+\alpha &\sim \dnorm(0, 10) \\
+\beta_k &\sim \dnorm(0, 2.5)
+\end{aligned}
+$$
+where $z_i$ is a vector of other covariates for observation $i$, and $\beta_{4:k}$ is the corresponding vector of covariates for those other covariates.
+Note that the actual order of columns and coefficients will be different in the
 ```{r}
-mod_f <- (xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 + unemp02 +
-            apt9200 + vsall03 + brdcont)
-lm(mod_f, data = alexseev)
+fmla <- xenovote ~ slavicshare * changenonslav + inc9903 + eduhi02 +
+  unemp02 + apt9200 + vsall03 + brdcont
 ```
 
-[^alexseev2]: The original model used cluster robust standard errors, which will be ignored for now.
-
-Use the `lm_preprocess` function in the [rubbish](https://jrnold.github.com/rubbish) package to turn the model formula into a list with relevant data.
-```{r}
-mod_data <- lm_preprocess(mod_f, data = alexseev)[c("X", "y")]
-
-mod_data <- within(mod_data, {
-  n <- nrow(X)
-  k <- ncol(X)
-  M <- 100
-  changenonslav <- seq(min(X[ , "changenonslav"]),                               max(X[ , "changenonslav"]),
-                       length.out = M)
-  idx_b_slavicshare <- which(colnames(X) == "slavicshare")
-  idx_b_slavicshare_changenonslav <-
-    which(colnames(X) == "slavicshare:changenonslav")
-  b_loc <- 0
-  # data appropriate prior
-  b_scale <- max(apply(X, 2, sd)) * 3
-  sigma_scale <- sd(y)
-})
+```{r message = FALSE,results='hide'}
+fit1 <- stan_glm(fmla, data = duma)
 ```
+```{r}
+summary(fit1)
+```
+
+### Stan Model
+
+```{r}
+library("recipes")
+rec <- recipe(xenovote ~ slavicshare + changenonslav + inc9903 + eduhi02 +
+  unemp02 + apt9200 + vsall03 + brdcont,
+  data = alexseev) %>%
+  step_interact(~ slavicshare * changenonslav) %>%
+  prep(data = alexseev, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+
+```{r}
+xeno_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y,
+  scale_beta = 2.5 * sd(y) * apply(X, 2, sd),
+  scale_alpha = 10 * sd(y),
+  loc_sigma = sd(y),
+  use_y_rep = 0,
+  use_log_lik = 0
+)
+```
+
 ```{r include = FALSE}
-mod <- stan_model("stan/ex-alexseev.stan")
+mod <- stan_model("stan/lm_normal_1.stan", verbose = FALSE)
 ```
 ```{r cache=FALSE}
 mod
 ```
 
 ```{r include=FALSE}
-mod_fit <- sampling(mod, data = mod_data)
-mod_fit
+fit <- sampling(mod, data = xeno_data)
+fit
 ```
 
+```{r}
+i_changenonslav <- which(colnames(X) == "changenonslav")
+i_interact <- which(colnames(X) == "slavicshare_x_changenonslav")
 
-The function `r rdoc("rstan", "extract")` extracts parameters from 
-the `r rdoc("rstan", "stanfit")` object as a list with an element for each parameter.
-```{r}
-dydx_all <-
-  rstan::extract(mod_fit, pars = "dydx")$dydx
-```
-To make it easier to use with `ggplot`, convert it to a data frame with columns `.id` (number), `changeonslav` (original value of `changeonslav` passed to the sampler), and `value` (the value of the marginal effect).
-```{r}
-dydx_all <-
-  dydx_all %>%
-  as.tibble() %>%
-  mutate(.iter = row_number()) %>%
-  gather(.id, value, -.iter) %>%
-  # merge with original values of changenonslav
-  left_join(tibble(.id = paste0("V", seq_along(mod_data$changenonslav)),
-            changenonslav = mod_data$changenonslav),
-            by = ".id")
+min_slavishare <- min(alexseev$slavicshare)
+max_slavicshare <- max(alexseev$slavicshare)
+slavicshare_grid <- seq(min_slavishare, max_slavicshare, length.out = 40)
+
+slav_x_change <- with_mcmc_iter(fit, {
+  tibble(slavicshare = slavicshare_grid,
+         dydx = beta[i_interact] * slavicshare + beta[i_changenonslav])
+}) %>%
+  bind_rows()
 ```
 
-Since values for a marginal effect line is generated for each iteration, the posterior distribution of $\partial E(\mathtt{xenovote}|.) / \partial slavicshare$ can be plotted as lines.
-Since the number of lines would be too many to display effectively, plot `r 2 ^ 8` of them:
-```{r}
-dydx_all %>%
-  filter(.iter %in% sample(unique(.iter), 2 ^ 8)) %>%
-  ggplot(aes(x = changenonslav, y = value, group = .iter)) +
-  geom_line(alpha = 0.3) +
-  ylab("Marginal effect of slavic share") +
-  xlab(paste(expression(Delta, "non-Slavic Share")))
-```
+Now we are interested in calculating the marginal effect of `xenovote` with respect to `slavicshare`,
+$$
+\frac{\partial \mu }{\partial \mathtt{slavicshare}} = \beta_1 + \beta_3 \mathtt{changenonslav} ,
+$$
+which is not a scalar, but instead, a function of $\mathtt{changenonslav}$.
+We will calculate the values of this partial on a uniform grid of values of
+`changenonslav` between the minimum and maximum values of `changenonslav`.
 
-Alternatively, we can summarize the posterior distribution of the marginal effects with a line (posterior mean) and credible interval regions (50%, 90%):
 ```{r}
-dydx_summary <-
-  dydx_all %>%
-  group_by(changenonslav) %>%
-  summarise(mean = mean(value),
-            q5 = quantile(value, 0.05),
-            q25 = quantile(value, 0.25),
-            q75 = quantile(value, 0.75),            
-            q95 = quantile(value, 0.95))
+interacts <- slav_x_change %>%
+  group_by(slavicshare) %>%
+  summarise(q2.5 = quantile(dydx, 0.025),
+            q97.5 = quantile(dydx, 0.975),
+            mean = mean(dydx))
 ggplot() +
-  modelr::geom_ref_line(h = 0) +
-  geom_ribbon(data = dydx_summary,
-              mapping = aes(x = changenonslav, ymin = q5, ymax = q95),
-              alpha = 0.2) +  
-  geom_ribbon(data = dydx_summary,
-              mapping = aes(x = changenonslav, ymin = q25, ymax = q75), 
-              alpha = 0.2) +
-  geom_line(data = dydx_summary,
-            mapping = aes(x = changenonslav, y = mean),
-            colour = "blue") +
-  geom_rug(data = alexseev, mapping = aes(x = changenonslav), sides = "b") +
-  ylab("Marginal effect of slavic share") +
-  xlab(expression(paste(Delta, "non-Slavic Share")))
+  geom_ribbon(data = interacts,
+              mapping = aes(x = slavicshare, ymin = q2.5, ymax = q97.5),
+              alpha = 0.3) +
+  geom_line(data = interacts,
+            mapping = aes(x = slavicshare, y = mean),
+            alpha = 0.3) +
+  geom_hline(yintercept = 0, size = 2, colour = "white") +
+  geom_rug(data = alexseev, mapping = aes(x = slavicshare), sides = "b") +
+  xlab("Slavic-share (%)") +
+  ylab(expression(paste("Marginal effect of ", Delta, " non-Slavic Share"))) +
+  theme_gray()
 
 ```
+
 The plot above also includes a rug with the observed values of `changenonslav` in the sample.
 
-- **Q:** For each value of `changenonslav`, what is the probability that the marginal effect of `slavicshare` is greater than 0? 
-- **Q:** Reestimate the model, but calculate the marginal effect of `slavicshare` for all observed values of `changenonslav` in the sample. For each observation, calculate the probability that the marginal effect is greater than 0. What proporation of observations is the probability that the marginal effect is greater than zero.
-- **Q:** Suppose you want to calculate the expected probability that the marginal effect of `slavicshare` is greater than zero in the sample. Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare` on the `xenovote`. Consider these two calculations:
+-   **Q:** For each value of `changenonslav`, what is the probability that the
+   marginal effect of `slavicshare` is greater than 0?
+
+-   **Q:** Re-estimate the model, but calculate the marginal effect of
+    `slavicshare` for all observed values of `changenonslav` in the sample. For
+    each observation, calculate the probability that the marginal effect is
+    greater than 0. What proportion of observations is the probability that the
+    marginal effect is greater than zero.
+
+-   **Q:** Suppose you want to calculate the expected probability that the
+    marginal effect of `slavicshare` is greater than zero in the sample.
+    Let $\theta^{S}_i$ be the parameter for the marginal effect of `slavicshare`
+    on the `xenovote`. Consider these two calculations:
     $$
     \frac{1}{N} \sum_{i = 1}^n \left( \frac{1}{S} \sum_{s = 1}^S I(\theta^{(s)}_i > 0) \right)
     $$
@@ -191,4 +283,113 @@ The plot above also includes a rug with the observed values of `changenonslav` i
     \frac{1}{S} \sum_{s = 1}^S \left( \frac{1}{N} \sum_{i = 1}^N I(\theta^{(s)}_i > 0) \right) .
     $$
     Are they the same? What are their substantive interpretations?
-- **Q:** Construct the same plot but for Figure 5(b) in @BerryGolderMilton2012a, which displays the marginaleffects of $\Delta$ *non-Slavic* on *Xenophobic* voting.
+
+-   **Q:** Construct the same plot but for Figure 5(b) in
+    @BerryGolderMilton2012a, which displays the marginal effects
+    of $\Delta$ *non-Slavic* on *Xenophobic* voting.
+
+## Average Marginal Effects
+
+The marginal effect of a continuous predictor for a binomial model with link function $F$ is,
+$$
+ME_k(x) = \frac{\partial F(\alpha + x'\beta)}{\partial x_k} = f(\alpha + X \beta) \beta_k
+$$
+
+The average marginal effect (AME) is the marginal effect averaged over the sample,
+$$
+AME_k = \frac{1}{n} \sum_i ME_k(x_i)
+$$
+The marginal effect at the mean (MEM) is the marginal effect evaluated at the mean values of $x$,
+$$
+MEM_k = ME_k(\bar{x})
+$$
+Note that because of Jensen's inequality, generally, $MEM \neq AME$.
+
+```{r}
+data("votechoice", package = "jrnold.bayes.notes")
+votechoice <- votechoice %>%
+  mutate_at(vars(white, female, bushvote), as.integer) %>%
+  mutate_at(vars(retecon, educ1_7, ideol7b, partyid, bushiraq), as.numeric)
+```
+
+This replicates the example in Hanmer et al.
+```{r}
+glm(bushvote ~ retecon + white + female + age + educ1_7 + income +
+              partyid + bushiraq + ideol7b,
+       data = mutate(votechoice,
+                     retecon = (retecon - 3) / 2,
+                     partyid = partyid - 1,
+                     bushiraq = (bushiraq - 1) / 3),
+    family = binomial())
+```
+
+```{r message=FALSE}
+mod_bernoulli_1 <- stan_model("stan/bernoulli_logit_1.stan", verbose = FALSE)
+```
+
+```{r}
+rec <- recipe(bushvote ~ retecon + partyid + bushiraq + ideol7b + white +
+              female + age + educ1_7 + income,
+       data = votechoice) %>%
+  step_poly(age, options = list(degree = 2)) %>%
+  prep(data = votechoice, retain = TRUE)
+X <- juice(rec, all_predictors(), composition = "matrix")
+y <- drop(juice(rec, all_outcomes(), composition = "matrix"))
+```
+
+```{r}
+votechoice_data <- list(
+  X = X,
+  N = nrow(X),
+  K = ncol(X),
+  y = y,
+  scale_alpha = 10,
+  scale_beta = apply(X, 2, sd) * 2.5,
+  use_y_rep = 0,
+  use_log_lik = 0
+)
+```
+
+```{r message=FALSE, results='hide}
+fit2 <- sampling(mod_bernoulli_1, data = votechoice_data)
+```
+
+Calculate the average marginal effect and the marginal effect at the mean for the difference between `retecon = 1` ("Much worse") and `retecon = 4` ("Same"):
+```{r}
+X1 <- bake(rec, all_predictors(),
+           newdata = mutate(votechoice, retecon = 1),
+           composition = "matrix")
+X1_mean <- bake(rec, all_predictors(),
+                newdata =  mutate(summarise_all(votechoice, mean),
+                                 retecon = 1),
+                composition = "matrix")
+
+X2 <- bake(rec, all_predictors(),
+           newdata = mutate(votechoice, retecon = 3),
+           composition = "matrix")
+X2_mean <- bake(rec, all_predictors(),
+                newdata = mutate(summarise_all(votechoice, mean),
+                                 retecon = 3),
+                composition = "matrix")
+
+marfx <- with_mcmc_iter(fit2, {
+  tibble(ame = mean(plogis(alpha + X2 %*% beta) - plogis(alpha + X1 %*% beta)),
+         mem = as.numeric(plogis(alpha + X2_mean %*% beta) -
+           plogis(alpha + X1_mean %*% beta)))
+}) %>%
+  bind_rows()
+```
+
+```{r}
+summarise_all(marfx)
+```
+
+<!--
+
+-   Examples from Stata margins documentation
+-   Examples from margins package
+-   Examples from Rainey separation
+
+-->
+
+[^margins]: This largely follows the nomenclature of Stata's implementation of marginal effects in its `margins` command. See the *Stata Reference Manual* (v 14), `margins`, p. 1405.

@@ -1,0 +1,31 @@
+# Coin-flips
+
+```{r}
+library("datums")
+```
+
+Calculate the posterior distribution for different levels
+```{r}
+data("kerrich", package = "datums")
+```
+
+1. What is the relationship?
+
+# Horse-Kicks
+
+```{r}
+data("prussian", package = "pscl")
+```
+
+Choose a prior equivalent to 1 kick in two years.
+Estimate the posterior distribution
+
+Often a gamma prior with $\alpha \approx 0$ and $\beta \approx 0$, what is the reasoning for this? "uninformative prior" look like?
+
+What is the posterior distribution?
+
+Sequentially estimate the posterior distribution.
+
+1.  Estimate the posterior distribution
+1.  Estimate the prior
+1.  Estimate the posterior
