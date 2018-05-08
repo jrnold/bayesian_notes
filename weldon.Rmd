@@ -1,0 +1,86 @@
+```{r}
+library("datums")
+library("tidyverse")
+```
+
+Frank Weldon threw 12 dice 26,306 times and counted the number of dice that showed a five or six.
+
+```{r}
+N <- 26306
+prob <- 2 / 6
+size <- 12
+```
+
+For a prior, let's suppose that one roll of 12 dice has 4 dice showing 5's or 6's and 8 dice showing other numbers.
+This is equivalent of $\mathrm{Beta}(4, 8)$.
+```{r}
+prior_a <- 4
+prior_b <- 8
+```
+
+The total number of 5's and 6's in the $`r N` \times 12$ dice rolls.
+```{r}
+total <- sum(weldon[["observed"]] * weldon[["n"]])
+```
+
+The posterior distribution is,
+```{r}
+posterior_a <- prior_a + total
+posterior_b <- prior_b + (N * size - total)
+```
+
+The posterior distribution is:
+```{r}
+qbeta(c(0.025, 0.975), posterior_a, posterior_b)
+```
+The posterior expected value is
+```{r}
+posterior_a / (posterior_a + posterior_b)
+```
+The mode is
+```{r}
+(posterior_a - 1) / (posterior_a + posterior_b - 2)
+```
+The median is approximately
+```{r}
+(posterior_a - 1 / 3) / (posterior_a + posterior_b - 2 / 3)
+```
+
+The probability that the observed data is greater than the theoretical quantile:
+```{r}
+pbeta(prob, posterior_a, posterior_b, lower.tail = FALSE)
+```
+
+Plotting the prior and the posterior on the data:
+```{r}
+tibble(x = ppoints(100),
+       posterior = dbeta(x, posterior_a, posterior_b),
+       prior = dbeta(x, prior_a, prior_b)) %>%
+  gather(variable, density, -x) %>%
+  ggplot(aes(x = x, y = density, colour = variable)) +
+  geom_line()
+```
+
+Alternatively, we could instead model the proportion as a multinomial distribution.
+This treats the categories as 1, ..., 12, as independent events.
+
+The prior distribution is Dirichlet with parameters derived from the expected number in each category for a single roll of `r size` dice.
+```{r}
+prior_alpha <- dbinom(0:size, size = size, prob = prob) * size
+round(prior_alpha , 1)
+```
+
+The posterior distribution for each category is also a Dirichlet distribution with the following parameters,
+```{r}
+post_alpha <- prior_alpha + weldon[["observed"]]
+round(post_alpha, 1)
+```
+
+The posterior predictive distribution is the [Dirichlet-multinomial](https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution) distribution.
+
+
+```{r}
+
+```
+
+

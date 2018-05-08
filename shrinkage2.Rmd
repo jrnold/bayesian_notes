@@ -1,0 +1,135 @@
+# Shrinkage
+
+In the frequentist framework, shrinkage estimation purposefully increases the bias
+of the estimator in order to reduce the variance.
+
+## MSE
+
+Under repeated sampling, the expected mean squared error is
+$$
+MSE = \E\left[\left(\hat{\theta} - \theta \right)^{2}\right] = \text{variance} + \text{bias}^{2}
+$$
+
+## James-Stein
+
+James Stein 1961
+
+Suppose that $x$ is distributed
+$$
+\begin{aligned}
+x \sim \dnorm(\mu, 1) \\
+\mu \sim \dnorm(m, s) \\
+\end{aligned}
+$$
+The  $\mu$ is,
+$$
+\begin{aligned}
+\mu_i | x_i &=  \dnorm(m + b(x_i - m), b) & b = s / (1 - s)
+\end{aligned}
+$$
+The posterior mean is
+$$
+\hat{\mu}^{\text{Bayes}} = m + b (x - m)
+$$
+The MLE point estimate is
+$$
+\hat{\mu}^{\text{MLE}} = m
+$$
+
+The expected squared error of the MLE and Bayesian estimators is,
+$$
+\begin{aligned}
+\E\left[ {\left(\hat{\mu}^{\text{Bayes}} - \mu\right)}^2 \right] = b \\
+\E\left[ {\left(\hat{\mu}^{\text{MLE}} - \mu\right)}^2 \right] = 1
+\end{aligned}
+$$
+Depending on the value of $s$, the risk of the Bayes estimator can be lower than 
+that of the MLE.
+For example, if $s = 1$, then $b = 1 / 2$.
+
+Now suppose that there are $N$ independendent means,
+$$
+\mu = (\mu_1, \dots, \mu_N)
+$$
+and
+$$
+\begin{aligned}
+\mu_i &\sim \dnorm(m, s) \\
+x_i | \mu_i &\sim \dnorm(\mu_i, 1) .
+\end{aligned}
+$$
+The Bayes and posterior point estimates are
+$$
+\begin{aligned}
+\hat{\mu}^{\text{Bayes}}_i &= m + b (x - m) \\
+\hat{\mu}^{\text{MLE}}_i &= x_i
+\end{aligned}
+$$
+The total squared error risk of $\hat{\mu}^{\text{Bayes}}$ is
+$$
+\begin{aligned}
+\E\left\{{\left\|\hat{\mu}^{Bayes} - \mu \right\|}^{2} \right\} &= \E\left\{\sum_{i = 1}^N \left(\hat{\mu}^{Bayes}_i - \mu_i \right)^{2} \right\} = N \cdot b \\
+\E\left\{{\left\|\hat{\mu}^{MLE} - \mu \right\|}^{2} \right\} &= N
+\end{aligned}
+$$
+The risk of the Bayes estimator is $b$ times the MLE estimator.
+
+If $m$ and $s$ are unknown, then we need to estimate them.
+Marginally, the posterior is
+$$
+x_i \sim \dnorm(m, s + 1) .
+$$
+Then unbiased estimates of $m$ and $s$ are
+$$
+\begin{aligned}[t]
+\hat{m} &= \bar{x}  \\
+\hat{b} &= 1 - \frac{(N - 3)}{s} & \text{if } N > 3 \\
+s &= \sum_{i = 1}^N (x_i - \bar{x})^{2}
+\end{aligned}
+$$
+
+The James-Stein estimator is a "plug-in" version of the Bayesian posterior mean using these quantities,
+$$
+\hat{\mu}^{JS}_i = \hat{m} + \hat{b}(x_i - \hat{m}) .
+$$
+This is called an empirical Bayes estimator because the hyperparameters $m$ and $b$ are estimated from the data and plugged into the posterior rather than being either specified or given their own prior distributions.
+
+
+```{r}
+james_stein <- function(x) {
+  n <- length(x)
+  m <- mean(x)
+  s <- sum((x - m) ^ 2)
+  b <- 1 - ((n - 3) / s)
+  m + b * (x - m)
+}
+
+bayes_mean <- function(x, m, s) {
+  b <- s / (1 + s)
+  m + b * (x - m)
+}
+
+mse <- function(est, actual) {
+  sum((est - actual) ^ 2)
+}
+
+sim_js_one <- function(n, m, s) {
+  x <- rnorm(n, m, sqrt(s)) 
+  tibble(
+    mle = mse(x, m),
+    js = mse(james_stein(x), m),
+    bayes = mse(bayes_mean(x, m, s), m)
+  )
+}
+
+vals <- rerun(2000, sim_js_one(10, 0, 1)) %>%
+  bind_rows()
+
+```
+
+```{r}
+gather(vals, estimator, error) %>%
+  group_by(estimator) %>%
+  summarise(mean = mean(error), sd = sd(error))
+```
+
