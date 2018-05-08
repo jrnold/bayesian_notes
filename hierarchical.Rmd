@@ -105,13 +105,13 @@ models[["pool"]]
 ```
 
 ```{r results='hide'}
-models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
+models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
 ```
 ```{r}
 models[["partial"]]
 ```
 
-Sample from all three models a
+Draw a sample for all three models:
 ```{r results='hide', message=FALSE, warning=FALSE}
 fits <- map(models, sampling, data = bball1970_data,
             refresh = -1) %>%
@@ -123,7 +123,8 @@ For each model calculate the posterior mean of $\mu$ for each player:
 bball1970 <-
   map2_df(names(fits), fits,
      function(nm, fit) {
-      mu <- broom::tidy(fit) %>% filter(str_detect(term, "^mu"))
+      mu <- broom::tidy(fit) %>% 
+        filter(str_detect(term, "^mu"))
       if (nrow(mu) == 1) {
         out <- tibble(estimate = rep(mu$estimate, 18L))
       } else {
