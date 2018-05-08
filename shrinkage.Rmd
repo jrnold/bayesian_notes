@@ -3,16 +3,15 @@
 In the frequentist framework, shrinkage estimation purposefully increases the bias
 of the estimator in order to reduce the variance.
 
-## MSE
+## Bias-Variance Tradeoff
 
-Under repeated sampling, the expected mean squared error is
-$$
-MSE = \E\left[\left(\hat{\theta} - \theta \right)^{2}\right] = \text{variance} + \text{bias}^{2}
-$$
+TODO
 
-## James-Stein
+See ISLR chapter on bias-variance tradeoff.
 
-James Stein 1961
+<!--
+
+## James-Stein Estimator
 
 Suppose that $x$ is distributed
 $$
@@ -132,4 +131,9 @@ gather(vals, estimator, error) %>%
   group_by(estimator) %>%
   summarise(mean = mean(error), sd = sd(error))
 ```
+
+-->
+
+## Bayesian Shrinkage
+
 
