@@ -1,4 +1,4 @@
-# Shrinkage and Regularization {#shrinkage-regularization}
+# Regression Shrinkage and Regularization {#shrinkage-regularization}
 
 *Shrinkage estimation* deliberately introduces biases into the model to improve
 *overall performance, often at the cost of individual estimates
