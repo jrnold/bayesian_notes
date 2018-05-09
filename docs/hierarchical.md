@@ -1,5 +1,14 @@
 
-# Hierarchical Models
+# Shrinkage and Hierarchical Models
+
+
+```r
+library("tidyverse")
+library("rstan")
+library("loo")
+```
+
+## Hierarchical Models
 
 -   *Hierarchical models:* often groups of parameters, $\{\theta_1, \dots, \theta_J\}$, are related.
 -   E.g. countries, states, counties, years, etc. Even the regression coefficients, $\beta_1, \dots, \beta_k$ seen the in the [Shrinkage and Regularization] chapter.
@@ -11,16 +20,7 @@
 -   parameters $(\theta_1, \dots, \theta_J)$ are *exchangeable* if $p(\theta_1, \dots, \theta_J)$ don't depend on the indexes.
 -   i.i.d. models are a special case of exchangeability.
 
-## Prerequisites {-}
-
-
-```r
-library("tidyverse")
-library("rstan")
-library("loo")
-```
-
-## Example: Baseball Hits
+## Baseball Hits
 
 @EfronMorris1975a analyzed data from 18 players in the 1970 season.
 The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.
@@ -126,14 +126,16 @@ prelist(class = "stan")list(list(name = "code", attribs = list(), children = lis
 
 
 ```r
-models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
+models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
 ```
 
 ```r
-# models[["partial"]]
+models[["partial"]]
 ```
 
-Sample from all three models a
+prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("/* Binomial Model\n\n  A binomial model for $i = 1, \\dots, N$, with partial pooling\n  $$\n  \\begin{aligned}[t]\n  p(y_i | n_i, \\mu_i) &\\sim \\mathsf{Binomial}(y_i | n_i, \\mu_i) \\\\\n  \\mu_i &= \\logit^{-1}(\\eta_i) \\\\\n  p(\\eta_i | \\tau) &\\sim \\mathsf{Normal}(alpha, \\tau) \\\\\n  p(\\tau) &\\sim \\mathsf{Normal}^+(0, 1) \\\\\n  p(alpha) & \\sim \\mathsf{Normal}(0, 2.5) \\\\\n  \\end{aligned}\n  $$\n\n*/\ndata {\n  int N;\n  int y[N];\n  int k[N];\n  // new data\n  int y_new[N];\n  int k_new[N];\n}\nparameters {\n  vector[N] eta;\n  real alpha;\n  real<lower = 0.> tau;\n}\nmodel {\n  alpha ~ normal(0., 10.);\n  tau ~ normal(0., 1);\n  eta ~ normal(alpha, tau);\n  y ~ binomial_logit(k, eta);\n}\ngenerated quantities {\n  int y_rep[N];\n  vector[N] log_lik;\n  vector[N] log_lik_new;\n  vector<lower = 0., upper = 1.>[N] mu;\n  mu = inv_logit(eta);\n  for (n in 1:N) { //\n    y_rep[n] = binomial_rng(k[n], mu[n]);\n    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);\n    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);\n  }\n}")))
+
+Draw a sample for all three models:
 
 ```r
 fits <- map(models, sampling, data = bball1970_data,
@@ -147,7 +149,8 @@ For each model calculate the posterior mean of $\mu$ for each player:
 bball1970 <-
   map2_df(names(fits), fits,
      function(nm, fit) {
-      mu <- broom::tidy(fit) %>% filter(str_detect(term, "^mu"))
+      mu <- broom::tidy(fit) %>% 
+        filter(str_detect(term, "^mu"))
       if (nrow(mu) == 1) {
         out <- tibble(estimate = rep(mu$estimate, 18L))
       } else {
@@ -214,8 +217,7 @@ map2_df(names(fits), fits,
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.
 In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats---this is regression to the mean.
-In sample, the partially pooling model shrinks the estimates towards the mean and
-reducing error.
+In sample, the partially pooling model shrinks the estimates towards the mean and reducing error.
 Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.
 
 ```r
@@ -251,4 +253,4 @@ Extensions:
 -   Albert, Jim. [Revisiting Efron and Morris’s Baseball Study](https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/) Feb 15, 2016
 -   Bob Carpenter. [Hierarchical Bayesian Batting Ability, with Multiple Comparisons](https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/). November 4, 2009.
 -   John Kruschke. [Shrinkage in multi-level hierarchical models](http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html). November 27, 2012.
--   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting
+-   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting.

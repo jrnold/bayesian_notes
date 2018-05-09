@@ -28,7 +28,7 @@ parameters {
 model {
   alpha ~ normal(0., 10.);
   tau ~ normal(0., 1);
-  eta ~ student_t(4., alpha, tau);
+  eta ~ normal(alpha, tau);
   y ~ binomial_logit(k, eta);
 }
 generated quantities {

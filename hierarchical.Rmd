@@ -1,4 +1,12 @@
-# Hierarchical Models
+# Shrinkage and Hierarchical Models
+
+```{r setup,message=FALSE}
+library("tidyverse")
+library("rstan")
+library("loo")
+```
+
+## Hierarchical Models
 
 -   *Hierarchical models:* often groups of parameters, $\{\theta_1, \dots, \theta_J\}$, are related.
 -   E.g. countries, states, counties, years, etc. Even the regression coefficients, $\beta_1, \dots, \beta_k$ seen the in the [Shrinkage and Regularization] chapter.
@@ -10,15 +18,7 @@
 -   parameters $(\theta_1, \dots, \theta_J)$ are *exchangeable* if $p(\theta_1, \dots, \theta_J)$ don't depend on the indexes.
 -   i.i.d. models are a special case of exchangeability.
 
-## Prerequisites {-}
-
-```{r setup,message=FALSE}
-library("tidyverse")
-library("rstan")
-library("loo")
-```
-
-## Example: Baseball Hits
+## Baseball Hits
 
 @EfronMorris1975a analyzed data from 18 players in the 1970 season.
 The goal was to predict the batting average of these 18 players from their first 45 at-bats for the remainder of the 1970 season.
@@ -105,13 +105,13 @@ models[["pool"]]
 ```
 
 ```{r results='hide'}
-models[["partial"]] <- stan_model("stan/binomial-partial-pooling-t.stan")
+models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
 ```
 ```{r}
-# models[["partial"]]
+models[["partial"]]
 ```
 
-Sample from all three models a
+Draw a sample for all three models:
 ```{r results='hide', message=FALSE, warning=FALSE}
 fits <- map(models, sampling, data = bball1970_data,
             refresh = -1) %>%
@@ -123,7 +123,8 @@ For each model calculate the posterior mean of $\mu$ for each player:
 bball1970 <-
   map2_df(names(fits), fits,
      function(nm, fit) {
-      mu <- broom::tidy(fit) %>% filter(str_detect(term, "^mu"))
+      mu <- broom::tidy(fit) %>% 
+        filter(str_detect(term, "^mu"))
       if (nrow(mu) == 1) {
         out <- tibble(estimate = rep(mu$estimate, 18L))
       } else {
@@ -177,8 +178,7 @@ map2_df(names(fits), fits,
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.
 In-sample for the no-pooling model is zero, but it over-estimates (under-estimates) the players with the highest (lowest) batting averages in their first 45 at bats---this is regression to the mean.
-In sample, the partially pooling model shrinks the estimates towards the mean and
-reducing error.
+In sample, the partially pooling model shrinks the estimates towards the mean and reducing error.
 Out of sample, the errors of the partially pooled model are not much different than the no-pooling model, except that the extreme observations have lower errors.
 ```{r}
 select(bball1970,
@@ -211,4 +211,4 @@ Extensions:
 -   Albert, Jim. [Revisiting Efron and Morris’s Baseball Study](https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/) Feb 15, 2016
 -   Bob Carpenter. [Hierarchical Bayesian Batting Ability, with Multiple Comparisons](https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/). November 4, 2009.
 -   John Kruschke. [Shrinkage in multi-level hierarchical models](http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html). November 27, 2012.
--   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting
+-   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting.
