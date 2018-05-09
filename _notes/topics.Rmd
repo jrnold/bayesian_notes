@@ -113,3 +113,9 @@ Effects Correlate http://www.stat.columbia.edu/~gelman/research/unpublished/Bafu
     - Democracy
 
 - Missing Data
+
+-  Jacob M. Montgomery; Florian Hollenbach; Michael D. Ward, 2012, "Replication data for: Improving Predictions Using Ensemble Bayesian Model Averaging", https://hdl.handle.net/1902.1/17286, Harvard Dataverse, V2
+-  Daniel Stegmueller, 2012, "Replication data for: How many countries for multilevel modeling? A comparison of Frequentist and Bayesian approaches.", https://hdl.handle.net/1902.1/18628, Harvard Dataverse, V2, UNF:5:XyGItBjR3K+whHxkVW3djw==
+-  Faust, Jon; Gilchrist, Simon; Wright, Jonathan; Zakrajsek, Egon, 2014, "Replication data for: Credit Spreads as Predictors of Real-Time Economic Activity: A Bayesian Model-Averaging Approach", https://doi.org/10.7910/DVN/26061, Harvard Dataverse, V1
+-  Graefe, Andreas, 2014, "Replication data for: Limitations of Ensemble Bayesian Model Averaging for forecasting social science problems", https://doi.org/10.7910/DVN/EBMA, Harvard Dataverse, V1
+-  Kosuke Imai; Dustin Tingley, 2011, "Replication data for: A Statistical Method for Empirical Testing of Competing Theories", https://hdl.handle.net/1902.1/16378, Harvard Dataverse, V3

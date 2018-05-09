@@ -122,7 +122,7 @@ sim_js_one <- function(n, m, s) {
   )
 }
 
-vals <- rerun(2000, sim_js_one(10, 0, 1)) %>%
+vals <- rerun(2^13, sim_js_one(10, 0, 1)) %>%
   bind_rows()
 
 ```
@@ -130,6 +130,14 @@ vals <- rerun(2000, sim_js_one(10, 0, 1)) %>%
 ```{r}
 gather(vals, estimator, error) %>%
   group_by(estimator) %>%
-  summarise(mean = mean(error), sd = sd(error))
+  summarise(risk = mean(error), se = sd(error) / sqrt(length(error)))
 ```
+
+## Bias-Variance Tradeoff
+
+
+## Rats Example
+
+
+## Eight Schools
 
