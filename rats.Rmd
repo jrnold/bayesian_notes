@@ -1,0 +1,51 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Rats 
+
+```{r}
+library("jrnold.bayes.notes")
+data("rats", package = "jrnold.bayes.notes")
+```
+
+$$
+\begin{aligned}[t]
+y_{ij} &\sim \dnorm(a_i + \beta_i x_j, \sigma_{y}) \\
+\beta_i &\sim \dnorm(m_{\beta}, s_{\beta}) \\
+\alpha_i &\sim \dnorm(m_{\alpha}, s_{\alpha})
+\end{aligned}
+$$
+
+```{r}
+data("rats")
+```
+
+```{r}
+library("rstan")
+```
+
+
+```{r}
+data("eightschools")
+```
+
+```{r message=FALSE}
+mod_8schools <- stan_model("stan/8schools.stan")
+```
+
+
+
+```{r}
+library("rstanarm")
+
+```
+
+
+
+```{r}
+
+```
+

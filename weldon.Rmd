@@ -61,6 +61,10 @@ tibble(x = ppoints(100),
   geom_line()
 ```
 
+```{r}
+
+```
+
 Alternatively, we could instead model the proportion as a multinomial distribution.
 This treats the categories as 1, ..., 12, as independent events.
 

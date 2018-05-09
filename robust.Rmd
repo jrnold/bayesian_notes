@@ -12,7 +12,9 @@ library("rstan")
 library("tidyverse")
 library("rstanarm")
 library("bayz")
+library("loo")
 library("jrnold.bayes.notes")
+library("recipes")
 ```
 
 ## Wide Tailed Distributions
@@ -140,6 +142,136 @@ $$
 Estimate some examples with known outliers and compare to using a normal
 See the data examples `income_ineq`, `unionization`, and `econ_growth` in the
 associated **jrnold.bayes.notes** package.
+
+```{r}
+data("econ_growth", package = "jrnold.bayes.notes")
+```
+
+```{r}
+rec_union <-
+  recipe(union_density ~ left_government + labor_force_size + econ_conc,
+       data = unionization) %>%
+  step_center(everything()) %>%
+  step_scale(everything()) %>%
+  prep(retain = TRUE)
+```
+```{r}
+union_data <- lst(
+  X = juice(rec_union, all_predictors(), composition = "matrix"),
+  y = drop(juice(rec_union, all_outcomes(), composition = "matrix")),
+  N = nrow(X),
+  K = ncol(X),
+  scale_alpha = 10,
+  scale_beta =rep(2.5, K),
+  loc_sigma = 1,
+  use_y_rep = 1,
+  use_log_lik = 1,
+  d = 4
+)
+
+```
+
+```{r}
+rec_econ_growth <-
+  recipe(econ_growth ~ labor_org + social_dem,
+       data = econ_growth) %>%
+  step_interact(~ labor_org * social_dem, sep = ":") %>%
+  step_center(everything()) %>%
+  step_scale(everything()) %>%
+  prep(retain = TRUE)
+```
+```{r}
+econ_growth_data <- lst(
+  X = juice(rec_econ_growth, all_predictors(), composition = "matrix"),
+  y = drop(juice(rec_econ_growth, all_outcomes(), composition = "matrix")),
+  N = nrow(X),
+  K = ncol(X),
+  scale_alpha = 10,
+  scale_beta =rep(2.5, K),
+  loc_sigma = 1,
+  use_y_rep = 1,
+  use_log_lik = 1,
+  d = 4
+)
+
+```
+
+```{r mod_lm_normal_1}
+models <- list()
+models[["lm_normal_1"]] <- stan_model("stan/lm_normal_1.stan")
+```
+
+```{r fit_normal_1}
+fits <- list()
+fits[["econ_normal"]] <- sampling(mod_normal_1, data = econ_growth_data)
+```
+
+```{r mod_student_t_0}
+models[["lm_student_t_0"]] <- stan_model("stan/lm_student_t_0.stan")
+```
+
+```{r fit_union_0}
+fits[["econ_t0"]] <- sampling(mod_student_t, data = econ_growth_data, refresh = -1)
+```
+
+```{r mod_student_t_1}
+models[["lm_student_t_1"]] <- stan_model("stan/lm_student_t_1.stan")
+```
+
+```{r fit_student_t_1}
+fits[["mod_student_t_1"]]
+fit_econ_t1 <- sampling(mod_student_t, data = econ_growth_data, refresh = -1)
+```
+
+```{r mod_student_t_2}
+models[["student_t_2"]] <- stan_model("stan/lm_student_t_2.stan")
+```
+
+```{r fit_union_2}
+fits[["econ_t2"]] <- sampling(mod_student_t_2, data = econ_growth_data, refresh = -1)
+```
+
+```{r}
+calc_loo <- function(x) {
+  ll <- extract_log_lik(x, "log_lik", 
+                        merge_chains = FALSE)
+  r_eff <- relative_eff(exp(ll))
+  loo(ll, r_eff = r_eff)
+}
+
+model_loo <- map(fits, calc_loo)
+
+map(model_loo, ~ .x[["estimates"]]["elpd_loo", "Estimate"])
+    
+```
+
+```{r}
+pars <- imap_dfr(fits, ~ mutate(tidyMCMC(.x, conf.int = TRUE), model = .y))
+  
+```
+
+```{r}
+ggplot() +
+  geom_pointrange(data = filter(pars, str_detect(term, "^y_rep")) %>%
+                    mutate(id = as.integer(str_extract(term, "\\d+"))),
+                mapping = aes(x = id, y = estimate, ymin = conf.low, ymax = conf.high, colour = model),
+                position = position_dodge(width = 0.2)) +
+  geom_point(data = tibble(y = econ_growth_data$y,
+                           x = seq_along(y)),
+             mapping = aes(x = x, y = y)) +
+  coord_flip()
+```
+
+```{r}
+ggplot() +
+  geom_pointrange(data = filter(pars, str_detect(term, "^beta")),
+                mapping = aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high, colour = model),
+                position = position_dodge(width = 0.2)) +
+  coord_flip()
+```
+
+
+
 
 ## Robit
 

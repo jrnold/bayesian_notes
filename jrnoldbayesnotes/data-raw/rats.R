@@ -14,6 +14,6 @@ rats <-
               day36 = col_integer()
             )) %>%
   mutate(id = row_number()) %>%
-  gather(day, growth) %>%
+  gather(day, growth, -id) %>%
   mutate(day = as.integer(str_extract(day, "\\d+")))
 devtools::use_data(rats, overwrite = TRUE)

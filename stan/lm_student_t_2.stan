@@ -22,7 +22,7 @@ parameters {
   real alpha;
   vector[K] beta;
   // regression scale
-  real<lower=0.> omega;
+  real<lower=0.> sigma;
   // 1 / lambda_i^2
   vector<lower = 0.0>[N] inv_lambda2;
   // degrees of freedom;
@@ -31,12 +31,15 @@ parameters {
 }
 transformed parameters {
   vector[N] mu;
-
+  vector[N] omega;
+  // observation variances
+  for (n in 1:N) {
+    omega[n] = sigma / sqrt(inv_lambda2[n]);
+  }
   mu = alpha + X * beta;
 }
 model {
   real half_nu;
-  vector[N] sigma;
 
   // priors
   alpha ~ normal(0.0, scale_alpha);
@@ -45,10 +48,6 @@ model {
   nu ~ gamma(2, 0.1);
   half_nu = 0.5 * nu;
   inv_lambda2 ~ gamma(half_nu, half_nu);
-  // observation variances
-  for (n in 1:N) {
-    sigma[n] = omega / sqrt(inv_lambda2[n]);
-  }
   // likelihood with obs specific scales
   y ~ normal(mu, sigma);
 }
@@ -58,9 +57,9 @@ generated quantities {
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
   for (n in 1:num_elements(y_rep)) {
-    y_rep[n] = student_t_rng(nu, mu[n], omega);
+    y_rep[n] = student_t_rng(nu, mu[n], omega[n]);
   }
   for (n in 1:num_elements(log_lik)) {
-    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega);
+    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega[n]);
   }
 }

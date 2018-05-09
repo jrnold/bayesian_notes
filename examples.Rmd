@@ -1,0 +1,166 @@
+# Model Selection
+
+We want to model $y = (y_1, \dots, y_n)$, which is a vector of $n$ non-negative integers.
+For each observation $i$, we also have a $p \times 1$ vector of predictors, $x_i$.
+
+Poisson Model
+$$
+\begin{aligned}[t]
+y_i &\sim \mathsf{Poisson}(\lambda_i) && y_i \in \{0, 1, 2, \dots \}, i \in 1, \dots, n \\
+\lambda_i &\sim \exp(\eta_i)  && \lambda_i \in \mathbb{R}^{+}, i \in 1, \dots, n \\
+\eta_i &= \alpha + \beta x'_i && \eta_i \in \mathbb{R}, i \in 1, \dots, n \\
+\alpha &\sim \mathsf{Normal}(0, 10) && \alpha \in \mathbb{R} \\
+\beta_j &\sim \mathsf{Normal}(0, 2.5) && \beta_j \in \mathbb{R}, j \in 1, \dots, p
+\end{aligned}
+$$
+where $x_i$ is a $k \times 1$ vector of covariates.
+For the prior scales of the regression intercept $\alpha$ and coefficients, $\beta_k$, are
+the weakly informative priors suggested by Stan.
+
+Negative Binomial Model
+
+$$
+\begin{aligned}[t]
+y_i &\sim \mathsf{NegBinomial2}(\mu_i, \phi) && y_i \in \{0, 1, 2, \dots \}, i \in 1, \dots, n \\
+\mu_i &\sim \exp(\eta_i)  && \lambda_i \in \mathbb{R}^{+}, i \in 1, \dots, n \\
+\eta_i &= \alpha + x'_i \beta && \eta_i \in \mathbb{R}, i \in 1, \dots, n \\
+\alpha &\sim \mathsf{Normal}(0, 10) && \alpha \in \mathbb{R} \\
+\beta_j &\sim \mathsf{Normal}(0, 2.5) && \beta_j \in \mathbb{R}, j \in 1, \dots, p \\
+\phi^{-1/2} &\sim \mathsf{Exponential}(0, 1) && \phi \in \mathbb{R}^{+}
+\end{aligned}
+$$
+where $x_i$ is a $k \times 1$ vector of covariates.
+The parameter $\phi$ controls the overdispersion.
+In the Poisson distribution, the variance always equals the mean, in the
+negative binomial distribution, the variance is always greater than the mean.
+As $\phi \to \infty$, $\mathsf{NegBinomial2(\mu, \phi)} \to \mathsf{Poisson}(\mu)$, and
+as $\phi \to 0$, the overdispersion increases.
+Since the less complex model is one without dispersion, we assign a prior to $\phi^{-1/2}$.
+This is means that as $\phi^{-1/2} \to 0$, there is less overdispersion.
+The prior is a weakly informative one.
+
+Zero-Inflation Poisson
+
+A common occurrence in count data is an over-abundance of 0 values relative to that predicted by a Poisson or negative binomial models.
+A zero inflation model is model for this phenomena.
+ See Ch. 13.7 "Zero-Inflated and Hurdle Models " in the Stan Modeling Language Reference (v 2.17).
+
+The zero inflation Poisson model, models $y_i$ as coming from two processes.
+With probability $\theta$, it comes from a process generating the excess 0s, and with 
+probability $1 - \theta$, it comes from a Poisson process.
+The likelihood of this model then becomes,
+$$
+\begin{aligned}[t]
+p(y_i | \theta, \lambda_i) &= \begin{cases}
+\theta + (1 - \theta) \times \mathsf{Poisson}(\lambda_i) & \text{if } y_i = 0 \\
+(1 - \theta) \times \mathsf{Poisson}(\lambda_i) & \text{if } y_i > 0
+\end{cases}  && y_i \in \{0, 1, 2, \dots \}, i \in 1, \dots, n 
+\end{aligned}
+$$
+The rest of the model is the same as the Poisson model.
+
+The zero inflated negative binomial model is similarly defined.
+The likelihood of the zero-inflated negative binomial model is
+$$
+\begin{aligned}[t]
+p(y_i | \theta, \lambda_i) &= \begin{cases}
+\theta + (1 - \theta) \times \mathsf{NegBinomial2}(\mu_i, \phi) & \text{if } y_i = 0 \\
+(1 - \theta) \times \mathsf{NegBinomial2}(\mu_i, \phi) & \text{if } y_i > 0
+\end{cases}  && y_i \in \{0, 1, 2, \dots \}, i \in 1, \dots, n 
+\end{aligned}
+$$
+The rest of the model is the same as the negative binomial model.
+
+```{r}
+
+```
+
+
+1.  Some Stan questions:
+
+    1.   What is the difference between the `neg_binomial` and `neg_binomial_2`
+         disributions?
+         
+    1.   Why does the code use `neg_binomial_2_log` and `poisson_log`? 
+         How would you write the models using the `neg_binomial_2` and `poisson`
+         distributions? 
+
+1.  The `zinfl_neg_binomial.stan` and `zinfl_poisson.stan` models define
+    functions to calcualte the log probability mass of the zero inflated poisson
+    and negative binomial functions.
+
+    ```
+      real zinfl_neg_binomial_2_log_lpmf(int y, real theta, real eta, real phi) {
+        if (y == 0) {
+          return log_sum_exp(bernoulli_lpmf(1 | theta),
+                                bernoulli_lpmf(0 | theta) +
+                                neg_binomial_2_log_lpmf(y | eta, phi));
+        } else {
+          return bernoulli_lpmf(0 | theta) +
+            neg_binomial_2_log_lpmf(y | eta, phi);
+        }
+      }
+    ```
+
+    1.  What is the variable type that `zinfl_poisson_log_lpmf` returns?
+        What is the variable type that `zinfl_poisson_rng` returns? 
+        Are they the same? If they are different, why?
+        
+    1.  What does the function `log_sum_exp` do? How is it different than the following? 
+        ```
+        return bernoulli_lpmf(1 | theta) + bernoulli_lpmf(0 | theta) * poisson_log_lpmf(y | eta, phi))
+        ```
+        
+    1.  Why does the function name end in `_lpmf`? (See Ch 24.5)? 
+    
+    1.  Later `zinfl_poisson_log_pmf` function is called as
+        ```
+        y[n] ~ zinfl_poisson_log(eta[n]);
+        ```
+        This is equivalent to 
+        ```
+        target += zinfl_poisson_log_lpmf(y[n], eta[n]);
+        ```
+        What is the statement `target +=` doing? 
+        How does this relate to the the underlying MCMC algorithm that Stan uses?
+                                
+1.  For the Poisson model, use posterior predictive checks to check for
+
+    1.  Zero-inflation
+    2.  Overdispersion (variance is greater than the mean)
+    
+    Think of your own ways to check these quantities using the output of the 
+    model and `rstan` and `bayesplot`.
+    
+1.  Calculate the expected log predictive density (elpd) using PSIS-LOO, using
+    the **loo** package and `loo` function.
+
+    1.  Which model has the highest elpd?
+    1.  Did `loo` produce any error or warning messages? What do they mean and how would you fix them? 
+    1.  The default print method for `loo` objects reports a `elpd_loo`, `p_loo`, 
+        and `looic`. What is the difference between `elpd_loo` and `looic`?
+        
+    1.  The default print method for `loo` objects reports `p_loo`, the effective number of parameters in the model.
+        It is reported with a standard error, suggesting it is an estimate.
+        Why would the number of parameters in a Bayesian model need to be estimated?
+        
+1.  Using the **loo** package, calculate the model weights to use for Bayesian model averaging. 
+    
+    
+    1.  Which model is given the most weight? 
+    1.  Calculate the posterior predictive density from the BMA model.
+
+1.  It is preferrable to use a continuous model expansion rather than model averaging,
+    if it is possible possible. Could you incorporate these models into a single model?
+    Write down and estimate that model.
+    
+## Model Averaging Example
+
+
+    
+## Shrinkage Estimators
+
+
+
+
+        

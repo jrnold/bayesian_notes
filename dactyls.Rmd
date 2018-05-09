@@ -1,0 +1,20 @@
+# Estimating ANOVA Type Models
+
+```{r}
+library("rstanarm")
+```
+
+```{r}
+data("Dactyl", package = "HistData")
+```
+
+Edgeworth (1885) took the first 75 lines in Book XI of Virgil's Aeneid and classified each of the first four "feet" of the line as a dactyl (one long syllable followed by two short ones) or not.
+
+Grouping the lines in blocks of five gave a 4 x 25 table of counts, represented here as a data frame with ordered factors, Foot and Lines. Edgeworth used this table in what was among the first examples of analysis of variance applied to a two-way classification.
+
+```{r}
+stan_aov(count ~ Foot + Lines, data = Dactyl, prior = R2(location = 0.5))
+```
+
+## Zero-Inflation
+
