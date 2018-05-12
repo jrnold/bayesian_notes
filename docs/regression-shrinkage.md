@@ -1,8 +1,10 @@
+
 # Shrinkage and Regularized Regression
 
 ## Prerequisites {-}
 
-```{r message=FALSE}
+
+```r
 library("rstan")
 library("rstanarm")
 library("bayz")
@@ -104,42 +106,220 @@ Properties:
 -   Used as the best convex approximation of the "best subset selection"
     regression problem, which finds the number of nonzero entries in a vector.
 
-```{r}
+
+```r
 data("diabetes", package = "lars")
 ```
 
-```{r}
+
+```r
 fit_lasso <- glmnet(diabetes$x, diabetes$y, alpha = 1)
 ```
-```{r}
+
+```r
 plot(fit_lasso)
 ```
 
+<img src="regression-shrinkage_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
+
 Choice of an optimal lambda:
-```{r}
+
+```r
 fit_lasso_cv <- cv.glmnet(diabetes$x, diabetes$y, parallel = TRUE)
+#> Warning: executing %dopar% sequentially: no parallel backend registered
 ```
 
-```{r}
+
+```r
 ggplot(tidy(fit_lasso_cv), aes(x = -log(lambda), y = estimate)) +
   geom_point()
 ```
 
-```{r}
+<img src="regression-shrinkage_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
+
+
+```r
 cv.glmnet(diabetes$x, diabetes$y, parallel = TRUE)
+#> Warning: executing %dopar% sequentially: no parallel backend registered
+#> $lambda
+#>  [1] 45.1600 41.1481 37.4927 34.1619 31.1271 28.3618 25.8422 23.5465
+#>  [9] 21.4547 19.5487 17.8120 16.2297 14.7879 13.4742 12.2772 11.1865
+#> [17] 10.1927  9.2872  8.4622  7.7104  7.0254  6.4013  5.8326  5.3145
+#> [25]  4.8424  4.4122  4.0202  3.6631  3.3377  3.0411  2.7710  2.5248
+#> [33]  2.3005  2.0961  1.9099  1.7403  1.5857  1.4448  1.3164  1.1995
+#> [41]  1.0929  0.9958  0.9074  0.8268  0.7533  0.6864  0.6254  0.5699
+#> [49]  0.5192  0.4731  0.4311  0.3928  0.3579  0.3261  0.2971  0.2707
+#> [57]  0.2467  0.2248  0.2048  0.1866  0.1700  0.1549  0.1412  0.1286
+#> [65]  0.1172  0.1068  0.0973  0.0887  0.0808  0.0736  0.0671  0.0611
+#> [73]  0.0557  0.0507  0.0462  0.0421  0.0384
+#> 
+#> $cvm
+#>  [1] 5919 5600 5209 4874 4596 4366 4175 4019 3889 3775 3673 3587 3513 3449
+#> [15] 3393 3342 3299 3263 3233 3209 3188 3171 3152 3131 3110 3092 3080 3070
+#> [29] 3062 3055 3047 3039 3032 3027 3021 3015 3010 3007 3004 3003 3003 3003
+#> [43] 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3005 3006
+#> [57] 3007 3007 3007 3006 3005 3004 3003 3002 3001 3000 3000 3000 3000 2999
+#> [71] 2999 3000 3000 3000 3000 3000 3000
+#> 
+#> $cvsd
+#>  [1] 284 278 247 222 203 187 175 166 159 156 155 153 151 149 149 149 149
+#> [18] 149 149 149 149 149 150 151 152 152 152 152 152 152 152 153 154 155
+#> [35] 156 156 157 157 158 158 159 159 160 160 161 161 162 162 162 163 163
+#> [52] 163 164 164 164 165 165 165 166 166 166 166 166 166 166 167 167 167
+#> [69] 168 168 168 168 168 169 169 169 169
+#> 
+#> $cvup
+#>  [1] 6203 5878 5456 5097 4799 4553 4350 4185 4048 3931 3828 3740 3664 3599
+#> [15] 3542 3490 3447 3412 3382 3357 3337 3320 3302 3282 3262 3244 3231 3222
+#> [29] 3214 3207 3199 3192 3186 3181 3176 3171 3167 3164 3162 3162 3162 3162
+#> [43] 3163 3164 3164 3165 3165 3165 3165 3166 3166 3166 3167 3168 3169 3171
+#> [57] 3172 3173 3173 3172 3171 3170 3169 3168 3167 3167 3167 3167 3167 3167
+#> [71] 3167 3168 3168 3168 3169 3169 3169
+#> 
+#> $cvlo
+#>  [1] 5635 5322 4961 4652 4394 4179 4000 3853 3729 3619 3519 3434 3363 3300
+#> [15] 3244 3193 3150 3114 3085 3060 3039 3021 3002 2980 2958 2940 2928 2918
+#> [29] 2910 2902 2895 2887 2879 2872 2865 2859 2853 2850 2847 2845 2844 2844
+#> [43] 2843 2843 2842 2842 2842 2841 2841 2840 2840 2839 2839 2839 2840 2841
+#> [57] 2842 2842 2841 2841 2839 2838 2837 2836 2835 2834 2833 2832 2832 2832
+#> [71] 2832 2831 2831 2831 2831 2831 2831
+#> 
+#> $nzero
+#>  s0  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 
+#>   0   2   2   2   2   2   2   2   3   3   3   3   4   4   4   4   4   4 
+#> s18 s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 s31 s32 s33 s34 s35 
+#>   4   4   4   4   5   5   5   5   6   6   6   7   7   7   7   7   7   7 
+#> s36 s37 s38 s39 s40 s41 s42 s43 s44 s45 s46 s47 s48 s49 s50 s51 s52 s53 
+#>   7   7   7   7   7   7   8   8   8   8   8   8   8   8   8   8   8   8 
+#> s54 s55 s56 s57 s58 s59 s60 s61 s62 s63 s64 s65 s66 s67 s68 s69 s70 s71 
+#>   8   8   9  10  10  10  10  10  10  10  10  10  10   9   9   9   9   9 
+#> s72 s73 s74 s75 s76 
+#>   9  10  10  10  10 
+#> 
+#> $name
+#>                  mse 
+#> "Mean-Squared Error" 
+#> 
+#> $glmnet.fit
+#> 
+#> Call:  glmnet(x = diabetes$x, y = diabetes$y, parallel = TRUE) 
+#> 
+#>       Df   %Dev  Lambda
+#>  [1,]  0 0.0000 45.2000
+#>  [2,]  2 0.0646 41.1000
+#>  [3,]  2 0.1320 37.5000
+#>  [4,]  2 0.1870 34.2000
+#>  [5,]  2 0.2340 31.1000
+#>  [6,]  2 0.2720 28.4000
+#>  [7,]  2 0.3040 25.8000
+#>  [8,]  2 0.3300 23.5000
+#>  [9,]  3 0.3520 21.5000
+#> [10,]  3 0.3740 19.5000
+#> [11,]  3 0.3920 17.8000
+#> [12,]  3 0.4070 16.2000
+#> [13,]  4 0.4200 14.8000
+#> [14,]  4 0.4320 13.5000
+#> [15,]  4 0.4420 12.3000
+#> [16,]  4 0.4500 11.2000
+#> [17,]  4 0.4570 10.2000
+#> [18,]  4 0.4630  9.2900
+#> [19,]  4 0.4680  8.4600
+#> [20,]  4 0.4720  7.7100
+#> [21,]  4 0.4750  7.0300
+#> [22,]  4 0.4780  6.4000
+#> [23,]  5 0.4820  5.8300
+#> [24,]  5 0.4870  5.3100
+#> [25,]  5 0.4900  4.8400
+#> [26,]  5 0.4940  4.4100
+#> [27,]  6 0.4960  4.0200
+#> [28,]  6 0.4980  3.6600
+#> [29,]  6 0.5000  3.3400
+#> [30,]  7 0.5030  3.0400
+#> [31,]  7 0.5050  2.7700
+#> [32,]  7 0.5060  2.5200
+#> [33,]  7 0.5080  2.3000
+#> [34,]  7 0.5090  2.1000
+#> [35,]  7 0.5100  1.9100
+#> [36,]  7 0.5110  1.7400
+#> [37,]  7 0.5110  1.5900
+#> [38,]  7 0.5120  1.4400
+#> [39,]  7 0.5120  1.3200
+#> [40,]  7 0.5130  1.2000
+#> [41,]  7 0.5130  1.0900
+#> [42,]  7 0.5130  0.9960
+#> [43,]  8 0.5140  0.9070
+#> [44,]  8 0.5140  0.8270
+#> [45,]  8 0.5140  0.7530
+#> [46,]  8 0.5140  0.6860
+#> [47,]  8 0.5150  0.6250
+#> [48,]  8 0.5150  0.5700
+#> [49,]  8 0.5150  0.5190
+#> [50,]  8 0.5150  0.4730
+#> [51,]  8 0.5150  0.4310
+#> [52,]  8 0.5150  0.3930
+#> [53,]  8 0.5150  0.3580
+#> [54,]  8 0.5150  0.3260
+#> [55,]  8 0.5150  0.2970
+#> [56,]  8 0.5150  0.2710
+#> [57,]  9 0.5150  0.2470
+#> [58,] 10 0.5160  0.2250
+#> [59,] 10 0.5160  0.2050
+#> [60,] 10 0.5160  0.1870
+#> [61,] 10 0.5170  0.1700
+#> [62,] 10 0.5170  0.1550
+#> [63,] 10 0.5170  0.1410
+#> [64,] 10 0.5170  0.1290
+#> [65,] 10 0.5170  0.1170
+#> [66,] 10 0.5170  0.1070
+#> [67,] 10 0.5170  0.0973
+#> [68,]  9 0.5170  0.0887
+#> [69,]  9 0.5170  0.0808
+#> [70,]  9 0.5170  0.0736
+#> [71,]  9 0.5170  0.0671
+#> [72,]  9 0.5170  0.0611
+#> [73,]  9 0.5170  0.0557
+#> [74,] 10 0.5170  0.0507
+#> [75,] 10 0.5180  0.0462
+#> [76,] 10 0.5180  0.0421
+#> [77,] 10 0.5180  0.0384
+#> [78,] 10 0.5180  0.0350
+#> [79,] 10 0.5180  0.0319
+#> [80,] 10 0.5180  0.0290
+#> [81,] 10 0.5180  0.0265
+#> [82,] 10 0.5180  0.0241
+#> [83,] 10 0.5180  0.0220
+#> [84,] 10 0.5180  0.0200
+#> [85,] 10 0.5180  0.0182
+#> [86,] 10 0.5180  0.0166
+#> [87,] 10 0.5180  0.0151
+#> [88,] 10 0.5180  0.0138
+#> 
+#> $lambda.min
+#> [1] 0.0736
+#> 
+#> $lambda.1se
+#> [1] 5.83
+#> 
+#> attr(,"class")
+#> [1] "cv.glmnet"
 ```
 
 
 
-```{r}
+
+```r
 fit_ridge <- glmnet(diabetes$x, diabetes$y, alpha = 0)
 ```
-```{r}
+
+```r
 plot(fit_ridge)
 ```
 
+<img src="regression-shrinkage_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
+
 Comparison of coefficients
-```{r}
+
+```r
 beta_lm <- lm(y ~ x, data = diabetes)
 ```
 
@@ -351,7 +531,7 @@ where $\delta_0$ is a Dirac delta function putting a point mass at 0, and $\pi(\
 
 The posterior distribution of $w$ is the probability that $\beta_k \neq 0$, and the conditional posterior distribution $p(\beta_k | y, w = 1)$ is the distribution of $\beta_k$ given that $\beta_k \neq 0$.
 
-See the R package `r rpkg("spikeslab")` and he accompanying article [@IshwaranKogalurRao2010a] for an implementation and review of spike-and-slab regressions.
+See the R package **[spikeslab](https://cran.r-project.org/package=spikeslab)** and he accompanying article [@IshwaranKogalurRao2010a] for an implementation and review of spike-and-slab regressions.
 
 
 ## Number of effective zeros
@@ -405,74 +585,7 @@ Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributi
 @ScottBerger2010a consider marginal maximum likelihood estimates of $\tau$.
 @PasKleijnVaart2014a suggest that an empirical Bayes estimator truncated below at $1 / n$.
 
-```{r echo=FALSE}
-library("tidyverse")
-kappa <- seq(.005, .995, by = 0.005)
-lambda <- (1 - kappa) / kappa
-
-f <- function(x) sqrt(1 / x - 1)
-f_jacobian <- function(x) 1 / (sqrt(1 / x - 1) * x ^ 2)
-f2 <- function(x) 1 / x - 1
-f2_jacobian <- function(x) x ^ (-2)
-
-funs <- list(
-  function(x) {
-    tibble(kappa = x,
-           dens = dt(f(kappa), df = 3) * f_jacobian(kappa),
-           name = "HS (df = 3)")
-  },
-  function(x) {
-    tibble(kappa = x,
-           dens = dt(f(kappa), df = 2) * f_jacobian(kappa),
-           name = "HS (df = 2)")
-  },
-  function(x) {
-    tibble(kappa = x,
-           dens = dcauchy(f(kappa)) * f_jacobian(kappa),
-           name = "HS (df = 1)")
-  },
-  function(x) {
-    df <- 3
-    tibble(kappa = x,
-           dens = dgamma(x / (1 - x), 0.5, 0.5) *
-             (1 / (1 - x) + x / (1 - x) ^ 2),
-           name = "Student t (df = 1)")
-  },
-  function(x) {
-    df <- 3
-    tibble(kappa = x,
-           dens = dgamma(x / (1 - x), 3 / 2, 3 / 2) *
-             (1 / (1 - x) + x / (1 - x) ^ 2),
-           name = "Student t (df = 3)")
-  },
-  function(x) {
-    df <- 3
-    tibble(kappa = x,
-           dens = dgamma(x / (1 - x), 1000, 1000) *
-             (1 / (1 - x) + x / (1 - x) ^ 2),
-           name = "Normal")
-  },
-  function(x) {
-    df <- 3
-    tibble(kappa = x,
-           dens = dgamma(x / (1 - x), 0.0001, 0.0001) *
-             (1 / (1 - x) + x / (1 - x) ^ 2),
-           name = "Student t (df = 0)")
-  },
-  function(x) {
-    df <- 3
-    tibble(kappa = x,
-           dens = dexp(f2(kappa), 0.5) * f2_jacobian(kappa),
-           name = "Double Exponential")
-  }
-)
-
-shrinkages <- invoke_map_df(funs, x = kappa)
-
-ggplot(shrinkages, aes(x = kappa, y = dens)) +
-  geom_line() +
-  facet_wrap(~ name, scales = "free_y")
-```
+<img src="regression-shrinkage_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 ## All Coefficients
@@ -598,7 +711,7 @@ Choosing the shrinkage penalty:
 
 ## References
 
--   `r rpkg("rstanarm")`: estimates GLM regressions with various priors
--   `r rpkg("rmonomvn")`: estimates Bayesian ridge, lasso, horseshoe, and ridge regression.
--   `r rpkg("bayesreg")`: See @MakalicSchmidt2016a for documentation and a good review of Bayesian regularized regression.
+-   **[rstanarm](https://cran.r-project.org/package=rstanarm)**: estimates GLM regressions with various priors
+-   **[rmonomvn](https://cran.r-project.org/package=rmonomvn)**: estimates Bayesian ridge, lasso, horseshoe, and ridge regression.
+-   **[bayesreg](https://cran.r-project.org/package=bayesreg)**: See @MakalicSchmidt2016a for documentation and a good review of Bayesian regularized regression.
 -   [fastHorseshoe]( http://jingyuhe.com/fastHorseshoe.html)

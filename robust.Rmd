@@ -203,7 +203,7 @@ models[["lm_normal_1"]] <- stan_model("stan/lm_normal_1.stan")
 
 ```{r fit_normal_1}
 fits <- list()
-fits[["econ_normal"]] <- sampling(mod_normal_1, data = econ_growth_data)
+fits[["econ_normal"]] <- sampling(models[["lm_normal_1"]], data = econ_growth_data)
 ```
 
 ```{r mod_student_t_0}
@@ -211,7 +211,7 @@ models[["lm_student_t_0"]] <- stan_model("stan/lm_student_t_0.stan")
 ```
 
 ```{r fit_union_0}
-fits[["econ_t0"]] <- sampling(mod_student_t, data = econ_growth_data, refresh = -1)
+fits[["econ_t0"]] <- sampling(models[["lm_student_t_0"]], data = econ_growth_data, refresh = -1)
 ```
 
 ```{r mod_student_t_1}
@@ -220,15 +220,15 @@ models[["lm_student_t_1"]] <- stan_model("stan/lm_student_t_1.stan")
 
 ```{r fit_student_t_1}
 fits[["mod_student_t_1"]]
-fit_econ_t1 <- sampling(mod_student_t, data = econ_growth_data, refresh = -1)
+fit_econ_t1 <- sampling(models[["lm_student_t_1"]], data = econ_growth_data, refresh = -1)
 ```
 
 ```{r mod_student_t_2}
-models[["student_t_2"]] <- stan_model("stan/lm_student_t_2.stan")
+models[["lm_student_t_2"]] <- stan_model("stan/lm_student_t_2.stan")
 ```
 
 ```{r fit_union_2}
-fits[["econ_t2"]] <- sampling(mod_student_t_2, data = econ_growth_data, refresh = -1)
+fits[["econ_t2"]] <- sampling(models[["lm_student_t_2"]], data = econ_growth_data, refresh = -1)
 ```
 
 ```{r}
