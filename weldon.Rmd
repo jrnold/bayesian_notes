@@ -3,7 +3,8 @@ library("datums")
 library("tidyverse")
 ```
 
-Frank Weldon threw 12 dice 26,306 times and counted the number of dice that showed a five or six.
+Frank Weldon threw 12 dice 26,306 times and counted the number
+of dice that showed a five or six.
 
 ```{r}
 N <- 26306
@@ -11,7 +12,8 @@ prob <- 2 / 6
 size <- 12
 ```
 
-For a prior, let's suppose that one roll of 12 dice has 4 dice showing 5's or 6's and 8 dice showing other numbers.
+For a prior, let's suppose that one roll of 12 dice has 4 dice
+showing 5's or 6's and 8 dice showing other numbers.
 This is equivalent of $\mathrm{Beta}(4, 8)$.
 ```{r}
 prior_a <- 4
@@ -61,30 +63,24 @@ tibble(x = ppoints(100),
   geom_line()
 ```
 
-```{r}
+Alternatively, we could instead model the proportion as a
+multinomial distribution. This treats the categories as 
+`1, ..., 12`, as independent events.
 
-```
+The prior distribution is Dirichlet with parameters derived
+from the expected number in each category for a single roll of `r size` dice.
 
-Alternatively, we could instead model the proportion as a multinomial distribution.
-This treats the categories as 1, ..., 12, as independent events.
-
-The prior distribution is Dirichlet with parameters derived from the expected number in each category for a single roll of `r size` dice.
 ```{r}
 prior_alpha <- dbinom(0:size, size = size, prob = prob) * size
 round(prior_alpha , 1)
 ```
 
-The posterior distribution for each category is also a Dirichlet distribution with the following parameters,
+The posterior distribution for each category is also a
+Dirichlet distribution with the following parameters,
+
 ```{r}
 post_alpha <- prior_alpha + weldon[["observed"]]
 round(post_alpha, 1)
 ```
 
 The posterior predictive distribution is the [Dirichlet-multinomial](https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution) distribution.
-
-
-```{r}
-
-```
-
-
