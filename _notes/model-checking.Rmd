@@ -134,10 +134,23 @@ Display real data alongside simulated data:
 -   Display data summaries or parameter inferences
 -   Graphs of residuals or other measures of discrepency
 
-    
-    
-    
--   
-    
+# Datasets
 
-    
+Example datasets for variable selectin, shrinkage, and or BMA.
+
+-   [datafls](https://www.rdocumentation.org/packages/BMS/versions/0.3.4/topics/datafls)
+    The economic growth data set from Fernandez, Ley and Steel, Journal of Applied Econometrics 2001.
+    Outcome is positive continuous. Regression. Used in BMA examples. Also
+    used with LASSO in ...
+-   Fearon civil war data.  Outcome is binary. Used in many different examples.
+-   `USCrime`: Used as an example in BMS
+-   `MASS::Boston`: Determinants of housing prices in Boston. Used as an example 
+    in ISLR.
+-   Credit. Used in ISLR.
+-   Hitters. Used in ISLR, and Fox (Ch 22).
+-   Prostate. Used in Elements of Statistical Learning. See `lasso2` and
+    `ElemStatLearn` packges.
+-   Seattle house price sales from [Kaggle]. A more geographically and temporally
+    relevant version of the Boston house price data.
+-   Refugee appeals. Used in Fox (Ch 22)
+-   Predicting US Presidential elections

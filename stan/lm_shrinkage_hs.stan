@@ -1,5 +1,4 @@
 // Linear Model with Normal Errors
-// Coefficients regularized with regularized Horseshoe prior.
 data {
   // number of observations
   int<lower=0> N;
@@ -12,47 +11,51 @@ data {
   matrix [N, K] X;
   // priors on alpha
   real<lower=0.> scale_alpha;
-  // regularization constant for horseshoe prior
-  real<lower=0.> c;
   // prior scale on global
   real<lower=0.> loc_tau;
   // prior on regression error distribution
   real<lower=0.> loc_sigma;
-  // location of prior on lambda
-  real<lower=0.> loc_lambda;
-  // degrees of freedom of hyperprior of lambda.
-  // If d = 1, then lambda_i ~ Cauchy() and it is horseshoe prior
-  real<lower=0.> d;
+  // scale of HS slab
+  real<lower=0.> scale_slab;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
 }
 parameters {
   // regression coefficient vector
-  real alpha;
-  vector[K] beta;
+  real alpha_raw;
+  vector[K] beta_raw;
   real<lower=0.> sigma;
   // hyper-parameters of coefficients
   real<lower=0.> tau;
-  vector<lower=0.>[K] lambda;
+  // local scales
+  vector[K] lambda;
 }
 transformed parameters {
   vector[N] mu;
+  real alpha;
+  vector[K] beta;
+  vector[K] lambda_tilde;
 
+  alpha = alpha_raw * scale_alpha;
+  // calculate these inside a block to avoid savin them
+  // calculate these values to avoid calculating them multiple times
+  for (k in 1:K) {
+    real lambda2;
+    real c2;
+    c2 = pow(scale_slab, 2);
+    lambda2 = pow(lambda[k], 2);
+    lambda_tilde[k] = sqrt(c2 * lambda2 ./ (lambda2 + c2));
+  }
+  beta = beta_raw * tau .* lambda_tilde;
   mu = alpha + X * beta;
 }
 model {
-  vector[K] lambda_tilde;
-  for (k in 1:K) {
-    lambda_tilde[k] = sqrt((c ^ 2 * lambda[k] ^ 2) / (lambda[k] ^ 2 + c ^ 2));
-  }
-
   // hyperpriors
-  lambda ~ student_t(d, 0, loc_lambda);
   tau ~ exponential(loc_tau);
   // priors
-  alpha ~ normal(0., scale_alpha);
-  beta ~ normal(0., tau * lambda_tilde);
+  alpha_raw ~ normal(0., 1.);
+  beta_raw ~ normal(0., 1.);
   sigma ~ exponential(loc_sigma);
   // likelihood
   y ~ normal(mu, sigma);

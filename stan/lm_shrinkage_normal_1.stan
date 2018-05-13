@@ -21,23 +21,27 @@ data {
 }
 parameters {
   // regression coefficient vector
-  real alpha;
-  vector[K] beta;
+  real alpha_raw;
+  vector[K] beta_raw;
   real<lower=0.> sigma;
   // hyper-parameters of coefficients
   real<lower=0.> tau;
 }
 transformed parameters {
+  real alpha;
+  vector[K] beta;
   vector[N] mu;
 
+  beta = beta_raw * tau;
+  alpha = alpha_raw .* scale_alpha;
   mu = alpha + X * beta;
 }
 model {
   // hyperpriors
   tau ~ exponential(loc_tau);
   // priors
-  alpha ~ normal(0., scale_alpha);
-  beta ~ normal(0., tau);
+  alpha_raw ~ normal(0., 1.);
+  beta_raw ~ normal(0., 1.);
   sigma ~ exponential(loc_sigma);
   // likelihood
   y ~ normal(mu, sigma);
