@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="shrinkage-and-hierarchical-models.html">
-<link rel="next" href="scaled-and-unscaled-variables.html">
+<link rel="next" href="distributions.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -60,41 +60,69 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -229,7 +257,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#average-predictive-comparisons"><i class="fa fa-check"></i><b>9.3</b> Average Predictive Comparisons</a></li>
+<li class="chapter" data-level="9.4" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.4</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> Model Comparison</a><ul>
 <li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#models"><i class="fa fa-check"></i><b>10.1</b> Models</a></li>
@@ -334,85 +363,85 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
 <li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
 <li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
+<li class="chapter" data-level="19.2.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#constrained-optimization-interpretation"><i class="fa fa-check"></i><b>19.2.3</b> Constrained Optimization Interpretation</a></li>
+<li class="chapter" data-level="19.2.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-interpretation"><i class="fa fa-check"></i><b>19.2.4</b> Bayesian Interpretation</a></li>
 </ul></li>
 <li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
 <li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
-<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#hiearchical-coefficient-priors"><i class="fa fa-check"></i><b>19.3.2</b> Hiearchical Coefficient Priors</a></li>
-<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Laplace Distribution</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.3.2</b> Spike and Slab prior</a></li>
+<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#normal-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Normal Distribution</a></li>
+<li class="chapter" data-level="19.3.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.4</b> Laplace Distribution</a></li>
+<li class="chapter" data-level="19.3.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.3.5</b> Student-t and Cauchy Distributions</a></li>
+<li class="chapter" data-level="19.3.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-prior"><i class="fa fa-check"></i><b>19.3.6</b> Horseshore Prior</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.4</b> Student-t and Cauchy Distributions</a></li>
-<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-and-hierarchical-priors"><i class="fa fa-check"></i><b>19.5</b> Horseshore and Hierarchical Priors</a></li>
-<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.6</b> Understanding Shrinkage Models</a></li>
-<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.7</b> Spike and Slab prior</a></li>
-<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#number-of-effective-zeros"><i class="fa fa-check"></i><b>19.8</b> Number of effective zeros</a></li>
-<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.9</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#all-coefficients"><i class="fa fa-check"></i><b>19.10</b> All Coefficients</a><ul>
-<li class="chapter" data-level="19.10.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#zellners-g-prior"><i class="fa fa-check"></i><b>19.10.1</b> Zellner’s g-prior</a></li>
-<li class="chapter" data-level="19.10.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#q-r-prior"><i class="fa fa-check"></i><b>19.10.2</b> Q-R Prior</a></li>
-</ul></li>
-<li class="chapter" data-level="19.11" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.11</b> Differences between Bayesian and Penalized ML</a></li>
-<li class="chapter" data-level="19.12" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#references-11"><i class="fa fa-check"></i><b>19.12</b> References</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.4</b> Understanding Shrinkage Models</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.6</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
-<li class="chapter" data-level="19.13" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.13</b> Parameters</a></li>
-<li class="chapter" data-level="19.14" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.14</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="19.14.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.14.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="19.14.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.14.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="19.14.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.14.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="19.14.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.14.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="19.14.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.14.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
+<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="19.9.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.9.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="19.9.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="19.9.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.9.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="19.9.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.9.5</b> Cholesky Decomposition</a></li>
 </ul></li>
+<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="scaled-and-unscaled-variables.html"><a href="scaled-and-unscaled-variables.html"><i class="fa fa-check"></i><b>20</b> Scaled and Unscaled Variables</a></li>
-<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
-<li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
-<li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
-<li class="chapter" data-level="22.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>22.3</b> Topics</a></li>
-<li class="chapter" data-level="22.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>22.4</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="22.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>22.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>22.5.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="22.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>22.5.2</b> Modern Statistical Workflow</a></li>
-<li class="chapter" data-level="22.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>22.5.3</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="22.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>22.5.4</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="22.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>22.5.5</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="22.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>22.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="22.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>22.5.7</b> Variable Selection</a></li>
-<li class="chapter" data-level="22.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>22.5.8</b> Multiple Testing</a></li>
-<li class="chapter" data-level="22.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>22.5.9</b> Rare Events</a></li>
-<li class="chapter" data-level="22.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>22.5.10</b> Identifiability</a></li>
-<li class="chapter" data-level="22.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>22.5.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="distributions.html"><a href="distributions.html#beta-distribution"><i class="fa fa-check"></i><b>20.0.1</b> Beta Distribution</a></li>
+<li class="chapter" data-level="20.0.2" data-path="distributions.html"><a href="distributions.html#gamma-distribution"><i class="fa fa-check"></i><b>20.0.2</b> Gamma Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>22.6</b> Software</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>22.6.1</b> Stan</a></li>
-<li class="chapter" data-level="22.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>22.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="22.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>22.6.3</b> Priors</a></li>
+<li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="21.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>21.1</b> Textbooks</a></li>
+<li class="chapter" data-level="21.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>21.2</b> Syllabi</a></li>
+<li class="chapter" data-level="21.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>21.3</b> Topics</a></li>
+<li class="chapter" data-level="21.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>21.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="21.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>21.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="21.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>21.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="21.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>21.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="21.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>21.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="21.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>21.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="21.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>21.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="21.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>21.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="21.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>21.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="21.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>21.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="21.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>21.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="21.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>21.5.11</b> Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>22.7</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="22.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>22.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="22.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>22.9</b> Mixture Models</a></li>
-<li class="chapter" data-level="22.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>22.10</b> Inference</a><ul>
-<li class="chapter" data-level="22.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>22.10.1</b> Discussion of Bayesian Inference</a></li>
+<li class="chapter" data-level="21.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>21.6</b> Software</a><ul>
+<li class="chapter" data-level="21.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>21.6.1</b> Stan</a></li>
+<li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
 </ul></li>
-<li class="chapter" data-level="22.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>22.11</b> Model Checking</a><ul>
-<li class="chapter" data-level="22.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>22.11.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="22.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>22.11.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="22.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>22.11.3</b> Software Validation</a></li>
+<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
+<li class="chapter" data-level="21.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>21.10.1</b> Discussion of Bayesian Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="22.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>22.12</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="22.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>22.13</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="22.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>22.14</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="22.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>22.15</b> History of Bayesian Statistics</a></li>
-<li class="chapter" data-level="22.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>22.16</b> Sampling Difficulties</a></li>
-<li class="chapter" data-level="22.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>22.17</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="22.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>22.18</b> Pooling Polls</a></li>
-<li class="chapter" data-level="22.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>22.19</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="22.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>22.20</b> Bayesian point estimation / Decision</a></li>
-<li class="chapter" data-level="22.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>22.21</b> Stan Modeling Language</a></li>
-<li class="chapter" data-level="22.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>22.22</b> Bayes Factors</a></li>
+<li class="chapter" data-level="21.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>21.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="21.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>21.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="21.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>21.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="21.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>21.11.3</b> Software Validation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-12.html"><a href="references-12.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="21.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>21.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="21.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>21.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="21.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>21.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="21.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>21.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="21.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>21.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="21.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>21.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="21.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>21.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="21.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>21.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="21.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>21.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="21.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>21.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="21.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>21.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -502,467 +531,444 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">19</span> Shrinkage and Regularized Regression</h1>
 <div id="prerequisites-11" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;glmnet&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(<span class="st">&quot;glmnet&quot;</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</a></code></pre></div>
 </div>
 <div id="introduction-6" class="section level2">
 <h2><span class="header-section-number">19.1</span> Introduction</h2>
-<p><em>Shrinkage estimation</em> deliberately introduces biases into the model to improve <em>overall performance, often at the cost of individual estimates </em><span class="citation">(Efron and Hastie 2016, 91)</span>.</p>
-<p>This is opposed to MLE, which produces unbiased estimates (asymptotically, given certain regularity conditions). Likewise, the Bayesian estimates with non- or weakly-informative priors will produce estimates similar to the MLE. With shrinkage, the priors are used to produce estimates <em>different</em> than the MLE case.</p>
-<p><em>Regularization</em> describes any method that reduces variability in high dimensional estimation or prediction problems <span class="citation">(Efron and Hastie 2016)</span>.</p>
+<p><em>Shrinkage estimation</em> deliberately introduces biases into the model to improve
+<em>overall performance, often at the cost of individual estimates
+</em><span class="citation">(Efron and Hastie 2016, 91)</span>.</p>
+<p>This is opposed to MLE, which produces unbiased estimates (asymptotically,
+given certain regularity conditions). Likewise, the Bayesian estimates with
+non- or weakly-informative priors will produce estimates similar to the MLE.
+With shrinkage, the priors are used to produce estimates <em>different</em> than the
+MLE case.</p>
+<p><em>Regularization</em> describes any method that reduces variability in high
+dimensional estimation or prediction problems <span class="citation">(Efron and Hastie 2016)</span>.</p>
 </div>
 <div id="penalized-maximum-likelihood-regression" class="section level2">
 <h2><span class="header-section-number">19.2</span> Penalized Maximum Likelihood Regression</h2>
-<p>Penalized regressions are regressions of the form: <span class="math display">\[
-\hat{\beta}_{penalized} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + f(\beta)
-\]</span> where <span class="math inline">\(f\)</span> is some sort of penalty function on <span class="math inline">\(\beta\)</span> that penalizes larger (in magnitude) values of <span class="math inline">\(\beta\)</span>.</p>
-<p>Two common forms</p>
-<ul>
-<li>Ridge: uses an <span class="math inline">\(\ell_2\)</span> penalty: <span class="math inline">\(\vec{beta}^2\)</span></li>
-<li>Lasso: uses an <span class="math inline">\(\ell_1\)</span> penalty: <span class="math inline">\(|\vec{\beta}|\)</span></li>
-</ul>
+<p>OLS finds the <span class="math inline">\(\beta\)</span> that minimize the in-sample sum of squared errors,
+<span class="math display">\[
+\hat{\beta}_{\text{OLS}} = \arg\min_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2
+\]</span></p>
+<p>Penalized regressions add a penalty term increasing in the magnitude of <span class="math inline">\(\beta\)</span> to the minimization function.
+<span class="math display">\[
+\hat{\beta}_{\text{penalized}} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \underbrace{f(\beta)}_{\text{shrinkage penalty}},
+\]</span>
+where <span class="math inline">\(f\)</span> is some sort of penalty function on <span class="math inline">\(\beta\)</span> that penalizes larger (in magnitude) values of <span class="math inline">\(\beta\)</span>.</p>
+<p>Penalized regression purposefully introduces bias into the regression in order
+to reduce variance and improve out-of-sample prediction. The penalty term,
+when chosen by cross-validation or an approximation thereof, allows for trading
+off bias and variance.</p>
+<p>Different penalized regression methods use different choices of <span class="math inline">\(f(\beta)\)</span>,
+The two most commonly penalty functions are Ridge and Lasso.</p>
 <div id="ridge-regression" class="section level3">
 <h3><span class="header-section-number">19.2.1</span> Ridge Regression</h3>
-<p>Ridge regression uses the following penalty <span class="citation">(Hoerl and Kennard 1970)</span>: <span class="math display">\[
-\hat{\beta}_{\text{ridge}} = \argmin_{\beta} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} \beta_k^2
-\]</span> This penalty produces smaller in magnitude coefficients, <span class="math inline">\(|\hat{\beta}_{ridge}| &lt; |\hat{\beta}_{OLS}|\)</span>. However, this “bias” in the coefficients can be offset by a lower variance, better MSE, and better out-of-sample performance than the OLS estimates.</p>
-<p>The point estimate for ridge regression coefficients is: <span class="math display">\[
-\hat{\vec{\beta}}_{\text{ridge}} = {(\mat{X}\T \mat{X} + \lambda \mat{I}_p)}^{-1} \mat{X}\T \vec{y}
-\]</span> The variance-covariance matrix of the point estimate is, <span class="math display">\[
-\mathrm{df}(\lambda) = \tr(\mat{X}(\mat{X}\T \mat{X} + \lambda \mat{I}_p)^{-1} \mat{X}\T) = \sum_{j = 1}^p \frac{d_j^2}{d_j^2 + \lambda}
-\]</span> where <span class="math inline">\(d_j\)</span> are the singular values of <span class="math inline">\(X\)</span></p>
+<p>Ridge regression uses the following penalty <span class="citation">(Hoerl and Kennard 1970)</span>:
+<span class="math display">\[
+\hat{\beta}_{\text{ridge}} = \arg\min_{\beta} \underbrace{\sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2}_{\text{RSS}} + \underbrace{\lambda}_{\text{tuning parameter}} \underbrace{\sum_{k} \beta_k^2}_{\ell_2 \text{ norm}^2}
+\]</span>
+The <span class="math inline">\(\ell_2\)</span> norm of <span class="math inline">\(\beta\)</span> is,
+<span class="math display">\[
+||\beta||_{2} = \sqrt{\sum_{k = 1}^K \beta_k^2} .
+\]</span></p>
+<p>The ridge regression coefficients are smaller in magnitude than the OLS coefficients, <span class="math inline">\(|\hat{\beta}_{ridge}| &lt; |\hat{\beta}_{OLS}|\)</span>.
+However, this bias in the coefficients can be offset by a lower variance, better MSE, and better out-of-sample performance than the OLS estimates.</p>
+<p>Unlike many other penalized regression estimators, ridge regression has a
+close-form solution.
+The expected value and variance-covariance matrix of the ridge regression
+coefficients is,
+<span class="math display">\[
+\begin{aligned}[t]
+\E[\hat{\beta}_{\text{ridge}}] &amp;= M y \\
+\Var[\hat{\beta}_{\text{ridge}}] &amp;=  \sigma^2 M&#39; M \\
+M &amp;= (X&#39; X + \lambda I)^{-1} X&#39; .
+\end{aligned}
+\]</span></p>
 <p>Some implications:</p>
 <ul>
-<li><p><span class="math inline">\(\hat{\vec{\beta}}\)</span> exists even if <span class="math inline">\(\hat{\vec{\beta}}_{\text{OLS}}\)</span> (<span class="math inline">\((\mat{X}\T\mat{X})^{-1}\)</span>), i.e. cases of <span class="math inline">\(n &gt; p\)</span> and collinearity, does not exist.</p></li>
-<li><p>If <span class="math inline">\(\mat{X}\)</span> is orthogonal (mean 0, unit variance, zero correlation), <span class="math inline">\(\mat{X}\T \mat{X} = n \mat{I}_p\)</span> then <span class="math display">\[
+<li><p><span class="math inline">\(\hat{\vec{\beta}}\)</span> exists even if <span class="math inline">\(\hat{\vec{\beta}}_{\text{OLS}}\)</span>
+(<span class="math inline">\((\mat{X}\T\mat{X})^{-1}\)</span>), i.e. cases of <span class="math inline">\(n &gt; p\)</span> and collinearity, does
+not exist.</p></li>
+<li><p>If <span class="math inline">\(\mat{X}\)</span> is orthogonal (mean 0, unit variance, zero correlation),
+<span class="math inline">\(\mat{X}\T \mat{X} = n \mat{I}_p\)</span> then
+<span class="math display">\[
 \hat{\vec{\beta}}_{\text{ridge}} = \frac{n}{n + \lambda}
 \hat{\vec{\beta}}_{\text{ols}}
-\]</span> meaning, <span class="math display">\[
+\]</span>
+meaning,
+<span class="math display">\[
 |\hat{\vec{\beta}}_{\text{ols}}| &gt;
 |\hat{\vec{\beta}}_{\text{ridge}}| \geq 0
 \]</span></p></li>
-<li><p>Ridge does not produce sparse estimates, since <span class="math inline">\((n / (n + \lambda)) \vec{\vec{\beta}}_{ols} = 0\)</span> iff <span class="math inline">\(\vec{\vec{\beta}}_{ols} = 0\)</span></p></li>
-<li><p><span class="math inline">\(\lambda = 0\)</span>, then there is no shrinkage</p></li>
-<li><p><span class="math inline">\(\lambda \to \infty\)</span>, then there is complete shrinkage and all coefficients are tend to 0.</p></li>
+<li><p>Ridge does not produce sparse estimates, since
+<span class="math inline">\((n / (n + \lambda)) \vec{\vec{\beta}}_{ols} = 0\)</span> iff <span class="math inline">\(\vec{\vec{\beta}}_{ols} = 0\)</span></p></li>
+<li><p>If <span class="math inline">\(\lambda = 0\)</span>, then the ridge coefficients are the same as the OLS
+coefficients,
+<span class="math inline">\(\lambda \to 0 \Rightarrow \hat{beta}_{\text{ridge}} \to \hat{beta}_{OLS}\)</span></p></li>
+<li><p>As <span class="math inline">\(\lambda\)</span> increases the coefficients are shrunk to 0,
+<span class="math inline">\(\lambda \to \infty \Rightarrow \hat{\beta}_{\text{ridge}} = 0\)</span>.</p></li>
 </ul>
 </div>
 <div id="lasso" class="section level3">
 <h3><span class="header-section-number">19.2.2</span> Lasso</h3>
-<p>The Lasso or LASSO (least absolute shrinkage and selection operator) replaces squared the penalty on <span class="math inline">\(\beta\)</span> with an absolute value penalty <span class="citation">(Tibshirani 1996)</span>: <span class="math display">\[
-\hat{\beta}_{\text{lasso}} = \argmin_{\beta} \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} |\beta_k|
-\]</span> The absolute value penalty will put some <span class="math inline">\(\hat{\beta}_k = 0\)</span>, producing a “sparse” solution.</p>
+<p>The lasso (Least Absolute Shrinkage and Selection Operator) uses an <span class="math inline">\(\ell_1\)</span> norm of <span class="math inline">\(\beta\)</span> as a penalty <span class="citation">(Tibshirani 1996)</span>,
+<span class="math display">\[
+\hat{\beta}_{\text{lasso}} = \arg\min_{\beta} \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} |\beta_k|
+\]</span>
+where <span class="math inline">\(\lambda \geq 0\)</span> is a tuning or shrinkage parameter chosen by cross-validation or a plug-in statistic.</p>
+<p>The <span class="math inline">\(\ell_1\)</span> norm of <span class="math inline">\(\beta\)</span> is the sum of the absolute values of its elements,
+<span class="math display">\[
+||\beta||_{1} = \sum_{k = 1}^K |\beta_k| .
+\]</span></p>
 <p>Properties:</p>
 <ul>
-<li><p>Unlike ridge regression, it sets some coefficients to exactly 0</p></li>
-<li><p>If variables are perfectly correlated, there is no unique solution (unlike the ridge regression)</p></li>
-<li><p>Used as the best convex approximation of the “best subset selection” regression problem, which finds the number of nonzero entries in a vector.</p></li>
+<li><p>Unlike ridge regression, it sets some coefficients exactly to 0, producing
+sparse solutions.</p></li>
+<li><p>If variables are perfectly correlated, there is no unique solution
+(unlike the ridge regression).</p></li>
+<li><p>Used as the best convex approximation of the “best subset selection”
+regression problem, which finds the number of nonzero entries in a vector.</p></li>
+<li><p>Unlike ridge regression, there is no closed-form solution.
+Since <span class="math inline">\(|\beta_k|\)</span> does not have a derivative, it was a more difficult
+iterative problem than many other regression functions. However, now there
+are several algorithms to estimate it.</p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;diabetes&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;lars&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lasso &lt;-<span class="st"> </span><span class="kw">glmnet</span>(diabetes<span class="op">$</span>x, diabetes<span class="op">$</span>y, <span class="dt">alpha =</span> <span class="dv">1</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit_lasso)</code></pre></div>
-<p><img src="regression-shrinkage_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>Choice of an optimal lambda:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lasso_cv &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(diabetes<span class="op">$</span>x, diabetes<span class="op">$</span>y, <span class="dt">parallel =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; Warning: executing %dopar% sequentially: no parallel backend registered</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">tidy</span>(fit_lasso_cv), <span class="kw">aes</span>(<span class="dt">x =</span> <span class="op">-</span><span class="kw">log</span>(lambda), <span class="dt">y =</span> estimate)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="regression-shrinkage_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cv.glmnet</span>(diabetes<span class="op">$</span>x, diabetes<span class="op">$</span>y, <span class="dt">parallel =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; Warning: executing %dopar% sequentially: no parallel backend registered</span>
-<span class="co">#&gt; $lambda</span>
-<span class="co">#&gt;  [1] 45.1600 41.1481 37.4927 34.1619 31.1271 28.3618 25.8422 23.5465</span>
-<span class="co">#&gt;  [9] 21.4547 19.5487 17.8120 16.2297 14.7879 13.4742 12.2772 11.1865</span>
-<span class="co">#&gt; [17] 10.1927  9.2872  8.4622  7.7104  7.0254  6.4013  5.8326  5.3145</span>
-<span class="co">#&gt; [25]  4.8424  4.4122  4.0202  3.6631  3.3377  3.0411  2.7710  2.5248</span>
-<span class="co">#&gt; [33]  2.3005  2.0961  1.9099  1.7403  1.5857  1.4448  1.3164  1.1995</span>
-<span class="co">#&gt; [41]  1.0929  0.9958  0.9074  0.8268  0.7533  0.6864  0.6254  0.5699</span>
-<span class="co">#&gt; [49]  0.5192  0.4731  0.4311  0.3928  0.3579  0.3261  0.2971  0.2707</span>
-<span class="co">#&gt; [57]  0.2467  0.2248  0.2048  0.1866  0.1700  0.1549  0.1412  0.1286</span>
-<span class="co">#&gt; [65]  0.1172  0.1068  0.0973  0.0887  0.0808  0.0736  0.0671  0.0611</span>
-<span class="co">#&gt; [73]  0.0557  0.0507  0.0462  0.0421  0.0384</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cvm</span>
-<span class="co">#&gt;  [1] 5919 5600 5209 4874 4596 4366 4175 4019 3889 3775 3673 3587 3513 3449</span>
-<span class="co">#&gt; [15] 3393 3342 3299 3263 3233 3209 3188 3171 3152 3131 3110 3092 3080 3070</span>
-<span class="co">#&gt; [29] 3062 3055 3047 3039 3032 3027 3021 3015 3010 3007 3004 3003 3003 3003</span>
-<span class="co">#&gt; [43] 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3003 3005 3006</span>
-<span class="co">#&gt; [57] 3007 3007 3007 3006 3005 3004 3003 3002 3001 3000 3000 3000 3000 2999</span>
-<span class="co">#&gt; [71] 2999 3000 3000 3000 3000 3000 3000</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cvsd</span>
-<span class="co">#&gt;  [1] 284 278 247 222 203 187 175 166 159 156 155 153 151 149 149 149 149</span>
-<span class="co">#&gt; [18] 149 149 149 149 149 150 151 152 152 152 152 152 152 152 153 154 155</span>
-<span class="co">#&gt; [35] 156 156 157 157 158 158 159 159 160 160 161 161 162 162 162 163 163</span>
-<span class="co">#&gt; [52] 163 164 164 164 165 165 165 166 166 166 166 166 166 166 167 167 167</span>
-<span class="co">#&gt; [69] 168 168 168 168 168 169 169 169 169</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cvup</span>
-<span class="co">#&gt;  [1] 6203 5878 5456 5097 4799 4553 4350 4185 4048 3931 3828 3740 3664 3599</span>
-<span class="co">#&gt; [15] 3542 3490 3447 3412 3382 3357 3337 3320 3302 3282 3262 3244 3231 3222</span>
-<span class="co">#&gt; [29] 3214 3207 3199 3192 3186 3181 3176 3171 3167 3164 3162 3162 3162 3162</span>
-<span class="co">#&gt; [43] 3163 3164 3164 3165 3165 3165 3165 3166 3166 3166 3167 3168 3169 3171</span>
-<span class="co">#&gt; [57] 3172 3173 3173 3172 3171 3170 3169 3168 3167 3167 3167 3167 3167 3167</span>
-<span class="co">#&gt; [71] 3167 3168 3168 3168 3169 3169 3169</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cvlo</span>
-<span class="co">#&gt;  [1] 5635 5322 4961 4652 4394 4179 4000 3853 3729 3619 3519 3434 3363 3300</span>
-<span class="co">#&gt; [15] 3244 3193 3150 3114 3085 3060 3039 3021 3002 2980 2958 2940 2928 2918</span>
-<span class="co">#&gt; [29] 2910 2902 2895 2887 2879 2872 2865 2859 2853 2850 2847 2845 2844 2844</span>
-<span class="co">#&gt; [43] 2843 2843 2842 2842 2842 2841 2841 2840 2840 2839 2839 2839 2840 2841</span>
-<span class="co">#&gt; [57] 2842 2842 2841 2841 2839 2838 2837 2836 2835 2834 2833 2832 2832 2832</span>
-<span class="co">#&gt; [71] 2832 2831 2831 2831 2831 2831 2831</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $nzero</span>
-<span class="co">#&gt;  s0  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 </span>
-<span class="co">#&gt;   0   2   2   2   2   2   2   2   3   3   3   3   4   4   4   4   4   4 </span>
-<span class="co">#&gt; s18 s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 s31 s32 s33 s34 s35 </span>
-<span class="co">#&gt;   4   4   4   4   5   5   5   5   6   6   6   7   7   7   7   7   7   7 </span>
-<span class="co">#&gt; s36 s37 s38 s39 s40 s41 s42 s43 s44 s45 s46 s47 s48 s49 s50 s51 s52 s53 </span>
-<span class="co">#&gt;   7   7   7   7   7   7   8   8   8   8   8   8   8   8   8   8   8   8 </span>
-<span class="co">#&gt; s54 s55 s56 s57 s58 s59 s60 s61 s62 s63 s64 s65 s66 s67 s68 s69 s70 s71 </span>
-<span class="co">#&gt;   8   8   9  10  10  10  10  10  10  10  10  10  10   9   9   9   9   9 </span>
-<span class="co">#&gt; s72 s73 s74 s75 s76 </span>
-<span class="co">#&gt;   9  10  10  10  10 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $name</span>
-<span class="co">#&gt;                  mse </span>
-<span class="co">#&gt; &quot;Mean-Squared Error&quot; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $glmnet.fit</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:  glmnet(x = diabetes$x, y = diabetes$y, parallel = TRUE) </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;       Df   %Dev  Lambda</span>
-<span class="co">#&gt;  [1,]  0 0.0000 45.2000</span>
-<span class="co">#&gt;  [2,]  2 0.0646 41.1000</span>
-<span class="co">#&gt;  [3,]  2 0.1320 37.5000</span>
-<span class="co">#&gt;  [4,]  2 0.1870 34.2000</span>
-<span class="co">#&gt;  [5,]  2 0.2340 31.1000</span>
-<span class="co">#&gt;  [6,]  2 0.2720 28.4000</span>
-<span class="co">#&gt;  [7,]  2 0.3040 25.8000</span>
-<span class="co">#&gt;  [8,]  2 0.3300 23.5000</span>
-<span class="co">#&gt;  [9,]  3 0.3520 21.5000</span>
-<span class="co">#&gt; [10,]  3 0.3740 19.5000</span>
-<span class="co">#&gt; [11,]  3 0.3920 17.8000</span>
-<span class="co">#&gt; [12,]  3 0.4070 16.2000</span>
-<span class="co">#&gt; [13,]  4 0.4200 14.8000</span>
-<span class="co">#&gt; [14,]  4 0.4320 13.5000</span>
-<span class="co">#&gt; [15,]  4 0.4420 12.3000</span>
-<span class="co">#&gt; [16,]  4 0.4500 11.2000</span>
-<span class="co">#&gt; [17,]  4 0.4570 10.2000</span>
-<span class="co">#&gt; [18,]  4 0.4630  9.2900</span>
-<span class="co">#&gt; [19,]  4 0.4680  8.4600</span>
-<span class="co">#&gt; [20,]  4 0.4720  7.7100</span>
-<span class="co">#&gt; [21,]  4 0.4750  7.0300</span>
-<span class="co">#&gt; [22,]  4 0.4780  6.4000</span>
-<span class="co">#&gt; [23,]  5 0.4820  5.8300</span>
-<span class="co">#&gt; [24,]  5 0.4870  5.3100</span>
-<span class="co">#&gt; [25,]  5 0.4900  4.8400</span>
-<span class="co">#&gt; [26,]  5 0.4940  4.4100</span>
-<span class="co">#&gt; [27,]  6 0.4960  4.0200</span>
-<span class="co">#&gt; [28,]  6 0.4980  3.6600</span>
-<span class="co">#&gt; [29,]  6 0.5000  3.3400</span>
-<span class="co">#&gt; [30,]  7 0.5030  3.0400</span>
-<span class="co">#&gt; [31,]  7 0.5050  2.7700</span>
-<span class="co">#&gt; [32,]  7 0.5060  2.5200</span>
-<span class="co">#&gt; [33,]  7 0.5080  2.3000</span>
-<span class="co">#&gt; [34,]  7 0.5090  2.1000</span>
-<span class="co">#&gt; [35,]  7 0.5100  1.9100</span>
-<span class="co">#&gt; [36,]  7 0.5110  1.7400</span>
-<span class="co">#&gt; [37,]  7 0.5110  1.5900</span>
-<span class="co">#&gt; [38,]  7 0.5120  1.4400</span>
-<span class="co">#&gt; [39,]  7 0.5120  1.3200</span>
-<span class="co">#&gt; [40,]  7 0.5130  1.2000</span>
-<span class="co">#&gt; [41,]  7 0.5130  1.0900</span>
-<span class="co">#&gt; [42,]  7 0.5130  0.9960</span>
-<span class="co">#&gt; [43,]  8 0.5140  0.9070</span>
-<span class="co">#&gt; [44,]  8 0.5140  0.8270</span>
-<span class="co">#&gt; [45,]  8 0.5140  0.7530</span>
-<span class="co">#&gt; [46,]  8 0.5140  0.6860</span>
-<span class="co">#&gt; [47,]  8 0.5150  0.6250</span>
-<span class="co">#&gt; [48,]  8 0.5150  0.5700</span>
-<span class="co">#&gt; [49,]  8 0.5150  0.5190</span>
-<span class="co">#&gt; [50,]  8 0.5150  0.4730</span>
-<span class="co">#&gt; [51,]  8 0.5150  0.4310</span>
-<span class="co">#&gt; [52,]  8 0.5150  0.3930</span>
-<span class="co">#&gt; [53,]  8 0.5150  0.3580</span>
-<span class="co">#&gt; [54,]  8 0.5150  0.3260</span>
-<span class="co">#&gt; [55,]  8 0.5150  0.2970</span>
-<span class="co">#&gt; [56,]  8 0.5150  0.2710</span>
-<span class="co">#&gt; [57,]  9 0.5150  0.2470</span>
-<span class="co">#&gt; [58,] 10 0.5160  0.2250</span>
-<span class="co">#&gt; [59,] 10 0.5160  0.2050</span>
-<span class="co">#&gt; [60,] 10 0.5160  0.1870</span>
-<span class="co">#&gt; [61,] 10 0.5170  0.1700</span>
-<span class="co">#&gt; [62,] 10 0.5170  0.1550</span>
-<span class="co">#&gt; [63,] 10 0.5170  0.1410</span>
-<span class="co">#&gt; [64,] 10 0.5170  0.1290</span>
-<span class="co">#&gt; [65,] 10 0.5170  0.1170</span>
-<span class="co">#&gt; [66,] 10 0.5170  0.1070</span>
-<span class="co">#&gt; [67,] 10 0.5170  0.0973</span>
-<span class="co">#&gt; [68,]  9 0.5170  0.0887</span>
-<span class="co">#&gt; [69,]  9 0.5170  0.0808</span>
-<span class="co">#&gt; [70,]  9 0.5170  0.0736</span>
-<span class="co">#&gt; [71,]  9 0.5170  0.0671</span>
-<span class="co">#&gt; [72,]  9 0.5170  0.0611</span>
-<span class="co">#&gt; [73,]  9 0.5170  0.0557</span>
-<span class="co">#&gt; [74,] 10 0.5170  0.0507</span>
-<span class="co">#&gt; [75,] 10 0.5180  0.0462</span>
-<span class="co">#&gt; [76,] 10 0.5180  0.0421</span>
-<span class="co">#&gt; [77,] 10 0.5180  0.0384</span>
-<span class="co">#&gt; [78,] 10 0.5180  0.0350</span>
-<span class="co">#&gt; [79,] 10 0.5180  0.0319</span>
-<span class="co">#&gt; [80,] 10 0.5180  0.0290</span>
-<span class="co">#&gt; [81,] 10 0.5180  0.0265</span>
-<span class="co">#&gt; [82,] 10 0.5180  0.0241</span>
-<span class="co">#&gt; [83,] 10 0.5180  0.0220</span>
-<span class="co">#&gt; [84,] 10 0.5180  0.0200</span>
-<span class="co">#&gt; [85,] 10 0.5180  0.0182</span>
-<span class="co">#&gt; [86,] 10 0.5180  0.0166</span>
-<span class="co">#&gt; [87,] 10 0.5180  0.0151</span>
-<span class="co">#&gt; [88,] 10 0.5180  0.0138</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $lambda.min</span>
-<span class="co">#&gt; [1] 0.0736</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $lambda.1se</span>
-<span class="co">#&gt; [1] 5.83</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,&quot;class&quot;)</span>
-<span class="co">#&gt; [1] &quot;cv.glmnet&quot;</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_ridge &lt;-<span class="st"> </span><span class="kw">glmnet</span>(diabetes<span class="op">$</span>x, diabetes<span class="op">$</span>y, <span class="dt">alpha =</span> <span class="dv">0</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit_ridge)</code></pre></div>
-<p><img src="regression-shrinkage_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>Comparison of coefficients</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> diabetes)</code></pre></div>
+</div>
+<div id="constrained-optimization-interpretation" class="section level3">
+<h3><span class="header-section-number">19.2.3</span> Constrained Optimization Interpretation</h3>
+</div>
+<div id="bayesian-interpretation" class="section level3">
+<h3><span class="header-section-number">19.2.4</span> Bayesian Interpretation</h3>
+<p>The penalty term in regressions can generally be interpreted a prior on the
+coefficients.
+Recall that although OLS does not require normal errors, the OLS coefficients are equivalent to the MLE of a probability model with normal errors,
+<span class="math display">\[
+\begin{aligned}
+\hat{\beta}_{MLE} &amp;= \arg \max_{\beta} \dnorm(y | x \beta, \sigma) \\
+&amp; = \arg \max_{\beta} {(2 \pi \sigma^2)}^{n / 2} \prod_{i = 1}^{n} \exp\left(-\frac{(y_i - x_i&#39; \beta)^2}{2 \sigma^2}\right) \\
+&amp;= \arg \max_{\beta} \frac{n}{2} (\log 2 + \log \pi) + n \log \sigma + \sum_{i = 1}^{n} \left( -\frac{(y_i - x_i&#39; \beta)^2}{2 \sigma^2} \right) \\
+&amp; = \arg \max_{\beta} \sum_{i = 1}^{n} - (y_i - x&#39;_i \beta)^2 \\
+&amp;= \arg \min_{\beta} \sum_{i = 1} (y_i - x&#39;_i \beta)^2 \\
+&amp;= \hat{\beta}_{OLS}
+\end{aligned}
+\]</span>
+Likewise the shrinkage prior can be represented as a normal distribution with mean 0 and scale <span class="math inline">\(1 / \lambda\)</span>, since the <span class="math inline">\(\beta\)</span> that maximize the probability of that, minimize the <span class="math inline">\(\ell_2\)</span> norm of <span class="math inline">\(\beta\)</span>,
+<span class="math display">\[
+\begin{aligned}
+\arg \max_{\beta} \dnorm(\beta | 0,  \tau) &amp;= \arg \max_{\beta} {(2 \pi \sigma^2)}^{K / 2} \prod_{k = 1}^{K} \exp\left(- \frac{(0 - \beta_k)^2}{2 \tau^2} \right)
+\\
+&amp;= \arg \max_{\beta} \sum_{k = 1}^{K} \left(-\frac{\beta_k^2}{2 \tau^2}\right) \\
+&amp;= \arg \min_{\beta} \frac{1}{2 \tau^2} \sum_{k = 1}^K \beta_k^2
+\end{aligned}
+\]</span>
+where <span class="math inline">\(\tau^2 = 1 / 2 \lambda\)</span>.</p>
+<p>Thus ridge regression can be thought of as a MAP estimator of the model
+<span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dnorm(\alpha + x&#39; \beta, \sigma) \\
+\beta_k &amp;\sim \dnorm(0, (2 \lambda)^{-1/2} )
+\end{aligned}
+\]</span>
+Similarly, the <span class="math inline">\(\beta\)</span> that minimize the <span class="math inline">\(\ell_1\)</span> norm also maximize the probability of random variables iid from the Laplace distribution, <span class="math inline">\(\dlaplace(\beta_k | 0, 1 / \lambda)\)</span>.
+<span class="math display">\[
+\begin{aligned}
+\arg \max_{\beta} \dlaplace(\beta | 0, 1 / \lambda) &amp;= \arg \max_{\beta} \left(\frac{\lambda}{2}\right)^{K} \prod_{k = 1}^{K} \exp\left(- \lambda |0 -
+\beta_k)| \right) \\
+&amp;= \arg \max_{\beta} \sum_{k = 1}^{K} - \lambda |\beta_k| \\
+&amp;= \arg \min_{\beta} \lambda \sum_{k = 1}^K |\beta_k|
+\end{aligned}
+\]</span>
+Thus lasso regression can be thought of as a MAP estimator of the model,
+<span class="math display">\[
+\begin{aligned}[t]
+y_i &amp;\sim \dnorm(\alpha + x&#39; \beta, \sigma) \\
+\beta_k &amp;\sim \dlaplace(0, 1 / \lambda)
+\end{aligned}
+\]</span></p>
 </div>
 </div>
 <div id="bayesian-shrinkage" class="section level2">
 <h2><span class="header-section-number">19.3</span> Bayesian Shrinkage</h2>
-<p>Consider the single output linear Gaussian regression model with several input variables, given by <span class="math display">\[
+<p>Consider the single output linear Gaussian regression model with several input variables, given by
+<span class="math display">\[
 \begin{aligned}[t]
 y_i \sim \dnorm(\vec{x}_i&#39; \vec{\beta}, \sigma^2)
 \end{aligned}
-\]</span> where <span class="math inline">\(\vec{x}\)</span> is a <span class="math inline">\(k\)</span>-vector of predictors, and <span class="math inline">\(\vec{\beta}\)</span> are the coefficients.</p>
+\]</span>
+where <span class="math inline">\(\vec{x}\)</span> is a <span class="math inline">\(k\)</span>-vector of predictors, and <span class="math inline">\(\vec{\beta}\)</span> are the coefficients.</p>
 <p>What priors do we put on <span class="math inline">\(\beta\)</span>?</p>
 <ul>
-<li><p><strong>Improper priors:</strong> <span class="math inline">\(\beta_k \propto 1\)</span> This produces the equivalent of MLE estimates.</p></li>
-<li><p><strong>Non-informative priors:</strong> These are priors which have such wide variance that they have little influence on the posterior, e.g. <span class="math inline">\(\beta_k \sim \dnorm(0, 1e6)\)</span>. The primary reason for these (as opposed to simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling as used in JAGS or BUGS, require proper prior distributions for all parameters.</p></li>
+<li><p><strong>Improper priors:</strong> <span class="math inline">\(\beta_k \propto 1\)</span> This produces the equivalent of
+MLE estimates.</p></li>
+<li><p><strong>Non-informative priors:</strong> These are priors which have such wide variance
+that they have little influence on the posterior, e.g.
+<span class="math inline">\(\beta_k \sim \dnorm(0, 1e6)\)</span>. The primary reason for these (as opposed to
+simply using an improper prior) is that some MCMC methods, e.g. Gibbs sampling
+as used in JAGS or BUGS, require proper prior distributions for all parameters.</p></li>
 </ul>
-<p><strong>Shrinkage priors</strong> have a couple characteristics</p>
+<p><strong>Shrinkage priors</strong> have a few characteristics</p>
 <ul>
 <li><p>they push <span class="math inline">\(\beta_k \to 0\)</span></p></li>
-<li><p>while in the other cases, the scale of the prior on <span class="math inline">\(\beta\)</span> is fixed, in shrinkage priors there is often a hyperprior on it, e.g., <span class="math inline">\(\beta_k \sim \dnorm(0, \tau)\)</span>, where <span class="math inline">\(\tau\)</span> is also a parameter to be estimated.</p></li>
+<li><p>while in the other cases, the scale of the prior on <span class="math inline">\(\beta\)</span> is fixed, in
+shrinkage priors there is often a hyperprior on it, e.g.,
+<span class="math inline">\(\beta_k \sim \dnorm(0, \tau)\)</span>, where <span class="math inline">\(\tau\)</span> is also a parameter to be estimated.</p></li>
 </ul>
 <div id="priors-1" class="section level3">
 <h3><span class="header-section-number">19.3.1</span> Priors</h3>
-<p>Consider the regression: <span class="math display">\[
+<p>Consider the regression:
+<span class="math display">\[
 y_i \sim \dnorm(\alpha + x_i&#39; \beta, \sigma)
 \]</span></p>
-<p>It is assumed that the outcome and predictor variables are standardized such that <span class="math display">\[
+<p>It is assumed that the outcome and predictor variables are standardized such that
+<span class="math display">\[
 \begin{aligned}[t]
 \E[y_i] &amp;= 0 &amp; \V[y_i] &amp;= 1 \\
 \E[x_i] &amp;= 0 &amp; \V[x_i] &amp;= 1. 
 \end{aligned}
-\]</span> Then, the default weakly informative priors are, <span class="math display">\[
+\]</span>
+Then, the default weakly informative priors are,
+<span class="math display">\[
 \begin{aligned}[t]
 \alpha &amp;\sim \dnorm(0, 10) \\
 \beta_k &amp;\sim \dnorm(0, 2.5) &amp; k \in \{1, \dots, K\}
 \end{aligned}
 \]</span></p>
 <p>The weakly informative priors will shrink all the coefficients towards zero.</p>
-<p>The amount of shrinkage depends on the amount of data as the likelihood dominates the prior as the amount of data increases. However, the amount of shrinkage is not estimated from the data. The prior on each coefficient is independent, and its scale is a constant (2.5 in this example).</p>
+<p>The amount of shrinkage depends on the amount of data as the likelihood dominates the prior as the amount of data increases.
+However, the amount of shrinkage is not estimated from the data.
+The prior on each coefficient is independent, and its scale is a constant (2.5 in this example).</p>
 <p>Regularization/shrinkage methods estimate the amount of shrinkage. The scale of the priors on the coefficients are hyperparameters, which are estimated from the data.</p>
 </div>
-<div id="hiearchical-coefficient-priors" class="section level3">
-<h3><span class="header-section-number">19.3.2</span> Hiearchical Coefficient Priors</h3>
-<div id="normal-distribution" class="section level4">
-<h4><span class="header-section-number">19.3.2.1</span> Normal Distribution</h4>
-<p>We can apply a normal prior to each <span class="math inline">\(\beta_k\)</span>. Unlike the weakly informative priors, the prior distributions all share a scale parameter <span class="math inline">\(\tau\)</span>. <span class="math display">\[
-\beta_k | \tau \sim \dnorm(0, \tau)
-\]</span> We need to assign a prior to <span class="math inline">\(\tau\)</span>.</p>
-<p>In MAP estimation this is often set to be an inmproper uniform distribution. Since in the weakly informative prior, <span class="math inline">\(\beta_k \sim \dnorm(0, 2.5\)</span> for all <span class="math inline">\(k\)</span>, a prior on <span class="math inline">\(\tau\)</span> in which the central tendency is the same as the weakly informative prior makes sense. One such prior is <span class="math display">\[
-\tau \sim \dexp(2.5)
-\]</span> TODO: look for better guidance for the prior of <span class="math inline">\(\tau\)</span>.</p>
-<ul>
-<li>This is equivalent to Ridge regression.</li>
-<li>Unlike most shrinkage estimators, there is a closed form solution to the posterior distribution</li>
-</ul>
-</div>
-</div>
-<div id="laplace-distribution" class="section level3">
-<h3><span class="header-section-number">19.3.3</span> Laplace Distribution</h3>
-<p>We can also use the Laplace distribution as a prior for the coefficients. This is called Bayesian Lasso, because the MAP estimator of this model is equivalent to the Lasso estimator.</p>
-<p>The prior distribution for each coefficient <span class="math inline">\(\beta_k\)</span> is a Laplace (or double exponential) distribution with scale parameter (<span class="math inline">\(\tau\)</span>). <span class="math display">\[
-\beta_k | \tau \sim \dlaplace(0, \tau)
-\]</span> Like many priors that have been proposed and used for coefficient shrinkage, this can be represented as a local-global scale-mixture of normal distributions. <span class="math display">\[
-\begin{aligned}
-\beta_k | \tau &amp;\sim \dnorm(0, \tau \lambda_k) \\
-\lambda_k^{-2} &amp;\sim \dexp(1/2)
-\end{aligned}
-\]</span> The global scale <span class="math inline">\(\tau\)</span> determines the overall amount of shrinkage. The local scales, <span class="math inline">\(\lambda_1, \dots, \lambda_K\)</span>, allow the amount of shrinkage to vary among coefficients.</p>
-</div>
-</div>
-<div id="student-t-and-cauchy-distributions" class="section level2">
-<h2><span class="header-section-number">19.4</span> Student-t and Cauchy Distributions</h2>
-<p>We can also use the Student-t distribution as a prior for the coefficients. The Cauchy distribution is a special case of the Student t distribution where the degrees of freedom is zero.</p>
-<p>The prior distribution for each coefficient <span class="math inline">\(\beta_k\)</span> is a Student-t distribution with degrees of freedom <span class="math inline">\(\nu\)</span>, location 0, and scale <span class="math inline">\(\tau\)</span>, <span class="math display">\[
-\beta_k | \tau \sim \dt(\nu, 0, \tau) .
-\]</span> Like many priors that have been proposed and used for coefficient shrinkage, this can be represented as a local-global scale-mixture of normal distributions. <span class="math display">\[
-\begin{aligned}
-\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \lambda_k) \\
-\lambda_k^{-2} &amp;\sim \dgamma(\nu/2, \nu/2)
-\end{aligned}
-\]</span></p>
-<p>The degrees of freedom parameter <span class="math inline">\(\nu\)</span> can be fixed to a particular value or estimated. If fixed, then common values are 1 for a Cauchy distribution, 2 to ensure that there is a finite mean, 3 to ensure that there is a finite variance, and 4 ensure that there is a finite kurtosis.</p>
-<p>If estimated, then the <span class="math display">\[
-\nu \sim \dgamma(2, 0.1)
-\]</span> Additionally, it may be useful to truncate the values of <span class="math inline">\(\nu\)</span> to be greater than 2 to ensure a finite variance of the Student t distribution.</p>
-</div>
-<div id="horseshore-and-hierarchical-priors" class="section level2">
-<h2><span class="header-section-number">19.5</span> Horseshore and Hierarchical Priors</h2>
-<p>The Horseshoe prior is defined solely in terms of a global-local mixture. <span class="math display">\[
-\begin{aligned}
-\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \lambda_k) \\
-\lambda_k &amp;\sim \dhalfcauchy(1)
-\end{aligned}
-\]</span></p>
-<p>The Hierarchical Shrinkage prior originally implemented in rstanarm and proposed by … replaces the half-Cauchy prior on <span class="math inline">\(\lambda_k\)</span> with a half-Student-t distribution with degrees of freedom <span class="math inline">\(\nu\)</span>. <span class="math display">\[
-\lambda_k \sim \dt(\nu, 0, 1)
-\]</span> The <span class="math inline">\(\nu\)</span> parameter is generally not estimated and fixed to a low value, with <span class="math inline">\(\nu = 4\)</span> being suggested. The problem with estimating the Horseshoe prior is that the wide tails of the Cauchy prior produced a posterior distribution with problematic geometry that was hard to sample. Increasing the degrees of freedom helped to regularize the posterior. The downside of this method is that by increasing the degrees of freedom of the Student-t distribution it would also shrink large parameters, which the Horseshoe prior was designed to avoid.</p>
-<p>Regularized horseshoe prior <span class="math display">\[
-\begin{aligned}
-\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \tilde{\lambda}_k) \\
-\tilde{\lambda}^2_k &amp;= \frac{c^2 \lambda^2}{c^2 + \lambda^2} \\
-\lambda_k &amp;\sim \dhalfcauchy(1)
-\end{aligned}
-\]</span> where <span class="math inline">\(c &gt; 0\)</span> is a constant. Like using a Student-t distribution, this regularizes the posterior distribution of a Horseshoe prior. However, it is less problematic in terms of shrinking large coefficients.</p>
-</div>
-<div id="understanding-shrinkage-models" class="section level2">
-<h2><span class="header-section-number">19.6</span> Understanding Shrinkage Models</h2>
-<p>Two-group model</p>
-<p><span class="math display">\[
-\begin{aligned}[t]
-p(\beta | \Lambda, \tau, \sigma^2, D) &amp;= \dnorm(\beta | \bar{\beta}, \Sigma) \\
-\bar{\beta} &amp;= \tau^2 \Lambda (\tau^2 \Lambda + \sigma^2 (X&#39;X)^{-1})^{-1} \hat{\beta} \\
-\Sigma &amp;= (\tau^{-2} \Lambda^{-1} + \frac{1}{\sigma^{2}} X&#39;X)^{-1} \\
-\Lambda &amp;= \diag(\lambda_1^{2}, \dots, \lambda^{2}_D) \\
-\hat{\beta} &amp;= (X&#39;X)^{-1} X&#39;y
-\end{aligned}
-\]</span> If the predictors are uncorrelated with zero mean and variances <span class="math inline">\(\Var(x_j) = s_j^2\)</span>, then <span class="math display">\[
-X&#39;X \approx n \diag(s_1^2, \dots, s^2_D) ,
-\]</span> and we can use the approximations, <span class="math display">\[
-\hat{\beta}_j = (1 - \kappa_j) \hat{\beta}_j \\
-\kappa_j = \frac{1}{1 + n \sigma^{-2} \tau^2 s_j^2 \lambda_j^2}
-\]</span></p>
-</div>
-<div id="spike-and-slab-prior" class="section level2">
-<h2><span class="header-section-number">19.7</span> Spike and Slab prior</h2>
+<div id="spike-and-slab-prior" class="section level3">
+<h3><span class="header-section-number">19.3.2</span> Spike and Slab prior</h3>
 <p><span class="math display">\[
 \begin{aligned}[t]
 \beta_k | \lambda_k, c, \epsilon  &amp;\sim \lambda_k N(0, c^2) + (1 - \lambda_j) N(0, \epsilon^2) \\
 \lambda_k &amp;\sim \dbern(\pi)
 \end{aligned}
 \]</span></p>
-<p>In the case of the linear regression, an alternative to BMA is to use a spike-and-slab prior <span class="citation">(Mitchell and Beauchamp 1988, <span class="citation">George and McCulloch (1993)</span>, <span class="citation">Ishwaran and Rao (2005)</span>)</span>, which is a prior that is a discrete mixture of a point mass at 0 and a non-informative distribution.</p>
-<p>The spike and slab prior is a “two-group” solution</p>
-<p><span class="math display">\[
+<p>In the case of the linear regression, an alternative to BMA is to use a
+spike-and-slab prior <span class="citation">(Mitchell and Beauchamp 1988, <span class="citation">@GeorgeMcCulloch1993a</span>, <span class="citation">@IshwaranRao2005a</span>)</span>,
+which is a prior that is a discrete mixture of a point mass at 0 and a
+non-informative distribution.</p>
+<p>The spike and slab prior is a “two-group” solution.
+<span class="math display">\[
 p(\beta_k) = (1 - w) \delta_0 + w \pi(\beta_k)
-\]</span> where <span class="math inline">\(\delta_0\)</span> is a Dirac delta function putting a point mass at 0, and <span class="math inline">\(\pi(\beta_k)\)</span> is an uninformative distribution, e.g. <span class="math inline">\(\pi(\beta_k) = \dnorm(\beta_k | 0, \sigma^2)\)</span> where <span class="math inline">\(\sigma\)</span> is large.</p>
+\]</span>
+where <span class="math inline">\(\delta_0\)</span> is a Dirac delta function putting a point mass at 0, and <span class="math inline">\(\pi(\beta_k)\)</span> is an uninformative distribution, e.g. <span class="math inline">\(\pi(\beta_k) = \dnorm(\beta_k | 0, \sigma^2)\)</span> where <span class="math inline">\(\sigma\)</span> is large.</p>
 <p>The posterior distribution of <span class="math inline">\(w\)</span> is the probability that <span class="math inline">\(\beta_k \neq 0\)</span>, and the conditional posterior distribution <span class="math inline">\(p(\beta_k | y, w = 1)\)</span> is the distribution of <span class="math inline">\(\beta_k\)</span> given that <span class="math inline">\(\beta_k \neq 0\)</span>.</p>
 <p>See the R package <strong><a href="https://cran.r-project.org/package=spikeslab">spikeslab</a></strong> and he accompanying article <span class="citation">(Ishwaran, Kogalur, and Rao 2010)</span> for an implementation and review of spike-and-slab regressions.</p>
 </div>
-<div id="number-of-effective-zeros" class="section level2">
-<h2><span class="header-section-number">19.8</span> Number of effective zeros</h2>
+<div id="normal-distribution" class="section level3">
+<h3><span class="header-section-number">19.3.3</span> Normal Distribution</h3>
+<p>We can apply a normal prior to each <span class="math inline">\(\beta_k\)</span>.
+Unlike the weakly informative priors, the prior distributions all share a scale parameter <span class="math inline">\(\tau\)</span>.
+<span class="math display">\[
+\beta_k | \tau \sim \dnorm(0, \tau)
+\]</span>
+We need to assign a prior to <span class="math inline">\(\tau\)</span>.</p>
+<p>In MAP estimation this is often set to be an improper uniform distribution.
+Since in the weakly informative prior, <span class="math inline">\(\beta_k \sim \dnorm(0, 2.5\)</span> for all <span class="math inline">\(k\)</span>, a prior on <span class="math inline">\(\tau\)</span> in which the central tendency is the same as the weakly informative prior makes sense.
+One such prior is
+<span class="math display">\[
+\tau \sim \dexp(2.5)
+\]</span>
+TODO: look for better guidance for the prior of <span class="math inline">\(\tau\)</span>.</p>
+<ul>
+<li>This is equivalent to Ridge regression.</li>
+<li>Unlike most shrinkage estimators, there is a closed form solution to the posterior distribution</li>
+</ul>
+</div>
+<div id="laplace-distribution" class="section level3">
+<h3><span class="header-section-number">19.3.4</span> Laplace Distribution</h3>
+<p>We can also use the Laplace distribution as a prior for the coefficients.
+This is called Bayesian Lasso, because the MAP estimator of this model is equivalent to the Lasso estimator.</p>
+<p>The prior distribution for each coefficient <span class="math inline">\(\beta_k\)</span> is a Laplace (or double exponential) distribution with scale parameter (<span class="math inline">\(\tau\)</span>).
+<span class="math display">\[
+\beta_k | \tau \sim \dlaplace(0, \tau)
+\]</span>
+Like many priors that have been proposed and used for coefficient shrinkage, this can be represented as a local-global scale-mixture of normal distributions.
+<span class="math display">\[
+\begin{aligned}
+\beta_k | \tau &amp;\sim \dnorm(0, \tau \lambda_k) \\
+\lambda_k^{-2} &amp;\sim \dexp(1/2)
+\end{aligned}
+\]</span>
+The global scale <span class="math inline">\(\tau\)</span> determines the overall amount of shrinkage.
+The local scales, <span class="math inline">\(\lambda_1, \dots, \lambda_K\)</span>, allow the amount of shrinkage to vary among coefficients.</p>
+</div>
+<div id="student-t-and-cauchy-distributions" class="section level3">
+<h3><span class="header-section-number">19.3.5</span> Student-t and Cauchy Distributions</h3>
+<p>We can also use the Student-t distribution as a prior for the coefficients.
+The Cauchy distribution is a special case of the Student t distribution where the degrees of freedom is zero.</p>
+<p>The prior distribution for each coefficient <span class="math inline">\(\beta_k\)</span> is a Student-t distribution with degrees of freedom <span class="math inline">\(\nu\)</span>, location 0, and scale <span class="math inline">\(\tau\)</span>,
+<span class="math display">\[
+\beta_k | \tau \sim \dt(\nu, 0, \tau) .
+\]</span>
+Like many priors that have been proposed and used for coefficient shrinkage, this can be represented as a local-global scale-mixture of normal distributions.
+<span class="math display">\[
+\begin{aligned}
+\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \lambda_k) \\
+\lambda_k^{-2} &amp;\sim \dgamma(\nu/2, \nu/2)
+\end{aligned}
+\]</span></p>
+<p>The degrees of freedom parameter <span class="math inline">\(\nu\)</span> can be fixed to a particular value or estimated.
+If fixed, then common values are 1 for a Cauchy distribution, 2 to ensure that there is a finite mean, 3 to ensure that there is a finite variance, and 4 ensure that there is a finite kurtosis.</p>
+<p>If estimated, then the
+<span class="math display">\[
+\nu \sim \dgamma(2, 0.1)
+\]</span>
+Additionally, it may be useful to truncate the values of <span class="math inline">\(\nu\)</span> to be greater
+than 2 to ensure a finite variance of the Student t distribution.</p>
+</div>
+<div id="horseshore-prior" class="section level3">
+<h3><span class="header-section-number">19.3.6</span> Horseshore Prior</h3>
+<p>The Horseshoe prior is defined solely in terms of a global-local mixture.
+<span class="math display">\[
+\begin{aligned}
+\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \lambda_k) \\
+\lambda_k &amp;\sim \dhalfcauchy(1)
+\end{aligned}
+\]</span></p>
+<p>The Hierarchical Shrinkage prior originally implemented in rstanarm and proposed by … replaces the half-Cauchy prior on <span class="math inline">\(\lambda_k\)</span> with a half-Student-t distribution with degrees of freedom <span class="math inline">\(\nu\)</span>.
+<span class="math display">\[
+\lambda_k \sim \dt(\nu, 0, 1)
+\]</span>
+The <span class="math inline">\(\nu\)</span> parameter is generally not estimated and fixed to a low value, with <span class="math inline">\(\nu = 4\)</span> being suggested.
+The problem with estimating the Horseshoe prior is that the wide tails of the Cauchy prior produced a posterior distribution with problematic geometry that was hard to sample.
+Increasing the degrees of freedom helped to regularize the posterior.
+The downside of this method is that by increasing the degrees of freedom of the Student-t distribution it would also shrink large parameters, which the
+Horseshoe prior was designed to avoid.</p>
+<p>Regularized horseshoe prior
+<span class="math display">\[
+\begin{aligned}
+\beta_k | \tau, \lambda &amp;\sim \dnorm(0, \tau \tilde{\lambda}_k) \\
+\tilde{\lambda}^2_k &amp;= \frac{c^2 \lambda^2}{c^2 + \lambda^2} \\
+\lambda_k &amp;\sim \dhalfcauchy(1)
+\end{aligned}
+\]</span>
+where <span class="math inline">\(c &gt; 0\)</span> is a constant.
+Like using a Student-t distribution, this regularizes the posterior distribution of a Horseshoe prior.
+However, it is less problematic in terms of shrinking large coefficients.</p>
+<p>Since there is little information about <span class="math inline">\(c\)</span>, <span class="math inline">\(c\)</span> is treated as a parameter,
+and a prior is placed on it.
+<span class="math display">\[
+c \sim \dt(0, s^2)
+\]</span></p>
+</div>
+</div>
+<div id="understanding-shrinkage-models" class="section level2">
+<h2><span class="header-section-number">19.4</span> Understanding Shrinkage Models</h2>
+<p>Suppose that <span class="math inline">\(X\)</span> is a <span class="math inline">\(n \times K\)</span> matrix of predictors,
+and <span class="math inline">\(y\)</span> is a <span class="math inline">\(n \times 1\)</span> vector of outcomes.
+The conditional posterior for <span class="math inline">\(\beta\)</span> given <span class="math inline">\((X, y)\)</span> is
+<span class="math display">\[
+\begin{aligned}[t]
+p(\beta | \Lambda, \tau, \sigma^2, D) &amp;= \dnorm(\beta | \bar{\beta}, \Sigma), \\
+\bar{\beta} &amp;= \tau^2 \Lambda (\tau^2 \Lambda + \sigma^2 (X&#39;X)^{-1})^{-1} \hat{\beta}, \\
+\Sigma &amp;= (\tau^{-2} \Lambda^{-1} + \frac{1}{\sigma^{2}} X&#39;X)^{-1}, \\
+\Lambda &amp;= \diag(\lambda_1^{2}, \dots, \lambda^{2}_D), \\
+\hat{\beta} &amp;= (X&#39;X)^{-1} X&#39;y .
+\end{aligned}
+\]</span>
+If the predictors are uncorrelated with zero mean and variances <span class="math inline">\(\Var(x_k) = s_k^2\)</span>, then
+<span class="math display">\[
+X&#39;X \approx n \diag(s_1^2, \dots, s^2_K) ,
+\]</span>
+and we can use the approximations,
+<span class="math display">\[
+\bar{\beta}_k = (1 - \kappa_k) \hat{\beta}_k,  \\
+\kappa_k = \frac{1}{1 + n \sigma^{-2} \tau^2 s_k^2 \lambda_k^2} .
+\]</span>
+The value <span class="math inline">\(\kappa_k\)</span> is called the <em>shrinkage factor</em> for coefficient <span class="math inline">\(\beta_k\)</span>.
+When <span class="math inline">\(\kappa_k = 0\)</span>, then there is no shrinkage and the posterior coefficient is the same as the MLE solution, <span class="math inline">\(\bar{\beta} = \hat{\beta}\)</span>.
+When <span class="math inline">\(\kappa_k = 1\)</span>, then there is complete shrinkage and the posterior coefficient is zero, <span class="math inline">\(\bar{\beta} = 0\)</span>.
+It also follows that <span class="math inline">\(\bar{\beta} \to 0\)</span> as <span class="math inline">\(\tau \to 0\)</span>, and <span class="math inline">\(\bar{\beta} \to \hat{\beta}\)</span> as <span class="math inline">\(\tau \to \infty\)</span>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">shrinkage_factor &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span class="dt">sigma =</span> <span class="dv">1</span>, <span class="dt">tau =</span> <span class="dv">1</span>, <span class="dt">sd_x =</span> <span class="dv">1</span>, <span class="dt">lambda =</span> <span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>n <span class="op">*</span><span class="st"> </span>tau <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>sd_x <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>lambda <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>sigma <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">}</a></code></pre></div>
 </div>
 <div id="choice-of-hyperparameter-on-tau" class="section level2">
-<h2><span class="header-section-number">19.9</span> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></h2>
+<h2><span class="header-section-number">19.5</span> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></h2>
 <p>The value of <span class="math inline">\(\tau\)</span> and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.</p>
-<p><span class="citation">Carvalho, Polson, and Scott (2009)</span> suggest <span class="math display">\[
-\tau \sim \dhalfcauchy(0, \sigma),
-\]</span> while <span class="citation">Polson and Scott (2011)</span> suggest, <span class="math display">\[
-\tau \sim \dhalfcauchy(0, 1) .
-\]</span></p>
-<p><span class="citation">Pas, Kleijn, and Vaart (2014)</span> suggest <span class="math display">\[
-\tau \sim \dhalfcauchy(0, p^{*} / n)
-\]</span> where <span class="math inline">\(p^*\)</span> is the true number of non-zero parameters, and <span class="math inline">\(n\)</span> is the number of observations. They suggest <span class="math inline">\(\tau = p^{*} / n\)</span> or <span class="math inline">\(\tau p^{*} / n \sqrt{log(n / p^{*})}\)</span>. Additionally, they suggest restricting <span class="math inline">\(\tau\)</span> to <span class="math inline">\([0, 1]\)</span>.</p>
-<p><span class="citation">Piironen and Vehtari (2016)</span> understand the choice of the prior on <span class="math inline">\(\tau\)</span> as the implied prior on the number of effective parameters. The shrinkage can be understood as its influence on the number of effective parameters, <span class="math inline">\(m_{eff}\)</span>, <span class="math display">\[
-m_{eff} = \sum_{j = 1}^K (1 - \kappa_j) .
-\]</span> This is a measure of effective model size.</p>
-<p>The mean and variance of <span class="math inline">\(m_{eff}\)</span> given <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span> are, <span class="math display">\[
+<!-- @CarvalhoPolsonScott2009a suggest -->
+<!-- $$ -->
+<!-- \tau \sim \dhalfcauchy(0, \sigma), -->
+<!-- $$ -->
+<!-- while @PolsonScott2011a suggest, -->
+<!-- $$ -->
+<!-- \tau \sim \dhalfcauchy(0, 1) . -->
+<!-- $$ -->
+<!-- @PasKleijnVaart2014a suggest -->
+<!-- $$ -->
+<!-- \tau \sim \dhalfcauchy(0, p^{*} / n) -->
+<!-- $$ -->
+<!-- where $p^*$ is the true number of non-zero parameters, -->
+<!-- and $n$ is the number of observations. -->
+<!-- They suggest $\tau = p^{*} / n$ or $\tau p^{*}  / n \sqrt{log(n / p^{*})}$. -->
+<!-- Additionally, they suggest restricting $\tau$ to $[0, 1]$. -->
+<p><span class="citation">Piironen and Vehtari (2017)</span> treat the prior on <span class="math inline">\(\tau\)</span> as the implied prior on the number of effective parameters.
+The shrinkage can be understood as its influence on the number of effective parameters, <span class="math inline">\(m_{eff}\)</span>,
+<span class="math display">\[
+m_{\text{eff}} = \sum_{j = 1}^K (1 - \kappa_j) .
+\]</span>
+This is a measure of effective model size.</p>
+<p><span class="citation">Piironen and Vehtari (2017)</span> show that for a given <span class="math inline">\(n\)</span> (data standard deviation), <span class="math inline">\(\tau\)</span>, <span class="math inline">\(\lambda_k\)</span>, and <span class="math inline">\(\sigma\)</span>, the and variance of <span class="math inline">\(m_{eff}\)</span>
+<span class="math display">\[
 \begin{aligned}[t]
 \E[m_{eff} | \tau, \sigma] &amp;= \frac{\sigma^{-1} \tau \sqrt{n}}{1 + \sigma^{-1} \tau \sqrt{n}} K , \\
 \Var[m_{eff} | \tau, \sigma] &amp;= \frac{\sigma^{-1} \tau \sqrt{n}}{2 (1 + \sigma^{-1} \tau \sqrt{n})2} K .
 \end{aligned}
 \]</span></p>
-<p>Based on this, a prior should be chosen so that the prior mass is located near, <span class="math display">\[
-\tau_0 = \frac{p_0}{K - p_0}\frac{\sigma}{\sqrt{n}}
+<p>Given a prior guess about the sparsity <span class="math inline">\(\beta\)</span>, a prior should be chosen such that it places mass near that guess.
+Let <span class="math inline">\(k_0 \in [0, K]\)</span> be the expected number of non-zero elements of <span class="math inline">\(\beta\)</span>, then choose <span class="math inline">\(\tau_0\)</span> such that
+<span class="math display">\[
+\tau_0 = \frac{k_0}{K - k_0}\frac{\sigma}{\sqrt{n}}
 \]</span></p>
-<p>Densities of the shrinkage parameter, <span class="math inline">\(\kappa\)</span>, for various shrinkage distributions where <span class="math inline">\(\sigma^2 = 1\)</span>, <span class="math inline">\(\tau = 1\)</span>, for <span class="math inline">\(n = 1\)</span>.</p>
-<p><span class="citation">Datta and Ghosh (2013)</span> warn against empirical Bayes estimators of <span class="math inline">\(\tau\)</span> for the horseshoe prior as it can collapse to 0. <span class="citation">Scott and Berger (2010)</span> consider marginal maximum likelihood estimates of <span class="math inline">\(\tau\)</span>. <span class="citation">Pas, Kleijn, and Vaart (2014)</span> suggest that an empirical Bayes estimator truncated below at <span class="math inline">\(1 / n\)</span>.</p>
-<p><img src="regression-shrinkage_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /></p>
-</div>
-<div id="all-coefficients" class="section level2">
-<h2><span class="header-section-number">19.10</span> All Coefficients</h2>
-<p>TODO</p>
-<div id="zellners-g-prior" class="section level3">
-<h3><span class="header-section-number">19.10.1</span> Zellner’s g-prior</h3>
-<p>An alternative prior is the Zellner’s g-prior. Consider the regression, <span class="math display">\[
-y_i | \alpha, \vec{\beta}, \sigma \sim \dnorm(\alpha + \mat{X} \vec{\beta}, \sigma^2)
-\]</span> The <span class="math inline">\(g\)</span>-prior is a non-informative, data-dependent prior, <span class="math display">\[
-\vec{\beta} \sim \dnorm(0, \sigma^2 g \mat{X}\T \mat{X})
-\]</span> It depends on only a single parameter <span class="math inline">\(g\)</span>. The prior for <span class="math inline">\(g\)</span> must be proper. Some common choices include, <span class="math display">\[
-\begin{aligned}
-g &amp;= n \\
-g &amp;= k^2 \\
-g &amp;= \max(n, k^2)
-\end{aligned}
-\]</span> or putting a hyperprior on <span class="math inline">\(g\)</span>.</p>
-<p>See <span class="citation">Ley and Steel (2012)</span> for a recent overview of g-priors.</p>
-</div>
-<div id="q-r-prior" class="section level3">
-<h3><span class="header-section-number">19.10.2</span> Q-R Prior</h3>
-<p>The QR decomposition of a the design matrix is <span class="math display">\[
-X = QR
-\]</span> where <span class="math inline">\(Q&#39;Q = I\)</span> and <span class="math inline">\(R\)</span> is upper-triangular. The OLS solution to linear regression is <span class="math display">\[
-(X&#39;X)^{-1} X&#39;y = R^{-1} Q&#39; y
-\]</span></p>
-<p>What is a prior distribution of <span class="math inline">\(\theta = Q&#39; y\)</span> ? THe prior distirbution of the <span class="math inline">\(k\)</span>-th element is <span class="math display">\[
-\theta_k = \rho_k \sigma_y \sqrt{N - 1},
-\]</span> where <span class="math inline">\(\rho_k\)</span> is the correlation between the <span class="math inline">\(k\)</span>th column of <span class="math inline">\(Q\)</span> and teh outcome. Let <span class="math inline">\(\rho = \sqrt{R^2}u\)</span> where <span class="math inline">\(u\)</span> is a unit vector uniformly distributed on the surface of a hypersphere. Then <span class="math inline">\(R^2 = \rho&#39; \rho\)</span> is the coefficient of determiniation of a linear model. An informative prior on <span class="math inline">\(R^2\)</span> penalizes <span class="math inline">\(\rho&#39; \rho\)</span>, and encourages <span class="math inline">\(\beta = R^{-1}\theta\)</span> to be closer to the origin.</p>
-<p>The distribution of <span class="math inline">\(R^2\)</span> is, <span class="math display">\[
-R^2 \sim \dbeta(K / 2, \eta)
-\]</span> The prior distribution of <span class="math inline">\(\sigma\)</span> is set to Jeffrey’s prior, <span class="math display">\[
-p(\sigma) \propto 1 / \sigma.
-\]</span></p>
-<p>The prior for the intercept, $= {y} - {x}’ R^{-1} is <span class="math display">\[
-\alpha \sim \dnorm(0, 1 / \sqrt{N}) .
-\]</span></p>
-<p>Then, <span class="math display">\[
-\sigma_y = \omega s_y \\
-\sigma_\epsilon = \sigma_y \sqrt{1 - R^2} \\
-\beta = R^{-1} u \sigma_y \sqrt{R^{2} (N - 1)}
-\]</span></p>
-</div>
+<p>This prior depends on the expected sparsity of the solution, which depends on the problem.
+PiironenVehtari2017a provide no guidence on how to select <span class="math inline">\(p_0\)</span>.
+Perhaps a simpler model, e.g. lasso could be used to estimate <span class="math inline">\(p_0\)</span>.</p>
+<ul>
+<li><span class="citation">Datta and Ghosh (2013)</span> warn against empirical Bayes estimators of <span class="math inline">\(\tau\)</span> for the horseshoe prior as it can collapse to 0.</li>
+<li><span class="citation">Scott and Berger (2010)</span> consider marginal maximum likelihood estimates of <span class="math inline">\(\tau\)</span>. –&gt;</li>
+<li><span class="citation">Pas, Kleijn, and Vaart (2014)</span> suggest that an empirical Bayes estimator truncated below at <span class="math inline">\(1 / n\)</span>.</li>
+</ul>
+<!-- Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributions where $\sigma^2 = 1$, $\tau = 1$, for $n = 1$. -->
+<p><img src="regression-shrinkage_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="differences-between-bayesian-and-penalized-ml" class="section level2">
-<h2><span class="header-section-number">19.11</span> Differences between Bayesian and Penalized ML</h2>
+<h2><span class="header-section-number">19.6</span> Differences between Bayesian and Penalized ML</h2>
 <p><span class="math display">\[
 \log p(\theta|y, x) \propto \frac{1}{2 \sigma} \sum_{i = 1}^n (\vec{x}_i\T \vec{\beta} - y_i)^2 + \lambda \sum_{k} \beta_k^2
-\]</span> In the first case, the log density of a normal distribution is, <span class="math display">\[
+\]</span>
+In the first case, the log density of a normal distribution is,
+<span class="math display">\[
 \log p(y | \mu, x) \propto \frac{1}{2 \sigma} (x - \mu)^2
-\]</span> The first regression term is the produce of normal distributions (sum of their log probabilities), <span class="math display">\[
+\]</span>
+The first regression term is the produce of normal distributions (sum of their log probabilities),
+<span class="math display">\[
 y_i \sim \dnorm(\vec{x}_i\T \vec{\beta}, \sigma)
-\]</span> The second term, <span class="math inline">\(\lambda \sum_{k} \beta_k^2\)</span> is also the sum of the log of densities of i.i.d. normal densities, with mean 0, and scale <span class="math inline">\(\tau = 1 / 2 \lambda\)</span>, <span class="math display">\[
+\]</span>
+The second term, <span class="math inline">\(\lambda \sum_{k} \beta_k^2\)</span> is also the sum of the log of densities of i.i.d. normal densities, with mean 0, and scale <span class="math inline">\(\tau = 1 / 2 \lambda\)</span>,
+<span class="math display">\[
 \beta_k \sim \dnorm(0, \tau^2)
 \]</span></p>
-<p>The only difference in the LASSO is the penalty term, which uses an absolute value penalty for <span class="math inline">\(\beta_k\)</span>. That term corresponds to a sum of log densities of i.i.d. double exponential (Laplace) distributions. The double exponential distribution density is similar to a normal distribution, <span class="math display">\[
+<p>The only difference in the LASSO is the penalty term, which uses an absolute value penalty for <span class="math inline">\(\beta_k\)</span>.
+That term corresponds to a sum of log densities of i.i.d. double exponential (Laplace) distributions.
+The double exponential distribution density is similar to a normal distribution,
+<span class="math display">\[
 \log p(y | \mu, \sigma) \propto - \frac{|y - \mu|}{\sigma}
-\]</span> So the LASSO penalty is equivalent to the log density of a double exponential distribution with location <span class="math inline">\(0\)</span>, and scale <span class="math inline">\(1 / \lambda\)</span>. <span class="math display">\[
+\]</span>
+So the LASSO penalty is equivalent to the log density of a double exponential distribution with location <span class="math inline">\(0\)</span>, and scale <span class="math inline">\(1 / \lambda\)</span>.
+<span class="math display">\[
 \beta_k \sim \dlaplace(0, \tau)
 \]</span></p>
 <p>There are several differences between Bayesian approaches to shrinkage and penalized ML approaches.</p>
@@ -982,209 +988,41 @@ y_i \sim \dnorm(\vec{x}_i\T \vec{\beta}, \sigma)
 <li>Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.</li>
 </ul>
 </div>
-<div id="references-11" class="section level2">
-<h2><span class="header-section-number">19.12</span> References</h2>
-<ul>
-<li><strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong>: estimates GLM regressions with various priors</li>
-<li><strong><a href="https://cran.r-project.org/package=rmonomvn">rmonomvn</a></strong>: estimates Bayesian ridge, lasso, horseshoe, and ridge regression.</li>
-<li><strong><a href="https://cran.r-project.org/package=bayesreg">bayesreg</a></strong>: See <span class="citation">Makalic and Schmidt (2016)</span> for documentation and a good review of Bayesian regularized regression.</li>
-<li><a href="http://jingyuhe.com/fastHorseshoe.html">fastHorseshoe</a></li>
-</ul>
+<div id="examples-3" class="section level2">
+<h2><span class="header-section-number">19.7</span> Examples</h2>
 
 </div>
 </div>
 
 
 
+<div id="prerequisites-12" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;stringr&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)</code></pre></div>
 </div>
 <div id="parameters" class="section level2">
-<h2><span class="header-section-number">19.13</span> Parameters</h2>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Category</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">modeled data</td>
-<td align="left">Data, assigned distribution</td>
-</tr>
-<tr class="even">
-<td align="left">unmodeled data</td>
-<td align="left">Data not given a distribution</td>
-</tr>
-<tr class="odd">
-<td align="left">modeled parameters</td>
-<td align="left">Parameters with an informative prior distribution</td>
-</tr>
-<tr class="even">
-<td align="left">unmodeled parameters</td>
-<td align="left">Parameters with non-informative prior distribution</td>
-</tr>
-<tr class="odd">
-<td align="left">derived quantities</td>
-<td align="left">Variables defined deterministicically</td>
-</tr>
-</tbody>
-</table>
-<p>See <span class="citation">Gelman and Hill (2007, 366)</span></p>
+<h2><span class="header-section-number">19.8</span> Parameters</h2>
 </div>
 <div id="miscellaneous-mathematical-background" class="section level2">
-<h2><span class="header-section-number">19.14</span> Miscellaneous Mathematical Background</h2>
+<h2><span class="header-section-number">19.9</span> Miscellaneous Mathematical Background</h2>
 <div id="location-scale-families" class="section level3">
-<h3><span class="header-section-number">19.14.1</span> Location-Scale Families</h3>
-<p>In a <a href="https://en.wikipedia.org/wiki/Location%E2%80%93scale_family">location-scale family</a> of distributions, if the random variable <span class="math inline">\(X\)</span> is distributed with mean 0 and standard deviation 1, then the random variable <span class="math inline">\(Y\)</span>, <span class="math display">\[
-Y = \mu + \sigma X ,
-\]</span> has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
-<p><strong>Normal distribution:</strong> Suppose <span class="math inline">\(X \sim \dnorm(0, 1)\)</span>, then <span class="math display">\[
-Y = \mu + \sigma X,
-\]</span> is equivalent to <span class="math inline">\(Y \sim \dnorm(\mu, \sigma)\)</span> (normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>).</p>
-<p>** Student-t distribution** (including Cauchy): <span class="math display">\[
-\begin{aligned}[t]
-X &amp;\sim \dt{\nu}(0, 1) \\
-Y &amp;= \mu + \sigma X 
-\end{aligned}
-\]</span> implies <span class="math display">\[
-Y \sim \dt{\nu}(\mu, \sigma),
-\]</span> i.e. <span class="math inline">\(Y\)</span> is distributed Student-<span class="math inline">\(t\)</span> with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span>.</p>
-<p>In Stan, it can be useful parameterize distributions in terms of a mean 0, scale 1 parameters, and separate parameters for the locations and scales. E.g. with normal distributions,</p>
-<pre><code>parameters {
-  real mu;
-  real&lt;lower = 0.0&gt; sigma;
-  vector[n] eps;
-}
-transformed parameters {
-  vector[n] y;
-  y = mu + sigma * eps;
-}
-model {
-  eps ~ normal(0.0, 1.0);
-}</code></pre>
+<h3><span class="header-section-number">19.9.1</span> Location-Scale Families</h3>
 </div>
 <div id="scale-mixtures-of-normal-distributions" class="section level3">
-<h3><span class="header-section-number">19.14.2</span> Scale Mixtures of Normal Distributions</h3>
-<p>Some commonly used distributions can be represented as scale mixtures of normal distributions. For formal details of scale mixtures of normal distributions see <span class="citation">West (1987)</span>. Distributions that are scale-mixtures of normal distributions can be written as, <span class="math display">\[
-Y \sim \dnorm(\mu, \sigma_i^2) \\
-\sigma_i \sim \pi(\sigma_i)
-\]</span> As its name suggests, the individual variances (scales) themselves, have a distribution.</p>
-<p>Some examples:</p>
-<ul>
-<li>Student-t</li>
-<li>Double Exponential</li>
-<li>Horseshoe or Hierarchical Shrinkage (HS)</li>
-<li>Horseshoe Plus or Hierarchical Shrinkage Plus (HS+)</li>
-</ul>
-<p>Even when analytic forms of the distribution are available, representing them as scale mixtures of normal distributions may be convenient in modeling. In particular, it may allow for drawing samples from the distribution easily. And in HMC, it may induce a more tractable posterior density.</p>
+<h3><span class="header-section-number">19.9.2</span> Scale Mixtures of Normal Distributions</h3>
 </div>
 <div id="covariance-correlation-matrix-decomposition" class="section level3">
-<h3><span class="header-section-number">19.14.3</span> Covariance-Correlation Matrix Decomposition</h3>
-<p>The suggested method for modeling covariance matrices in Stan is the separation strategy which decomposes a covariance matrix <span class="math inline">\(\Sigma\)</span> can be decomposed into a standard deviation vector <span class="math inline">\(\sigma\)</span>, and a correlation matrix <span class="math inline">\(R\)</span> <span class="citation">(Barnard, McCulloch, and Meng 2000)</span>, <span class="math display">\[
-\Sigma = \diag(\sigma) R \diag(\sigma) .
-\]</span> This is useful for setting priors on covariance because separate priors can be set for the scales of the variables via <span class="math inline">\(\sigma\)</span>, and the correlation between them, via <span class="math inline">\(R\)</span>.</p>
-<p>The <a href="https://github.com/stan-dev/rstanarm/wiki/Prior-distributions">rstanarm</a> <code>decov</code> prior goes further and decomposes the covariance matrix into a correlation matrix, <span class="math inline">\(\mat{R}\)</span>, a diagonal variance matrix <span class="math inline">\(\mat{\Omega}\)</span> with trace <span class="math inline">\(n \sigma^2\)</span>, a scalar global variance <span class="math inline">\(\sigma^2\)</span>, and a simplex <span class="math inline">\(\vec{\pi}\)</span> (proportion of total variance for each variable): <span class="math display">\[
-\begin{aligned}[t]
-\mat{\Sigma} &amp;= \mat{\Omega} \mat{R}  \\
-\diag(\mat{\Omega}) &amp;= n \vec{\pi} \sigma^2
-\end{aligned}
-\]</span> Separate and interpretable priors can be put on <span class="math inline">\(\mat{R}\)</span>, <span class="math inline">\(\vec{\pi}\)</span>, and <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>The LKJ (Lewandowski, ) distribution is a distribution over correlation coefficients, <span class="math display">\[
-R \sim \dlkjcorr(\eta) ,
-\]</span> where <span class="math display">\[
-\dlkjcorr(\Sigma | \eta) \propto \det(\Sigma)^{(\eta - 1)} .
-\]</span></p>
-<p>This distribution has the following properties:</p>
-<ul>
-<li><span class="math inline">\(\eta = 1\)</span>: uniform correlations</li>
-<li><span class="math inline">\(\eta \to \infty\)</span>: approaches the identity matrix</li>
-<li><span class="math inline">\(0 &lt; \eta &lt; 1\)</span>: there is a trough at the identity matrix with higher probabilities placed on non-zero correlations.</li>
-<li>For all positive <span class="math inline">\(\eta\)</span> (<span class="math inline">\(\eta &gt; 0\)</span>), <span class="math inline">\(\E(R) = \mat{I}\)</span>.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lkjcorr_df &lt;-<span class="st"> </span><span class="cf">function</span>(eta, <span class="dt">n =</span> <span class="dv">2</span>) {
-  out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">rlkjcorr</span>(n, eta))
-  out<span class="op">$</span>.row &lt;-<span class="st"> </span><span class="kw">seq_len</span>(<span class="kw">nrow</span>(out))
-  out &lt;-<span class="st"> </span><span class="kw">gather</span>(out, .col, value, <span class="op">-</span>.row)
-  out<span class="op">$</span>.col &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">str_replace</span>(out<span class="op">$</span>.col, <span class="st">&quot;^V&quot;</span>, <span class="st">&quot;&quot;</span>))
-  out<span class="op">$</span>eta &lt;-<span class="st"> </span>eta
-  out  
-}
-
-lkjsims &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">50</span>, <span class="dv">1000</span>), lkjcorr_df, <span class="dt">n =</span> <span class="dv">50</span>)</code></pre></div>
-<p>This simulates a single matrix from the LKJ distribution with different values of <span class="math inline">\(\eta\)</span>. As <span class="math inline">\(\eta \to \infty\)</span>, the off-diagonal correlations tend towards 0, and the correlation matrix to the identity matrix.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lkjsims,
-       <span class="kw">aes</span>(<span class="dt">x =</span> .row, <span class="dt">y =</span> .col, <span class="dt">fill =</span> value)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>eta, <span class="dt">ncol =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_distiller</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;RdYlBu&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
-<p><img src="appendix_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>The density of the off-diagonal correlations.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lkjsims <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(.row <span class="op">&lt;</span><span class="st"> </span>.col) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">colour =</span> <span class="kw">factor</span>(eta))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_density</span>()</code></pre></div>
-<p><img src="appendix_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>For other discussions of the LKJ correlation distribution, see these:</p>
-<ul>
-<li><a href="https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices/125017#125017" class="uri">https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices/125017#125017</a></li>
-<li><a href="http://www.zinkov.com/posts/2015-06-09-where-priors-come-from/" class="uri">http://www.zinkov.com/posts/2015-06-09-where-priors-come-from/</a></li>
-<li><a href="http://www.psychstatistics.com/2014/12/27/d-lkj-priors/" class="uri">http://www.psychstatistics.com/2014/12/27/d-lkj-priors/</a></li>
-</ul>
+<h3><span class="header-section-number">19.9.3</span> Covariance-Correlation Matrix Decomposition</h3>
 </div>
 <div id="qr-factorization" class="section level3">
-<h3><span class="header-section-number">19.14.4</span> QR Factorization</h3>
-<p>For a full-rank <span class="math inline">\(N \times K\)</span> matrix, the QR factorization is <span class="math display">\[
-\mat{X} = \mat{Q} \mat{R} 
-\]</span> where <span class="math inline">\(\mat{Q}\)</span> is an orthonormal matrix such that <span class="math inline">\(\mat{Q}\T \mat{Q}\)</span> and <span class="math inline">\(\mat{R}\)</span> is an upper triangular matrix.</p>
-<p>Stan function <span class="citation">Stan Development Team (2016)</span> suggest writing it is <span class="math display">\[
-\begin{aligned}[t]
-\mat{Q}^* = \mat{Q} \times \sqrt{N - 1} \\
-\mat{R}^* = \frac{1}{\sqrt{N - 1}} \mat{R}
-\end{aligned}
-\]</span></p>
-<p>This is used for solving linear model.</p>
-<p>Suppose <span class="math inline">\(\vec{\beta}\)</span> is a <span class="math inline">\(K \times 1\)</span> vector, then <span class="math display">\[
-\vec{eta} = \mat{x} \vec{\beta} = \mat{Q} \mat{R} \vec{\beta} = \mat{Q}^* \mat{R}^* \vec{\beta} .
-\]</span> Suppose <span class="math inline">\(\mat{theta} = \mat{R}^* \vec{\beta}\)</span>, then <span class="math inline">\(\vec{eta} = \mat{Q}^* \mat{\theta}\)</span> and <span class="math inline">\(\vec{beta} = {\mat{R}^*}^{-1} \mat{\theta}\)</span>.</p>
-<p><a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html">rstanarm</a> provides a prior for a normal linear model which uses the QR decomposition to parameterize a prior in terms of <span class="math inline">\(R^2\)</span>.</p>
-<p>Stan functions:</p>
-<ul>
-<li><code>qr_Q(matrix A)</code></li>
-<li><code>qr_R(matrix A)</code></li>
-</ul>
-<p>See <span class="citation">Stan Development Team (2016 Sec 8.2)</span></p>
+<h3><span class="header-section-number">19.9.4</span> QR Factorization</h3>
 </div>
 <div id="cholesky-decomposition" class="section level3">
-<h3><span class="header-section-number">19.14.5</span> Cholesky Decomposition</h3>
-<p>The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a> of a positive definite matrix <span class="math inline">\(A\)</span> is, <span class="math display">\[
-\mat{A} = \mat{L} \mat{L}\T ,
-\]</span> where <span class="math inline">\(\mat{L}\)</span> is a lower-triangular matrix.</p>
-<ul>
-<li>It is similar to a square root for a matrix.</li>
-<li><p>It often more numerically stable or efficient to work with the Cholesky decomposition, than with a covariance matrix. When working with the covariance matrix, numerical precision can result in a non positive definite matrix. However, working with <span class="math inline">\(\mat{L}\)</span> will ensure that <span class="math inline">\(\mat{A} = \mat{L} \mat{L}\T\)</span> will be positive definite.</p></li>
-<li><p>In Stan</p>
-<ul>
-<li>Types types <code>cholesky_factor_cov</code>, and <code>cholesky_factor_corr</code> represent the Cholesky factor of covariance and correlation matrices, respectively.</li>
-<li>Cholesky decomposition function is <code>cholesky_decompose(matrix A)</code></li>
-</ul></li>
-<li><p>Multiple functions in Stan are parameterized with Cholesky decompositions instead of or in addition to covariance matrices. Use them if possible; they are more numerically stable.</p>
-<ul>
-<li><code>lkj_corr_chol_lpdf</code></li>
-<li><code>multi_normal_cholesky_lpdf</code></li>
-</ul></li>
-</ul>
-<p>The Cholesky factor is used for sampling from a multivariate normal distribution using i.i.d. standard normal distributions. Suppose <span class="math inline">\(X_1, \dots, X_N\)</span> are <span class="math inline">\(N\)</span> i.i.d. standard normal distributions, <span class="math inline">\(\mat{\Omega}\)</span> is an <span class="math inline">\(N \times N\)</span> lower-triangular matrix such that <span class="math inline">\(\mat{\Omega} \mat{Omega}\T = \mat{\Sigma}\)</span>, and <span class="math inline">\(\mu\)</span> is an <span class="math inline">\(N \times 1\)</span> vector, then <span class="math display">\[
-\vec{\mu} + \mat{\Omega} X \sim \dnorm(\vec{\mu}, \mat{\Sigma})
-\]</span></p>
-<p>See <span class="citation">Stan Development Team (2016, 40, 147, 241, 246)</span></p>
+<h3><span class="header-section-number">19.9.5</span> Cholesky Decomposition</h3>
 </div>
+</div>
+<div id="scaled-and-unscaled-variables" class="section level2">
+<h2><span class="header-section-number">19.10</span> Scaled and Unscaled Variables</h2>
+
 </div>
 </div>
             </section>
@@ -1193,7 +1031,7 @@ lkjsims &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class
         </div>
       </div>
 <a href="shrinkage-and-hierarchical-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="scaled-and-unscaled-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1229,7 +1067,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

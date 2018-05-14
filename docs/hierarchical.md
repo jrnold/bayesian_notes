@@ -212,7 +212,7 @@ map2_df(names(fits), fits,
 #>   <chr>   <dbl>  <dbl>
 #> 1 nopool  -3.23  -4.62
 #> 2 pool    -2.58  -4.06
-#> 3 partial -2.59  -4.00
+#> 3 partial -2.60  -4.01
 ```
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.

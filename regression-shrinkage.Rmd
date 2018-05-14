@@ -435,14 +435,14 @@ The value of $\tau$ and the choice of its hyper-parameter has a big influence on
 <!-- They suggest $\tau = p^{*} / n$ or $\tau p^{*}  / n \sqrt{log(n / p^{*})}$. -->
 <!-- Additionally, they suggest restricting $\tau$ to $[0, 1]$. -->
 
-@PiironenVehtari2016a understand the choice of the prior on $\tau$ as the implied prior on the number of effective parameters.
+@PiironenVehtari2017a treat the prior on $\tau$ as the implied prior on the number of effective parameters.
 The shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$,
 $$
 m_{\text{eff}} = \sum_{j = 1}^K (1 - \kappa_j) .
 $$
 This is a measure of effective model size.
 
-@PiironenVehtari2016a show that for a given $n$ (data standard deviation), $\tau$, $\lambda_k$, and $\sigma$, the and variance of $m_{eff}$ 
+@PiironenVehtari2017a show that for a given $n$ (data standard deviation), $\tau$, $\lambda_k$, and $\sigma$, the and variance of $m_{eff}$ 
 $$
 \begin{aligned}[t]
 \E[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{1 + \sigma^{-1} \tau \sqrt{n}} K , \\
@@ -457,7 +457,7 @@ $$
 $$
 
 This prior depends on the expected sparsity of the solution, which depends on the problem. 
-@PiironenVehtari2016 provide no guidence on how to select $p_0$.
+PiironenVehtari2017a provide no guidence on how to select $p_0$.
 Perhaps a simpler model, e.g. lasso could be used to estimate $p_0$.
 
 -  @DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0.
@@ -584,152 +584,3 @@ Choosing the shrinkage penalty:
 -   Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.
 
 ## Examples
-
-### Credit Balances
-
-### Example
-
-The `Credit` data set in the **ISLR** package contains simulated data on 
-on average credit card balances of 10,000 individuals and several individual
-level covariates.
-We would like to predict credit card balances by modeling them as a function of
-the included covariates.
-
-Estimate the coefficients with OLS.
-```{r}
-data("Credit", package = "ISLR")
-f <- Balance ~  Income + Limit + Rating + Cards + Age +
-             Education + Gender + Student + Married + Ethnicity
-fit_lm <- lm(f, data = Credit)
-```
-
-Create the design matrix and response vector using `recipe`.
-```{r}
-rec_credit <- recipe(f, data = Credit) %>%
-  step_dummy(all_nominal()) %>%
-  prep(data = Credit, retain = TRUE)
-credit_X <- juice(rec_credit, all_predictors(), composition = "matrix")
-credit_y <- as.numeric(juice(rec_credit, all_outcomes(), 
-                             composition = "matrix"))
-```
-
-Estimate the lasso coefficients:
-```{r}
-fit_lasso <- glmnet(credit_X, credit_y, alpha = 1)
-```
-Plot the coefficient solution paths as a function of $\lambda$:
-```{r}
-plot(fit_lasso, xvar = "lambda")
-```
-
-Plot the choice of the optimal penalty as chosen by cross validation.
-```{r}
-fit_lasso_cv <- cv.glmnet(credit_X, credit_y, parallel = TRUE)
-```
-```{r}
-plot(fit_lasso_cv)
-```
-The $\lambda$ penalty with the smallest MSE is,
-```{r}
-fit_lasso_cv$lambda.min
-```
-However, the CV choice of $\lambda$ tends to overfit, so ... suggest the 1-standard error rule, which chooses the largest $\lambda$ (simplest model) within 1 standard error of the $\lambda$ that minimizes the MSE.
-
-Estimate ridge regression coefficients.
-```{r}
-fit_ridge <- glmnet(credit_X, credit_y, alpha = 0)
-```
-```{r}
-fit_lasso_cv$lambda.1se
-```
-
-Plot the coefficient ridge solution paths as a function of $\lambda$:
-```{r}
-plot(fit_ridge)
-```
-
-Plot the choice of the optimal penalty as chosen by cross validation.
-```{r}
-fit_ridge_cv <- cv.glmnet(credit_X, credit_y, parallel = TRUE)
-```
-```{r warning=FALSE}
-plot(fit_ridge_cv)
-```
-The $\lambda$ shrinkage penalty with the smallest MSE is,
-```{r}
-fit_ridge_cv$lambda.min
-```
-and the $\labmda$ shrinkage penalty chosen by the 1-standard error rule is
-```{r}
-fit_ridge_cv$lambda.1se
-```
-
-```{r}
-data("Credit", package = "ISLR")
-```
-
-```{r}
-credit_fmla <- Balance ~ Income + Limit + Rating + Cards + Age + Education + 
-    Gender + Student + Married + Ethnicity
-```
-
-Estimate a model with a weakly informative prior.
-```{r}
-fit_weakinf <- stan_glm(credit_fmla, 
-         family = gaussian(), 
-         prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-         prior_intercept = normal(location = 0, scale = 10),
-         autoscale = TRUE,
-         data = Credit)
-```
-
-Estimate a model using the hierarchical shrinkage prior included in **rstanarm**.
-```{r}
-fit_hs <- stan_glm(credit_fmla, 
-                   family = gaussian(), 
-                   prior = hs(df = 1, global_df = 1, global_scale = 0.01, 
-                              slab_df = 4, slab_scale = 2.5),
-                   prior_intercept = normal(location = 0, scale = 10),
-                   data = Credit)
-```
-and Lasso
-```{r}
-fit_lasso <- stan_glm(credit_fmla, 
-                   family = gaussian(), 
-                   prior = lasso(df = 1, location = 0, scale = NULL,
-                                 autoscale = TRUE),
-                   prior_intercept = normal(location = 0, scale = 10),
-                   data = Credit)
-```
-
-
-```{r}
-rec_credit <- recipe(f, data = Credit) %>%
-  # factors to indicators
-  step_dummy(all_nominal()) %>%
-  # center and scale
-  step_center(everything()) %>%
-  step_scale(everything()) %>%
-  prep(data = Credit, retain = TRUE)
-X <- juice(rec_credit, all_predictors(), composition = "matrix")
-y <- as.numeric(juice(rec_credit, all_predictors(), composition = "matrix"))
-```
-
-```{r}
-models <- list()
-for (i in c("lm_shrinkage_student_t_1", "lm_shrinkage_laplace_1",
-            "lm_shrinkage_normal_1.stan", "lm_shrinkage_hs")) {
-  models[[i]] <- stan_model(glue::glue("stan/{i}.stan"))
-}
-
-```
-
-## References
-
--   `r rpkg("rstanarm")`: estimates GLM regressions with various priors
--   `r rpkg("rmonomvn")`: estimates Bayesian ridge, lasso, horseshoe, and ridge regression.
--   `r rpkg("bayesreg")`: See @MakalicSchmidt2016a for documentation and a good review of Bayesian regularized regression.
--   [fastHorseshoe]( http://jingyuhe.com/fastHorseshoe.html)
--   Allan Riddell. [Epistemology of the corral: regression and variable selection
-    with Stan and the Horseshoe prior](https://www.ariddell.org/horseshoe-prior-with-stan.html)
-    March 10, 2014.

@@ -239,7 +239,7 @@ $$
 
 See @Stan2016a [p. 40, 147, 241, 246]
     
-# Scaled and Unscaled Variables
+## Scaled and Unscaled Variables
 
 Though priors shouldn't depend on the data itself, many priors depends 
 
@@ -325,30 +325,5 @@ $$
 For example, a weakly informative prior on the variance of $\tilde{\epsilon}}$ implies a weakly informative prior on the variance of $\epsilon$,
 $$
 \sigma_{\tilde{\epsilon}} \sim C^{+}\left(0, 5 \right) \to 
-\sigma_{\epsilon} \sim C^{+}\left(0, \sigma_Y 5 \right) .
+\sigma_{\epsilon} \sim C^{+}\left(0, 5 \sigma_Y \right) .
 $$
-
-
-All of the above calculations are a little sloppy since I'm treating the other random variables as constants when deriving these (basically assuming $\alpha$ and $\beta$ are independent).
-
-**TODO** handle multivariate case, with whitening transformation
-$$
-\tilde{Y} = \beta' \tilde{X} + \epsilon
-$$
-where 
-$$
-\begin{aligned}[t]
-E(\tilde{Y}) &= 0, & V(\tilde{Y}) &= 1, \\
-E(\tilde{X}) &= 0_k, & V(\tilde{Y}) &= I_k .
-\end{aligned}
-$$
-and
-$$
-\begin{aligned}[t]
-\tilde{Y} &= \sigma_Y^{-1}(Y - \bar{Y}) &, Y &= \sigma_{\tilde{Y}} Y + \bar{Y} \\
-\tilde{X} &= L (X - \bar{X}), & X &= L^{-1} \tilde{X} + \bar{X}
-\end{aligned}
-$$
-where $L$ is a $k \times k$ whitening matrix.
-This is a matrix such that $L' L = V(X)^{-1}$.
-With a sample, $L = chol(X' X)$.
