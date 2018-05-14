@@ -479,36 +479,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\T}{'}
 
 % This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}{\mathrm{Student-t}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
-\newcommand{\dbernoulli}{\mathrm{Bernoulli}}
+\newcommand{\dunif}{\mathsf{Uniform}}
+\newcommand{\dnorm}{\mathsf{Normal}}
+\newcommand{\dhalfnorm}{\mathrm{HalfNormal}}
+\newcommand{\dlnorm}{\mathsf{LogNormal}}
+\newcommand{\dmvnorm}{\mathsf{Normal}}
+\newcommand{\dgamma}{\mathsf{Gamma}}
+\newcommand{\dinvgamma}{\mathsf{InvGamma}}
+\newcommand{\dchisq}{\mathsf{ChiSquared}}
+\newcommand{\dinvchisq}{\mathsf{InvChiSquared}}
+\newcommand{\dexp}{\mathsf{Exponential}}
+\newcommand{\dlaplace}{\mathsf{Laplace}}
+\newcommand{\dweibull}{\mathsf{Weibull}}
+\newcommand{\dwishart}{\mathsf{Wishart}}
+\newcommand{\dinvwishart}{\mathsf{InvWishart}}
+\newcommand{\dlkj}{\mathsf{LkjCorr}}
+\newcommand{\dt}{\mathsf{StudentT}}
+\newcommand{\dhalft}{\mathsf{HalfStudentT}}
+\newcommand{\dbeta}{\mathsf{Beta}}
+\newcommand{\ddirichlet}{\mathsf{Dirichlet}}
+\newcommand{\dlogistic}{\mathsf{Logistic}}
+\newcommand{\dllogistic}{\mathsf{LogLogistic}}
+\newcommand{\dpois}{\mathsf{Poisson}}
+\newcommand{\dBinom}{\mathsf{Binomial}}
+\newcommand{\dmultinom}{\mathsf{Multinom}}
+\newcommand{\dnbinom}{\mathsf{NegativeBinomial}}
+\newcommand{\dnbinomalt}{\mathsf{NegativeBinomial2}}
+\newcommand{\dbetabinom}{\mathsf{BetaBinomial}}
+\newcommand{\dcauchy}{\mathsf{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathsf{HalfCauchy}}
+\newcommand{\dbernoulli}{\mathsf{Bernoulli}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Reals}{\R}
@@ -521,6 +521,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 \DeclareMathOperator{\invlogit}{Inv-Logit}
 \DeclareMathOperator{\logit}{Logit}
+\DeclareMathOperator{\diag}{diag}
 
 \]
 <div id="bayesian-computation" class="section level1">
@@ -565,7 +566,7 @@ After 10 spins you have the following sequence of water and land.</p>
 <p>To summarize, this model is
 <span class="math display">\[
 \begin{aligned}[t]
-y &amp;\sim dbinom(n, \theta) \\
+y &amp;\sim \dBinom(n, \theta) \\
 \theta &amp;\sim beta(1, 1) \\
 \end{aligned}
 \]</span>

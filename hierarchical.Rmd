@@ -38,7 +38,7 @@ head(bball1970)
 Let $y_i$ be the number of hits in the first 45 at bats for player $i$,
 $$
 \begin{aligned}[t]
-y_i & \sim \dbin(45, \mu_i),
+y_i & \sim \dBinom(45, \mu_i),
 \end{aligned}
 $$
 where $\mu_i \in (0, 1)$ is the player-specific batting average.
@@ -93,22 +93,22 @@ models <- list()
 ```{r results='hide'}
 models[["nopool"]] <- stan_model("stan/binomial-no-pooling.stan")
 ```
-```{r}
-models[["nopool"]]
+```{r echo=FALSE, comment=NA, prompt=FALSE}
+cat(models[["nopool"]]@model_code)
 ```
 
 ```{r results='hide'}
 models[["pool"]] <- stan_model("stan/binomial-complete-pooling.stan")
 ```
-```{r}
-models[["pool"]]
+```{r echo=FALSE, comment=NA, prompt=FALSE}
+cat(models[["pool"]]@model_code)
 ```
 
 ```{r results='hide'}
 models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
 ```
-```{r}
-models[["partial"]]
+```{r echo=FALSE, comment=NA, prompt=FALSE}
+cat(models[["partial"]]@model_code)
 ```
 
 Draw a sample for all three models:

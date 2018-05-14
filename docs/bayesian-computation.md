@@ -50,7 +50,7 @@ n <- length(smpls)
 To summarize, this model is
 $$
 \begin{aligned}[t]
-y &\sim dbinom(n, \theta) \\
+y &\sim \dBinom(n, \theta) \\
 \theta &\sim beta(1, 1) \\
 \end{aligned}
 $$

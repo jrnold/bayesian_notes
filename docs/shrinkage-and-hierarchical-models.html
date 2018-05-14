@@ -479,36 +479,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\T}{'}
 
 % This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}{\mathrm{Student-t}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
-\newcommand{\dbernoulli}{\mathrm{Bernoulli}}
+\newcommand{\dunif}{\mathsf{Uniform}}
+\newcommand{\dnorm}{\mathsf{Normal}}
+\newcommand{\dhalfnorm}{\mathrm{HalfNormal}}
+\newcommand{\dlnorm}{\mathsf{LogNormal}}
+\newcommand{\dmvnorm}{\mathsf{Normal}}
+\newcommand{\dgamma}{\mathsf{Gamma}}
+\newcommand{\dinvgamma}{\mathsf{InvGamma}}
+\newcommand{\dchisq}{\mathsf{ChiSquared}}
+\newcommand{\dinvchisq}{\mathsf{InvChiSquared}}
+\newcommand{\dexp}{\mathsf{Exponential}}
+\newcommand{\dlaplace}{\mathsf{Laplace}}
+\newcommand{\dweibull}{\mathsf{Weibull}}
+\newcommand{\dwishart}{\mathsf{Wishart}}
+\newcommand{\dinvwishart}{\mathsf{InvWishart}}
+\newcommand{\dlkj}{\mathsf{LkjCorr}}
+\newcommand{\dt}{\mathsf{StudentT}}
+\newcommand{\dhalft}{\mathsf{HalfStudentT}}
+\newcommand{\dbeta}{\mathsf{Beta}}
+\newcommand{\ddirichlet}{\mathsf{Dirichlet}}
+\newcommand{\dlogistic}{\mathsf{Logistic}}
+\newcommand{\dllogistic}{\mathsf{LogLogistic}}
+\newcommand{\dpois}{\mathsf{Poisson}}
+\newcommand{\dBinom}{\mathsf{Binomial}}
+\newcommand{\dmultinom}{\mathsf{Multinom}}
+\newcommand{\dnbinom}{\mathsf{NegativeBinomial}}
+\newcommand{\dnbinomalt}{\mathsf{NegativeBinomial2}}
+\newcommand{\dbetabinom}{\mathsf{BetaBinomial}}
+\newcommand{\dcauchy}{\mathsf{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathsf{HalfCauchy}}
+\newcommand{\dbernoulli}{\mathsf{Bernoulli}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Reals}{\R}
@@ -521,6 +521,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 \DeclareMathOperator{\invlogit}{Inv-Logit}
 \DeclareMathOperator{\logit}{Logit}
+\DeclareMathOperator{\diag}{diag}
 
 \]
 <div id="shrinkage-and-hierarchical-models" class="section level1">
@@ -564,7 +565,7 @@ The goal was to predict the batting average of these 18 players from their first
 <p>Let <span class="math inline">\(y_i\)</span> be the number of hits in the first 45 at bats for player <span class="math inline">\(i\)</span>,
 <span class="math display">\[
 \begin{aligned}[t]
-y_i &amp; \sim \dbin(45, \mu_i),
+y_i &amp; \sim \dBinom(45, \mu_i),
 \end{aligned}
 \]</span>
 where <span class="math inline">\(\mu_i \in (0, 1)\)</span> is the player-specific batting average.
@@ -609,14 +610,129 @@ On the log odds scale, this places 95% of the probability mass between 0.7 and 9
 <p>Create a list to store models:</p>
 <div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" data-line-number="1">models &lt;-<span class="st"> </span><span class="kw">list</span>()</a></code></pre></div>
 <div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1">models[[<span class="st">&quot;nopool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-no-pooling.stan&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1">models[[<span class="st">&quot;nopool&quot;</span>]]</a></code></pre></div>
-<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“/* Binomial Model (No pooling)A binomial model for <span class="math inline">\(i = 1, \\dots, N\)</span>, no pooling:<span class="math display">\[\n  p(y_i | n_i, \\mu_i) &amp;\\sim \\mathsf{Binomial}(y_i | n_i, \\mu_i) \\\\\n  \\mu_i &amp;= \\logit^{-1}(\\eta_i) \\\\\n  p(\\eta_i) &amp;\\sim \\mathsf{Normal}^+(0, 10)\n  \]</span>/quantities {int y_rep[N];vector[N] log_lik;vector[N] log_lik_new;vector&lt;lower = 0., upper = 1.&gt;[N] mu;mu = inv_logit(eta);for (n in 1:N) {y_rep[n] = binomial_rng(k[n], mu[n]);log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);}}”)))</p>
+<pre><code>/* Binomial Model (No pooling)
+
+  A binomial model for $i = 1, \dots, N$, no pooling:
+  $$
+  p(y_i | n_i, \mu_i) &amp;\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
+  \mu_i &amp;= \logit^{-1}(\eta_i) \\
+  p(\eta_i) &amp;\sim \mathsf{Normal}^+(0, 10)
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  vector[N] eta;
+}
+model {
+  eta ~ normal(0., 10.);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  vector&lt;lower = 0., upper = 1.&gt;[N] mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) {
+    y_rep[n] = binomial_rng(k[n], mu[n]);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
+  }
+}</code></pre>
 <div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1">models[[<span class="st">&quot;pool&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-complete-pooling.stan&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" data-line-number="1">models[[<span class="st">&quot;pool&quot;</span>]]</a></code></pre></div>
-<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“/* Binomial ModelA binomial model for <span class="math inline">\(i = 1, \\dots, N\)</span>, with complete pooling<span class="math display">\[\n  \\begin{aligned}[t]\n  p(y_i | n_i, \\mu) &amp;\\sim \\mathsf{Binomial}(n_i, \\mu) \\\\\n  \\mu &amp;= \\logit^{-1}(\\eta) \\\\\n  p(\\eta) &amp;\\sim \\mathsf{Normal}^+(0, 10)\n  \\end{aligned}\n  \]</span>/quantities {int y_rep[N];vector[N] log_lik;vector[N] log_lik_new;real&lt;lower = 0., upper = 1.&gt; mu;mu = inv_logit(eta);for (n in 1:N) { //y_rep[n] = binomial_rng(k[n], mu);log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta);log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta);}}”)))</p>
+<pre><code>/* Binomial Model
+
+  A binomial model for $i = 1, \dots, N$, with complete pooling
+  $$
+  \begin{aligned}[t]
+  p(y_i | n_i, \mu) &amp;\sim \mathsf{Binomial}(n_i, \mu) \\
+  \mu &amp;= \logit^{-1}(\eta) \\
+  p(\eta) &amp;\sim \mathsf{Normal}^+(0, 10)
+  \end{aligned}
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  real eta;
+}
+model {
+  eta ~ normal(0., 10.);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  real&lt;lower = 0., upper = 1.&gt; mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) { //
+    y_rep[n] = binomial_rng(k[n], mu);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta);
+  }
+}</code></pre>
 <div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" data-line-number="1">models[[<span class="st">&quot;partial&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/binomial-partial-pooling.stan&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" data-line-number="1">models[[<span class="st">&quot;partial&quot;</span>]]</a></code></pre></div>
-<p>prelist(class = “stan”)list(list(name = “code”, attribs = list(), children = list(“/* Binomial ModelA binomial model for <span class="math inline">\(i = 1, \\dots, N\)</span>, with partial pooling<span class="math display">\[\n  \\begin{aligned}[t]\n  p(y_i | n_i, \\mu_i) &amp;\\sim \\mathsf{Binomial}(y_i | n_i, \\mu_i) \\\\\n  \\mu_i &amp;= \\logit^{-1}(\\eta_i) \\\\\n  p(\\eta_i | \\tau) &amp;\\sim \\mathsf{Normal}(alpha, \\tau) \\\\\n  p(\\tau) &amp;\\sim \\mathsf{Normal}^+(0, 1) \\\\\n  p(alpha) &amp; \\sim \\mathsf{Normal}(0, 2.5) \\\\\n  \\end{aligned}\n  \]</span>/quantities {int y_rep[N];vector[N] log_lik;vector[N] log_lik_new;vector&lt;lower = 0., upper = 1.&gt;[N] mu;mu = inv_logit(eta);for (n in 1:N) { //y_rep[n] = binomial_rng(k[n], mu[n]);log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);}}”)))</p>
+<pre><code>/* Binomial Model
+
+  A binomial model for $i = 1, \dots, N$, with partial pooling
+  $$
+  \begin{aligned}[t]
+  p(y_i | n_i, \mu_i) &amp;\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
+  \mu_i &amp;= \logit^{-1}(\eta_i) \\
+  p(\eta_i | \tau) &amp;\sim \mathsf{Normal}(alpha, \tau) \\
+  p(\tau) &amp;\sim \mathsf{Normal}^+(0, 1) \\
+  p(alpha) &amp; \sim \mathsf{Normal}(0, 2.5) \\
+  \end{aligned}
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  vector[N] eta;
+  real alpha;
+  real&lt;lower = 0.&gt; tau;
+}
+model {
+  alpha ~ normal(0., 10.);
+  tau ~ normal(0., 1);
+  eta ~ normal(alpha, tau);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  vector&lt;lower = 0., upper = 1.&gt;[N] mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) { //
+    y_rep[n] = binomial_rng(k[n], mu[n]);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
+  }
+}</code></pre>
 <p>Draw a sample for all three models:</p>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" data-line-number="1">fits &lt;-<span class="st"> </span><span class="kw">map</span>(models, sampling, <span class="dt">data =</span> bball1970_data,</a>
 <a class="sourceLine" id="cb138-2" data-line-number="2">            <span class="dt">refresh =</span> <span class="dv">-1</span>) <span class="op">%&gt;%</span></a>

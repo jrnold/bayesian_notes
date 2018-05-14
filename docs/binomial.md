@@ -26,7 +26,7 @@ $$
 The outcome is distributed Binomial,
 $$
 \begin{aligned}[t]
-y_i \sim \dbin \left(n_i, \pi \right)
+y_i \sim \dBinom \left(n_i, \pi \right)
 \end{aligned}
 $$
 
@@ -37,7 +37,7 @@ $$
 and
 $$
 \begin{aligned}[t]
-y_i &\sim \dbin \left(1, \pi \right) & \text{for all $i$} \\
+y_i &\sim \dBinom \left(1, \pi \right) & \text{for all $i$} \\
 \end{aligned}
 $$
 

@@ -48,7 +48,7 @@ head(bball1970)
 Let $y_i$ be the number of hits in the first 45 at bats for player $i$,
 $$
 \begin{aligned}[t]
-y_i & \sim \dbin(45, \mu_i),
+y_i & \sim \dBinom(45, \mu_i),
 \end{aligned}
 $$
 where $\mu_i \in (0, 1)$ is the player-specific batting average.
@@ -107,33 +107,145 @@ models <- list()
 models[["nopool"]] <- stan_model("stan/binomial-no-pooling.stan")
 ```
 
-```r
-models[["nopool"]]
 ```
+/* Binomial Model (No pooling)
 
-prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("/* Binomial Model (No pooling)\n\n  A binomial model for $i = 1, \\dots, N$, no pooling:\n  $$\n  p(y_i | n_i, \\mu_i) &\\sim \\mathsf{Binomial}(y_i | n_i, \\mu_i) \\\\\n  \\mu_i &= \\logit^{-1}(\\eta_i) \\\\\n  p(\\eta_i) &\\sim \\mathsf{Normal}^+(0, 10)\n  $$\n\n*/\ndata {\n  int N;\n  int y[N];\n  int k[N];\n  // new data\n  int y_new[N];\n  int k_new[N];\n}\nparameters {\n  vector[N] eta;\n}\nmodel {\n  eta ~ normal(0., 10.);\n  y ~ binomial_logit(k, eta);\n}\ngenerated quantities {\n  int y_rep[N];\n  vector[N] log_lik;\n  vector[N] log_lik_new;\n  vector<lower = 0., upper = 1.>[N] mu;\n  mu = inv_logit(eta);\n  for (n in 1:N) {\n    y_rep[n] = binomial_rng(k[n], mu[n]);\n    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);\n    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);\n  }\n}")))
+  A binomial model for $i = 1, \dots, N$, no pooling:
+  $$
+  p(y_i | n_i, \mu_i) &\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
+  \mu_i &= \logit^{-1}(\eta_i) \\
+  p(\eta_i) &\sim \mathsf{Normal}^+(0, 10)
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  vector[N] eta;
+}
+model {
+  eta ~ normal(0., 10.);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  vector<lower = 0., upper = 1.>[N] mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) {
+    y_rep[n] = binomial_rng(k[n], mu[n]);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
+  }
+}
+```
 
 
 ```r
 models[["pool"]] <- stan_model("stan/binomial-complete-pooling.stan")
 ```
 
-```r
-models[["pool"]]
 ```
+/* Binomial Model
 
-prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("/* Binomial Model\n\n  A binomial model for $i = 1, \\dots, N$, with complete pooling\n  $$\n  \\begin{aligned}[t]\n  p(y_i | n_i, \\mu) &\\sim \\mathsf{Binomial}(n_i, \\mu) \\\\\n  \\mu &= \\logit^{-1}(\\eta) \\\\\n  p(\\eta) &\\sim \\mathsf{Normal}^+(0, 10)\n  \\end{aligned}\n  $$\n\n*/\ndata {\n  int N;\n  int y[N];\n  int k[N];\n  // new data\n  int y_new[N];\n  int k_new[N];\n}\nparameters {\n  real eta;\n}\nmodel {\n  eta ~ normal(0., 10.);\n  y ~ binomial_logit(k, eta);\n}\ngenerated quantities {\n  int y_rep[N];\n  vector[N] log_lik;\n  vector[N] log_lik_new;\n  real<lower = 0., upper = 1.> mu;\n  mu = inv_logit(eta);\n  for (n in 1:N) { //\n    y_rep[n] = binomial_rng(k[n], mu);\n    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta);\n    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta);\n  }\n}")))
+  A binomial model for $i = 1, \dots, N$, with complete pooling
+  $$
+  \begin{aligned}[t]
+  p(y_i | n_i, \mu) &\sim \mathsf{Binomial}(n_i, \mu) \\
+  \mu &= \logit^{-1}(\eta) \\
+  p(\eta) &\sim \mathsf{Normal}^+(0, 10)
+  \end{aligned}
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  real eta;
+}
+model {
+  eta ~ normal(0., 10.);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  real<lower = 0., upper = 1.> mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) { //
+    y_rep[n] = binomial_rng(k[n], mu);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta);
+  }
+}
+```
 
 
 ```r
 models[["partial"]] <- stan_model("stan/binomial-partial-pooling.stan")
 ```
 
-```r
-models[["partial"]]
 ```
+/* Binomial Model
 
-prelist(class = "stan")list(list(name = "code", attribs = list(), children = list("/* Binomial Model\n\n  A binomial model for $i = 1, \\dots, N$, with partial pooling\n  $$\n  \\begin{aligned}[t]\n  p(y_i | n_i, \\mu_i) &\\sim \\mathsf{Binomial}(y_i | n_i, \\mu_i) \\\\\n  \\mu_i &= \\logit^{-1}(\\eta_i) \\\\\n  p(\\eta_i | \\tau) &\\sim \\mathsf{Normal}(alpha, \\tau) \\\\\n  p(\\tau) &\\sim \\mathsf{Normal}^+(0, 1) \\\\\n  p(alpha) & \\sim \\mathsf{Normal}(0, 2.5) \\\\\n  \\end{aligned}\n  $$\n\n*/\ndata {\n  int N;\n  int y[N];\n  int k[N];\n  // new data\n  int y_new[N];\n  int k_new[N];\n}\nparameters {\n  vector[N] eta;\n  real alpha;\n  real<lower = 0.> tau;\n}\nmodel {\n  alpha ~ normal(0., 10.);\n  tau ~ normal(0., 1);\n  eta ~ normal(alpha, tau);\n  y ~ binomial_logit(k, eta);\n}\ngenerated quantities {\n  int y_rep[N];\n  vector[N] log_lik;\n  vector[N] log_lik_new;\n  vector<lower = 0., upper = 1.>[N] mu;\n  mu = inv_logit(eta);\n  for (n in 1:N) { //\n    y_rep[n] = binomial_rng(k[n], mu[n]);\n    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);\n    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);\n  }\n}")))
+  A binomial model for $i = 1, \dots, N$, with partial pooling
+  $$
+  \begin{aligned}[t]
+  p(y_i | n_i, \mu_i) &\sim \mathsf{Binomial}(y_i | n_i, \mu_i) \\
+  \mu_i &= \logit^{-1}(\eta_i) \\
+  p(\eta_i | \tau) &\sim \mathsf{Normal}(alpha, \tau) \\
+  p(\tau) &\sim \mathsf{Normal}^+(0, 1) \\
+  p(alpha) & \sim \mathsf{Normal}(0, 2.5) \\
+  \end{aligned}
+  $$
+
+*/
+data {
+  int N;
+  int y[N];
+  int k[N];
+  // new data
+  int y_new[N];
+  int k_new[N];
+}
+parameters {
+  vector[N] eta;
+  real alpha;
+  real<lower = 0.> tau;
+}
+model {
+  alpha ~ normal(0., 10.);
+  tau ~ normal(0., 1);
+  eta ~ normal(alpha, tau);
+  y ~ binomial_logit(k, eta);
+}
+generated quantities {
+  int y_rep[N];
+  vector[N] log_lik;
+  vector[N] log_lik_new;
+  vector<lower = 0., upper = 1.>[N] mu;
+  mu = inv_logit(eta);
+  for (n in 1:N) { //
+    y_rep[n] = binomial_rng(k[n], mu[n]);
+    log_lik[n] = binomial_logit_lpmf(y[n] | k[n], eta[n]);
+    log_lik_new[n] = binomial_logit_lpmf(y_new[n] | k_new[n], eta[n]);
+  }
+}
+```
 
 Draw a sample for all three models:
 

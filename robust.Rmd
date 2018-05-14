@@ -206,7 +206,7 @@ fits <- list()
 fits[["econ_normal"]] <- sampling(models[["lm_normal_1"]], data = econ_growth_data)
 ```
 
-```{r mod_student_t_0}
+```{r mod_student_t_0,results='hide',message=FALSE,warning=FALSE}
 models[["lm_student_t_0"]] <- stan_model("stan/lm_student_t_0.stan")
 ```
 
@@ -223,7 +223,7 @@ fits[["mod_student_t_1"]]
 fit_econ_t1 <- sampling(models[["lm_student_t_1"]], data = econ_growth_data, refresh = -1)
 ```
 
-```{r mod_student_t_2}
+```{r mod_student_t_2,message=FALSE,results='hide',warning=FALSE}
 models[["lm_student_t_2"]] <- stan_model("stan/lm_student_t_2.stan")
 ```
 
@@ -270,16 +270,13 @@ ggplot() +
   coord_flip()
 ```
 
-
-
-
 ## Robit
 
 The "robit" is a "robust" bivariate model.[@GelmanHill2007a, p. 125; @Liu2005a]
 For the link-function the robit uses the CDF of the Student-t distribution with $d$ degrees of freedom.
 $$
 \begin{aligned}[t]
-y_i &\sim \dbin \left(n_i, \pi_i \right) \\
+y_i &\sim \dBinom \left(n_i, \pi_i \right) \\
 \pi_i &= \int_{-\infty}^{\eta_i} \mathsf{StudentT}(x | \nu, 0, (\nu - 2)/ \nu) dx \\
 \eta_i &= \alpha + X \beta
 \end{aligned}

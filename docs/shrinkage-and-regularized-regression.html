@@ -257,8 +257,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#average-predictive-comparisons"><i class="fa fa-check"></i><b>9.3</b> Average Predictive Comparisons</a></li>
-<li class="chapter" data-level="9.4" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.4</b> References</a></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> Model Comparison</a><ul>
 <li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#models"><i class="fa fa-check"></i><b>10.1</b> Models</a></li>
@@ -380,7 +379,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
 <li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
 <li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
@@ -391,10 +390,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a><ul>
-<li class="chapter" data-level="20.0.1" data-path="distributions.html"><a href="distributions.html#beta-distribution"><i class="fa fa-check"></i><b>20.0.1</b> Beta Distribution</a></li>
-<li class="chapter" data-level="20.0.2" data-path="distributions.html"><a href="distributions.html#gamma-distribution"><i class="fa fa-check"></i><b>20.0.2</b> Gamma Distribution</a></li>
-</ul></li>
+<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a></li>
 <li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
 <li class="chapter" data-level="21.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>21.1</b> Textbooks</a></li>
 <li class="chapter" data-level="21.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>21.2</b> Syllabi</a></li>
@@ -483,36 +479,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \newcommand{\T}{'}
 
 % This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}{\mathrm{Student-t}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
-\newcommand{\dbernoulli}{\mathrm{Bernoulli}}
+\newcommand{\dunif}{\mathsf{Uniform}}
+\newcommand{\dnorm}{\mathsf{Normal}}
+\newcommand{\dhalfnorm}{\mathrm{HalfNormal}}
+\newcommand{\dlnorm}{\mathsf{LogNormal}}
+\newcommand{\dmvnorm}{\mathsf{Normal}}
+\newcommand{\dgamma}{\mathsf{Gamma}}
+\newcommand{\dinvgamma}{\mathsf{InvGamma}}
+\newcommand{\dchisq}{\mathsf{ChiSquared}}
+\newcommand{\dinvchisq}{\mathsf{InvChiSquared}}
+\newcommand{\dexp}{\mathsf{Exponential}}
+\newcommand{\dlaplace}{\mathsf{Laplace}}
+\newcommand{\dweibull}{\mathsf{Weibull}}
+\newcommand{\dwishart}{\mathsf{Wishart}}
+\newcommand{\dinvwishart}{\mathsf{InvWishart}}
+\newcommand{\dlkj}{\mathsf{LkjCorr}}
+\newcommand{\dt}{\mathsf{StudentT}}
+\newcommand{\dhalft}{\mathsf{HalfStudentT}}
+\newcommand{\dbeta}{\mathsf{Beta}}
+\newcommand{\ddirichlet}{\mathsf{Dirichlet}}
+\newcommand{\dlogistic}{\mathsf{Logistic}}
+\newcommand{\dllogistic}{\mathsf{LogLogistic}}
+\newcommand{\dpois}{\mathsf{Poisson}}
+\newcommand{\dBinom}{\mathsf{Binomial}}
+\newcommand{\dmultinom}{\mathsf{Multinom}}
+\newcommand{\dnbinom}{\mathsf{NegativeBinomial}}
+\newcommand{\dnbinomalt}{\mathsf{NegativeBinomial2}}
+\newcommand{\dbetabinom}{\mathsf{BetaBinomial}}
+\newcommand{\dcauchy}{\mathsf{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathsf{HalfCauchy}}
+\newcommand{\dbernoulli}{\mathsf{Bernoulli}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Reals}{\R}
@@ -525,19 +521,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 \DeclareMathOperator{\invlogit}{Inv-Logit}
 \DeclareMathOperator{\logit}{Logit}
+\DeclareMathOperator{\diag}{diag}
 
 \]
 <div id="shrinkage-and-regularized-regression" class="section level1">
 <h1><span class="header-section-number">19</span> Shrinkage and Regularized Regression</h1>
 <div id="prerequisites-11" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(<span class="st">&quot;glmnet&quot;</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
+<a class="sourceLine" id="cb144-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)</a>
+<a class="sourceLine" id="cb144-3" data-line-number="3"><span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)</a>
+<a class="sourceLine" id="cb144-4" data-line-number="4"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
+<a class="sourceLine" id="cb144-5" data-line-number="5"><span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)</a>
+<a class="sourceLine" id="cb144-6" data-line-number="6"><span class="kw">library</span>(<span class="st">&quot;glmnet&quot;</span>)</a>
+<a class="sourceLine" id="cb144-7" data-line-number="7"><span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</a></code></pre></div>
 </div>
 <div id="introduction-6" class="section level2">
 <h2><span class="header-section-number">19.1</span> Introduction</h2>
@@ -892,9 +889,9 @@ The value <span class="math inline">\(\kappa_k\)</span> is called the <em>shrink
 When <span class="math inline">\(\kappa_k = 0\)</span>, then there is no shrinkage and the posterior coefficient is the same as the MLE solution, <span class="math inline">\(\bar{\beta} = \hat{\beta}\)</span>.
 When <span class="math inline">\(\kappa_k = 1\)</span>, then there is complete shrinkage and the posterior coefficient is zero, <span class="math inline">\(\bar{\beta} = 0\)</span>.
 It also follows that <span class="math inline">\(\bar{\beta} \to 0\)</span> as <span class="math inline">\(\tau \to 0\)</span>, and <span class="math inline">\(\bar{\beta} \to \hat{\beta}\)</span> as <span class="math inline">\(\tau \to \infty\)</span>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">shrinkage_factor &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span class="dt">sigma =</span> <span class="dv">1</span>, <span class="dt">tau =</span> <span class="dv">1</span>, <span class="dt">sd_x =</span> <span class="dv">1</span>, <span class="dt">lambda =</span> <span class="dv">1</span>) {</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>n <span class="op">*</span><span class="st"> </span>tau <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>sd_x <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>lambda <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>sigma <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" data-line-number="1">shrinkage_factor &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span class="dt">sigma =</span> <span class="dv">1</span>, <span class="dt">tau =</span> <span class="dv">1</span>, <span class="dt">sd_x =</span> <span class="dv">1</span>, <span class="dt">lambda =</span> <span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb145-2" data-line-number="2">  <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>n <span class="op">*</span><span class="st"> </span>tau <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>sd_x <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>lambda <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>sigma <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb145-3" data-line-number="3">}</a></code></pre></div>
 </div>
 <div id="choice-of-hyperparameter-on-tau" class="section level2">
 <h2><span class="header-section-number">19.5</span> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></h2>
@@ -996,32 +993,320 @@ So the LASSO penalty is equivalent to the log density of a double exponential di
 
 
 
-<div id="prerequisites-12" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
+<a class="sourceLine" id="cb146-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;stringr&quot;</span>)</a>
+<a class="sourceLine" id="cb146-3" data-line-number="3"><span class="kw">library</span>(<span class="st">&quot;bayz&quot;</span>)</a></code></pre></div>
 </div>
 <div id="parameters" class="section level2">
 <h2><span class="header-section-number">19.8</span> Parameters</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Category</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">modeled data</td>
+<td align="left">Data, assigned distribution</td>
+</tr>
+<tr class="even">
+<td align="left">unmodeled data</td>
+<td align="left">Data not given a distribution</td>
+</tr>
+<tr class="odd">
+<td align="left">modeled parameters</td>
+<td align="left">Parameters with an informative prior distribution</td>
+</tr>
+<tr class="even">
+<td align="left">unmodeled parameters</td>
+<td align="left">Parameters with non-informative prior distribution</td>
+</tr>
+<tr class="odd">
+<td align="left">derived quantities</td>
+<td align="left">Variables defined deterministicically</td>
+</tr>
+</tbody>
+</table>
+<p>See <span class="citation">A. Gelman and Hill (2007, 366)</span></p>
 </div>
 <div id="miscellaneous-mathematical-background" class="section level2">
 <h2><span class="header-section-number">19.9</span> Miscellaneous Mathematical Background</h2>
 <div id="location-scale-families" class="section level3">
 <h3><span class="header-section-number">19.9.1</span> Location-Scale Families</h3>
+<p>In a <a href="https://en.wikipedia.org/wiki/Location%E2%80%93scale_family">location-scale family</a> of distributions, if the random variable <span class="math inline">\(X\)</span> is distributed with mean 0 and standard deviation 1, then the random variable <span class="math inline">\(Y\)</span>,
+<span class="math display">\[
+Y = \mu + \sigma X ,
+\]</span>
+has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
+<p><strong>Normal distribution:</strong> Suppose <span class="math inline">\(X \sim \dnorm(0, 1)\)</span>, then
+<span class="math display">\[
+Y = \mu + \sigma X,
+\]</span>
+is equivalent to <span class="math inline">\(Y \sim \dnorm(\mu, \sigma)\)</span> (normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>).</p>
+<p>** Student-t distribution** (including Cauchy):
+<span class="math display">\[
+\begin{aligned}[t]
+X &amp;\sim \dt{\nu}(0, 1) \\
+Y &amp;= \mu + \sigma X 
+\end{aligned}
+\]</span>
+implies
+<span class="math display">\[
+Y \sim \dt{\nu}(\mu, \sigma),
+\]</span>
+i.e. <span class="math inline">\(Y\)</span> is distributed Student-<span class="math inline">\(t\)</span> with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span>.</p>
+<p>In Stan, it can be useful parameterize distributions in terms of a mean 0, scale 1 parameters, and separate parameters for the locations and scales. E.g. with normal distributions,</p>
+<pre><code>parameters {
+  real mu;
+  real&lt;lower = 0.0&gt; sigma;
+  vector[n] eps;
+}
+transformed parameters {
+  vector[n] y;
+  y = mu + sigma * eps;
+}
+model {
+  eps ~ normal(0.0, 1.0);
+}</code></pre>
 </div>
 <div id="scale-mixtures-of-normal-distributions" class="section level3">
 <h3><span class="header-section-number">19.9.2</span> Scale Mixtures of Normal Distributions</h3>
+<p>Some commonly used distributions can be represented as scale mixtures of normal distributions.
+For formal details of scale mixtures of normal distributions see <span class="citation">West (1987)</span>.
+Distributions that are scale-mixtures of normal distributions can be written as,
+<span class="math display">\[
+Y \sim \dnorm(\mu, \sigma_i^2) \\
+\sigma_i \sim \pi(\sigma_i)
+\]</span>
+As its name suggests, the individual variances (scales) themselves, have a distribution.</p>
+<p>Some examples:</p>
+<ul>
+<li>Student-t</li>
+<li>Double Exponential</li>
+<li>Horseshoe or Hierarchical Shrinkage (HS)</li>
+<li>Horseshoe Plus or Hierarchical Shrinkage Plus (HS+)</li>
+</ul>
+<p>Even when analytic forms of the distribution are available, representing them as scale mixtures of normal distributions may be convenient in modeling.
+In particular, it may allow for drawing samples from the distribution easily.
+And in HMC, it may induce a more tractable posterior density.</p>
 </div>
 <div id="covariance-correlation-matrix-decomposition" class="section level3">
 <h3><span class="header-section-number">19.9.3</span> Covariance-Correlation Matrix Decomposition</h3>
+<p>The suggested method for modeling covariance matrices in Stan is the separation strategy which decomposes a covariance matrix <span class="math inline">\(\Sigma\)</span> can be decomposed into a standard deviation vector <span class="math inline">\(\sigma\)</span>, and a correlation matrix <span class="math inline">\(R\)</span> <span class="citation">(Barnard, McCulloch, and Meng 2000)</span>,
+<span class="math display">\[
+\Sigma = \diag(\sigma) R \diag(\sigma) .
+\]</span>
+This is useful for setting priors on covariance because separate priors can be set
+for the scales of the variables via <span class="math inline">\(\sigma\)</span>, and the correlation between them,
+via <span class="math inline">\(R\)</span>.</p>
+<p>The <a href="https://github.com/stan-dev/rstanarm/wiki/Prior-distributions">rstanarm</a> <code>decov</code> prior goes further and decomposes the covariance matrix into a correlation matrix, <span class="math inline">\(\mat{R}\)</span>,
+a diagonal variance matrix <span class="math inline">\(\mat{\Omega}\)</span> with trace <span class="math inline">\(n \sigma^2\)</span>, a scalar global variance <span class="math inline">\(\sigma^2\)</span>, and a simplex <span class="math inline">\(\vec{\pi}\)</span> (proportion of total variance for each variable):
+<span class="math display">\[
+\begin{aligned}[t]
+\mat{\Sigma} &amp;= \mat{\Omega} \mat{R}  \\
+\diag(\mat{\Omega}) &amp;= n \vec{\pi} \sigma^2
+\end{aligned}
+\]</span>
+Separate and interpretable priors can be put on <span class="math inline">\(\mat{R}\)</span>, <span class="math inline">\(\vec{\pi}\)</span>, and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The LKJ (Lewandowski, ) distribution is a distribution over correlation coefficients,
+<span class="math display">\[
+R \sim \dlkjcorr(\eta) ,
+\]</span>
+where
+<span class="math display">\[
+\dlkjcorr(\Sigma | \eta) \propto \det(\Sigma)^{(\eta - 1)} .
+\]</span></p>
+<p>This distribution has the following properties:</p>
+<ul>
+<li><span class="math inline">\(\eta = 1\)</span>: uniform correlations</li>
+<li><span class="math inline">\(\eta \to \infty\)</span>: approaches the identity matrix</li>
+<li><span class="math inline">\(0 &lt; \eta &lt; 1\)</span>: there is a trough at the identity matrix with higher probabilities placed on non-zero correlations.</li>
+<li>For all positive <span class="math inline">\(\eta\)</span> (<span class="math inline">\(\eta &gt; 0\)</span>), <span class="math inline">\(\E(R) = \mat{I}\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" data-line-number="1">lkjcorr_df &lt;-<span class="st"> </span><span class="cf">function</span>(eta, <span class="dt">n =</span> <span class="dv">2</span>) {</a>
+<a class="sourceLine" id="cb148-2" data-line-number="2">  out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">rlkjcorr</span>(n, eta))</a>
+<a class="sourceLine" id="cb148-3" data-line-number="3">  out<span class="op">$</span>.row &lt;-<span class="st"> </span><span class="kw">seq_len</span>(<span class="kw">nrow</span>(out))</a>
+<a class="sourceLine" id="cb148-4" data-line-number="4">  out &lt;-<span class="st"> </span><span class="kw">gather</span>(out, .col, value, <span class="op">-</span>.row)</a>
+<a class="sourceLine" id="cb148-5" data-line-number="5">  out<span class="op">$</span>.col &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">str_replace</span>(out<span class="op">$</span>.col, <span class="st">&quot;^V&quot;</span>, <span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb148-6" data-line-number="6">  out<span class="op">$</span>eta &lt;-<span class="st"> </span>eta</a>
+<a class="sourceLine" id="cb148-7" data-line-number="7">  out  </a>
+<a class="sourceLine" id="cb148-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb148-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb148-10" data-line-number="10">lkjsims &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">50</span>, <span class="dv">1000</span>), lkjcorr_df, <span class="dt">n =</span> <span class="dv">50</span>)</a></code></pre></div>
+<p>This simulates a single matrix from the LKJ distribution with different values of <span class="math inline">\(\eta\)</span>.
+As <span class="math inline">\(\eta \to \infty\)</span>, the off-diagonal correlations tend towards 0, and the correlation matrix to the identity matrix.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" data-line-number="1"><span class="kw">ggplot</span>(lkjsims,</a>
+<a class="sourceLine" id="cb149-2" data-line-number="2">       <span class="kw">aes</span>(<span class="dt">x =</span> .row, <span class="dt">y =</span> .col, <span class="dt">fill =</span> value)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-3" data-line-number="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>eta, <span class="dt">ncol =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_fill_distiller</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;RdYlBu&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-7" data-line-number="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb149-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<p><img src="appendix_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>The density of the off-diagonal correlations.</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" data-line-number="1">lkjsims <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb150-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(.row <span class="op">&lt;</span><span class="st"> </span>.col) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb150-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">colour =</span> <span class="kw">factor</span>(eta))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb150-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_density</span>()</a></code></pre></div>
+<p><img src="appendix_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>For other discussions of the LKJ correlation distribution, see these:</p>
+<ul>
+<li><a href="https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices/125017#125017" class="uri">https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices/125017#125017</a></li>
+<li><a href="http://www.zinkov.com/posts/2015-06-09-where-priors-come-from/" class="uri">http://www.zinkov.com/posts/2015-06-09-where-priors-come-from/</a></li>
+<li><a href="http://www.psychstatistics.com/2014/12/27/d-lkj-priors/" class="uri">http://www.psychstatistics.com/2014/12/27/d-lkj-priors/</a></li>
+</ul>
 </div>
 <div id="qr-factorization" class="section level3">
 <h3><span class="header-section-number">19.9.4</span> QR Factorization</h3>
+<p>For a full-rank <span class="math inline">\(N \times K\)</span> matrix, the QR factorization is
+<span class="math display">\[
+\mat{X} = \mat{Q} \mat{R} 
+\]</span>
+where <span class="math inline">\(\mat{Q}\)</span> is an orthonormal matrix such that <span class="math inline">\(\mat{Q}\T \mat{Q}\)</span> and
+<span class="math inline">\(\mat{R}\)</span> is an upper triangular matrix.</p>
+<p>Stan function
+<span class="citation">Stan Development Team (2016)</span> suggest writing it is
+<span class="math display">\[
+\begin{aligned}[t]
+\mat{Q}^* = \mat{Q} \times \sqrt{N - 1} \\
+\mat{R}^* = \frac{1}{\sqrt{N - 1}} \mat{R}
+\end{aligned}
+\]</span></p>
+<p>This is used for solving linear model.</p>
+<p>Suppose <span class="math inline">\(\vec{\beta}\)</span> is a <span class="math inline">\(K \times 1\)</span> vector, then
+<span class="math display">\[
+\vec{eta} = \mat{x} \vec{\beta} = \mat{Q} \mat{R} \vec{\beta} = \mat{Q}^* \mat{R}^* \vec{\beta} .
+\]</span>
+Suppose <span class="math inline">\(\mat{theta} = \mat{R}^* \vec{\beta}\)</span>, then <span class="math inline">\(\vec{eta} = \mat{Q}^* \mat{\theta}\)</span> and <span class="math inline">\(\vec{beta} = {\mat{R}^*}^{-1} \mat{\theta}\)</span>.</p>
+<p><a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html">rstanarm</a> provides a prior for a normal linear model which uses the QR decomposition to parameterize a prior in terms of <span class="math inline">\(R^2\)</span>.</p>
+<p>Stan functions:</p>
+<ul>
+<li><code>qr_Q(matrix A)</code></li>
+<li><code>qr_R(matrix A)</code></li>
+</ul>
+<p>See <span class="citation">Stan Development Team (2016 Sec 8.2)</span></p>
 </div>
 <div id="cholesky-decomposition" class="section level3">
 <h3><span class="header-section-number">19.9.5</span> Cholesky Decomposition</h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a> of a
+positive definite matrix <span class="math inline">\(A\)</span> is,
+<span class="math display">\[
+\mat{A} = \mat{L} \mat{L}\T ,
+\]</span>
+where <span class="math inline">\(\mat{L}\)</span> is a lower-triangular matrix.</p>
+<ul>
+<li>It is similar to a square root for a matrix.</li>
+<li><p>It often more numerically stable or efficient to work with the Cholesky decomposition, than with
+a covariance matrix. When working with the covariance matrix, numerical precision can
+result in a non positive definite matrix. However, working with <span class="math inline">\(\mat{L}\)</span> will ensure
+that <span class="math inline">\(\mat{A} = \mat{L} \mat{L}\T\)</span> will be positive definite.</p></li>
+<li><p>In Stan</p>
+<ul>
+<li>Types types <code>cholesky_factor_cov</code>, and <code>cholesky_factor_corr</code> represent the Cholesky factor
+of covariance and correlation matrices, respectively.</li>
+<li>Cholesky decomposition function is <code>cholesky_decompose(matrix A)</code></li>
+</ul></li>
+<li><p>Multiple functions in Stan are parameterized with Cholesky decompositions instead of or in addition
+to covariance matrices. Use them if possible; they are more numerically stable.</p>
+<ul>
+<li><code>lkj_corr_chol_lpdf</code></li>
+<li><code>multi_normal_cholesky_lpdf</code></li>
+</ul></li>
+</ul>
+<p>The Cholesky factor is used for sampling from a multivariate normal distribution using i.i.d. standard normal distributions.
+Suppose <span class="math inline">\(X_1, \dots, X_N\)</span> are <span class="math inline">\(N\)</span> i.i.d. standard normal distributions, <span class="math inline">\(\mat{\Omega}\)</span> is an <span class="math inline">\(N \times N\)</span> lower-triangular matrix such that <span class="math inline">\(\mat{\Omega} \mat{Omega}\T = \mat{\Sigma}\)</span>, and <span class="math inline">\(\mu\)</span> is an <span class="math inline">\(N \times 1\)</span> vector, then
+<span class="math display">\[
+\vec{\mu} + \mat{\Omega} X \sim \dnorm(\vec{\mu}, \mat{\Sigma})
+\]</span></p>
+<p>See <span class="citation">Stan Development Team (2016, 40, 147, 241, 246)</span></p>
 </div>
 </div>
 <div id="scaled-and-unscaled-variables" class="section level2">
 <h2><span class="header-section-number">19.10</span> Scaled and Unscaled Variables</h2>
+<p>Though priors shouldn’t depend on the data itself, many priors depends</p>
+<p>Suppose <span class="math inline">\(\tilde{Y}\)</span>, <span class="math inline">\(\tilde{X}\)</span>, <span class="math inline">\(\tilde{\alpha}\)</span>, <span class="math inline">\(\tilde{\beta}\)</span>, and <span class="math inline">\(\epsilon\)</span> are random variables, such that
+<span class="math display">\[
+\tilde{Y} = \tilde{\alpha} + \tilde{\beta} \tilde{X} + \epsilon .
+\]</span>
+These random variables have the following properties,
+<span class="math display">\[
+\begin{aligned}[t]
+\tilde{Y} &amp;= \frac{Y - \bar{Y}}{\sigma_Y}, &amp; \E[\tilde{Y}] &amp;= 0, &amp; \sigma_Y^2 &amp;= \Var[\tilde{Y}] = 1 \\
+\tilde{X} &amp;= \frac{X - \bar{X}}{\sigma_X}, &amp;  \E[\tilde{X}] &amp;= 0, &amp; \sigma_X^2 &amp;= \Var[\tilde{X}] = 1 , \\
+&amp;&amp; \E[\epsilon] &amp;= 0 &amp; \sigma_{\tilde{\epsilon}}^2 &amp;= \Var[\tilde{\epsilon}]
+\end{aligned}
+\]</span>
+where
+<span class="math display">\[
+\begin{aligned}[t]
+\bar{X} &amp;= \E[X] , &amp; s_X^2 &amp;= \Var[X] , \\
+\bar{Y} &amp;= \E[Y] , &amp; s_Y^2 &amp;= \Var[Y] . 
+\end{aligned}
+\]</span></p>
+<p>Then via some algebra,
+<span class="math display">\[
+\begin{aligned}
+Y &amp;= \underbrace{\sigma_{Y} \tilde{\alpha} + \bar{Y} - \frac{\sigma_Y }{\sigma_X} \tilde{\beta} \bar{X}}_{\alpha} + 
+\underbrace{\frac{\sigma_Y}{\sigma_X} \tilde{\beta}}_{\beta} X + \underbrace{\sigma_Y \tilde{\epsilon}}_{\epsilon} \\ 
+  &amp;= \alpha + \beta X + \epsilon .
+\end{aligned}
+\]</span>
+The primary relationships of interest are those between <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\tilde{\alpha}\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\tilde{\beta}\)</span>, and <span class="math inline">\(\epsilon\)</span> and <span class="math inline">\(\tilde{\epsilon}\)</span>.
+These can be used to convert between coefficients estimated with standardized data to the coefficients on the data scale, or to adjust scale-free weakly informative priors to the data scale.
+<span class="math display">\[
+\begin{aligned}[t]
+\tilde{\alpha} &amp;= \sigma_Y^{-1}\left(\alpha - \bar{Y} + \beta \bar{X} \right) \\
+&amp;= \sigma_Y^{-1}\left(\alpha - \bar{Y} + \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} \right), \\
+\alpha &amp;= \sigma_Y \tilde{\alpha} + \bar{Y} - \frac{\sigma_Y}{\sigma_X} \tilde{\beta} \bar{X} \\
+       &amp;= \sigma_Y \tilde{\alpha} + \bar{Y} - \beta \bar{X} ,  \\
+\tilde{\beta} &amp;= \frac{\sigma_X}{\sigma_Y} \beta , \\
+\beta &amp;= \frac{\sigma_Y}{\sigma_X} \tilde{\beta} , \\
+\tilde{\epsilon} &amp;= \epsilon / \sigma_Y , \\
+\epsilon &amp;= \sigma_Y \tilde{\epsilon} .
+\end{aligned}
+\]</span>
+This implies the following relationships between their means and variances,
+<span class="math display">\[
+\begin{aligned}[t]
+E(\alpha) &amp;= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \frac{\sigma_Y}{\sigma_X} E(\tilde{\beta}) \bar{X} , &amp;
+V(\alpha) &amp;= \sigma_{Y}^2 V(\tilde{\alpha}) + \frac{\sigma_Y^2}{\sigma_X^2} V(\tilde{\beta}) \bar{X}^2 , \\
+ &amp;= \sigma_{Y} E(\tilde{\alpha}) + \bar{Y} - \bar{X} E(\beta) , &amp;
+ &amp;= \sigma_{Y}^2 V(\tilde{\alpha}) + \bar{X}^2 V(\beta) , \\
+E(\tilde{\alpha}) &amp;= \frac{E(\alpha) - \bar{Y} + E(\beta) \bar{X} }{\sigma_Y} , &amp;
+V(\tilde{\alpha}) &amp;= \sigma_Y^{-2} \left[ V(\alpha) + \bar{X}^2 V(\beta) \right]
+\end{aligned}
+\]</span>
+For example, a weakly informative prior on <span class="math inline">\(\tilde{\alpha}\)</span> implies a prior on <span class="math inline">\(\alpha\)</span>,
+<span class="math display">\[
+\tilde{\alpha} \sim N(0, 10^2) \to \alpha \sim N \left( \frac{\beta \bar{X} - \bar{Y}}{\sigma_Y}, \sigma_Y^2 10^2 \right) .
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}[t]
+E(\beta) &amp;= \frac{\sigma_Y}{\sigma_X} E(\tilde{\beta})  , &amp;
+V(\beta) &amp;= \frac{\sigma_Y^2}{\sigma_X^2} V(\tilde{\beta})  , \\
+E(\tilde{\beta}) &amp;= \frac{\sigma_X}{\sigma_Y} E(\beta)  , &amp;
+V(\tilde{\beta}) &amp;= \frac{\sigma_X^2}{\sigma_Y^2} V(\beta) . 
+\end{aligned}
+\]</span></p>
+<p>For example, a weakly informative prior on <span class="math inline">\(\tilde{\beta}\)</span> implies the following prior on <span class="math inline">\(\beta\)</span>,
+<span class="math display">\[
+\tilde{\beta} \sim N(0, 2.5^2) \to \beta \sim N\left(0, \frac{\sigma_Y^2}{\sigma_X^2} 2.5^2 \right) .
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}[t]
+E(\epsilon) &amp;= 0 , &amp; V(\epsilon) &amp;= \sigma_Y^2 V(\tilde{\epsilon}), \\
+E(\tilde{\epsilon}) &amp;= 0 , &amp; V(\tilde{\epsilon}) &amp;= \sigma_Y^{-2}  V(\epsilon) .
+\end{aligned}
+\]</span>
+For example, a weakly informative prior on the variance of <span class="math inline">\(\tilde{\epsilon}\)</span> implies a weakly informative prior on the variance of <span class="math inline">\(\epsilon\)</span>,
+<span class="math display">\[
+\sigma_{\tilde{\epsilon}} \sim C^{+}\left(0, 5 \right) \to 
+\sigma_{\epsilon} \sim C^{+}\left(0, 5 \sigma_Y \right) .
+\]</span></p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-# (PART) Appendix {-}
+# Appendix {-}
 
 ## Prerequisites {-}
 
@@ -236,7 +236,6 @@ $$
 \vec{\mu} + \mat{\Omega} X \sim \dnorm(\vec{\mu}, \mat{\Sigma})
 $$
 
-
 See @Stan2016a [p. 40, 147, 241, 246]
     
 ## Scaled and Unscaled Variables
@@ -247,19 +246,19 @@ Suppose $\tilde{Y}$, $\tilde{X}$, $\tilde{\alpha}$, $\tilde{\beta}$, and $\epsil
 $$
 \tilde{Y} = \tilde{\alpha} + \tilde{\beta} \tilde{X} + \epsilon .
 $$
-These random variables have the following properties:
+These random variables have the following properties,
 $$
-\begin{aligned}
-\tilde{Y} &= \frac{Y - \bar{Y}}{\sigma_Y}, & \E\[\tilde{Y}\] &= 0, & \sigma_Y^2 &= \V\[\tilde{Y}\] = 1 \\
-\tilde{X} &= \frac{X - \bar{X}}{\sigma_X}, &  \E\[\tilde{X}\] &= 0, & \sigma_X^2 &= \V\[\tilde{X}\] = 1 , \\
-&& \E\[\epsilon\] &= 0 & \sigma_{\tilde{\epsilon}}^2 &= \V\[\tilde{\epsilon}\]
+\begin{aligned}[t]
+\tilde{Y} &= \frac{Y - \bar{Y}}{\sigma_Y}, & \E[\tilde{Y}] &= 0, & \sigma_Y^2 &= \Var[\tilde{Y}] = 1 \\
+\tilde{X} &= \frac{X - \bar{X}}{\sigma_X}, &  \E[\tilde{X}] &= 0, & \sigma_X^2 &= \Var[\tilde{X}] = 1 , \\
+&& \E[\epsilon] &= 0 & \sigma_{\tilde{\epsilon}}^2 &= \Var[\tilde{\epsilon}]
 \end{aligned}
 $$
 where 
 $$
 \begin{aligned}[t]
-\bar{X} &= \E\[X\] , & s_X^2 &= \V\[X\] , \\
-\bar{Y} &= \E\[Y\] , & s_Y^2 &= \V\[Y\] . 
+\bar{X} &= \E[X] , & s_X^2 &= \Var[X] , \\
+\bar{Y} &= \E[Y] , & s_Y^2 &= \Var[Y] . 
 \end{aligned}
 $$
 
@@ -322,7 +321,7 @@ E(\epsilon) &= 0 , & V(\epsilon) &= \sigma_Y^2 V(\tilde{\epsilon}), \\
 E(\tilde{\epsilon}) &= 0 , & V(\tilde{\epsilon}) &= \sigma_Y^{-2}  V(\epsilon) .
 \end{aligned}
 $$
-For example, a weakly informative prior on the variance of $\tilde{\epsilon}}$ implies a weakly informative prior on the variance of $\epsilon$,
+For example, a weakly informative prior on the variance of $\tilde{\epsilon}$ implies a weakly informative prior on the variance of $\epsilon$,
 $$
 \sigma_{\tilde{\epsilon}} \sim C^{+}\left(0, 5 \right) \to 
 \sigma_{\epsilon} \sim C^{+}\left(0, 5 \sigma_Y \right) .
