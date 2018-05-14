@@ -1,3 +1,9 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
 # Shrinkage and Regularized Regression
 
 ## Prerequisites {-}
@@ -10,7 +16,6 @@ library("tidyverse")
 library("broom")
 library("glmnet")
 ```
-
 
 ## Introduction
 
@@ -41,14 +46,31 @@ $$
 where $f$ is some sort of penalty function on $\beta$ that penalizes larger (in magnitude) values of $\beta$.
 
 Penalized regression purposefully introduces bias into the regression in order 
-to reduce variance and improve out-of-sample prediction.  The penalty term, 
-when chosen by cross-validation or an approximation thereof, allows for trading
-off bias and variance.
+to reduce variance and improve out-of-sample prediction.
+The penalty term, when chosen by cross-validation or an approximation thereof, allows for trading off bias and variance.
 
-Different penalized regression methods use different choices of $f(\beta)$, 
+Different penalized regression methods use different choices of $f(\beta)$. 
 The two most commonly penalty functions are Ridge and Lasso.
 
+### Sparse Regression Models
 
+Consider the regression problem,
+$$
+y_i \sim \dnorm(\alpha + x_i'\beta, \sigma) .
+$$
+It is often very useful to find sparse solutions, meaning that some of the 
+elements of $\beta$ are zero or close to it.
+
+There are two main approaches to sparsity in Bayesian statistics [CarvalhoPolsonScott2009a]:
+
+-   discrete mixtures that place a point mass at $\beta_k = 0$ (Beauchamp 1988, George and McCulloch 1993)
+-   shrinkage solution which uses an absolutely continuous prior that places a large mass of its density near zero.
+
+The spike-and-slab prior (and BMA as an approximation) is an example of the former,
+while the horseshoe prior is an example of the latter.
+Many other common shrinkage priors (Normal, Student-t, Laplace) are not sparse shrinkage models.
+
+Whereas the MAP with Laplace prior distribution achieves sparse point estimates, it does not induce a posterior distribution with a large mass near zero.
 
 ### Ridge Regression
 
@@ -132,14 +154,15 @@ Properties:
     Since $|\beta_k|$ does not have a derivative, it was a more difficult 
     iterative problem than many other regression functions. However, now there
     are several algorithms to estimate it.
-    
+
 ### Constrained Optimization Interpretation
 
+TODO - see *ISLR* or any other textbook. This is not as 
+relevant to the analog to Bayesian shrinkage.
 
 ### Bayesian Interpretation
 
-The penalty term in regressions can generally be interpreted a prior on the 
-coefficients.
+The penalty term in regressions can generally be interpreted a prior on the coefficients.
 Recall that although OLS does not require normal errors, the OLS coefficients are equivalent to the MLE of a probability model with normal errors,
 $$
 \begin{aligned}
@@ -151,13 +174,15 @@ $$
 &= \hat{\beta}_{OLS}
 \end{aligned}
 $$
-Likewise the shrinkage prior can be represented as a normal distribution with mean 0 and scale $1 / \lambda$, since the $\beta$ that maximize the probability of that, minimize the $\ell_2$ norm of $\beta$,
+Likewise the shrinkage prior can be represented as a normal distribution with mean 0 and scale $1 / \lambda$,
+since the $\beta$ that maximize the probability of that,
+minimize the $\ell_2$ norm of $\beta$,
 $$
 \begin{aligned}
 \arg \max_{\beta} \dnorm(\beta | 0,  \tau) &= \arg \max_{\beta} {(2 \pi \sigma^2)}^{K / 2} \prod_{k = 1}^{K} \exp\left(- \frac{(0 - \beta_k)^2}{2 \tau^2} \right)
 \\
 &= \arg \max_{\beta} \sum_{k = 1}^{K} \left(-\frac{\beta_k^2}{2 \tau^2}\right) \\
-&= \arg \min_{\beta} \frac{1}{2 \tau^2} \sum_{k = 1}^K \beta_k^2
+&= \arg \min_{\beta} \frac{1}{2 \tau^2} \sum_{k = 1}^K \beta_k^2 ,
 \end{aligned}
 $$
 where $\tau^2 = 1 / 2 \lambda$.
@@ -175,14 +200,14 @@ $$
 \arg \max_{\beta} \dlaplace(\beta | 0, 1 / \lambda) &= \arg \max_{\beta} \left(\frac{\lambda}{2}\right)^{K} \prod_{k = 1}^{K} \exp\left(- \lambda |0 -
 \beta_k)| \right) \\
 &= \arg \max_{\beta} \sum_{k = 1}^{K} - \lambda |\beta_k| \\
-&= \arg \min_{\beta} \lambda \sum_{k = 1}^K |\beta_k|
+&= \arg \min_{\beta} \lambda \sum_{k = 1}^K |\beta_k| .
 \end{aligned}
 $$
 Thus lasso regression can be thought of as a MAP estimator of the model,
 $$
 \begin{aligned}[t]
-y_i &\sim \dnorm(\alpha + x' \beta, \sigma) \\
-\beta_k &\sim \dlaplace(0, 1 / \lambda)
+y_i &\sim \dnorm(\alpha + x' \beta, \sigma) , \\
+\beta_k &\sim \dlaplace(0, 1 / \lambda) .
 \end{aligned}
 $$
 
@@ -325,12 +350,36 @@ Regularization/shrinkage methods estimate the amount of shrinkage. The scale of 
 
 ## Spike and Slab prior
 
+This is a "gold standard" for sparse Bayesian estimation.
+It directly represents sparsity with a point mass on $\beta_k$.
+The prior is a two-component mixture of normal distributions
 $$
 \begin{aligned}[t]
-\beta_k | \lambda_k, c, \epsilon  &\sim \lambda_k N(0, c^2) + (1 - \lambda_j) N(0, \epsilon^2) \\
+\beta_k | \lambda_k, c, \epsilon  &\sim \lambda_k N(0, c^2), + (1 - \lambda_j) N(0, \epsilon^2) \\
+\lambda_k &\sim \dbern(\pi), 
+\end{aligned}
+$$
+for $k = 1, \dots, K$, and $\epsilon << c$.
+The indicator variable $\lambda_{k} \in \{0, 1}$ denotes whether $\beta_j$ is close to zero; $\lambda_k = 0$ means that the coefficient came from the spike, and $\lambda_k = 1$ means that the coefficient came from the slab.
+The value of $\epsilon$ can be either 0, implying a delta spike at 0, or $\epsilon > 0$, but small. 
+The values of $c$ and $\pi$ need to be chosen or assigned priors.
+
+If $\epsilon = 0$, then
+$$
+\begin{aligned}
+\beta_k | \lambda_k, c &\sim \dnorm(0, c^2 \lambda^2_k), \\
 \lambda_k &\sim \dbern(\pi)
 \end{aligned}
 $$
+The shrinkage parameter only takes two values,
+$$
+\kappa = \begin{cases} 
+1 & \lambda_k = 0 \\
+\frac{1}{1 + n \sigma^{-2} s^2_k c^2} & \lambda_k = 1
+\end{cases}
+$$
+As $c \to \infty$, then $\kappa = \{0, 1}$,
+with shrinkage occurring either completely or not at all.
 
 In the case of the linear regression, an alternative to BMA is to use a
 spike-and-slab prior [@MitchellBeauchamp1988a, @GeorgeMcCulloch1993a, @IshwaranRao2005a],
@@ -347,7 +396,7 @@ The posterior distribution of $w$ is the probability that $\beta_k \neq 0$, and 
 
 See the R package `r rpkg("spikeslab")` and he accompanying article [@IshwaranKogalurRao2010a] for an implementation and review of spike-and-slab regressions.
 
-#### Normal Distribution
+### Normal Distribution
 
 We can apply a normal prior to each $\beta_k$. 
 Unlike the weakly informative priors, the prior distributions all share a scale parameter $\tau$.
@@ -362,6 +411,7 @@ One such prior is
 $$
 \tau \sim \dexp(2.5)
 $$
+
 TODO: look for better guidance for the prior of $\tau$.
 
 -   This is equivalent to Ridge regression.
@@ -369,7 +419,7 @@ TODO: look for better guidance for the prior of $\tau$.
 
 ### Laplace Distribution
 
-We can also use the Laplace distribution as a prior for the coefficients.
+We can also use the Laplace or double exponential distribution as a prior for the coefficients.
 This is called Bayesian Lasso, because the MAP estimator of this model is equivalent to the Lasso estimator.
 
 The prior distribution for each coefficient $\beta_k$ is a Laplace (or double exponential) distribution with scale parameter ($\tau$).
@@ -386,7 +436,7 @@ $$
 The global scale $\tau$ determines the overall amount of shrinkage.
 The local scales, $\lambda_1, \dots, \lambda_K$, allow the amount of shrinkage to vary among coefficients.
 
-## Student-t and Cauchy Distributions
+### Student-t Distribution
 
 We can also use the Student-t distribution as a prior for the coefficients.
 The Cauchy distribution is a special case of the Student t distribution where the degrees of freedom is zero.
@@ -406,50 +456,51 @@ $$
 The degrees of freedom parameter $\nu$ can be fixed to a particular value or estimated.
 If fixed, then common values are 1 for a Cauchy distribution, 2 to ensure that there is a finite mean, 3 to ensure that there is a finite variance, and 4 ensure that there is a finite kurtosis.
 
-If estimated, then the 
+If the degrees of freedom is not specified, then use the prior,
 $$
 \nu \sim \dgamma(2, 0.1)
 $$
 Additionally, it may be useful to truncate the values of $\nu$ to be greater
 than 2 to ensure a finite variance of the Student t distribution.
 
-## Horseshore and Hierarchical Priors
+## Horseshore Priors
 
 The Horseshoe prior is defined solely in terms of a global-local mixture.
 $$
 \begin{aligned}
 \beta_k | \tau, \lambda &\sim \dnorm(0, \tau \lambda_k) \\
-\lambda_k &\sim \dhalfcauchy(1)
+\lambda_k &\sim \dhalfcauchy(0, 1) \\
+\tau &\sim \dhalfcauchy(0, \tau_0)
 \end{aligned}
 $$
+The heavy-tailed Cauchy prior on $\lambda_k$ allows individual coefficients to offset and global shrinkage, $\tau$, and take large values with little shrinkage.
+The horseshoe prior has computational issues.
+The heavy-tails can leave the posterior diffuse to large values and hard to sample.
 
-The Hierarchical Shrinkage prior originally implemented in rstanarm and proposed by ... replaces the half-Cauchy prior on $\lambda_k$ with a half-Student-t distribution with degrees of freedom $\nu$.
+The hierarchical shrinkage prior replaces the half-Cauchy prior on $\lambda_k$ with a half-Student-t distribution with degrees of freedom $\nu$.
 $$
-\lambda_k \sim \dt(\nu, 0, 1)
+\lambda_k \sim \dhalft(\nu, 0, 1)
 $$
 The $\nu$ parameter is generally not estimated and fixed to a low value, with $\nu = 4$ being suggested.
-The problem with estimating the Horseshoe prior is that the wide tails of the Cauchy prior produced a posterior distribution with problematic geometry that was hard to sample.
+The problem with estimating the horseshoe prior is that the wide tails of the Cauchy prior produced a posterior distribution with problematic geometry that was hard to sample.
 Increasing the degrees of freedom helped to regularize the posterior.
 The downside of this method is that by increasing the degrees of freedom of the Student-t distribution it would also shrink large parameters, which the 
-Horseshoe prior was designed to avoid.
+horseshoe prior was designed to avoid.
 
-Regularized horseshoe prior
+The regularized horseshoe prior (or Finnish horseshoe prior) is defined as
 $$
 \begin{aligned}
 \beta_k | \tau, \lambda &\sim \dnorm(0, \tau \tilde{\lambda}_k) \\
-\tilde{\lambda}^2_k &= \frac{c^2 \lambda^2}{c^2 + \lambda^2} \\
-\lambda_k &\sim \dhalfcauchy(1)
+\tilde{\lambda}_k &= \frac{c \lambda}{\sqrt{c^2 + \tau \lambda^2}} \\
+\lambda_k &\sim \dhalfcauchy(1) \\
+c^2 &\sim \invgamma(d_{\text{slab}} / 2, d_{\text{slab}} s_{\text{slab}}^2 / 2) \\
+\tau &\sim \dhalfcauchy(0, \tau_0^2)
 \end{aligned}
 $$
-where $c > 0$ is a constant.
+Where $d_{\text{slab}}$ is the degrees of freedom for the slab, and $s_{\text{slab}}$ is the scale of the slab.
+For defaults `rstanarm` uses $d_{\text{slab}} = 4$ and $s_{\text{slab}} = 2.5$.
 Like using a Student-t distribution, this regularizes the posterior distribution of a Horseshoe prior.
-However, it is less problematic in terms of shrinking large coefficients.
-
-Since there is little information about $c$, $c$ is treated as a parameter,
-and a prior is placed on it.
-$$
-c \sim \dt(0, s^2)
-$$
+However, it is less problematic than using the Student-t distribution because it shrinks large coefficients less.
 
 ## Understanding Shrinkage Models
 
@@ -478,67 +529,6 @@ The value $\kappa_k$ is called the *shrinkage factor* for coefficient $\beta_k$.
 When $\kappa_k = 0$, then there is no shrinkage and the posterior coefficient is the same as the MLE solution, $\bar{\beta} = \hat{\beta}$.
 When $\kappa_k = 1$, then there is complete shrinkage and the posterior coefficient is zero, $\bar{\beta} = 0$.
 It also follows that $\bar{\beta} \to 0$ as $\tau \to 0$, and $\bar{\beta} \to \hat{\beta}$ as $\tau \to \infty$.
-
-```{r}
-shrinkage_factor <- function(n, sigma = 1, tau = 1, sd_x = 1, lambda = 1) {
-  1 / 1 + n * tau ^ 2 * sd_x ^ 2 * lambda ^ 2 / sigma ^ 2
-}
-```
-
-
-
-## Number of effective zeros
-
-
-
-
-## Choice of Hyperparameter on $\tau$
-
-The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
-
-<!-- @CarvalhoPolsonScott2009a suggest -->
-<!-- $$ -->
-<!-- \tau \sim \dhalfcauchy(0, \sigma), -->
-<!-- $$ -->
-<!-- while @PolsonScott2011a suggest, -->
-<!-- $$ -->
-<!-- \tau \sim \dhalfcauchy(0, 1) . -->
-<!-- $$ -->
-
-<!-- @PasKleijnVaart2014a suggest -->
-<!-- $$ -->
-<!-- \tau \sim \dhalfcauchy(0, p^{*} / n) -->
-<!-- $$ -->
-<!-- where $p^*$ is the true number of non-zero parameters, -->
-<!-- and $n$ is the number of observations. -->
-<!-- They suggest $\tau = p^{*} / n$ or $\tau p^{*}  / n \sqrt{log(n / p^{*})}$. -->
-<!-- Additionally, they suggest restricting $\tau$ to $[0, 1]$. -->
-
-@PiironenVehtari2016a understand the choice of the prior on $\tau$ as the implied prior on the number of effective parameters.
-The shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$,
-$$
-m_{eff} = \sum_{j = 1}^K (1 - \kappa_j) .
-$$
-This is a measure of effective model size.
-
-<!-- The mean and variance of $m_{eff}$ given $\tau$ and $\sigma$ are, -->
-<!-- $$ -->
-<!-- \begin{aligned}[t] -->
-<!-- \E[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{1 + \sigma^{-1} \tau \sqrt{n}} K , \\ -->
-<!-- \Var[m_{eff} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{2 (1 + \sigma^{-1} \tau \sqrt{n})2} K . -->
-<!-- \end{aligned} -->
-<!-- $$ -->
-
-Based on this, a prior should be chosen so that the prior mass is located near,
-$$
-\tau_0 = \frac{p_0}{K - p_0}\frac{\sigma}{\sqrt{n}}
-$$
-
-<!-- Densities of the shrinkage parameter, $\kappa$, for various shrinkage distributions where $\sigma^2 = 1$, $\tau = 1$, for $n = 1$. -->
-
-<!-- @DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0. -->
-<!-- @ScottBerger2010a consider marginal maximum likelihood estimates of $\tau$. -->
-<!-- @PasKleijnVaart2014a suggest that an empirical Bayes estimator truncated below at $1 / n$. -->
 
 ```{r echo=FALSE}
 library("tidyverse")
@@ -611,87 +601,67 @@ ggplot(shrinkages, aes(x = kappa, y = dens)) +
   scale_y_continuous("Density")
 ```
 
-### Choice of prior on Global Shrinkage
+## Choice of Hyperparameter on $\tau$
 
-The performance of the sparse shrinkage estimators can depend quite heavily on the choice of $\tau$. 
-In particular, there is usually not much information about sparsity of coefficients, and much data is required to estimate it. 
+The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
+However, there are varying suggestions [@CarvalhoPolsonScott2009a,  @PolsonScott2011a, @PasKleijnVaart2014a].
 
+Shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$ [@PiironenVehtari2016a],
 $$
-\tau_0 = \frac{p_0}{K - p_0} \times \frac{\sigma}{\sqrt{n}}
+m_{\text{eff}} = \sum_{j = 1}^K (1 - \kappa_j) .
 $$
 
+-  This is a measure of model complexity or model size
 
-## All Coefficients
+-  However, the interpretation as the "number of non-zero parameters" becomes
 
-TODO
+-  The values of $\kappa_i$ can be used for thresholding. Carvalho et al suggest
+   a decision rule of selecting variables where $\kappa_k > 1 / 2$.
+   
+I have not seen it described elsewhere, but the level of sparsification can be 
+summarized by comparing the variance of $\kappa_k$ given $m_eff$ to the case where all 
+$kappa_k \in \{0, 1\}$. If all $\kappa_k$ are zero or one, then
+$$
+s_{\text{eff}} = \frac{\sum(\kappa_k - m_{\text{eff}} / K)^2}{(m_{\text{eff}} / K) (1 - m_{\text{eff}} / K)}
+$$
+If $s_{eff} = 1$, then all $\kappa_{k}$ are one or zero; if $s_{eff} = 0$, the all 
+$\kappa_{k} = m_{eff} / K$ (uniform shrinkage as with a normal prior).
 
-### Zellner's g-prior
-
-An alternative prior is the Zellner's g-prior.
-Consider the regression,
+If the prior can be represented as a scale mixture of normal distributions,
+then the the mean and variance of $m_{eff}$ are
 $$
-y_i | \alpha, \vec{\beta}, \sigma \sim \dnorm(\alpha + \mat{X} \vec{\beta}, \sigma^2)
-$$
-The $g$-prior is a non-informative, data-dependent prior,
-$$
-\vec{\beta} \sim \dnorm(0, \sigma^2 g \mat{X}\T \mat{X})
-$$
-It depends on only a single parameter $g$.
-The prior for $g$ must be proper. Some common choices include,
-$$
-\begin{aligned}
-g &= n \\
-g &= k^2 \\
-g &= \max(n, k^2)
+\begin{aligned}[t]
+\E[m_{\text{eff}} | \tau, \sigma] &= \frac{\sigma^{-1} s_k\tau \sqrt{n}}{1 + \sigma^{-1} s_k \tau \sqrt{n}} K , \\
+\Var[m_{\text{eff}} | \tau, \sigma] &= \frac{\sigma^{-1} \tau \sqrt{n}}{2 (1 + \sigma^{-1} s_k \tau \sqrt{n})^2} K .
 \end{aligned}
 $$
-or putting a hyperprior on $g$.
 
-See @LeySteel2012a for a recent overview of g-priors.
+The prior should be chosen so that the prior mass is located near 
+$$
+\tau_0 = \frac{k_0}{K - k_0}\frac{\sigma}{\sqrt{n}} .
+$$
+where $k_0$ is a guess as to the number of non-zero coefficients.
+Note that the choice of $\tau$ must scale with the observation noise $\sigma$ and the number of observations $n$.
 
-### Q-R Prior
+```{r}
 
-The QR decomposition of a the design matrix is 
-$$
-X = QR
-$$
-where $Q'Q = I$ and $R$ is upper-triangular.
-The OLS solution to linear regression is
-$$
-(X'X)^{-1} X'y = R^{-1} Q' y
-$$
+```
 
-What is a prior distribution of $\theta = Q' y$ ? 
-The prior distribution of the $k$-th element is
-$$
-\theta_k = \rho_k \sigma_y \sqrt{N - 1},
-$$
-where $\rho_k$ is the correlation between the $k$th column of $Q$ and the outcome.
-Let $\rho = \sqrt{R^2}u$ where $u$ is a unit vector uniformly distributed on the surface of a hypersphere.
-Then $R^2 = \rho' \rho$ is the coefficient of determiniation of a linear model.
-An informative prior on $R^2$ penalizes $\rho' \rho$, and encourages $\beta = R^{-1}\theta$ to be closer to the origin.
 
-The distribution of $R^2$ is,
-$$
-R^2 \sim \dbeta(K / 2, \eta)
-$$
-The prior distribution of $\sigma$ is set to Jeffrey's prior,
-$$
-p(\sigma) \propto 1 / \sigma.
-$$
+Calculate the shrinkage factor $\kappa_k$ given $n$, $\sigma$, $\tau$, 
+$sd_x$, and $\lambda_k$.
+```{r}
+shrinkage_factor <- function(n, lambda = 1, tau = 1, sigma = 1, sd_x = 1) {
+  1 / (1 + n * tau ^ 2 * sd_x ^ 2 * lambda ^ 2 / sigma ^ 2)
+}
+```
 
-The prior for the intercept, $\alpha = \bar{y} - \bar{x}' R^{-1} \theta is
-$$
-\alpha \sim \dnorm(0, 1 / \sqrt{N}) .
-$$
-
-Then,
-$$
-\sigma_y = \omega s_y \\
-\sigma_\epsilon = \sigma_y \sqrt{1 - R^2} \\
-\beta = R^{-1} u \sigma_y \sqrt{R^{2} (N - 1)}
-$$
-
+Choose $
+```{r}
+optimal_tau <- function(k0, K, n, sigma = 1) {
+  k0 / (K - k0) * sigma / sqrt(n)
+}
+```
 
 ## Differences between Bayesian and Penalized ML
 
@@ -711,7 +681,7 @@ $$
 \beta_k \sim \dnorm(0, \tau^2)
 $$
 
-The only difference in the LASSO is the penalty term, which uses an absolute value penalty for $\beta_k$.
+The only difference in the lasso is the penalty term, which uses an absolute value penalty for $\beta_k$.
 That term corresponds to a sum of log densities of i.i.d. double exponential (Laplace) distributions.
 The double exponential distribution density is similar to a normal distribution,
 $$
@@ -721,7 +691,6 @@ So the LASSO penalty is equivalent to the log density of a double exponential di
 $$
 \beta_k \sim \dlaplace(0, \tau)
 $$
-
 
 There are several differences between Bayesian approaches to shrinkage and penalized ML approaches.
 
@@ -740,7 +709,6 @@ Choosing the shrinkage penalty:
 -   ML: cross-validation
 -   Bayesian: a prior is placed on the shrinkage penalty, and it is estimated as part of the posterior.
 
-
 ## References
 
 -   `r rpkg("rstanarm")`: estimates GLM regressions with various priors
@@ -748,8 +716,120 @@ Choosing the shrinkage penalty:
 -   `r rpkg("bayesreg")`: See @MakalicSchmidt2016a for documentation and a good review of Bayesian regularized regression.
 -   [fastHorseshoe]( http://jingyuhe.com/fastHorseshoe.html)
 
-
 ## Example
+
+### Diabetes
+
+```{r}
+data("diabetes", package = "lars")
+```
+The `diabetes` data has 442 observations (from Efron, Hastie, Johnston, Tibshirani 2003 LARS paper).
+The data are provided as matrices, with `x` a matrix with 10 columns, `y` a 
+numeric vector with the response, and and `x2` a matrix with 64 columns (`x` plus interactions.
+The matrix `x` has been standardized to have zero mean and unit variance.
+
+This data frame contains the following columns:
+
+```{r}
+diabetes_lm <- lm(y ~ x, data = diabetes)
+diabetes_lasso <- glmnet(diabetes$x, diabetes$y, alpha = 1)
+diabetes_ridge <- glmnet(diabetes$x, diabetes$y, alpha = 0)
+
+diabetes_ridge_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 0, parallel = TRUE)
+diabetes_lasso_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 1, parallel = TRUE)
+```
+
+```{r}
+plot(diabetes_ridge)
+```
+
+```{r}
+tidy(diabetes_lasso)
+glance(diabetes_lasso)
+```
+
+```{r}
+nonzero <- 
+```
+
+```{r}
+coefplot_glmnet <- function(x, ...) {
+  xlabel <- expression(-log(lambda))
+  ylabel <- expression(beta)
+  ggplot(dplyr::filter(tidy(x), term != "(Intercept)"),
+         aes(x = -log(lambda), y = estimate, colour = term)) +
+    geom_hline(yintercept = 0) +
+    geom_line() +
+    labs(x = xlabel, y = ylabel)
+}
+coefplot_glmnet(diabetes_lasso)
+```
+
+Nonzeros
+```{r}
+nonzeros <- function(x, se = TRUE) {
+  lambdahat <- if (se) "lambda.1se" else "lambda.min"
+  x$nzero[which.min(x$lambda - x[[lambdahat]])]
+  
+}
+
+```
+
+Estimate a model with a weakly informative prior.
+```{r}
+fit_diabetes <- list()
+fit_diabetes[["weak_inf"]] <- stan_glm(y ~ x2,
+         family = gaussian(), 
+         prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
+         prior_intercept = normal(location = 0, scale = 10),
+         data = diabetes, refresh = -1)
+```
+
+Estimate a model using the hierarchical shrinkage prior included in **rstanarm**.
+```{r}
+fit_diabetes[["hs"]] <- 
+  stan_glm(y ~ x2,
+           family = gaussian(), 
+           prior = hs(df = 1, global_df = 1, global_scale = 0.01, 
+                      slab_df = 4, slab_scale = 2.5),
+           prior_intercept = normal(location = 0, scale = 10),
+           data = diabetes)
+```
+and Lasso
+```{r}
+fit_lasso <- stan_glm(credit_fmla, 
+                   family = gaussian(), 
+                   prior = lasso(df = 1, location = 0, scale = NULL,
+                                 autoscale = TRUE),
+                   prior_intercept = normal(location = 0, scale = 10),
+                   data = Credit)
+```
+
+Estimate with Stan models ... 
+
+-   Ridge
+-   Lasso
+-   HS
+
+```{r}
+rec_credit <- recipe(f, data = Credit) %>%
+  # factors to indicators
+  step_dummy(all_nominal()) %>%
+  # center and scale
+  step_center(everything()) %>%
+  step_scale(everything()) %>%
+  prep(data = Credit, retain = TRUE)
+X <- juice(rec_credit, all_predictors(), composition = "matrix")
+y <- as.numeric(juice(rec_credit, all_predictors(), composition = "matrix"))
+```
+
+```{r}
+models <- list()
+for (i in c("lm_shrinkage_student_t_1", "lm_shrinkage_laplace_1",
+            "lm_shrinkage_normal_1.stan", "lm_shrinkage_hs")) {
+  models[[i]] <- stan_model(glue::glue("stan/{i}.stan"))
+}
+```
 
 ### Credit Balances
 
@@ -815,6 +895,57 @@ for (i in c("lm_shrinkage_student_t_1", "lm_shrinkage_laplace_1",
             "lm_shrinkage_normal_1.stan", "lm_shrinkage_hs")) {
   models[[i]] <- stan_model(glue::glue("stan/{i}.stan"))
 }
+```
 
+### US Crime
+
+This is used as an example in the BAS package.
+
+Post-process the US crime data the same way as BMA. See help for `bic.glm`.
+```{r}
+data("UScrime", package = "MASS")
+UScrime <- UScrime %>%
+  mutate_at(vars(y, M, Ed, Po1, Po2, LF, M.F, Pop, U1, U2, GDP, 
+                 Ineq, Prob, Time), log)
+```
+
+The model of interest is `y` as a function of the other covariates:
+```{r}
+lm(y ~ ., data = UScrime)
+```
+
+Lasso regression
+```{r}
+cv.glmnet(as.matrix(dplyr::select(UScrime, -y)), UScrime$y)
+```
+```{r}
+plot(glmnet(as.matrix(dplyr::select(UScrime, -y)), UScrime$y),
+     xvar = "lambda")
+```
+
+Ridge regresion
+```{r}
+cv.glmnet(as.matrix(dplyr::select(UScrime, -y)), UScrime$y, alpha = 0)
+```
+```{r}
+plot(glmnet(as.matrix(dplyr::select(UScrime, -y)), UScrime$y, alpha = 0),
+     xvar = "lambda")
+```
+
+```{r}
+stan_glm(y ~ ., data = UScrime,
+         family = gaussian(),
+         prior_intercept = normal(location = 0, scale = 10, autoscale = TRUE)
+         prior_aux = exponential(1),
+         
+```
+
+```{r}
+X <- as.matrix(dplyr::select(UScrime, -y))
+y <- UScrime[["y"]]
+```
+
+```{r}
+nonzeros(cv.glmnet(X, y))
 ```
 

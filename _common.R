@@ -77,3 +77,7 @@ print_stanmodel <- function(path) {
     htmltools::tags$code() %>%
     htmltools::tags$pre(class = "stan")
 }
+
+# Stan options
+options(mc.cores = parallel::detectCores())
+rstan::rstan_options(auto_write = TRUE)

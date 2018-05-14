@@ -1,0 +1,53 @@
+# Normal
+
+$$
+\beta^*_k \sim \dnorm(0, 1) \\
+\tau \sim \dchisq(d) \\
+\beta_k = m_{\beta} + s_{\beta} \tau \beta_k^*
+$$
+
+# Student-t
+
+$$
+\beta^*_k \sim \dnorm(0, 1) \\
+\lambda^*_1 \sim \dnorm^{+}(0, 1) \\
+\lambda^*_2 \sim \dinvgamma(\nu / 2, \nu / 2) \\
+\lambda = \lambda^*_1 \sqrt{\lambda^*_2} \\
+\tau \sim \dchisq(d) \\
+\beta_k = m_{\beta} + s_{\beta} \tau \lambda \beta_k^*
+$$
+
+# Laplace
+
+$$
+\beta^*_k \sim \dnorm(0, 1) \\
+\lambda_k^* \sim \dexp(1) \\
+\tau \sim \dchisq(d) \\
+\beta_k = m_{\beta} + s_{\beta} \tau \sqrt{2 \lambda_k^*} \beta_k^*
+$$
+where $d = 1$ is the prior degrees of freedom.
+
+# Horseshoe Prior
+
+The Student-t distributions of both $\lambda$ and $\tau$ are split into
+two random variates: half-normal and inverse-gamma.
+$$
+\beta^* \sim \dnorm(0, 1) \\
+\lambda = \lambda^*_{k,1} \sqrt{\lambda^*_{k,2}} \\
+\lambda^*_{k,1} \sim \dnorm^{+}(0, 1) \\
+\lambda^*_{k,2} \sim \dinvgamma(d_{l} / 2, d_{l} / 2) \\
+\tau = \tau^*_1 \sqrt{\tau^*_2} s_g \sigma \\
+\tau_{1}^* \sim \dnorm(0, 1) \\
+\tau_{2}^* \sim \dinvgamma(d_{g} / 2, d_{g} / 2) \\
+c \sim \dinvgamma(d_{slab} / 2, d_{slab} / 2) \\
+\tilde{\lambda} = \sqrt{\frac{c^2 \lambda^2}{c^2 + \tau^2 \lambda^2}} \\
+\beta = \tau \tilde{\lambda} \beta^* 
+$$
+
+-   $d_g$ Global prior degrees of freedom
+-   $d_l$ Local prior degrees of freedom
+-   $d_s$ Slab prior degrees of freedom
+-   $s_g$ Prior global scale
+
+
+## 
