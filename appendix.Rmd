@@ -1,8 +1,11 @@
 # (PART) Appendix {-}
 
-```{r}
+## Prerequisites {-}
+
+```{r message=FALSE}
 library("tidyverse")
 library("stringr")
+library("bayz")
 ```
 
 ## Parameters
@@ -16,7 +19,6 @@ unmodeled parameters    Parameters with non-informative prior distribution
 derived quantities      Variables defined deterministicically
 
 See @GelmanHill2007a [p. 366]
-
 
 ## Miscellaneous Mathematical Background
 
@@ -350,4 +352,3 @@ $$
 where $L$ is a $k \times k$ whitening matrix.
 This is a matrix such that $L' L = V(X)^{-1}$.
 With a sample, $L = chol(X' X)$.
-

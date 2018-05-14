@@ -60,69 +60,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 </head>
@@ -356,54 +328,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.2.1" data-path="shrinkage-and-hierarchical-models.html"><a href="shrinkage-and-hierarchical-models.html#references-10"><i class="fa fa-check"></i><b>18.2.1</b> References</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>19</b> Distributions</a></li>
-<li class="chapter" data-level="20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>20</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="20.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>20.1</b> Textbooks</a></li>
-<li class="chapter" data-level="20.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>20.2</b> Syllabi</a></li>
-<li class="chapter" data-level="20.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>20.3</b> Topics</a></li>
-<li class="chapter" data-level="20.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>20.4</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="20.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>20.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="20.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>20.5.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="20.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>20.5.2</b> Modern Statistical Workflow</a></li>
-<li class="chapter" data-level="20.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>20.5.3</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="20.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>20.5.4</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="20.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>20.5.5</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="20.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>20.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="20.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>20.5.7</b> Variable Selection</a></li>
-<li class="chapter" data-level="20.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>20.5.8</b> Multiple Testing</a></li>
-<li class="chapter" data-level="20.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>20.5.9</b> Rare Events</a></li>
-<li class="chapter" data-level="20.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>20.5.10</b> Identifiability</a></li>
-<li class="chapter" data-level="20.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>20.5.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="19" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html"><i class="fa fa-check"></i><b>19</b> Shrinkage and Regularized Regression</a><ul>
+<li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-11"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="19.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#introduction-6"><i class="fa fa-check"></i><b>19.1</b> Introduction</a></li>
+<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
 </ul></li>
-<li class="chapter" data-level="20.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>20.6</b> Software</a><ul>
-<li class="chapter" data-level="20.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>20.6.1</b> Stan</a></li>
-<li class="chapter" data-level="20.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>20.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="20.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>20.6.3</b> Priors</a></li>
+<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#hiearchical-coefficient-priors"><i class="fa fa-check"></i><b>19.3.2</b> Hiearchical Coefficient Priors</a></li>
+<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Laplace Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="20.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>20.7</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="20.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>20.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="20.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>20.9</b> Mixture Models</a></li>
-<li class="chapter" data-level="20.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>20.10</b> Inference</a><ul>
-<li class="chapter" data-level="20.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>20.10.1</b> Discussion of Bayesian Inference</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.4</b> Student-t and Cauchy Distributions</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-and-hierarchical-priors"><i class="fa fa-check"></i><b>19.5</b> Horseshore and Hierarchical Priors</a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.6</b> Understanding Shrinkage Models</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.7</b> Spike and Slab prior</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#number-of-effective-zeros"><i class="fa fa-check"></i><b>19.8</b> Number of effective zeros</a></li>
+<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.9</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#all-coefficients"><i class="fa fa-check"></i><b>19.10</b> All Coefficients</a><ul>
+<li class="chapter" data-level="19.10.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#zellners-g-prior"><i class="fa fa-check"></i><b>19.10.1</b> Zellner’s g-prior</a></li>
+<li class="chapter" data-level="19.10.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#q-r-prior"><i class="fa fa-check"></i><b>19.10.2</b> Q-R Prior</a></li>
 </ul></li>
-<li class="chapter" data-level="20.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>20.11</b> Model Checking</a><ul>
-<li class="chapter" data-level="20.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>20.11.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="20.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>20.11.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="20.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>20.11.3</b> Software Validation</a></li>
+<li class="chapter" data-level="19.11" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.11</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.12" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#references-11"><i class="fa fa-check"></i><b>19.12</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="20.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>20.12</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="20.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>20.13</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="20.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>20.14</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="20.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>20.15</b> History of Bayesian Statistics</a></li>
-<li class="chapter" data-level="20.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>20.16</b> Sampling Difficulties</a></li>
-<li class="chapter" data-level="20.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>20.17</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="20.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>20.18</b> Pooling Polls</a></li>
-<li class="chapter" data-level="20.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>20.19</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="20.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>20.20</b> Bayesian point estimation / Decision</a></li>
-<li class="chapter" data-level="20.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>20.21</b> Stan Modeling Language</a></li>
-<li class="chapter" data-level="20.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>20.22</b> Bayes Factors</a></li>
+<li class="part"><span><b>IV Appendix</b></span><ul>
+<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="19.13" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.13</b> Parameters</a></li>
+<li class="chapter" data-level="19.14" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.14</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="19.14.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.14.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="19.14.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.14.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="19.14.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.14.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="19.14.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.14.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="19.14.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.14.5</b> Cholesky Decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="scaled-and-unscaled-variables.html"><a href="scaled-and-unscaled-variables.html"><i class="fa fa-check"></i><b>20</b> Scaled and Unscaled Variables</a></li>
+<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
+<li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
+<li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
+<li class="chapter" data-level="22.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>22.3</b> Topics</a></li>
+<li class="chapter" data-level="22.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>22.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="22.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>22.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>22.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="22.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>22.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="22.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>22.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="22.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>22.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="22.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>22.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="22.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>22.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="22.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>22.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="22.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>22.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="22.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>22.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="22.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>22.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="22.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>22.5.11</b> Shrinkage</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>22.6</b> Software</a><ul>
+<li class="chapter" data-level="22.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>22.6.1</b> Stan</a></li>
+<li class="chapter" data-level="22.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>22.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="22.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>22.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="22.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>22.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="22.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>22.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="22.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>22.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="22.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>22.10</b> Inference</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>22.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>22.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>22.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="22.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>22.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="22.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>22.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>22.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="22.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>22.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="22.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>22.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="22.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>22.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="22.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>22.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="22.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>22.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="22.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>22.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="22.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>22.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="22.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>22.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="22.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>22.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="22.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>22.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-12.html"><a href="references-12.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -493,40 +502,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">12</span> Generalized Linear Models</h1>
 <div id="prerequisites-5" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
-<a class="sourceLine" id="cb79-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre></div>
 </div>
 <div id="introduction-1" class="section level2">
 <h2><span class="header-section-number">12.1</span> Introduction</h2>
-<p>Generalized linear models (GLMs) are a class of commonly used models.
-In GLMs, the mean is specified as a function of a linear model of predictors,
-<span class="math display">\[
+<p>Generalized linear models (GLMs) are a class of commonly used models. In GLMs, the mean is specified as a function of a linear model of predictors, <span class="math display">\[
 E(Y) = \mu = g^{-1}(\mat{X} \vec{\beta}) .
-\]</span>
-GLMs are a generalization of linear regression from an unbounded continuous outcome variable to other types of data: binary, count, categorical, bounded continuous.</p>
+\]</span> GLMs are a generalization of linear regression from an unbounded continuous outcome variable to other types of data: binary, count, categorical, bounded continuous.</p>
 <p>A GLM consists of three components:</p>
 <ol style="list-style-type: decimal">
-<li><p>A <em>probability distribution</em> (<em>family</em>) specifying the conditional
-distribution of the response variable.
-In GLMs, the distribution is in the exponential family: Normal, Binomial, Poisson, Categorical, Multinomial, Poisson, Beta.</p></li>
-<li><p>A <em>linear predictor</em>, which is a linear function of the predictors,
-<span class="math display">\[
+<li><p>A <em>probability distribution</em> (<em>family</em>) specifying the conditional distribution of the response variable. In GLMs, the distribution is in the exponential family: Normal, Binomial, Poisson, Categorical, Multinomial, Poisson, Beta.</p></li>
+<li><p>A <em>linear predictor</em>, which is a linear function of the predictors, <span class="math display">\[
 \eta = \mat{X} \vec{\beta}.
 \]</span></p></li>
-<li><p>A <em>link function</em> (<span class="math inline">\(g(.)\)</span>) which maps the expected value to the the linear predictor,
-<span class="math display">\[
+<li><p>A <em>link function</em> (<span class="math inline">\(g(.)\)</span>) which maps the expected value to the the linear predictor, <span class="math display">\[
 g(\mu) = \eta .
-\]</span>
-The link function is smooth and invertible, and the <em>inverse link function</em> or <em>mean function</em> maps the linear predictor to the mean,
-<span class="math display">\[
+\]</span> The link function is smooth and invertible, and the <em>inverse link function</em> or <em>mean function</em> maps the linear predictor to the mean, <span class="math display">\[
 \mu = g^{-1}(\eta) .
-\]</span>
-The link function (<span class="math inline">\(g\)</span>) and its inverse ($g^{-1}) translate <span class="math inline">\(\eta\)</span> from <span class="math inline">\((\-infty, +\infty)\)</span> to the proper range for the probability distribution and back again.</p></li>
+\]</span> The link function (<span class="math inline">\(g\)</span>) and its inverse ($g^{-1}) translate <span class="math inline">\(\eta\)</span> from <span class="math inline">\((\-infty, +\infty)\)</span> to the proper range for the probability distribution and back again.</p></li>
 </ol>
-<p>These models are often estimated with MLE, as with the function <a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats</a>.
-These are also easily estimated in a Bayesian setting.</p>
-<p>See the help for <a href="https://www.rdocumentation.org/packages/stats/topics/family">stats</a> for common probability distributions, <a href="https://www.rdocumentation.org/packages/stats/topics/make.link">stats</a> for common links, and the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia</a> page for a table of common GLMs.
-See the function <strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> for even more examples of link functions and probability distributions.</p>
+<p>These models are often estimated with MLE, as with the function <a href="https://www.rdocumentation.org/packages/stats/topics/glm">stats</a>. These are also easily estimated in a Bayesian setting.</p>
+<p>See the help for <a href="https://www.rdocumentation.org/packages/stats/topics/family">stats</a> for common probability distributions, <a href="https://www.rdocumentation.org/packages/stats/topics/make.link">stats</a> for common links, and the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia</a> page for a table of common GLMs. See the function <strong><a href="https://cran.r-project.org/package=VGAM">VGAM</a></strong> for even more examples of link functions and probability distributions.</p>
 <!--
 Link                       Range of $\mu_i$                    $\eta_i = g(\mu_i)$                         $\mu_i = g^{-1}(\eta)_i$
 -------------------------- ----------------------------------- ------------------------------------------- ----------------------------------------
@@ -564,21 +561,13 @@ Table: Common distributions and link functions. Table derived from @Fox2016a [p.
 <h2><span class="header-section-number">12.2</span> Count Models</h2>
 <div id="poisson" class="section level3">
 <h3><span class="header-section-number">12.2.1</span> Poisson</h3>
-<p>The Poisson model is used for unbounded count data,
-<span class="math display">\[
+<p>The Poisson model is used for unbounded count data, <span class="math display">\[
 Y = 0, 1, \dots, \infty
-\]</span>
-The outcome is modeled as a Poisson distribution
-<span class="math display">\[
+\]</span> The outcome is modeled as a Poisson distribution <span class="math display">\[
 y_i \sim \dpois(\lambda_i)
-\]</span>
-with positive mean parameter <span class="math inline">\(\lambda_i \in (0, \infty)\)</span>.
-Since <span class="math inline">\(\lambda_i\)</span> has to be positive, the most common link function is the log,
-<span class="math display">\[
+\]</span> with positive mean parameter <span class="math inline">\(\lambda_i \in (0, \infty)\)</span>. Since <span class="math inline">\(\lambda_i\)</span> has to be positive, the most common link function is the log, <span class="math display">\[
 \log(\lambda_i) = \exp(\vec{x}_i&#39; \vec{\beta})
-\]</span>
-which has the inverse,
-<span class="math display">\[
+\]</span> which has the inverse, <span class="math display">\[
 \lambda_i = \log(\vec{x}_i \vec{\beta})
 \]</span></p>
 <p>In Stan, the Poisson distribution has two implementations:</p>
@@ -591,39 +580,26 @@ which has the inverse,
 </div>
 <div id="example-3" class="section level2">
 <h2><span class="header-section-number">12.3</span> Example</h2>
-<p>A regression model of bilateral sanctions for the period 1939 to 1983.
-The outcome variable is the number of countries imposing sanctions.</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;sanction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)</a></code></pre></div>
+<p>A regression model of bilateral sanctions for the period 1939 to 1983. The outcome variable is the number of countries imposing sanctions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;sanction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Zelig&quot;</span>)</code></pre></div>
 <p>TODO</p>
 </div>
 <div id="negative-binomial" class="section level2">
 <h2><span class="header-section-number">12.4</span> Negative Binomial</h2>
-<p>The <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial</a> model is also used for unbounded count data,
-<span class="math display">\[
+<p>The <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial</a> model is also used for unbounded count data, <span class="math display">\[
 Y = 0, 1, \dots, \infty
-\]</span>
-The Poisson distribution has the restriction that the mean is equal to the variance, <span class="math inline">\(\E(X) = \Var(X) = \lambda\)</span>.
-The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).</p>
-<p>The outcome is modeled as a negative binomial distribution,
-<span class="math display">\[
+\]</span> The Poisson distribution has the restriction that the mean is equal to the variance, <span class="math inline">\(\E(X) = \Var(X) = \lambda\)</span>. The Negative Binomial distribution has an additional parameter that allows the variance to vary (though it is always larger than the mean).</p>
+<p>The outcome is modeled as a negative binomial distribution, <span class="math display">\[
 y_i \sim \dbinom(\alpha_i, \beta)
-\]</span>
-with shape <span class="math inline">\(\alpha \in \R^{+}\)</span> and inverse scale <span class="math inline">\(\beta \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \alpha_i / \beta\)</span> and <span class="math inline">\(\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)\)</span>.
-Then the mean can be modeled and transformed to the
-<span class="math display">\[
+\]</span> with shape <span class="math inline">\(\alpha \in \R^{+}\)</span> and inverse scale <span class="math inline">\(\beta \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \alpha_i / \beta\)</span> and <span class="math inline">\(\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
 \alpha_i &amp;= \mu_i / \beta
 \end{aligned}
 \]</span></p>
-<p><strong>Important</strong> The negative binomial distribution has many different parameterizations.
-An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter.
-<span class="math display">\[
+<p><strong>Important</strong> The negative binomial distribution has many different parameterizations. An alternative parameterization of the negative binomial uses the mean and a over-dispersion parameter. <span class="math display">\[
 y_i \sim \dnbinomalt(\mu_i, \phi)
-\]</span>
-with location parameter <span class="math inline">\(\mu \in \R^{+}\)</span> and over-dispersion parameter <span class="math inline">\(\phi \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \mu_i\)</span> and <span class="math inline">\(\Var(Y) = \mu_i + \frac{\mu_i^2}{\phi}\)</span>.
-Then the mean can be modeled and transformed to the
-<span class="math display">\[
+\]</span> with location parameter <span class="math inline">\(\mu \in \R^{+}\)</span> and over-dispersion parameter <span class="math inline">\(\phi \in \R^{+}\)</span>, and <span class="math inline">\(\E(y) = \mu_i\)</span> and <span class="math inline">\(\Var(Y) = \mu_i + \frac{\mu_i^2}{\phi}\)</span>. Then the mean can be modeled and transformed to the <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= \log( \vec{x}_i \vec{\gamma} ) \\
 \end{aligned}
@@ -636,7 +612,7 @@ Then the mean can be modeled and transformed to the
 </ul>
 <p>Also, <code>rstanarm</code> supports Poisson and <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/count.html">negative binomial models</a>.</p>
 <ul>
-<li><span class="citation">A. Gelman et al. (2013 Ch 16)</span></li>
+<li><span class="citation">Gelman et al. (2013 Ch 16)</span></li>
 </ul>
 </div>
 <div id="multinomial-categorical-models" class="section level2">
@@ -644,13 +620,9 @@ Then the mean can be modeled and transformed to the
 </div>
 <div id="gamma-regression" class="section level2">
 <h2><span class="header-section-number">12.6</span> Gamma Regression</h2>
-<p>The response variable is continuous and positive.
-In gamma regression, the coefficient of variation is constant rather than the variance.
-<span class="math display">\[
+<p>The response variable is continuous and positive. In gamma regression, the coefficient of variation is constant rather than the variance. <span class="math display">\[
 y_i \sim \dgamma(\alpha_i, \beta)
-\]</span>
-and
-<span class="math display">\[
+\]</span> and <span class="math display">\[
 \begin{aligned}[t]
 \alpha_i &amp;= \mu_i / \beta \\
 \mu_i &amp;= \vec{x}_i \vec{\gamma}
@@ -663,19 +635,15 @@ and
 </div>
 <div id="beta-regression" class="section level2">
 <h2><span class="header-section-number">12.7</span> Beta Regression</h2>
-<p>This is for a response variable that is a proportion, <span class="math inline">\(y_i \in (0, 1)\)</span>,
-<span class="math display">\[
+<p>This is for a response variable that is a proportion, <span class="math inline">\(y_i \in (0, 1)\)</span>, <span class="math display">\[
 y_i \sim \dbeta(\alpha_i, \beta_i)
-\]</span>
-and
-<span class="math display">\[
+\]</span> and <span class="math display">\[
 \begin{aligned}[t]
 \mu_i &amp;= g^{-1}(\vec{x}_i&#39; \vec{\gamma}) \\
 \alpha_i &amp;= \mu_i \phi \\
 \beta_i &amp;= (1 - \mu_i) \phi
 \end{aligned}
-\]</span>
-Additionally, the <span class="math inline">\(\phi\)</span> parameter could also be modeled.</p>
+\]</span> Additionally, the <span class="math inline">\(\phi\)</span> parameter could also be modeled.</p>
 <p>In Stan:</p>
 <ul>
 <li><code>beta(y | alpha, beta)</code> with positive prior successes plus one, <span class="math inline">\(\alpha &gt; 0\)</span>, and negative prior failures plus one, <span class="math inline">\(\beta &gt; 0\)</span>. Then <span class="math inline">\(\E(Y) = \alpha / (\alpha + \beta)\)</span> and <span class="math inline">\(\Var(Y) = \alpha\beta / ((\alpha + \beta)^2 (\alpha + \beta + 1))\)</span>.</li>
@@ -691,12 +659,12 @@ Additionally, the <span class="math inline">\(\phi\)</span> parameter could also
 <h2><span class="header-section-number">12.8</span> References</h2>
 <p>For general references on count models see</p>
 <ul>
-<li><span class="citation">A. Gelman and Hill (2007, 109–16)</span></li>
+<li><span class="citation">Gelman and Hill (2007, 109–16)</span></li>
 <li><span class="citation">McElreath (2016 Ch 10)</span></li>
 <li><span class="citation">Fox (2016 Ch. 14)</span></li>
-<li><span class="citation">A. Gelman et al. (2013 Ch. 16)</span></li>
+<li><span class="citation">Gelman et al. (2013 Ch. 16)</span></li>
 </ul>
-<p><span class="citation">A. Gelman et al. (2013 Ch 16)</span>, <span class="citation">A. Gelman and Hill (2007 Ch. 5-6)</span>, <span class="citation">McElreath (2016 Ch. 9)</span>. <span class="citation">King (1998)</span> discusses MLE estimation of many common GLM models.</p>
+<p><span class="citation">Gelman et al. (2013 Ch 16)</span>, <span class="citation">Gelman and Hill (2007 Ch. 5-6)</span>, <span class="citation">McElreath (2016 Ch. 9)</span>. <span class="citation">King (1998)</span> discusses MLE estimation of many common GLM models.</p>
 <p>Many econometrics/statistics textbooks, e.g. <span class="citation">Fox (2016)</span>, discuss GLMs. Though they are not derived from a Bayesian context, they can easily transferred.</p>
 
 </div>
@@ -743,7 +711,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

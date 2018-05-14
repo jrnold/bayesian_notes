@@ -212,7 +212,7 @@ map2_df(names(fits), fits,
 #>   <chr>   <dbl>  <dbl>
 #> 1 nopool  -3.23  -4.62
 #> 2 pool    -2.58  -4.06
-#> 3 partial -2.60  -4.01
+#> 3 partial -2.59  -4.00
 ```
 
 To see why this is the case, plot the average errors for each observation in- and out-of-sample.
@@ -239,18 +239,19 @@ select(bball1970,
 
 <img src="hierarchical_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" />
 
+
 Extensions:
 
--   Redo this analysis with the [rstanarm](https://www.rdocumentation.org/packages/rstanarm/topics/bball2006) dataset with hits and at-bats for the entire 2006 AL season of MLB.
 -   Use a beta distribution for the prior of $\mu_i$. How would you specify the prior beta distribution so that it is uninformative?
 -   If you used the beta distribution, how would you specify the beta distribution as a function of the mean?
 -   The lowest batting average of the modern era is approximately 0.16 and the highest is approximately 0.4. Use this information for an informative prior distribution.
 -   There may be some truly exceptional players. Model this by replacing the normal prior for $\eta$ with a wide tailed distribution.
 -   The distribution of batting averages may be asymmetric - since there may be a few great players, but a player can only be so bad before they are relegated to the minor league. Find a skewed distribution to use as a prior.
 
+
+
 ### References
 
 -   Albert, Jim. [Revisiting Efron and Morris’s Baseball Study](https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/) Feb 15, 2016
 -   Bob Carpenter. [Hierarchical Bayesian Batting Ability, with Multiple Comparisons](https://lingpipe-blog.com/2009/11/04/hierarchicalbayesian-batting-ability-with-multiple-comparisons/). November 4, 2009.
 -   John Kruschke. [Shrinkage in multi-level hierarchical models](http://doingbayesiandataanalysis.blogspot.com/2012/11/shrinkage-in-multi-level-hierarchical.html). November 27, 2012.
--   See @JensenMcShaneWyner2009a for an updated hierarchical model of baseball hitting.
