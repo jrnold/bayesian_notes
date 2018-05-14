@@ -1,5 +1,4 @@
 # (PART) Appendix {-}
-<<<<<<< HEAD
 
 ```{r}
 library("tidyverse")
@@ -351,5 +350,4 @@ $$
 where $L$ is a $k \times k$ whitening matrix.
 This is a matrix such that $L' L = V(X)^{-1}$.
 With a sample, $L = chol(X' X)$.
-=======
->>>>>>> 844a3561672916cbbc68d37a08cf93bfa2c932ed
+

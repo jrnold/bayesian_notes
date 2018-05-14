@@ -1,5 +1,18 @@
+Lasso and Ridge Regression Examples
 
+-  Simulated data ...
+-  Sine data
+-  Prostate cancer 
+-  Boston housing ... MASS
 
+-  BMA datastes
+
+   - race                       Scottish Hill Racing data
+   - vaso                       Vaso data
+
+-  BMS datasets
+  
+   - datafls                    FLS (2001) growth data
 
 Thurs: Multi-level modeling: Random and fixed effects
 

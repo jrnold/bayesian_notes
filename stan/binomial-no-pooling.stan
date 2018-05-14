@@ -21,6 +21,8 @@ parameters {
 }
 model {
   eta ~ normal(0., 10.);
+  //  y ~ binomial(inv_logit(eta));
+  // binomial_logit
   y ~ binomial_logit(k, eta);
 }
 generated quantities {

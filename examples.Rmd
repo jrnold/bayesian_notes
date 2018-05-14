@@ -157,10 +157,105 @@ The rest of the model is the same as the negative binomial model.
 ## Model Averaging Example
 
 
+
+
+
     
 ## Shrinkage Estimators
 
 
 
 
+
+## Mixture of Normal Distributions
+
+A scale mixture of normal distribution is a distribution which can be written as a normal distribution conditional on the scale.
+In a scale-mixture of normal distributions, a random variable $Y$ is distributed $p_Y$ is the marginal distribution of a normal distribution conditional on its scale, $W$, which distributed $p_W$,
+$$
+p_Y(y) = \int_{0}^\infty \mathsf{Normal}(y | 0, w) p_W(w) dw
+$$
+This can alo be written as,
+$$
+\begin{aligned}[t]
+y|w &\sim \mathsf{Normal}(0, w) \\
+w &\sim p_W(.) 
+\end{aligned}
+$$
+Common examples of scale-mixtures of normal distributions include the Student-t distribution and the Laplace (Double Exponential) distribution.
+The normal distribution can be thought of as a trivial scale mixture of itself, where the prior distribution of $w$ is a point mass on the scale of the normal distribution.
+Also, there can be discrete scale mixtures of normal distributions,
+$$
+p_Y(y) = \sum_{k = 1}^K \pi_k \mathsf{Normal}(y | 0, w_k)
+$$
+where $pi_k \geq 0$, and $\sum_{k = 1}^K \pi_k = 1$.
+
+A useful form of scale-mixtures of normal distributions for regularization and shrinkage is the local-global scale-mixture of normal distributions.
+Each observation is independently distributed normal conditional on a global scale term ($\tau$) and a observation-specific local scale paramter ($\lambda_i$),
+$$
+y_i | \tau, \lambda_i \sim \mathsf{Normal}(0, \tau \lambda_i) .
+$$
+The prior distribution given to $\lambda_i$ determines the shrinkage properties of the marginal distribution.
+The global scale parameter $\tau$ determines the overall spread of the errors.
+
+This exercise will provide you some intuition about these distributions.
+
+The data frame `randsamps` contains samples from the following local-global scale-mixture of normal distributions. 
+
+| Column | Distribution of $\lambda_i$ |
+|-------|--------------|
+|   `x` | $\lambda_i = 1$ for all $i$                    | 
+|  `y1` | $\lambda_i^{-2} \sim \mathsf{Gamma}(1/2, 1/2)$ |
+|  `y2` | $\lambda_i \sim \mathsf{Cauchy}^{+}(1)$        |
+|  `y3` | $\lambda_i^{-2} \sim \mathsf{Gamma}(2, 2)$     |
+|  `y4` | $$\begin{aligned}\lambda_i | z_i = \begin{aligned}[t] \lambda_i | z_i = 1 \sim \mathsf{Normal}(0, 10^{-6}) \\ \lambda_i | z_i = 0 \sim \mathsf{Normal}(0, \sqrt{2}) \\ z_i &\sim \mathsf{Bernoulli}(1/2)$$ |
+|  `y5`  | $\lambda_i^2 \sim \mathsf{Exponential}(1/2)$     |
+
+```{r}
+n <- 2 ^ 13
+randsamps <- tibble(
+  x = rnorm(n),
+  y1 = x * sample(c(1e-16, sqrt(2)), size = length(x), replace = TRUE),
+  y2 = x / sqrt(rgamma(length(x), 0.5, 0.5)),
+  y3 = x * abs(rcauchy(length(x))),
+  y4 = x / sqrt(rgamma(length(x), 2, 2)),
+  y5 = x * sqrt(exp(0.5)),
+)
+```
+
+The data frame `densities` contains densities for several probability density functions (with specific choices of parameters) for a range around zero.
+Each probability density function matches one of the random samples 
+
+| Column         | Description |
+|----------------|------------------------------------|
+| `normal`       | $\mathsf{DoubleExponential}(0, 1)$ |
+| `laplace`      | $\mathsf{Laplace}(0, 1)$           |
+| `student_t`    | $\mathsf{StudentT}(4, 0, 1)$       |
+| `cauchy`       | $\mathsf{Cauchy}(0, 1)$            |
+| `horseshoe`    | Horseshoe prior                    |
+| `spike_slab`   | Spike-and-slab                     |
+
+The Horseshoe prior does not have an analytic form, but can be approximated with,
+$$
+\frac{1}{\pi^2 \sqrt{2 \pi}} \log(1 + 4 / \theta^2) < p_HS (\theta) \leq  \frac{1}{\pi^2 |\theta|} .
+$$
+
+The probaibility density function of this spike-and-slab distribution is,
+$$
+p(y_i) = \theta \mathsf{Normal}(0, 10^-6) + (1 - \theta) \mathsf{Normal}(0, \sqrt{2}) ,
+$$
+where $\theta = 1/2$.
+
+```{r}
+densities <- tibble(
+  x = seq(-5, 5, length.out = 2 ^ 7),
+  cauchy = dcauchy(x),
+  normal = dnorm(x),
+  laplace = LaplacesDemon::dlaplace(x),
+  student_t = dt(x, 4),
+  spike_slab = 0.5 * dnorm(x, 0, 1e-6) + 0.5 * dnorm(x, 0, 100)
+)
+```
+
+1.  Match the samples `x`, `y1`, ..., `y5` in `randsamples` to the density functions in  `cauchy`, `horseshoe`, `laplace`, `normal`, `spike_slab`, `spike_slab`, and `student_t`.
+1.  Which of these probability density functions put the most prior probability on sparsity (values very close to zero).
         
