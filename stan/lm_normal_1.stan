@@ -9,13 +9,19 @@ data {
   // design matrix X
   // should not include an intercept
   matrix [N, K] X;
-  // priors on alpha
+  // scale of normal prior on regression intercept
   real<lower=0.> scale_alpha;
+  // scale of normal prior on regression coefficients
   vector<lower=0.>[K] scale_beta;
+  // expected value of the regression error
   real<lower=0.> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
+}
+transformed data {
+  // inverse scale of regression error
+  real<lower=0.> rate_sigma;
 }
 parameters {
   // regression coefficient vector
@@ -32,7 +38,7 @@ model {
   // priors
   alpha ~ normal(0., scale_alpha);
   beta ~ normal(0., scale_beta);
-  sigma ~ exponential(loc_sigma);
+  sigma ~ exponential(rate_sigma);
   // likelihood
   y ~ normal(mu, sigma);
 }

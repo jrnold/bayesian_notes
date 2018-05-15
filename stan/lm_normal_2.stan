@@ -1,5 +1,10 @@
-// Linear Model with Normal Errors -
-// version for non-scaled and centered data
+/*
+
+# Linear Model with Normal Errors
+
+This version uses a centered parameterization
+
+*/
 data {
   // number of observations
   int<lower=0> N;
@@ -10,9 +15,11 @@ data {
   // design matrix X
   // should not include an intercept
   matrix [N, K] X;
-  // priors on alpha
+  // scale of normal prior on regression intercept
   real<lower=0.> scale_alpha;
+  // scale of normal prior on regression coefficients
   vector<lower=0.>[K] scale_beta;
+  // expected value of the regression error
   real<lower=0.> loc_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
@@ -28,20 +35,18 @@ transformed parameters {
   vector[N] mu;
   real alpha;
   vector[K] beta;
-  real<lower=0.> sigma;
 
-  beta = beta_z .* scale_beta;
   alpha = alpha_z * scale_alpha;
-  sigma = sigma_z * loc_sigma;
+  beta = beta_z * scale_beta;
   mu = alpha + X * beta;
 }
 model {
   // priors
-  alpha_z ~ normal(0., 1.);
+  alpha_z ~ normal(0., 1);
   beta_z ~ normal(0., 1.);
   sigma_z ~ exponential(1.);
   // likelihood
-  y ~ normal(mu, sigma);
+  y ~ normal(mu, sigma_z * loc_sigma);
 }
 generated quantities {
   // simulate data from the posterior

@@ -19,30 +19,31 @@ data {
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
 }
+transformed data {
+  // inverse scale of sigma distribution
+  real<lower=0.> rate_sigma;
+}
 parameters {
   // regression coefficient vector
-  real alpha_raw;
-  vector[K] beta_raw;
+  real alpha;
+  vector[K] beta;
+  // scale of regression errors
   real<lower=0.> sigma;
-  // hyper-parameters of coefficients
+  // global scale
   real<lower=0.> tau;
 }
 transformed parameters {
-  real alpha;
-  vector[K] beta;
   vector[N] mu;
 
-  beta = beta_raw * tau;
-  alpha = alpha_raw .* scale_alpha;
   mu = alpha + X * beta;
 }
 model {
   // hyperpriors
   tau ~ exponential(loc_tau);
   // priors
-  alpha_raw ~ normal(0., 1.);
-  beta_raw ~ normal(0., 1.);
-  sigma ~ exponential(loc_sigma);
+  alpha ~ normal(0., scale_alpha);
+  beta ~ normal(0., scale_beta);
+  sigma ~ exponential(rate_sigma);
   // likelihood
   y ~ normal(mu, sigma);
 }

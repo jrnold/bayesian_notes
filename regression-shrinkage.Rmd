@@ -643,11 +643,6 @@ $$
 where $k_0$ is a guess as to the number of non-zero coefficients.
 Note that the choice of $\tau$ must scale with the observation noise $\sigma$ and the number of observations $n$.
 
-```{r}
-
-```
-
-
 Calculate the shrinkage factor $\kappa_k$ given $n$, $\sigma$, $\tau$, 
 $sd_x$, and $\lambda_k$.
 ```{r}
