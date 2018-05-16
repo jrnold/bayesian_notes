@@ -56,6 +56,8 @@ generated quantities {
   vector[N * use_y_rep] y_rep;
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
+  vector[K] kappa;
+  real m_eff;
   for (n in 1:num_elements(y_rep)) {
     y_rep[n] = student_t_rng(nu, mu[n], omega[n]);
   }

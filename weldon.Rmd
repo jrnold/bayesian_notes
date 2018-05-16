@@ -71,7 +71,7 @@ The prior distribution is Dirichlet with parameters derived
 from the expected number in each category for a single roll of `r size` dice.
 
 ```{r}
-prior_alpha <- dbinom(0:size, size = size, prob = prob) * size
+prior_alpha <- dBinom(0:size, size = size, prob = prob) * size
 round(prior_alpha , 1)
 ```
 

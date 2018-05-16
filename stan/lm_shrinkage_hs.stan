@@ -1,4 +1,6 @@
-// Linear Model with Normal Errors
+/*
+  Linear Model with Normal Errors and Regularized Horseshoe shrinkage
+*/
 data {
   // number of observations
   int<lower=0> N;
@@ -12,25 +14,18 @@ data {
   // priors on alpha
   real<lower=0.> scale_alpha;
   // prior scale on global
-  real<lower=0.> loc_tau;
-  // prior on regression error distribution
-  real<lower=0.> loc_sigma;
-  // degrees of freedom for half-t prior on tau
+  real<lower=0.> scale_tau;
   real<lower=1.> df_tau;
+  // prior on regression error distribution
+  real<lower=0.> rate_sigma;
   // degrees of freedom for half-t prior on lambdas
   real<lower=1.> df_lambda;
   // scale and degrees of freedom of HS slab
   real<lower=0.> scale_slab;
   real<lower=0.> df_slab;
-  // Number of non-zero coefficients expected;
-  // will be multiplied by sigma.
-  real<lower=0.,upper=K> k0;
-  // keep responses
+  // flags
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
-}
-transformed data {
-  real<lower=0.> tau0 = k0 / (K - k0) / sqrt(1. * N);
 }
 parameters {
   // regression coefficients on z-scale
@@ -41,31 +36,31 @@ parameters {
   // global shrinkage parameter
   real<lower=0.> tau;
   // local shrinkage
-  vector[K] lambda;
+  vector<lower = 0.>[K] lambda;
   // slab scale
   real<lower=0.> c;
 }
 transformed parameters {
+  // expected value of the response
   vector[N] mu;
+  // regularized lambda
+  vector<lower = 0.>[K] lambda_tilde;
   real alpha;
   vector[K] beta;
-  vector[K] lambda_tilde;
 
   alpha = alpha_z * scale_alpha;
-  // calculate these inside a block to avoid savin them
-  // calculate these values to avoid calculating them multiple times
+  beta = tau * lambda .* beta_z;
   lambda_tilde = c * lambda ./ (c ^ 2 + tau ^ 2 * square(lambda));
-  beta = beta_z * tau .* lambda_tilde;
   mu = alpha + X * beta;
 }
 model {
   // regression noise
-  sigma ~ exponential(loc_sigma);
+  sigma ~ exponential(rate_sigma);
   // global shrinkage parameters
-  tau ~ student_t(df_tau, 0., sigma * tau0);
+  tau ~ student_t(df_tau, 0., sigma * scale_tau);
   // local shrinkage parameters
   lambda ~ student_t(df_lambda, 0., 1.);
-  // priors
+  // regression coefficient and
   alpha_z ~ normal(0., 1.);
   beta_z ~ normal(0., 1.);
   // slab scale
@@ -78,10 +73,19 @@ generated quantities {
   vector[N * use_y_rep] y_rep;
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
+  vector[K] kappa;
+  real m_eff;
   for (i in 1:num_elements(y_rep)) {
     y_rep[i] = normal_rng(mu[i], sigma);
   }
   for (i in 1:num_elements(log_lik)) {
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
+  {
+    real inv_sigma2 = 1. / sigma ^ 2;
+    real tau2 = tau ^ 2;
+    vector[K] lambda2 = square(lambda);
+    kappa = 1. ./ (1. + N * inv_sigma2 * tau2 * lambda2);
+  }
+  m_eff = K - sum(kappa);
 }

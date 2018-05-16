@@ -60,41 +60,69 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -334,85 +362,82 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
 <li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
 <li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
+<li class="chapter" data-level="19.2.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#constrained-optimization-interpretation"><i class="fa fa-check"></i><b>19.2.3</b> Constrained Optimization Interpretation</a></li>
+<li class="chapter" data-level="19.2.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-interpretation"><i class="fa fa-check"></i><b>19.2.4</b> Bayesian Interpretation</a></li>
 </ul></li>
 <li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
 <li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
-<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#hiearchical-coefficient-priors"><i class="fa fa-check"></i><b>19.3.2</b> Hiearchical Coefficient Priors</a></li>
-<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Laplace Distribution</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.3.2</b> Spike and Slab prior</a></li>
+<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#normal-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Normal Distribution</a></li>
+<li class="chapter" data-level="19.3.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.4</b> Laplace Distribution</a></li>
+<li class="chapter" data-level="19.3.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.3.5</b> Student-t and Cauchy Distributions</a></li>
+<li class="chapter" data-level="19.3.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-prior"><i class="fa fa-check"></i><b>19.3.6</b> Horseshore Prior</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.4</b> Student-t and Cauchy Distributions</a></li>
-<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-and-hierarchical-priors"><i class="fa fa-check"></i><b>19.5</b> Horseshore and Hierarchical Priors</a></li>
-<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.6</b> Understanding Shrinkage Models</a></li>
-<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.7</b> Spike and Slab prior</a></li>
-<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#number-of-effective-zeros"><i class="fa fa-check"></i><b>19.8</b> Number of effective zeros</a></li>
-<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.9</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#all-coefficients"><i class="fa fa-check"></i><b>19.10</b> All Coefficients</a><ul>
-<li class="chapter" data-level="19.10.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#zellners-g-prior"><i class="fa fa-check"></i><b>19.10.1</b> Zellner’s g-prior</a></li>
-<li class="chapter" data-level="19.10.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#q-r-prior"><i class="fa fa-check"></i><b>19.10.2</b> Q-R Prior</a></li>
-</ul></li>
-<li class="chapter" data-level="19.11" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.11</b> Differences between Bayesian and Penalized ML</a></li>
-<li class="chapter" data-level="19.12" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#references-11"><i class="fa fa-check"></i><b>19.12</b> References</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.4</b> Understanding Shrinkage Models</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.6</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
 </ul></li>
 <li class="part"><span><b>IV Appendix</b></span><ul>
 <li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
-<li class="chapter" data-level="19.13" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.13</b> Parameters</a></li>
-<li class="chapter" data-level="19.14" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.14</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="19.14.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.14.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="19.14.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.14.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="19.14.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.14.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="19.14.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.14.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="19.14.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.14.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
+<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="19.9.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.9.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="19.9.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="19.9.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.9.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="19.9.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.9.5</b> Cholesky Decomposition</a></li>
 </ul></li>
+<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="scaled-and-unscaled-variables.html"><a href="scaled-and-unscaled-variables.html"><i class="fa fa-check"></i><b>20</b> Scaled and Unscaled Variables</a></li>
-<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
-<li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
-<li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
-<li class="chapter" data-level="22.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>22.3</b> Topics</a></li>
-<li class="chapter" data-level="22.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>22.4</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="22.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>22.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>22.5.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="22.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>22.5.2</b> Modern Statistical Workflow</a></li>
-<li class="chapter" data-level="22.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>22.5.3</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="22.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>22.5.4</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="22.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>22.5.5</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="22.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>22.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="22.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>22.5.7</b> Variable Selection</a></li>
-<li class="chapter" data-level="22.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>22.5.8</b> Multiple Testing</a></li>
-<li class="chapter" data-level="22.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>22.5.9</b> Rare Events</a></li>
-<li class="chapter" data-level="22.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>22.5.10</b> Identifiability</a></li>
-<li class="chapter" data-level="22.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>22.5.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a></li>
+<li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="21.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>21.1</b> Textbooks</a></li>
+<li class="chapter" data-level="21.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>21.2</b> Syllabi</a></li>
+<li class="chapter" data-level="21.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>21.3</b> Topics</a></li>
+<li class="chapter" data-level="21.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>21.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="21.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>21.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="21.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>21.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="21.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>21.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="21.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>21.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="21.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>21.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="21.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>21.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="21.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>21.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="21.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>21.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="21.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>21.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="21.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>21.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="21.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>21.5.11</b> Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>22.6</b> Software</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>22.6.1</b> Stan</a></li>
-<li class="chapter" data-level="22.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>22.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="22.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>22.6.3</b> Priors</a></li>
+<li class="chapter" data-level="21.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>21.6</b> Software</a><ul>
+<li class="chapter" data-level="21.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>21.6.1</b> Stan</a></li>
+<li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>22.7</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="22.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>22.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="22.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>22.9</b> Mixture Models</a></li>
-<li class="chapter" data-level="22.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>22.10</b> Inference</a><ul>
-<li class="chapter" data-level="22.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>22.10.1</b> Discussion of Bayesian Inference</a></li>
+<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
+<li class="chapter" data-level="21.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>21.10.1</b> Discussion of Bayesian Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="22.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>22.11</b> Model Checking</a><ul>
-<li class="chapter" data-level="22.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>22.11.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="22.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>22.11.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="22.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>22.11.3</b> Software Validation</a></li>
+<li class="chapter" data-level="21.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>21.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="21.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>21.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="21.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>21.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="21.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>21.11.3</b> Software Validation</a></li>
 </ul></li>
-<li class="chapter" data-level="22.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>22.12</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="22.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>22.13</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="22.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>22.14</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="22.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>22.15</b> History of Bayesian Statistics</a></li>
-<li class="chapter" data-level="22.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>22.16</b> Sampling Difficulties</a></li>
-<li class="chapter" data-level="22.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>22.17</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="22.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>22.18</b> Pooling Polls</a></li>
-<li class="chapter" data-level="22.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>22.19</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="22.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>22.20</b> Bayesian point estimation / Decision</a></li>
-<li class="chapter" data-level="22.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>22.21</b> Stan Modeling Language</a></li>
-<li class="chapter" data-level="22.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>22.22</b> Bayes Factors</a></li>
+<li class="chapter" data-level="21.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>21.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="21.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>21.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="21.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>21.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="21.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>21.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="21.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>21.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="21.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>21.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="21.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>21.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="21.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>21.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="21.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>21.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="21.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>21.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="21.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>21.22</b> Bayes Factors</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-12.html"><a href="references-12.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -454,36 +479,36 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \newcommand{\T}{'}
 
 % This follows BDA
-\newcommand{\dunif}{\mathrm{U}}
-\newcommand{\dnorm}{\mathrm{N}}
-\newcommand{\dlnorm}{\mathrm{lognormal}}
-\newcommand{\dmvnorm}{\mathrm{N}}
-\newcommand{\dgamma}{\mathrm{Gamma}}
-\newcommand{\dinvgamma}{\mathrm{Inv-Gamma}}
-\newcommand{\dchisq}[1]{\chi^2_{#1}}
-\newcommand{\dinvchisq}[1]{\mathrm{Inv-}\chi^2_{#1}}
-\newcommand{\dexp}{\mathrm{Expon}}
-\newcommand{\dlaplace}{\mathrm{Laplace}}
-\newcommand{\dweibull}{\mathrm{Weibull}}
-\newcommand{\dwishart}[1]{\mathrm{Wishart}_{#1}}
-\newcommand{\dinvwishart}[1]{\mathrm{Inv-Wishart}_{#1}}
-\newcommand{\dlkj}{\mathrm{LkjCorr}}
-\newcommand{\dt}{\mathrm{Student-t}}
-\newcommand{\dbeta}{\mathrm{Beta}}
-\newcommand{\ddirichlet}{\mathrm{Dirichlet}}
-\newcommand{\dlogistic}{\mathrm{Logistic}}
-\newcommand{\dllogistic}{\mathrm{Log-logistic}}
-\newcommand{\dpois}{\mathrm{Poisson}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dBinom}{\mathrm{Bin}}
-\newcommand{\dmultinom}{\mathrm{Multinom}}
-\newcommand{\dnbinom}{\mathrm{Neg-bin}}
-\newcommand{\dnbinomalt}{\mathrm{Neg-bin2}}
-\newcommand{\dbetabinom}{\mathrm{Beta-bin}}
-\newcommand{\dcauchy}{\mathrm{Cauchy}}
-\newcommand{\dhalfcauchy}{\mathrm{Cauchy}^{+}}
-\newcommand{\dlkjcorr}{\mathrm{LKJ}^{+}}
-\newcommand{\dbernoulli}{\mathrm{Bernoulli}}
+\newcommand{\dunif}{\mathsf{Uniform}}
+\newcommand{\dnorm}{\mathsf{Normal}}
+\newcommand{\dhalfnorm}{\mathrm{HalfNormal}}
+\newcommand{\dlnorm}{\mathsf{LogNormal}}
+\newcommand{\dmvnorm}{\mathsf{Normal}}
+\newcommand{\dgamma}{\mathsf{Gamma}}
+\newcommand{\dinvgamma}{\mathsf{InvGamma}}
+\newcommand{\dchisq}{\mathsf{ChiSquared}}
+\newcommand{\dinvchisq}{\mathsf{InvChiSquared}}
+\newcommand{\dexp}{\mathsf{Exponential}}
+\newcommand{\dlaplace}{\mathsf{Laplace}}
+\newcommand{\dweibull}{\mathsf{Weibull}}
+\newcommand{\dwishart}{\mathsf{Wishart}}
+\newcommand{\dinvwishart}{\mathsf{InvWishart}}
+\newcommand{\dlkj}{\mathsf{LkjCorr}}
+\newcommand{\dt}{\mathsf{StudentT}}
+\newcommand{\dhalft}{\mathsf{HalfStudentT}}
+\newcommand{\dbeta}{\mathsf{Beta}}
+\newcommand{\ddirichlet}{\mathsf{Dirichlet}}
+\newcommand{\dlogistic}{\mathsf{Logistic}}
+\newcommand{\dllogistic}{\mathsf{LogLogistic}}
+\newcommand{\dpois}{\mathsf{Poisson}}
+\newcommand{\dBinom}{\mathsf{Binomial}}
+\newcommand{\dmultinom}{\mathsf{Multinom}}
+\newcommand{\dnbinom}{\mathsf{NegativeBinomial}}
+\newcommand{\dnbinomalt}{\mathsf{NegativeBinomial2}}
+\newcommand{\dbetabinom}{\mathsf{BetaBinomial}}
+\newcommand{\dcauchy}{\mathsf{Cauchy}}
+\newcommand{\dhalfcauchy}{\mathsf{HalfCauchy}}
+\newcommand{\dbernoulli}{\mathsf{Bernoulli}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Reals}{\R}
@@ -496,6 +521,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 \DeclareMathOperator{\invlogit}{Inv-Logit}
 \DeclareMathOperator{\logit}{Logit}
+\DeclareMathOperator{\diag}{diag}
 
 \]
 <div id="mcmc-diagnostics" class="section level1">
@@ -509,8 +535,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Also see the <strong><a href="https://cran.r-project.org/package=bayesplot">bayesplot</a></strong> vignette <a href="https://cran.r-project.org/web/packages/bayesplot/vignettes/MCMC-diagnostics.html">Visual MCMC diagnostics using the bayesplot package</a>, which though specific to the provides, provides a good overview of these diagnostics.</p>
 <div id="prerequisites-3" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)</a>
+<a class="sourceLine" id="cb64-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a></code></pre></div>
 </div>
 <div id="reparameterize-models" class="section level2">
 <h2><span class="header-section-number">8.1</span> Reparameterize Models</h2>
@@ -522,20 +548,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="convergence-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.2</span> Convergence Diagnostics</h2>
-<p>Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilibrium. However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.</p>
-<p>In general there is no way to prove that the sampler has converged.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> However, there are several statistics that indicate that a sampler has not converged.</p>
+<p>Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilibrium.
+However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.</p>
+<p>In general there is no way to prove that the sampler has converged.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>
+However, there are several statistics that indicate that a sampler has not converged.</p>
 <div id="potential-scale-reduction-hatr" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</h3>
-<p>In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting values of the chains <span class="citation">(Stan Development Team 2016, Sec 28.2)</span>.</p>
-<p>One way to check this is to compare the distributions of multiple chains—in equilibrium they should all have the same mean. Additionally, the split <span class="math inline">\(\hat{R}\)</span> tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.</p>
+<p>In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting
+values of the chains <span class="citation">(Stan Development Team 2016, Sec 28.2)</span>.</p>
+<p>One way to check this is to compare the distributions of multiple chains—in equilibrium they should all have the same mean.
+Additionally, the split <span class="math inline">\(\hat{R}\)</span> tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.</p>
 <p>See <span class="citation">Stan Development Team (2016 Sec 28.2)</span> for the equations to calculate these.</p>
 <p><strong>TODO:</strong> Examples of passing and non-passing <span class="math inline">\(\hat{R}\)</span> chains using fake data generated from known functions with a given autocorrelation.</p>
-<p><strong>Rule of Thumb:</strong> The rule of thumb is that R-hat values for all less than 1.1 <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">source</a>. Note that <strong>all</strong> parameters must show convergence. This is a necessary but not sufficient condition for convergence.</p>
+<p><strong>Rule of Thumb:</strong> The rule of thumb is that R-hat values for all less than 1.1 <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">source</a>.
+Note that <strong>all</strong> parameters must show convergence.
+This is a necessary but not sufficient condition for convergence.</p>
 </div>
 <div id="references-3" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> References</h3>
 <ul>
-<li><span class="citation">Gelman et al. (2013, 267)</span></li>
+<li><span class="citation">A. Gelman et al. (2013, 267)</span></li>
 <li><span class="citation">Stan Development Team (2016 Ch 28.)</span> for how Stan calculates Hat, autocorrelations, and ESS.</li>
 <li><span class="citation">Gelman and Rubin (1992)</span> introduce the R-hat statistic</li>
 </ul>
@@ -547,93 +579,110 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In other words, highly correlated MCMC samplers requires more samples to produce the same level of Monte Carlo error for an estimate.</p>
 <div id="effective-sample-size" class="section level3">
 <h3><span class="header-section-number">8.3.1</span> Effective Sample Size</h3>
-<p>The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample. Suppose that the <span class="math inline">\(\rho^2_t\)</span> is the ACF function of a sample of size <span class="math inline">\(N\)</span>, the effective sample size, <span class="math inline">\(N_eff\)</span>, is <span class="math display">\[
+<p>The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample.
+Suppose that the <span class="math inline">\(\rho^2_t\)</span> is the ACF function of a sample of size <span class="math inline">\(N\)</span>, the effective sample size, <span class="math inline">\(N_eff\)</span>, is
+<span class="math display">\[
 N_{eff} = \frac{N}{\sum_{t = -\infty}^\infty \rho_t} = \frac{N}{1 + 2 \sum_{t = -\infty}^\infty \rho_t}.
-\]</span> <strong>TODO</strong> show that if <span class="math inline">\(\rho_t = 1\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = 1\)</span>, and if <span class="math inline">\(\rho_t = 0\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = N\)</span></p>
-<p>Computing the effective sample size requires calculating an autocorrelation. A multi-chain estimate of the autocorrelation is found by computing the <em>variogram</em> with the correlations for all lags, <span class="math display">\[
+\]</span>
+<strong>TODO</strong> show that if <span class="math inline">\(\rho_t = 1\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = 1\)</span>, and if <span class="math inline">\(\rho_t = 0\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = N\)</span></p>
+<p>Computing the effective sample size requires calculating an autocorrelation.
+A multi-chain estimate of the autocorrelation is found by computing the <em>variogram</em> with the correlations for all lags,
+<span class="math display">\[
 V_t = \frac{1}{m(n - t)} \sum_{j = 1}^m \sum_{i = t + 1}^n (\psi_{i,j} - \psi_{i - t,j})^2
-\]</span> The estimate of the autocorrelations <span class="math inline">\(\hat{\rho}_t\)</span> is <span class="math display">\[
+\]</span>
+The estimate of the autocorrelations <span class="math inline">\(\hat{\rho}_t\)</span> is
+<span class="math display">\[
 \hat{\rho}_t = 1 - \frac{V_t}{2 \widehat{\mathrm{var}}^+}
-\]</span> The estimates of the autocorrelations can be noisy, so <span class="math inline">\(\hat{\rho}_t\)</span> are summed from 0, to the last <span class="math inline">\(t\)</span> such that <span class="math inline">\(\rho\)</span> is positive (<span class="math inline">\(T\)</span>), <span class="math display">\[
+\]</span>
+The estimates of the autocorrelations can be noisy, so <span class="math inline">\(\hat{\rho}_t\)</span> are summed from 0, to the last <span class="math inline">\(t\)</span> such that <span class="math inline">\(\rho\)</span> is positive (<span class="math inline">\(T\)</span>),
+<span class="math display">\[
 \hat{n}_{eff} = \frac{mn}{1 + 2 \sum_{t = 1}^T \hat{\rho}_t}
 \]</span></p>
 <ul>
-<li><p>See also <span class="citation">Stan Development Team (2016 Sec 28.4)</span>, <span class="citation">Geyer (2011)</span>, and <span class="citation">Gelman et al. (2013 Sec 11.5)</span>.</p></li>
-<li><p>This isn’t the only way to calculate the effective sample size. The <strong><a href="https://cran.r-project.org/package=coda">coda</a></strong> package function <a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">coda</a> uses a different method. The differences are due to how the autocorrelation is calculated.</p></li>
+<li><p>See also <span class="citation">Stan Development Team (2016 Sec 28.4)</span>, <span class="citation">Geyer (2011)</span>, and <span class="citation">A. Gelman et al. (2013 Sec 11.5)</span>.</p></li>
+<li><p>This isn’t the only way to calculate the effective sample size. The
+<strong><a href="https://cran.r-project.org/package=coda">coda</a></strong> package function <a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">coda</a>
+uses a different method. The differences are due to how the autocorrelation is calculated.</p></li>
 </ul>
-<p><strong>Example:</strong> Comparison of the effective sample sizes for data generated with various levels of autocorrelation. The package <code>rstan</code> does not directly expose the function it uses to calculate ESS, so this <code>ess</code> function does so (for a single chain).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
-  N &lt;-<span class="st"> </span><span class="kw">length</span>(x)
-  V &lt;-<span class="st"> </span><span class="kw">map_dbl</span>(<span class="kw">seq_len</span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>),
-          <span class="cf">function</span>(t) {
-             <span class="kw">mean</span>(<span class="kw">diff</span>(x, <span class="dt">lag =</span> t) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-          })
-  rho &lt;-<span class="st"> </span><span class="kw">head_while</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>V <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(x), <span class="op">~</span><span class="st"> </span>. <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
-  N <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">sum</span>(rho))
-}
-n &lt;-<span class="st"> </span><span class="dv">1024</span>
-sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.99</span>),
-  <span class="cf">function</span>(ar) {
-    <span class="kw">tibble</span>(<span class="dt">ar =</span> ar,
-           <span class="dt">y =</span> <span class="cf">if</span> (ar <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {
-             <span class="kw">rnorm</span>(n)
-           } <span class="cf">else</span> {
-             <span class="kw">as.numeric</span>(<span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> ar), n))
-           },
-           <span class="dt">x =</span> <span class="kw">seq_along</span>(y),
-           <span class="dt">n_eff =</span> <span class="kw">ess</span>(y),
-           <span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;AR = %.2f (n_eff = %.0f)&quot;</span>, ar, n_eff))
-  }
-)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sims, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<p><strong>Example:</strong> Comparison of the effective sample sizes for data generated with various levels of autocorrelation.
+The package <code>rstan</code> does not directly expose the function it uses to calculate ESS, so this <code>ess</code> function does so (for a single chain).</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1">ess &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">  N &lt;-<span class="st"> </span><span class="kw">length</span>(x)</a>
+<a class="sourceLine" id="cb65-3" data-line-number="3">  V &lt;-<span class="st"> </span><span class="kw">map_dbl</span>(<span class="kw">seq_len</span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb65-4" data-line-number="4">          <span class="cf">function</span>(t) {</a>
+<a class="sourceLine" id="cb65-5" data-line-number="5">             <span class="kw">mean</span>(<span class="kw">diff</span>(x, <span class="dt">lag =</span> t) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb65-6" data-line-number="6">          })</a>
+<a class="sourceLine" id="cb65-7" data-line-number="7">  rho &lt;-<span class="st"> </span><span class="kw">head_while</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>V <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(x), <span class="op">~</span><span class="st"> </span>. <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb65-8" data-line-number="8">  N <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">sum</span>(rho))</a>
+<a class="sourceLine" id="cb65-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb65-10" data-line-number="10">n &lt;-<span class="st"> </span><span class="dv">1024</span></a>
+<a class="sourceLine" id="cb65-11" data-line-number="11">sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.99</span>),</a>
+<a class="sourceLine" id="cb65-12" data-line-number="12">  <span class="cf">function</span>(ar) {</a>
+<a class="sourceLine" id="cb65-13" data-line-number="13">    <span class="kw">tibble</span>(<span class="dt">ar =</span> ar,</a>
+<a class="sourceLine" id="cb65-14" data-line-number="14">           <span class="dt">y =</span> <span class="cf">if</span> (ar <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb65-15" data-line-number="15">             <span class="kw">rnorm</span>(n)</a>
+<a class="sourceLine" id="cb65-16" data-line-number="16">           } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb65-17" data-line-number="17">             <span class="kw">as.numeric</span>(<span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> ar), n))</a>
+<a class="sourceLine" id="cb65-18" data-line-number="18">           },</a>
+<a class="sourceLine" id="cb65-19" data-line-number="19">           <span class="dt">x =</span> <span class="kw">seq_along</span>(y),</a>
+<a class="sourceLine" id="cb65-20" data-line-number="20">           <span class="dt">n_eff =</span> <span class="kw">ess</span>(y),</a>
+<a class="sourceLine" id="cb65-21" data-line-number="21">           <span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;AR = %.2f (n_eff = %.0f)&quot;</span>, ar, n_eff))</a>
+<a class="sourceLine" id="cb65-22" data-line-number="22">  }</a>
+<a class="sourceLine" id="cb65-23" data-line-number="23">)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw">ggplot</span>(sims, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-3" data-line-number="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
 <p><img src="diagnostics_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="thinning" class="section level2">
 <h2><span class="header-section-number">8.4</span> Thinning</h2>
-<p>Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved. Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.</p>
+<p>Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved.
+Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.</p>
 <p>Both of these will produce 1,000 samples from the posterior, but effective sample size of <span class="math inline">\(B\)</span> will be greater than the effective sample size of <span class="math inline">\(A\)</span>, since after thinning g the autocorrelation in <span class="math inline">\(B\)</span> will be lower.</p>
 <ul>
 <li><em>A</em> Generating 1,000 samples after convergence and save all of them</li>
 <li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
 </ul>
-<p>In this case, A produces 10,000 samples, and B produces 1,000. The effective sample size of A will be higher than B. However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: <span class="math inline">\(N_{eff}(A) / N_{eff}(B) &lt; 10\)</span>.</p>
+<p>In this case, A produces 10,000 samples, and B produces 1,000.
+The effective sample size of A will be higher than B.
+However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: <span class="math inline">\(N_{eff}(A) / N_{eff}(B) &lt; 10\)</span>.</p>
 <ul>
 <li><em>A</em> Generating 10,000 samples after convergence and save all of them</li>
 <li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
 </ul>
 <p>Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.</p>
 <p>Thinning has become less of an issue as memory has become less of a computational constraint, and samplers have become more efficient.</p>
-<p>The following example simulates random values from an autocorrelated series, and applies different levels of thinning. Thinning is always decreasing the effective sample size. However, the number of effective samples per sample (<code>n_eff / n</code>) increases until the thinning is large enough that the thinned samples are uncorrelated.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">thin_ess &lt;-<span class="st"> </span><span class="cf">function</span>(thin, x) {
-  <span class="cf">if</span> (thin <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) {
-    <span class="co"># keep only thinned rows</span>
-    x_thinned &lt;-<span class="st"> </span>x[(<span class="kw">seq_len</span>(<span class="kw">length</span>(x)) <span class="op">%%</span><span class="st"> </span>thin) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]
-  } <span class="cf">else</span> {
-    x_thinned &lt;-<span class="st"> </span>x
-  }
-  <span class="kw">tibble</span>(<span class="dt">thin =</span> thin,
-         <span class="dt">n =</span> <span class="kw">length</span>(x_thinned),
-         <span class="dt">n_eff =</span> <span class="kw">ess</span>(x_thinned),
-         <span class="st">`</span><span class="dt">n_eff / n</span><span class="st">`</span> =<span class="st"> </span>n_eff <span class="op">/</span><span class="st"> </span>n)
-}
-
-<span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>), thin_ess,
-       <span class="dt">x =</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> .<span class="dv">9</span>), <span class="dv">4096</span>))
-<span class="co">#&gt; # A tibble: 6 x 4</span>
-<span class="co">#&gt;    thin     n n_eff `n_eff / n`</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     1  4096 1266.       0.309</span>
-<span class="co">#&gt; 2     2  2048 1087.       0.531</span>
-<span class="co">#&gt; 3     4  1024  791.       0.773</span>
-<span class="co">#&gt; 4     8   512  512        1    </span>
-<span class="co">#&gt; 5    16   256  256        1    </span>
-<span class="co">#&gt; 6    32   128  128        1</span></code></pre></div>
+<p>The following example simulates random values from an autocorrelated series, and applies different levels of thinning.
+Thinning is always decreasing the effective sample size.
+However, the number of effective samples per sample (<code>n_eff / n</code>) increases until the thinning is large enough that the thinned samples are uncorrelated.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">thin_ess &lt;-<span class="st"> </span><span class="cf">function</span>(thin, x) {</a>
+<a class="sourceLine" id="cb67-2" data-line-number="2">  <span class="cf">if</span> (thin <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb67-3" data-line-number="3">    <span class="co"># keep only thinned rows</span></a>
+<a class="sourceLine" id="cb67-4" data-line-number="4">    x_thinned &lt;-<span class="st"> </span>x[(<span class="kw">seq_len</span>(<span class="kw">length</span>(x)) <span class="op">%%</span><span class="st"> </span>thin) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb67-5" data-line-number="5">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb67-6" data-line-number="6">    x_thinned &lt;-<span class="st"> </span>x</a>
+<a class="sourceLine" id="cb67-7" data-line-number="7">  }</a>
+<a class="sourceLine" id="cb67-8" data-line-number="8">  <span class="kw">tibble</span>(<span class="dt">thin =</span> thin,</a>
+<a class="sourceLine" id="cb67-9" data-line-number="9">         <span class="dt">n =</span> <span class="kw">length</span>(x_thinned),</a>
+<a class="sourceLine" id="cb67-10" data-line-number="10">         <span class="dt">n_eff =</span> <span class="kw">ess</span>(x_thinned),</a>
+<a class="sourceLine" id="cb67-11" data-line-number="11">         <span class="st">`</span><span class="dt">n_eff / n</span><span class="st">`</span> =<span class="st"> </span>n_eff <span class="op">/</span><span class="st"> </span>n)</a>
+<a class="sourceLine" id="cb67-12" data-line-number="12">}</a>
+<a class="sourceLine" id="cb67-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb67-14" data-line-number="14"><span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>), thin_ess,</a>
+<a class="sourceLine" id="cb67-15" data-line-number="15">       <span class="dt">x =</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> <span class="fl">.9</span>), <span class="dv">4096</span>))</a>
+<a class="sourceLine" id="cb67-16" data-line-number="16"><span class="co">#&gt; # A tibble: 6 x 4</span></a>
+<a class="sourceLine" id="cb67-17" data-line-number="17"><span class="co">#&gt;    thin     n n_eff `n_eff / n`</span></a>
+<a class="sourceLine" id="cb67-18" data-line-number="18"><span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb67-19" data-line-number="19"><span class="co">#&gt; 1     1  4096 1266.       0.309</span></a>
+<a class="sourceLine" id="cb67-20" data-line-number="20"><span class="co">#&gt; 2     2  2048 1087.       0.531</span></a>
+<a class="sourceLine" id="cb67-21" data-line-number="21"><span class="co">#&gt; 3     4  1024  791.       0.773</span></a>
+<a class="sourceLine" id="cb67-22" data-line-number="22"><span class="co">#&gt; 4     8   512  512        1    </span></a>
+<a class="sourceLine" id="cb67-23" data-line-number="23"><span class="co">#&gt; 5    16   256  256        1    </span></a>
+<a class="sourceLine" id="cb67-24" data-line-number="24"><span class="co">#&gt; 6    32   128  128        1</span></a></code></pre></div>
 <ul>
-<li><span class="citation">Gelman et al. (2013, 282–83)</span></li>
+<li><span class="citation">A. Gelman et al. (2013, 282–83)</span></li>
 <li><span class="citation">Stan Development Team (2016, 354–55)</span></li>
 </ul>
 <div id="traceplots" class="section level3">
@@ -641,7 +690,7 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 <p>Trace plots are a time series of sampler iterations, e.g. as produced by <a href="https://www.rdocumentation.org/packages/bayesplot/topics/mcmc_trace">bayesplot</a>.</p>
 <p>These can, but <strong>should not</strong>, be used to assess convergence,</p>
 <ul>
-<li>such visual inspection is ‘notoriously unreliable’ <span class="citation">(Gelman et al. 2013, 285)</span></li>
+<li>such visual inspection is ‘notoriously unreliable’ <span class="citation">(A. Gelman et al. 2013, 285)</span></li>
 <li>it cannot scale to many parameters</li>
 </ul>
 <p>Trace plots may be useful for diagnosing convergence problems <em>after</em> <span class="math inline">\(\hat{R}\)</span> or or <span class="math inline">\(n_eff\)</span> indicates problems. Some possible issues to check in these plots are</p>
@@ -652,22 +701,30 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 </div>
 <div id="monte-carlo-standard-error-mcse" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Monte Carlo Standard Error (MCSE)</h3>
-<p>The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error. With a independent sample of size <span class="math inline">\(N\)</span>, the MCSE for the sample mean is <span class="math display">\[
+<p>The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error.
+With a independent sample of size <span class="math inline">\(N\)</span>, the MCSE for the sample mean is
+<span class="math display">\[
 MCSE(\bar{\theta}) = \frac{s}{\sqrt{N}}
-\]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
-<p>However, MCMC are generally not independent, and the MCSE will be higher than that of an independent sample. One way to calculate the MCSE with autocorrelated samples is to use the effective sample size instead of the sample size, <span class="math display">\[
+\]</span>
+where <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
+<p>However, MCMC are generally not independent, and the MCSE will be higher than that
+of an independent sample. One way to calculate the MCSE with autocorrelated samples is to use the effective sample size instead of the sample size,
+<span class="math display">\[
 MCSE(\bar{\theta}) = \frac{s}{\sqrt{N_{eff}}}
 \]</span></p>
-<p>An MCSE estimator for the mean is <span class="math display">\[
+<p>An MCSE estimator for the mean is
+<span class="math display">\[
 \mathrm{MCSE}(\hat{\theta}) = \frac{\sd(\theta)}{\sqrt{n_{neff}}}
-\]</span> An MCSE estimator for any posterior probability, where <span class="math inline">\(\hat{p} = \Pr(f(\theta))\)</span>, follows from the standard error of a proportion, but using the effective sample size, <span class="math display">\[
+\]</span>
+An MCSE estimator for any posterior probability, where <span class="math inline">\(\hat{p} = \Pr(f(\theta))\)</span>, follows from the standard error of a proportion, but using the effective sample size,
+<span class="math display">\[
 MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 \]</span></p>
 <p>See <span class="citation">Flegal, Haran, and Jones (2008)</span> and the <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for methods to calculate MCMC standard errors for means and quantiles using sub-sampling methods.</p>
 <p><span class="citation">Flegal, Haran, and Jones (2008)</span> argues for using ESS as a stopping rule and convergence diagnostic for Bayesian inference.</p>
 <p>The estimation of standard errors for quantiles, as would be used in is more complicated. See the package <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for Monte Carlo standard errors of quantiles (though calculated in a different method than <strong>rstan</strong>).</p>
 <ul>
-<li><span class="citation">Gelman et al. (2013 Sec. 10.5)</span></li>
+<li><span class="citation">A. Gelman et al. (2013 Sec. 10.5)</span></li>
 <li><span class="citation">Flegal, Haran, and Jones (2008)</span></li>
 <li><a href="http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf">Talk by Geyer on MCSE</a></li>
 </ul>
@@ -675,7 +732,8 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 </div>
 <div id="hmc-nut-specific-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.5</span> HMC-NUT Specific Diagnostics</h2>
-<p>Hamiltonian Monte Carlo (HMC), and the No-U-Turn Sampler (HMC-NUTS) in particular, produce several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution. This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods such <span class="math inline">\(\hat{R}\)</span>.</p>
+<p>Hamiltonian Monte Carlo (HMC), and the No-U-Turn Sampler (HMC-NUTS) in particular, produce several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution.
+This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods such <span class="math inline">\(\hat{R}\)</span>.</p>
 <p>Three specific HMC-NUTS diagnostics are</p>
 <ol style="list-style-type: decimal">
 <li>divergent transitions</li>
@@ -687,17 +745,25 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 <li>Stepsize: Length of the steps to take</li>
 <li>Tree-depth: Number of steps to take</li>
 </ol>
-<p>During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal. The other alternative is to reparameterize the models.</p>
+<p>During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal.
+The other alternative is to reparameterize the models.</p>
 <div id="divergent-transitions" class="section level3">
 <h3><span class="header-section-number">8.5.1</span> Divergent transitions</h3>
-<p>The details of the HMC are technical and can be found <strong>TODO</strong>. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating. If the step sizes are too large, the discrete approximation does not work. Helpfully, when the approximation is poor it does not fail without any indication but will produce “divergent transitions”.</p>
+<p>The details of the HMC are technical and can be found <strong>TODO</strong>. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating.
+If the step sizes are too large, the discrete approximation does not work.
+Helpfully, when the approximation is poor it does not fail without any indication but will produce “divergent transitions”.</p>
 <p>If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased.</p>
-<p>Reduce the step size. This can be done by increasing the the <code>adapt_delta</code> parameter. This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup. A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.</p>
+<p>Reduce the step size. This can be done by increasing the the <code>adapt_delta</code> parameter.
+This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup.
+A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.</p>
 <p>See <span class="citation">Stan Development Team (2016, 380)</span></p>
 </div>
 <div id="maximum-tree-depth" class="section level3">
 <h3><span class="header-section-number">8.5.2</span> Maximum Tree-depth</h3>
-<p>NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try. If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum. While divergent transitions bias inference, a too-small maximum tree-depth only affects efficiency. The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum tree-depth were set higher.</p>
+<p>NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
+If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum.
+While divergent transitions bias inference, a too-small maximum tree-depth only affects efficiency.
+The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum tree-depth were set higher.</p>
 <p>Increase the maximum tree-depth.</p>
 </div>
 <div id="bayesian-fraction-of-missing-information" class="section level3">
@@ -707,7 +773,7 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 </div>
 <div id="debugging-bayesian-computing" class="section level2">
 <h2><span class="header-section-number">8.6</span> Debugging Bayesian Computing</h2>
-<p>See <span class="citation">Gelman et al. (2013, 270)</span>, …</p>
+<p>See <span class="citation">A. Gelman et al. (2013, 270)</span>, …</p>
 <ol style="list-style-type: decimal">
 <li>Pick a reasonable value for the “true” parameter vector <span class="math inline">\(\theta^* \sim p(\theta)\)</span>. This should be a random draw from the prior, but if <span class="math inline">\(\theta\)</span> is uninformative, then any reasonable value of <span class="math inline">\(\theta\)</span> should work.</li>
 <li>Draw all other parameters that are conditional on <span class="math inline">\(\theta^*\)</span>.</li>
@@ -733,7 +799,7 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 <div class="footnotes">
 <hr />
 <ol start="6">
-<li id="fn6"><p>This is also the case in optimization with non-convex objective functions.<a href="mcmc-diagnostics.html#fnref6">↩</a></p></li>
+<li id="fn6"><p>This is also the case in optimization with non-convex objective functions.<a href="mcmc-diagnostics.html#fnref6" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -778,7 +844,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

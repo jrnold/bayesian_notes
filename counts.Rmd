@@ -39,7 +39,7 @@ The Negative Binomial distribution has an additional parameter that allows the v
 
 The outcome is modeled as a negative binomial distribution,
 $$
-y_i \sim \dbin(\alpha_i, \beta)
+y_i \sim \dBinom(\alpha_i, \beta)
 $$
 with shape $\alpha \in \R^{+}$ and inverse scale $\beta \in \R^{+}$, and $\E(y) = \alpha_i / \beta$ and $\Var(Y) = \frac{\alpha_i}{\beta^2}(\beta + 1)$.
 Then the mean can be modeled and transformed to the

@@ -1,5 +1,5 @@
 
-# (PART) Appendix {-}
+# Appendix {-}
 
 ## Prerequisites {-}
 
@@ -21,7 +21,6 @@ unmodeled parameters    Parameters with non-informative prior distribution
 derived quantities      Variables defined deterministicically
 
 See @GelmanHill2007a [p. 366]
-
 
 ## Miscellaneous Mathematical Background
 
@@ -246,10 +245,9 @@ $$
 \vec{\mu} + \mat{\Omega} X \sim \dnorm(\vec{\mu}, \mat{\Sigma})
 $$
 
-
 See @Stan2016a [p. 40, 147, 241, 246]
     
-# Scaled and Unscaled Variables
+## Scaled and Unscaled Variables
 
 Though priors shouldn't depend on the data itself, many priors depends 
 
@@ -257,19 +255,19 @@ Suppose $\tilde{Y}$, $\tilde{X}$, $\tilde{\alpha}$, $\tilde{\beta}$, and $\epsil
 $$
 \tilde{Y} = \tilde{\alpha} + \tilde{\beta} \tilde{X} + \epsilon .
 $$
-These random variables have the following properties:
+These random variables have the following properties,
 $$
-\begin{aligned}
-\tilde{Y} &= \frac{Y - \bar{Y}}{\sigma_Y}, & \E\[\tilde{Y}\] &= 0, & \sigma_Y^2 &= \V\[\tilde{Y}\] = 1 \\
-\tilde{X} &= \frac{X - \bar{X}}{\sigma_X}, &  \E\[\tilde{X}\] &= 0, & \sigma_X^2 &= \V\[\tilde{X}\] = 1 , \\
-&& \E\[\epsilon\] &= 0 & \sigma_{\tilde{\epsilon}}^2 &= \V\[\tilde{\epsilon}\]
+\begin{aligned}[t]
+\tilde{Y} &= \frac{Y - \bar{Y}}{\sigma_Y}, & \E[\tilde{Y}] &= 0, & \sigma_Y^2 &= \Var[\tilde{Y}] = 1 \\
+\tilde{X} &= \frac{X - \bar{X}}{\sigma_X}, &  \E[\tilde{X}] &= 0, & \sigma_X^2 &= \Var[\tilde{X}] = 1 , \\
+&& \E[\epsilon] &= 0 & \sigma_{\tilde{\epsilon}}^2 &= \Var[\tilde{\epsilon}]
 \end{aligned}
 $$
 where 
 $$
 \begin{aligned}[t]
-\bar{X} &= \E\[X\] , & s_X^2 &= \V\[X\] , \\
-\bar{Y} &= \E\[Y\] , & s_Y^2 &= \V\[Y\] . 
+\bar{X} &= \E[X] , & s_X^2 &= \Var[X] , \\
+\bar{Y} &= \E[Y] , & s_Y^2 &= \Var[Y] . 
 \end{aligned}
 $$
 
@@ -332,33 +330,8 @@ E(\epsilon) &= 0 , & V(\epsilon) &= \sigma_Y^2 V(\tilde{\epsilon}), \\
 E(\tilde{\epsilon}) &= 0 , & V(\tilde{\epsilon}) &= \sigma_Y^{-2}  V(\epsilon) .
 \end{aligned}
 $$
-For example, a weakly informative prior on the variance of $\tilde{\epsilon}}$ implies a weakly informative prior on the variance of $\epsilon$,
+For example, a weakly informative prior on the variance of $\tilde{\epsilon}$ implies a weakly informative prior on the variance of $\epsilon$,
 $$
 \sigma_{\tilde{\epsilon}} \sim C^{+}\left(0, 5 \right) \to 
-\sigma_{\epsilon} \sim C^{+}\left(0, \sigma_Y 5 \right) .
+\sigma_{\epsilon} \sim C^{+}\left(0, 5 \sigma_Y \right) .
 $$
-
-
-All of the above calculations are a little sloppy since I'm treating the other random variables as constants when deriving these (basically assuming $\alpha$ and $\beta$ are independent).
-
-**TODO** handle multivariate case, with whitening transformation
-$$
-\tilde{Y} = \beta' \tilde{X} + \epsilon
-$$
-where 
-$$
-\begin{aligned}[t]
-E(\tilde{Y}) &= 0, & V(\tilde{Y}) &= 1, \\
-E(\tilde{X}) &= 0_k, & V(\tilde{Y}) &= I_k .
-\end{aligned}
-$$
-and
-$$
-\begin{aligned}[t]
-\tilde{Y} &= \sigma_Y^{-1}(Y - \bar{Y}) &, Y &= \sigma_{\tilde{Y}} Y + \bar{Y} \\
-\tilde{X} &= L (X - \bar{X}), & X &= L^{-1} \tilde{X} + \bar{X}
-\end{aligned}
-$$
-where $L$ is a $k \times k$ whitening matrix.
-This is a matrix such that $L' L = V(X)^{-1}$.
-With a sample, $L = chol(X' X)$.

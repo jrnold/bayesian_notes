@@ -50,7 +50,7 @@ n <- length(smpls)
 To summarize, this model is
 $$
 \begin{aligned}[t]
-y &\sim dbinom(n, \theta) \\
+y &\sim \dBinom(n, \theta) \\
 \theta &\sim beta(1, 1) \\
 \end{aligned}
 $$
@@ -88,12 +88,12 @@ Doesn't work well in large dimensions, or if the grid does not include many poin
 
 ```r
 library("tidyverse")
-#> ── Attaching packages ───────────────────────────────────── tidyverse 1.2.1 ──
+#> ── Attaching packages ────────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
 #> ✔ tibble  1.4.2     ✔ dplyr   0.7.4
 #> ✔ tidyr   0.8.0     ✔ stringr 1.3.0
 #> ✔ readr   1.1.1     ✔ forcats 0.3.0
-#> ── Conflicts ──────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ───────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 grid <- tibble(
@@ -624,11 +624,11 @@ The Monte Carlo estimates of the mean is
 
 ```r
 mean(x)
-#> [1] 1.07
+#> [1] 1.03
 ```
 with standard error,
 
 ```r
 sd(x) / sqrt(length(x))
-#> [1] 0.0486
+#> [1] 0.0456
 ```

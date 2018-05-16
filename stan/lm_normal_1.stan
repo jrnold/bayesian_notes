@@ -14,14 +14,10 @@ data {
   // scale of normal prior on regression coefficients
   vector<lower=0.>[K] scale_beta;
   // expected value of the regression error
-  real<lower=0.> loc_sigma;
+  real<lower=0.> rate_sigma;
   // keep responses
   int<lower=0, upper=1> use_y_rep;
   int<lower=0, upper=1> use_log_lik;
-}
-transformed data {
-  // inverse scale of regression error
-  real<lower=0.> rate_sigma;
 }
 parameters {
   // regression coefficient vector

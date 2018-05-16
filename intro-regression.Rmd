@@ -244,7 +244,7 @@ Now, sample from the posterior, using the function `sampling`:
 mod1_fit <- sampling(mod1, data = mod1_data)
 ```
 
-```{r}
+```{r results='hide'}
 summary(mod1_fit)
 ```
 
