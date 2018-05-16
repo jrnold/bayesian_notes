@@ -49,6 +49,14 @@ Sparse shrinkage estimators produce solutions that can be sparse, containing zer
 In the optimizatization case, shrinkage 
 The most well known of these is the lasso.
 
+For all of these examples we will be considering a linear regression with normal errors,
+$$
+y_i \sim \dnorm(\alpha + x'_i \beta, \sigma)
+$$
+where there are $i = 1, \dots, n$ observations, $x_i$ is a $k \times 1$ vector
+of predictors, $\alpha$ and $\sigma$ are scalars, and $beta$ is a $k \times 1$
+vector of predictors.
+
 ## Shrinkage Estimators
 
 ### Penalized Maximum Likelihood Regression
@@ -380,17 +388,13 @@ spike-and-slab prior [@MitchellBeauchamp1988a, @GeorgeMcCulloch1993a, @IshwaranR
 which is a prior that is a discrete mixture of a point mass at 0 and a
 non-informative distribution.
 
-The spike and slab prior is a "two-group" solution.
-$$
-p(\beta_k) = (1 - w) \delta_0 + w \pi(\beta_k)
-$$
-where $\delta_0$ is a Dirac delta function putting a point mass at 0, and $\pi(\beta_k)$ is an uninformative distribution, e.g. $\pi(\beta_k) = \dnorm(\beta_k | 0, \sigma^2)$ where $\sigma$ is large.
-
 The posterior distribution of $w$ is the probability that $\beta_k \neq 0$, and the conditional posterior distribution $p(\beta_k | y, w = 1)$ is the distribution of $\beta_k$ given that $\beta_k \neq 0$.
 
 See the R package `r rpkg("spikeslab")` and he accompanying article [@IshwaranKogalurRao2010a] for an implementation and review of spike-and-slab regressions.
 
 #### Bayesian Lasso
+
+
 
 Similarly, the $\beta$ that minimize the $\ell_1$ norm also maximize the probability of random variables iid from the Laplace distribution, $\dlaplace(\beta_k | 0, 1 / \lambda)$.
 $$
@@ -461,6 +465,8 @@ However, it is less problematic than using the Student-t distribution because it
 
 The value of $\tau$ and the choice of its hyper-parameter has a big influence on the sparsity of the coefficients.
 
+## 
+
 @PiironenVehtari2017a treat the prior on $\tau$ as the implied prior on the number of effective parameters.
 The shrinkage can be understood as its influence on the number of effective parameters, $m_{eff}$,
 $$
@@ -489,6 +495,8 @@ Perhaps a simpler model, e.g. lasso could be used to estimate $p_0$.
 -  @DattaGhosh2013a warn against empirical Bayes estimators of $\tau$ for the horseshoe prior as it can collapse to 0.
 -  @ScottBerger2010a consider marginal maximum likelihood estimates of $\tau$. -->
 -  @PasKleijnVaart2014a suggest that an empirical Bayes estimator truncated below at $1 / n$.
+
+### Shrinkage Factor
 
 ```{r echo=FALSE}
 library("tidyverse")
@@ -559,7 +567,7 @@ ggplot(shrinkages, aes(x = kappa, y = dens)) +
         panel.grid = element_blank())
 ```
 
-### Shrinkage Factor
+
 
 Suppose that $X$ is a $n \times K$ matrix of predictors,
 and $y$ is a $n \times 1$ vector of outcomes.
@@ -682,50 +690,185 @@ The data are provided as matrices, with `x` a matrix with 10 columns, `y` a
 numeric vector with the response, and and `x2` a matrix with 64 columns (`x` plus interactions.
 The matrix `x` has been standardized to have zero mean and unit variance.
 
-This data frame contains the following columns:
+#### Penalized Regression
+
+Before turning to full Bayesian estimation, we can produce MAP estimates for the model for the following:
+
+1.  Flat priors 
+1.  Ridge regression/Normal priors/L2 penalty
+1.  Lasso regresssion/Laplace (double exponential) priors/L1 penalty
 
 ```{r}
-diabetes_lm <- lm(y ~ x, data = diabetes)
-diabetes_lasso <- glmnet(diabetes$x, diabetes$y, alpha = 1)
-diabetes_ridge <- glmnet(diabetes$x, diabetes$y, alpha = 0)
-
-diabetes_ridge_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 0, parallel = TRUE)
-diabetes_lasso_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 1, parallel = TRUE)
+diabetes_map_lm <- lm(y ~ x, data = diabetes)
+diabetes_map_ridge <- glmnet(diabetes$x, diabetes$y, alpha = 1)
+diabetes_map_lasso <- glmnet(diabetes$x, diabetes$y, alpha = 0)
 ```
+Note that even `x` was a matrix, we can use it on the right-hand-side of the formula, and the formula object knows to use the columns of it.
 
+By default `glmnet` estimates the coefficients for the range of the shrinkage penalty $\lambda$.
+The sequence of values of a coefficient for values of $\lambda$ from $\lambda = 0$ (no shrinkage) to $\lambda \approx \infty$ (large enough that all coefficients are zero) is called the coefficient path.
+
+The `plot` method for the `glmnet` objects returned by `glmnet()` will plot coefficient paths.
+Here I will extract the data using `broom::tidy()` and plot them with `ggplot()`.
 ```{r}
-plot(diabetes_ridge)
+diabetes_coefpaths <- bind_rows(
+  mutate(tidy(diabetes_map_lasso), model = "Lasso (L1)"),
+  mutate(tidy(diabetes_map_ridge), model = "Ridge (L2)")) %>%
+  filter(term != "(Intercept)") 
 ```
-
 ```{r}
-tidy(diabetes_lasso)
-glance(diabetes_lasso)
+diabetes_coefpaths %>%
+  ggplot(aes(x = -log(lambda), y = estimate, group = term)) +
+  geom_line() +
+  facet_wrap(~ model, ncol = 1, scales = "free_x") +
+  labs(x = expression(-log(lambda)), y = expression(beta))
 ```
+Note that the $\lambda$ penalties are on different scales in the Lasso and ridge regession.
+Nevertheless we see that the ridge regression coefficients smoothly converge towards zero as $- \log(\lambda) \to 0$, while the lasso coefficients eventually hit zero and then are set to zero.
 
+To put them on the same scale, instead of plotting the coefficient paths vs. $\lambda$ 
+we could instead plot it against the percent of deviance explained.
 ```{r}
-coefplot_glmnet <- function(x, ...) {
-  xlabel <- expression(-log(lambda))
-  ylabel <- expression(beta)
-  ggplot(dplyr::filter(tidy(x), term != "(Intercept)"),
-         aes(x = -log(lambda), y = estimate, colour = term)) +
-    geom_hline(yintercept = 0) +
-    geom_line() +
-    labs(x = xlabel, y = ylabel)
-}
-coefplot_glmnet(diabetes_lasso)
+diabetes_coefpaths %>%
+  ggplot(aes(x = dev.ratio, y = estimate, group = term)) +
+  geom_line() +
+  facet_wrap(~ model, ncol = 1, scales = "free_x") +
+  labs(x = expression("% Deviance"), y = expression(beta))
 ```
 
-A utility function to extract the number of non-zero coefficients for lasso with the penalty chosen by cross-validation.
+However, `glmnet` does not choose a value of `lambda`. 
+To choose a particular value of `lambda` using K-fold cross-validation, use `cv.glmnet`.
+I will use the default value of 10 folds.
+
+```{r message=FALSE}
+diabetes_ridge_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 0, 
+                               nfolds = 10, parallel = TRUE)
+```
+This plots the values of $\lambda$, the MSE (and its standard error) and the lines
+indicate the $\lambda$ with the lowest MSE and the one chosen by the 1-standard deviation rule.
+```{r warning=FALSE}
+plot(diabetes_ridge_cv)
+```
+
+Similarly for lasso.
+```{r message=FALSE}
+diabetes_lasso_cv <- cv.glmnet(diabetes$x, diabetes$y, alpha = 1, 
+                               nfolds = 10, parallel = TRUE)
+```
+```{r warning=FALSE}
+plot(diabetes_lasso_cv)
+```
+
+For the optimal $\lambda$, Lasso produces the following number of non-zero coefficients:
 ```{r}
 lasso_nonzeros <- function(x, se = TRUE) {
   lambdahat <- if (se) "lambda.1se" else "lambda.min"
   unname(x$nzero[which(x$lambda == x[[lambdahat]])])
 }
+lasso_nonzeros(diabetes_lasso_cv)
 ```
 
 ```{r}
-lasso_nonzeros(diabetes_lasso_cv)
+get_glmnet_coef <- function(x) {
+  lambdahat <- "lambda.1se"
+  coefpaths <- tidy(x[["glmnet.fit"]])
+  filter(coefpaths, lambda == x[[lambdahat]])
+}
 ```
+
+OLS, lasso, and ridge point estimates.
+Coefficients are ordered in descending value of $|\hat{\beta}_{OLS}|$.
+```{r}
+bind_rows(
+  mutate(tidy(diabetes_map_lm), model = "OLS"),
+  mutate(get_glmnet_coef(diabetes_ridge_cv), model = "ridge"),
+  mutate(get_glmnet_coef(diabetes_lasso_cv), model = "lasso")) %>%
+  mutate(term = if_else(model %in% c("OLS"),
+                        str_replace(term, "^x", ""), term)) %>%
+  select(model, term, estimate) %>%
+  complete(model, term, fill = list(estimate = 0)) %>%
+  filter(!term %in% "(Intercept)") %>%
+  mutate(term = fct_reorder(term, if_else(model == "OLS", 
+                                          abs(estimate), NA_real_),
+                            mean, na.rm = TRUE)) %>%
+  ggplot(aes(x = term, y = estimate, colour = model)) +
+  geom_hline(yintercept = 0, colour = "white", size = 2) +
+  geom_point() +
+  coord_flip() +
+  labs(y = expression(hat(beta)), x = "")
+```
+Note that while `tc` has the largest OLS point estimate, both ridge and lasso 
+estimate it to be approximately zero.
+For the `hdl` coefficient, the lasso and ridge estimates have a different sign than OLS
+and are larger in magnitude.
+
+#### Full Bayes
+
+We can estimate this with Stan models and rstanarm.
+The rstanarm models are faster.
+However, at the moment rstanarm does not provide ridge regression.
+Additionally, the Stan models provided will also return the shrinkage parameters, 
+effective number of parameters, and local scales.
+
+##### Stan models
+
+1.  Weakly informative priors
+1.  Shrinkage with normal priors
+1.  Shrinkage with Student t priors
+1.  Shrinkage with Laplace priors
+1.  Shrinkage with Horseshoe priors
+
+This preprocesses the data that will be used by all the models.
+```{r}
+diabetes_standata <- lst(
+  X = scale(diabetes$x),
+  K = ncol(X),
+  N = nrow(X),
+  y = as.numeric(scale(diabetes$y)),
+  scale_alpha = 10,
+  rate_sigma = 1,
+  use_log_lik = 1,
+  use_y_rep = 1
+)
+```
+
+```{r}
+diabetes_standata_normal <- within(diabetes_standata, {
+  df_tau <- 4
+  scale_tau <- 2.5
+})
+fit_normal <- sampling(models[["lm_shrinkage_normal_1"]],
+                       data = diabetes_standata_normal,
+                       control = list(adapt_delta = 0.95))
+```
+
+```{r}
+diabetes_standata_student_t <- within(diabetes_standata, {
+  df_tau <- 4
+  scale_tau <- 1
+  df_lambda <- 1
+})
+fit_student <- sampling(models[["lm_shrinkage_student_t_1"]], 
+                        data = diabetes_standata_student_t,
+                        control = list(adapt_delta = 0.99))
+```
+
+```{r}
+diabetes_nonzero <- lasso_nonzeros(diabetes_lasso_cv)
+
+diabetes_standata_hs <- within(diabetes_standata, {
+  scale_tau <- diabetes_nonzero / (K - diabetes_nonzero) / sqrt(N)
+  df_tau <- 1
+  df_slab <- 25
+  scale_slab <- 4
+  df_lambda <- 1
+})
+fit_hs <- sampling(models[["lm_shrinkage_hs"]],
+                   data = diabetes_standata_hs,
+                   control = list(adapt_delta = 0.99))
+```
+
+##### rstanarm
 
 Estimate a model with a weakly informative prior.
 ```{r}
@@ -738,11 +881,8 @@ fit_diabetes[["weak_inf"]] <- stan_glm(y ~ x,
          data = diabetes, refresh = -1)
 ```
 
-
 Estimate a model using the hierarchical shrinkage prior included in **rstanarm**.
 ```{r}
-tau0 <- 5 / (11 - 5)  / sqrt(length(diabetes$y))
-
 fit_diabetes[["hs"]] <- 
   stan_glm(y ~ x,
            family = gaussian(), 
@@ -759,7 +899,7 @@ slab.
 However, if `slab_df` is set to a low value, such as the default `slab_df = 4`, the tails of the Student-t distribution are wid enough that the data can overcome the likelihood even if `slab_scale` is narrow.
 If `slab_df` is set to a higher number, the narrow tails mean that `slab_scale` must be set to the a reasonable value.
 
-and Lasso
+Estimate a model with Laplace priors.
 ```{r}
 fit_diabetes[["lasso"]] <- stan_glm(y ~ x,
                      family = gaussian(), 
@@ -770,83 +910,31 @@ fit_diabetes[["lasso"]] <- stan_glm(y ~ x,
                      data = diabetes)
 ```
 
-```{r}
-models <- list()
-for (i in c("lm_shrinkage_student_t_1", 
-            "lm_shrinkage_laplace_1",
-            "lm_shrinkage_normal_1", 
-            "lm_shrinkage_hs")) {
-  models[[i]] <- stan_model(glue::glue("stan/{i}.stan"))
-}
-```
+## Shrinkage with Correlated Variables
 
-```{r}
-diabetes_standata <- lst(
-  X = scale(diabetes$x),
-  K = ncol(X),
-  N = nrow(X),
-  y = as.numeric(scale(diabetes$y)),
-  scale_alpha = 10,
-  rate_sigma = 1,
-  use_log_lik = 1,
-  use_y_rep = 1
-)
-```
+Up until now, the various approaches modeled regression coefficients hieararchically, 
+but did not account for correlations between them.
+In many cases, theoretical results for them rely upon assuming uncorrelated predictors.
 
-```{r}
-glmnet(diabetes_standata$X, diabetes_standata$y) %>%
-  tidy()
-```
+In the MAP case:
 
-```{r}
-diabetes_nonzero <- lasso_nonzeros(diabetes_lasso_cv)
+-  ridge regression will shrink both correlated variables
+-  lasso will arbitrary shrink one regression
 
-diabetes_standata_hs <- within(diabetes_standata, {
-  scale_tau <- diabetes_nonzero / (K - diabetes_nonzero) / sqrt(N)
-  df_tau <- 1
-  df_slab <- 25
-  scale_slab <- 2.5
-  df_lambda <- 1
-})
-fit_hs <- sampling(models[["lm_shrinkage_hs"]], data = diabetes_standata_hs, control = list(adapt_delta = 0.99))
-```
+In full Bayes, highly correlated variables can produce posteriors that are harder
+to sample from. For example, producing divergences.
 
-```{r}
-diabetes_standata_laplace <- within(diabetes_standata, {
-  df_tau <- 1
-  scale_tau <- 2.5
-  df_lambda <- 4
-})
-fit_laplace <- sampling(models[["lm_shrinkage_laplace_1"]], data = diabetes_standata_laplace, control = list(adapt_delta = 0.95))
-```
+Some alternative models for correlated variables.
 
-```{r}
-diabetes_standata_normal <- within(diabetes_standata, {
-  df_tau <- 4
-  scale_tau <- 2.5
-})
-fit_normal <- sampling(models[["lm_shrinkage_normal_1"]], data = diabetes_standata_normal, control = list(adapt_delta = 0.95))
-```
+-  using the PCA transformation of $X$ and using the previous 
+-  `rstanarm::stan_lm` will shrink the regression QR decomposition by a
+-  Zellner's g-prior
 
-```{r}
-diabetes_standata_student_t <- within(diabetes_standata, {
-  df_tau <- 4
-  scale_tau <- 1
-  df_lambda <- 4
-})
-fit_student <- sampling(models[["lm_shrinkage_student_t_1"]], data = diabetes_standata_student_t, control = list(adapt_delta = 0.99))
-```
 
-Estimate with 
+## Variable Selection
 
--  weakly informative priors
--  normal prior
--  laplace
--  horseshoe prior
+Variable selection is closely related to sparse shrinkage methods.
+Sparse shrinkage methods can be seen as offering an alternative.
 
-TODO:
-
--  Compare coefficients
--  Compare performance of sampling
--  Out of sample predictions - using LOO
-
+-  Use the **projpred** package
+-  Use `lambda`
