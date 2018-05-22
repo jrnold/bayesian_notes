@@ -6,7 +6,7 @@ library("rstanarm")
 library("tidyverse")
 ```
 
-Multilevel models are commonly used hierarchical model.
+Multilevel models are a commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
 
 Suppose that there are $i = 1, dots, n$ observations, and each observation is in one of $j = 1, \dots, J$ groups.
