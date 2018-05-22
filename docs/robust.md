@@ -161,7 +161,7 @@ parameters {
   real alpha;
   vector[K] beta;
   // regression scale
-  real<lower=0.> omega;
+  real<lower=0.> sigma;
   // 1 / lambda_i^2
   vector<lower = 0.0>[N] inv_lambda2;
   // degrees of freedom;
@@ -170,12 +170,15 @@ parameters {
 }
 transformed parameters {
   vector[N] mu;
-
+  vector[N] omega;
+  // observation variances
+  for (n in 1:N) {
+    omega[n] = sigma / sqrt(inv_lambda2[n]);
+  }
   mu = alpha + X * beta;
 }
 model {
   real half_nu;
-  vector[N] sigma;
 
   // priors
   alpha ~ normal(0.0, scale_alpha);
@@ -184,10 +187,6 @@ model {
   nu ~ gamma(2, 0.1);
   half_nu = 0.5 * nu;
   inv_lambda2 ~ gamma(half_nu, half_nu);
-  // observation variances
-  for (n in 1:N) {
-    sigma[n] = omega / sqrt(inv_lambda2[n]);
-  }
   // likelihood with obs specific scales
   y ~ normal(mu, sigma);
 }
@@ -197,10 +196,10 @@ generated quantities {
   // log-likelihood posterior
   vector[N * use_log_lik] log_lik;
   for (n in 1:num_elements(y_rep)) {
-    y_rep[n] = student_t_rng(nu, mu[n], omega);
+    y_rep[n] = student_t_rng(nu, mu[n], omega[n]);
   }
   for (n in 1:num_elements(log_lik)) {
-    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega);
+    log_lik[n] = student_t_lpdf(y[n] | nu, mu[n], omega[n]);
   }
 }</code>
 </pre><!--/html_preserve-->
@@ -311,6 +310,169 @@ fits[["econ_t0"]] <- sampling(models[["lm_student_t_0"]], data = econ_growth_dat
 
 ```r
 models[["lm_student_t_1"]] <- stan_model("stan/lm_student_t_1.stan")
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:1:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Core:531:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:2:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/LU:47:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:3:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Cholesky:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Jacobi:29:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:3:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Cholesky:43:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/QR:17:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Householder:27:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:5:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/SVD:48:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Geometry:58:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Dense:7:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Eigenvalues:58:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Sparse:26:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/SparseCore:66:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Sparse:27:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/OrderingMethods:71:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Sparse:29:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/SparseCholesky:43:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Sparse:32:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/SparseQR:35:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> In file included from file199a4ffb80c1.cpp:8:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math.hpp:4:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#> In file included from /Users/jrnold/Library/R/3.5/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/Sparse:33:
+#> In file included from /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/IterativeLinearSolvers:46:
+#> /Users/jrnold/Library/R/3.5/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#>     #pragma clang diagnostic pop
+#>                              ^
+#> 13 warnings generated.
+#> ld: warning: directory not found for option '-L/usr/local/opt/llvm/lib/clang/5.0.0/lib/darwin/'
 ```
 
 

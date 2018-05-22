@@ -9,11 +9,74 @@ library("tidyverse")
 Multilevel models are a commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
 
-Suppose that there are $i = 1, dots, n$ observations, and each observation is in one of $j = 1, \dots, J$ groups.
-Let $j[i]$ be the group for
+## Terminology
+
+These models go by different names in different literatures:
+*hierarchical (generalized) linear models*, *nested data models*,
+*mixed models*, *random coefficients*, *random-effects*,
+*random parameter models*,  *split-plot designs* [^mlm-names].
+There are further names for specific types of these models including varying-intercept, varying-slope,rando etc. 
+
+In classical statistics there two main approaches to these models:
+
+1.  Maximum likelihood (and variations): See the **lme4** package. This
+    is more common in statistics and many social sciences (except economics).
+1.  OLS and adjusted standard errors: See the **plm** packge. This is the 
+    stanard econometric approach.
+
+See ["Some false friends"](https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf) in the **plm** vignette and @GelmanHill2007 [p. 245, fn. 5] for discussion of the differences between these approaches.
+
+
+## Normal
+
+Notation:
+
+-   Units: $i = 1, \dots, n$.
+-   Outcomes: $y = (y_1, \dots, y_n)$
+-   Predictors: $X$ is a $n \times p$ matrix; $x_i$ is the $K \times 1$ 
+    column vector of individual $i$'s predictors. 
+-   Groups: $j = 1, \dots, m$. Each observation is in a group.
+    Let $j[i]$ indicate the group that observation $i$ is in.
+
+Suppose we want to estimate a regression for these data, where thet data generating process is $y_i = \alpha_i + X_i \beta_i$ with normal errors.
+
+Depending on how we model differences between groups we can approach this in
+three ways
+
+1.  Pooled model
+2.  Individual models
+3.  Partially pooled model
+
+In the *pooled model* we ignore differences between groups and use common 
+coefficients.
 $$
 \begin{aligned}[t]
-y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma^2) \\
+y_i &\sim \dnorm(\alpha + x_i' \beta, \sigma) \\
+\end{aligned}
+$$
+The pooled model estimates one model, with three parameters: $\alpha$, $\beta$, 
+and $\sigma$.
+
+In an *individual* or *non-pooled model*, a sepearate model is estimated for each group.
+For each $j' \in 1, \dots, m$, estimate the model
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]} + x_i' \beta_{j[i]}, \sigma_{j[i]}) & \text{ where } j[i] = j' .
+\end{aligned}
+$$
+The non-pooled model estimates $m$ separate models with $m \times 3$ parameters, one $\alpha$, $\beta$, and $\sigma$ for each group. 
+Note that in this model, no information is shared between groups.
+The data from another group and its estimates of $\alpha$ or $\beta$ do not help in the estimation of another group.
+However, if these are in any way similar problems we may think that the values of $\alpha$ and $\beta$ differ between groups, but that they should be similar.
+We should think that there must be a way to share that information via a prior.
+This insight will lead to the partially pooled model.
+
+In a *partially pooled* model, different groups have different parameters, but
+these group parameters share common hyperpriors---priors in which the distribution is a function of parameters estimated from the data.
+This is an example of a partially pooled model,
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma_{j[i]}) \\
   \begin{bmatrix}
   \alpha_j \\
   \beta_j
@@ -26,59 +89,15 @@ y_i &\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma^2) \\
   \mu_\beta
   \end{bmatrix},
 \Omega
-\right)
+\right) \\
+\sigma_{j[i]} &\sim p(.)
 \end{aligned} .
 $$
-
-*Pooled model*: All coefficients are common between groups. This is equivalent to a linear model.
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
-\begin{bmatrix}
-\alpha \\
-\beta
-\end{bmatrix}
-&\sim
-\dnorm
-\left(
-  \begin{bmatrix}
-  \mu_{\alpha} \\
-  \mu_{\beta}
-  \end{bmatrix},
-  \Omega
-\right)
-\end{aligned}
-$$
-
-*Pooled model*: All coefficients are common between groups. This is equivalent to a linear model.
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(\alpha + \beta x_i, \sigma^2) \\
-\end{aligned}
-$$
-*Varying-intercept*: The slope coefficients ($\beta$) are common between groups, but the intercepts ($\alpha_j$) vary by group.
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma^2) \\
-\end{aligned}
-$$
-*Varying-slope model*: The groups share a common intercept, $\alpha$, but the slope coefficient ($\beta$), varies between groups. This is less common since it is hard to think of cases when it is appropriate.
-$$
-\begin{aligned}[t]
-y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
-\end{aligned}
-$$
-These models go by different names in different literatures:
-*hierarchical (generalized) linear models*, *nested data models*,
-*mixed models*, *random coefficients*, *random-effects*,
-*random parameter models*,  *split-plot designs* [^mlm-names].
-
-The model can be extended to other cases:
-
--   generalized linear models
--   multiple parameters
-
-One of the difficulties in these models is the prior to the covariance matrix, $\Omega$.
+The imporant feature of this model, is that the priors for the parameters $\alpha_j$, $\beta_j$ are functions of other parameters, often called *hyperparmeters*, $\mu_{\alpha}$, $\mu_{\beta}$, and $\Omega$.
+This is allows for sharing information between groups.
+The observations from one group help to estimate $\mu_{\alpha}$, $\mu_{\beta}$,
+and $\Sigma$, which in turn help to estimate the $\alpha_j$ and $\beta_j$ in another group.
+If the parameters of the prior distribution of $\alpha$ and $\beta$ were fixed (data) and not themselves parameters, this sharing of information would not occur.
 
 ```{r echo=FALSE, fig.cap="Visual representation of hierarchical models"}
 n <- 20
@@ -118,6 +137,59 @@ bind_rows(
   theme_void()
 
 ```
+
+We can also allow some parameters to vary between groups, but pool other parameters.
+
+*Group-heteroskedastic*: Assume that the intercept ($\alpha$) and slope ($\beta$) are the same across groups, but allow the scale of the regression error to vary between groups.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + x'_i \beta, \sigma_{j[i]}) \\
+\log \sigma_j &\sim \dnorm(\tau, \psi)
+\end{aligned}
+$$
+The prior on the $\log \sigma_j$ has two parameters, $\tau$ (the average log-standard deviation of the errors) and $\psi$, which determines the level of heteroskedasticity.
+
+In a *varying-intercept* model keep the slope coefficients ($\beta$) common between groups, but allow the intercepts ($\alpha_j$) to vary by group.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma) \\
+\alpha_{j} &\sim \dnorm(\mu_\alpha, \omega_{\alpha})
+\end{aligned}
+$$
+
+In a *varying-slope model*, the groups share a common intercept, $\alpha$, but the slope coefficient ($\beta$), varies between groups. 
+
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
+\beta_{j} & \sim \dnorm(\mu_{\beta}, \omega_{\beta})
+\end{aligned}
+$$
+This is less common since it is hard to think of cases when it is appropriate.
+More often, if the slope coefficient is allowed to vary between groups,
+the the intercepts should as well.
+This is the more-general *varying-slope varying-intercept* model,
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
+  \begin{bmatrix}
+  \alpha_j \\
+  \beta_j
+  \end{bmatrix}
+& \sim
+\dnorm
+\left(
+  \begin{bmatrix}
+  \mu_\alpha \\
+  \mu_\beta
+  \end{bmatrix},
+\Omega
+\right)
+\end{aligned}
+$$
+
+
+
 
 ## Example: Radon
 
@@ -342,23 +414,14 @@ fit_slope_partial <-
 
 ## Pooling of Hierarchical Parameters
 
-This is easiest understood in the case of a model of group means,
+What does partial pooling do?  
+This is easiest to understand in a simple mean-model with normal errors.
 $$
 \begin{aligned}[t]
 y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
 \mu_{j} &\sim \dnorm(\gamma, \tau^2) .
 \end{aligned}
 $$
-Each group has size $n_j$.
-
-| Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
-| ------------------------------- | --------------------------------------------------------------- |
-| $n_j = 0$                       | $\hat{\mu}_j = \gamma$ (complete pooling)                       |
-| $n_j < \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\gamma$                                |
-| $n_j = \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$      |
-| $n_j > \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\bar{y}_j$                             |
-| $n_j = \infty$                  | $\hat{\mu}_j = \bar{y}_j$ (no pooling)                          |
-
 If the hyperparameters were known, the posterior of $\mu_j$ is
 $$
 \mu_j | y, \gamma, \sigma, \tau \sim \dnorm(\hat{\mu}_j, V_j)
@@ -371,8 +434,23 @@ V_j &= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
 \end{aligned}
 $$
 
-Some crude estimates given $\mu_j$.
+How does this vary depending on the size of the group, $n_j$? 
 
+| Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
+| ------------------------------- | --------------------------------------------------------------- |
+| $n_j = 0$                       | $\hat{\mu}_j = \gamma$ (complete pooling)                       |
+| $n_j < \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\gamma$                                |
+| $n_j = \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$      |
+| $n_j > \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\bar{y}_j$                             |
+| $n_j = \infty$                  | $\hat{\mu}_j = \bar{y}_j$ (no pooling)                          |
+
+When the sample size of the group is large, the prior data from other groups provides little additional informiation and the posterior 
+is dominated by the observations in that group.
+However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior.
+We even have posterior estimates of groups and observations from groups we have not seen before due to
+the estimated distribution of group means.
+
+If instead the group means $\mu_j$ were known, we can calculate some crude estimates.
 The *data variance*, $\sigma^2$, is the residual variance,
 $$
 \E(\sigma^2 | y, \mu)  = \frac{1}{n} \sum_{i = 1}^n (y - \mu_{j[i]})^2 .
@@ -386,21 +464,12 @@ $$
 $$
 The group level variance is $\tau^2$ is,
 $$
-\E(\tau^ | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
+\E(\tau^2 | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
 $$
 
-## ANOVA
 
-**TODO**
 
-## Time-Series Cross Section
-
-**TODO**
-
-A common application for these models are Time-Series Cross-Section (TSCS) or panel models.
-In this case, both the time and units can be modeled.
-
- ## Extensions
+## Extensions
 
 -   Including group-level covariates
 

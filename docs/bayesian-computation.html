@@ -60,69 +60,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 </head>
@@ -359,85 +331,105 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html"><i class="fa fa-check"></i><b>19</b> Shrinkage and Regularized Regression</a><ul>
 <li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-11"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="19.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#introduction-6"><i class="fa fa-check"></i><b>19.1</b> Introduction</a></li>
-<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
-<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
-<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
-<li class="chapter" data-level="19.2.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#constrained-optimization-interpretation"><i class="fa fa-check"></i><b>19.2.3</b> Constrained Optimization Interpretation</a></li>
-<li class="chapter" data-level="19.2.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-interpretation"><i class="fa fa-check"></i><b>19.2.4</b> Bayesian Interpretation</a></li>
+<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-estimators"><i class="fa fa-check"></i><b>19.2</b> Shrinkage Estimators</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2.1</b> Penalized Maximum Likelihood Regression</a></li>
+<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.2.2</b> Bayesian Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
-<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
-<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.3.2</b> Spike and Slab prior</a></li>
-<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#normal-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Normal Distribution</a></li>
-<li class="chapter" data-level="19.3.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.4</b> Laplace Distribution</a></li>
-<li class="chapter" data-level="19.3.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.3.5</b> Student-t and Cauchy Distributions</a></li>
-<li class="chapter" data-level="19.3.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-prior"><i class="fa fa-check"></i><b>19.3.6</b> Horseshore Prior</a></li>
+<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#sparse-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Sparse Shrinkage</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-likelihood"><i class="fa fa-check"></i><b>19.3.1</b> Penalized Likelihood</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-sparse-shrinkage-models"><i class="fa fa-check"></i><b>19.3.2</b> Bayesian Sparse Shrinkage Models</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.4</b> Understanding Shrinkage Models</a></li>
-<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.6</b> Differences between Bayesian and Penalized ML</a></li>
-<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#section"><i class="fa fa-check"></i><b>19.4</b> </a><ul>
+<li class="chapter" data-level="19.4.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-factor"><i class="fa fa-check"></i><b>19.4.1</b> Shrinkage Factor</a></li>
+<li class="chapter" data-level="19.4.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prior-on-the-global-scale"><i class="fa fa-check"></i><b>19.4.2</b> Prior on the Global Scale</a></li>
 </ul></li>
-<li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
-<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
-<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="19.9.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.9.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="19.9.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="19.9.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.9.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="19.9.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.9.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.5</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.6</b> Examples</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#diabetes"><i class="fa fa-check"></i><b>19.6.1</b> Diabetes</a></li>
+<li class="chapter" data-level="19.6.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#example-4"><i class="fa fa-check"></i><b>19.6.2</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-with-correlated-variables"><i class="fa fa-check"></i><b>19.7</b> Shrinkage with Correlated Variables</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#variable-selection"><i class="fa fa-check"></i><b>19.8</b> Variable Selection</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a></li>
-<li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="21.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>21.1</b> Textbooks</a></li>
-<li class="chapter" data-level="21.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>21.2</b> Syllabi</a></li>
-<li class="chapter" data-level="21.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>21.3</b> Topics</a></li>
-<li class="chapter" data-level="21.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>21.4</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="21.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>21.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="21.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>21.5.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="21.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>21.5.2</b> Modern Statistical Workflow</a></li>
-<li class="chapter" data-level="21.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>21.5.3</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="21.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>21.5.4</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="21.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>21.5.5</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="21.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>21.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
-<li class="chapter" data-level="21.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>21.5.8</b> Multiple Testing</a></li>
-<li class="chapter" data-level="21.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>21.5.9</b> Rare Events</a></li>
-<li class="chapter" data-level="21.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>21.5.10</b> Identifiability</a></li>
-<li class="chapter" data-level="21.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>21.5.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="20" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>20</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="20.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.1.1</b> Data</a></li>
+<li class="chapter" data-level="20.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>20.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="20.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>20.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="20.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>20.1.4</b> Varying Slope Model</a></li>
+<li class="chapter" data-level="20.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>20.1.5</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="20.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>20.1.6</b> lme4</a></li>
+<li class="chapter" data-level="20.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm-2"><i class="fa fa-check"></i><b>20.1.7</b> rstanarm</a></li>
 </ul></li>
-<li class="chapter" data-level="21.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>21.6</b> Software</a><ul>
-<li class="chapter" data-level="21.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>21.6.1</b> Stan</a></li>
-<li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
+<li class="chapter" data-level="20.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>20.3</b> ANOVA</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>20.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>20.5</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>20.5.1</b> How many groups?</a></li>
+<li class="chapter" data-level="20.5.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>20.5.2</b> Correlation between Predictors and Errors</a></li>
 </ul></li>
-<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
-<li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
-<li class="chapter" data-level="21.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>21.10.1</b> Discussion of Bayesian Inference</a></li>
+<li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#references-11"><i class="fa fa-check"></i><b>20.6</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="21.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>21.11</b> Model Checking</a><ul>
-<li class="chapter" data-level="21.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>21.11.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="21.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>21.11.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="21.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>21.11.3</b> Software Validation</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="20.7" data-path="appendix.html"><a href="appendix.html#parameters"><i class="fa fa-check"></i><b>20.7</b> Parameters</a></li>
+<li class="chapter" data-level="20.8" data-path="appendix.html"><a href="appendix.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>20.8</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="20.8.1" data-path="appendix.html"><a href="appendix.html#location-scale-families"><i class="fa fa-check"></i><b>20.8.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="20.8.2" data-path="appendix.html"><a href="appendix.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>20.8.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="20.8.3" data-path="appendix.html"><a href="appendix.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>20.8.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="20.8.4" data-path="appendix.html"><a href="appendix.html#qr-factorization"><i class="fa fa-check"></i><b>20.8.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="20.8.5" data-path="appendix.html"><a href="appendix.html#cholesky-decomposition"><i class="fa fa-check"></i><b>20.8.5</b> Cholesky Decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="21.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>21.12</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="21.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>21.13</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="21.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>21.14</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="21.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>21.15</b> History of Bayesian Statistics</a></li>
-<li class="chapter" data-level="21.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>21.16</b> Sampling Difficulties</a></li>
-<li class="chapter" data-level="21.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>21.17</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="21.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>21.18</b> Pooling Polls</a></li>
-<li class="chapter" data-level="21.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>21.19</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="21.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>21.20</b> Bayesian point estimation / Decision</a></li>
-<li class="chapter" data-level="21.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>21.21</b> Stan Modeling Language</a></li>
-<li class="chapter" data-level="21.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>21.22</b> Bayes Factors</a></li>
+<li class="chapter" data-level="20.9" data-path="appendix.html"><a href="appendix.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>20.9</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
+<li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
+<li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
+<li class="chapter" data-level="22.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>22.3</b> Topics</a></li>
+<li class="chapter" data-level="22.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>22.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="22.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>22.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>22.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="22.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>22.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="22.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>22.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="22.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>22.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="22.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>22.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="22.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>22.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="22.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection-1"><i class="fa fa-check"></i><b>22.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="22.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>22.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="22.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>22.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="22.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>22.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="22.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>22.5.11</b> Shrinkage</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>22.6</b> Software</a><ul>
+<li class="chapter" data-level="22.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>22.6.1</b> Stan</a></li>
+<li class="chapter" data-level="22.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>22.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="22.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>22.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="22.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>22.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="22.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>22.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="22.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models-1"><i class="fa fa-check"></i><b>22.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="22.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>22.10</b> Inference</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>22.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>22.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>22.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="22.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>22.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="22.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>22.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>22.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="22.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>22.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="22.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>22.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="22.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>22.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="22.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>22.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="22.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>22.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="22.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>22.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="22.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>22.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="22.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>22.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="22.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>22.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="22.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>22.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-12.html"><a href="references-12.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -531,13 +523,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <div id="how-to-calculate-a-posterior" class="section level2">
 <h2><span class="header-section-number">7.1</span> How to calculate a posterior?</h2>
-<p>Bayesian inference requires calculating the posterior distribution,
-<span class="math display">\[
+<p>Bayesian inference requires calculating the posterior distribution, <span class="math display">\[
 p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int_{\theta&#39; \in \Theta} p(y | \theta&#39;) p(\theta&#39;)\, d\theta&#39; } .
-\]</span>
-However, calculating this quantity is difficult.
-The denominator (marginal likelihood) is an integral.
-Additionally, and function of the distribution, e.g. the mean is <span class="math inline">\(\int \theta p(\theta | y) \,d\theta\)</span> also requires calculating an integral.</p>
+\]</span> However, calculating this quantity is difficult. The denominator (marginal likelihood) is an integral. Additionally, and function of the distribution, e.g. the mean is <span class="math inline">\(\int \theta p(\theta | y) \,d\theta\)</span> also requires calculating an integral.</p>
 <p>In general there are several strategies for this.</p>
 <ol style="list-style-type: decimal">
 <li>Symbolic/Analytic: in a few cases, the posterior distribution can be derived symbolically and has a closed-form solution that corresponds distribution that can be sampled from. <em>Conjugate priors</em> are the most common case of this.</li>
@@ -550,39 +538,26 @@ Additionally, and function of the distribution, e.g. the mean is <span class="m
 <div id="example-globe-tossing-model" class="section level2">
 <h2><span class="header-section-number">7.2</span> Example: Globe-tossing model</h2>
 <p>Suppose that we want to estimate the proportion of the Earth’s surface that is water.</p>
-<p>Suppose that you don’t have any idea what proportion of the Earth’s surface (<span class="math inline">\(\theta\)</span>) is covered in water, so you think any proportion is equally likely:
-<span class="math display">\[
+<p>Suppose that you don’t have any idea what proportion of the Earth’s surface (<span class="math inline">\(\theta\)</span>) is covered in water, so you think any proportion is equally likely: <span class="math display">\[
 \theta \sim \dbeta(1, 1) = \dunif(0, 1)
-\]</span>
-Alas, the internet is down so you cannot look it up on Wikipedia.
-Luckily, you do have a globe.
-Since it would be hard to directly calculate the area on the globe, you estimate the proportion that is water by repeatedly choosing a random point on the globe by spinning it, and marking whether that point
-is water (<code>&quot;W&quot;</code>) or land (<code>&quot;L&quot;</code>).
-After 10 spins you have the following sequence of water and land.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">smpls &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>)</a></code></pre></div>
+\]</span> Alas, the internet is down so you cannot look it up on Wikipedia. Luckily, you do have a globe. Since it would be hard to directly calculate the area on the globe, you estimate the proportion that is water by repeatedly choosing a random point on the globe by spinning it, and marking whether that point is water (<code>&quot;W&quot;</code>) or land (<code>&quot;L&quot;</code>). After 10 spins you have the following sequence of water and land.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">smpls &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;L&quot;</span>, <span class="st">&quot;W&quot;</span>)</code></pre></div>
 <p>Given that data, what is your estimate about the proportion of the earth’s surface that is water?</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">y &lt;-<span class="st"> </span><span class="kw">sum</span>(smpls <span class="op">==</span><span class="st"> &quot;W&quot;</span>)</a>
-<a class="sourceLine" id="cb45-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="kw">length</span>(smpls)</a></code></pre></div>
-<p>To summarize, this model is
-<span class="math display">\[
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">sum</span>(smpls <span class="op">==</span><span class="st"> &quot;W&quot;</span>)
+n &lt;-<span class="st"> </span><span class="kw">length</span>(smpls)</code></pre></div>
+<p>To summarize, this model is <span class="math display">\[
 \begin{aligned}[t]
 y &amp;\sim \dBinom(n, \theta) \\
 \theta &amp;\sim beta(1, 1) \\
 \end{aligned}
-\]</span>
-Suppose we use
-<span class="math display">\[
+\]</span> Suppose we use <span class="math display">\[
 \theta \sim beta(1, 1)
 \]</span></p>
-<p>We will calculate this posterior distribution in multiple ways.
-For now, save the parameters of this model in some object for later reuse.
-The prior on <span class="math inline">\(\theta\)</span> is,</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p>Since the beta is a conjugate distribution of the binomial likelihood, we
-can analytically calculate the posterior distribution.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">posterior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>y,  <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</a></code></pre></div>
-<p>The posterior distribution is
-<span class="math display">\[
+<p>We will calculate this posterior distribution in multiple ways. For now, save the parameters of this model in some object for later reuse. The prior on <span class="math inline">\(\theta\)</span> is,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)</code></pre></div>
+<p>Since the beta is a conjugate distribution of the binomial likelihood, we can analytically calculate the posterior distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">posterior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>y,  <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</code></pre></div>
+<p>The posterior distribution is <span class="math display">\[
 p(\theta | y) = \dbeta(3, 9)
 \]</span></p>
 </div>
@@ -590,45 +565,40 @@ p(\theta | y) = \dbeta(3, 9)
 <h2><span class="header-section-number">7.3</span> Quadrature</h2>
 <div id="grid-approximation" class="section level3">
 <h3><span class="header-section-number">7.3.1</span> Grid approximation</h3>
-<p>tl;dr: Approximate the posterior distribution by taking a grid of points in <span class="math inline">\(\theta\)</span> and calculating <span class="math inline">\(p(\theta|y)\)</span>.
-Doesn’t work well in large dimensions, or if the grid does not include many points in the area with high posterior density.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="co">#&gt; ── Attaching packages ────────────────────────────────────── tidyverse 1.2.1 ──</span></a>
-<a class="sourceLine" id="cb48-3" data-line-number="3"><span class="co">#&gt; ✔ ggplot2 2.2.1     ✔ purrr   0.2.4</span></a>
-<a class="sourceLine" id="cb48-4" data-line-number="4"><span class="co">#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.4</span></a>
-<a class="sourceLine" id="cb48-5" data-line-number="5"><span class="co">#&gt; ✔ tidyr   0.8.0     ✔ stringr 1.3.0</span></a>
-<a class="sourceLine" id="cb48-6" data-line-number="6"><span class="co">#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0</span></a>
-<a class="sourceLine" id="cb48-7" data-line-number="7"><span class="co">#&gt; ── Conflicts ───────────────────────────────────────── tidyverse_conflicts() ──</span></a>
-<a class="sourceLine" id="cb48-8" data-line-number="8"><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></a>
-<a class="sourceLine" id="cb48-9" data-line-number="9"><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></a>
-<a class="sourceLine" id="cb48-10" data-line-number="10">grid &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb48-11" data-line-number="11">  <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb48-12" data-line-number="12">  <span class="dt">prior =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> prior<span class="op">$</span>a, <span class="dt">shape2 =</span> prior<span class="op">$</span>b),</a>
-<a class="sourceLine" id="cb48-13" data-line-number="13">  <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-14" data-line-number="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">posterior_unst =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,</a>
-<a class="sourceLine" id="cb48-15" data-line-number="15">         <span class="dt">posterior =</span> posterior_unst <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior_unst))</a></code></pre></div>
-<p>See <span class="citation">A. Gelman et al. (2013 Sec 10.1)</span></p>
+<p>tl;dr: Approximate the posterior distribution by taking a grid of points in <span class="math inline">\(\theta\)</span> and calculating <span class="math inline">\(p(\theta|y)\)</span>. Doesn’t work well in large dimensions, or if the grid does not include many points in the area with high posterior density.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="co">#&gt; ── Attaching packages ───────────────────────────────────── tidyverse 1.2.1 ──</span>
+<span class="co">#&gt; ✔ ggplot2 2.2.1     ✔ purrr   0.2.4</span>
+<span class="co">#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.4</span>
+<span class="co">#&gt; ✔ tidyr   0.8.0     ✔ stringr 1.3.0</span>
+<span class="co">#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0</span>
+<span class="co">#&gt; ── Conflicts ──────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
+grid &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">10</span>),
+  <span class="dt">prior =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> prior<span class="op">$</span>a, <span class="dt">shape2 =</span> prior<span class="op">$</span>b),
+  <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">posterior_unst =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,
+         <span class="dt">posterior =</span> posterior_unst <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior_unst))</code></pre></div>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.1)</span></p>
 </div>
 </div>
 <div id="functional-approximations" class="section level2">
 <h2><span class="header-section-number">7.4</span> Functional Approximations</h2>
-<p>See <span class="citation">A. Gelman et al. (2013 Sec 10.3, 13.3)</span></p>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.3, 13.3)</span></p>
 <div id="maximum-a-posteriori" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Maximum A Posteriori</h3>
 <p>tl;dr: approximate the posterior distribution with a point mass at the</p>
-<p>Maximum a posteriori estimation finds value of <span class="math inline">\(\theta\)</span> that maximizes the posterior distribution,
-<span class="math display">\[
+<p>Maximum a posteriori estimation finds value of <span class="math inline">\(\theta\)</span> that maximizes the posterior distribution, <span class="math display">\[
 \hat{\theta} = \arg\max_{\theta} p(\theta |y) .
 \]</span></p>
-<p>The MAP is best thought of a Bayesian point estimate of the mode of the posterior distribution.
-However, unlike (most?) other point estimates it does not require first computing the posterior distribution.</p>
+<p>The MAP is best thought of a Bayesian point estimate of the mode of the posterior distribution. However, unlike (most?) other point estimates it does not require first computing the posterior distribution.</p>
 <p>However, we can consider it a functional approximation of the posterior distribution, in which the approximating distribution is a point mass at <span class="math inline">\(\hat{\theta}\)</span>.</p>
 <p>Notes:</p>
 <ul>
-<li><p>often the maximum of the posterior is much easier to calculate than the
-entire posterior distribution</p></li>
-<li><p>when the prior is improper, <span class="math inline">\(p(\theta | y) \propto p(y | theta)\)</span> and the
-MAP and maximum likelihood (MLE) estimators produce the same point estimate.</p></li>
+<li><p>often the maximum of the posterior is much easier to calculate than the entire posterior distribution</p></li>
+<li><p>when the prior is improper, <span class="math inline">\(p(\theta | y) \propto p(y | theta)\)</span> and the MAP and maximum likelihood (MLE) estimators produce the same point estimate.</p></li>
 </ul>
 </div>
 <div id="laplace-approximation" class="section level3">
@@ -645,46 +615,41 @@ p(\theta | y) &amp;
 \approx p(\widehat{\theta}) + (\theta - \widehat{\theta}) \left[ \frac{d}{d \theta} p(\theta | y) \right]_{\theta = \hat{\theta}} + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
 &amp;= p(\widehat{\theta}) + \frac{1}{2} (\theta - \hat{\theta})^2 \left[\frac{d^2 }{d \theta^2} p(\theta| y) \right]_{\theta = \hat{\theta}} \\
 \end{aligned}
-\]</span>
-where the second term is zero since <span class="math inline">\(\hat{\theta}\)</span> is the maximum of <span class="math inline">\(p(\theta | y)\)</span>, <span class="math inline">\(d / d\theta p(\theta | y) = 0\)</span>.</p>
-<p>The first term <span class="math inline">\(p(\theta)\)</span> is a constant.
-The second term is proportional to the logarithm of a normal density,
-<span class="math display">\[
+\]</span> where the second term is zero since <span class="math inline">\(\hat{\theta}\)</span> is the maximum of <span class="math inline">\(p(\theta | y)\)</span>, <span class="math inline">\(d / d\theta p(\theta | y) = 0\)</span>.</p>
+<p>The first term <span class="math inline">\(p(\theta)\)</span> is a constant. The second term is proportional to the logarithm of a normal density, <span class="math display">\[
 p(\theta | y) \approx dnorm\left(\hat{\theta},\left[ - \frac{d^2}{d \theta^2} \log p(\theta | y) \middle|_{\theta = \hat{\theta}} \right] \right)
 \]</span></p>
 <p>Extensions of this approach include:</p>
 <ul>
-<li>Fitting a mixture of normal densities. This is especially useful for multi-modal densities. <span class="citation">(A. Gelman et al. 2013, 319)</span></li>
-<li>Using a multivariate Students-<span class="math inline">\(t\)</span> distribution instead of a normal distribution <span class="citation">(A. Gelman et al. 2013, 319)</span></li>
-<li>Using the the normal or Laplace approximation as a proposal distribution with importance sampling <span class="citation">(A. Gelman et al. 2013, 319)</span></li>
+<li>Fitting a mixture of normal densities. This is especially useful for multi-modal densities. <span class="citation">(Gelman et al. 2013, 319)</span></li>
+<li>Using a multivariate Students-<span class="math inline">\(t\)</span> distribution instead of a normal distribution <span class="citation">(Gelman et al. 2013, 319)</span></li>
+<li>Using the the normal or Laplace approximation as a proposal distribution with importance sampling <span class="citation">(Gelman et al. 2013, 319)</span></li>
 </ul>
 <div id="example" class="section level4">
 <h4><span class="header-section-number">7.4.2.1</span> Example</h4>
-<p>Rather than deriving the second derivative for the posterior distribution, I will use numerical derivatives in this example.
-The idea is the same, although the numerical derivatives are slower than symbolic derivatives.</p>
-<p>Use the R function <code>optimize</code> to calculate the maximum of the posterior.
-We will need to use the option <code>hessian = TRUE</code> in order to calculate the second derivatives needed for the variance parameter of the normal distribution.</p>
+<p>Rather than deriving the second derivative for the posterior distribution, I will use numerical derivatives in this example. The idea is the same, although the numerical derivatives are slower than symbolic derivatives.</p>
+<p>Use the R function <code>optimize</code> to calculate the maximum of the posterior. We will need to use the option <code>hessian = TRUE</code> in order to calculate the second derivatives needed for the variance parameter of the normal distribution.</p>
 <p>Write a function that takes a single parameter <code>par</code> and returns the log posterior value.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">calc_posterior &lt;-<span class="st"> </span><span class="cf">function</span>(par) {</a>
-<a class="sourceLine" id="cb49-2" data-line-number="2">  lprior &lt;-<span class="st"> </span><span class="kw">dbeta</span>(par, prior<span class="op">$</span>a, prior<span class="op">$</span>b, <span class="dt">log =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb49-3" data-line-number="3">  lpost &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> par, <span class="dt">log =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb49-4" data-line-number="4">  <span class="op">-</span><span class="st"> </span>(lprior <span class="op">+</span><span class="st"> </span>lpost)</a>
-<a class="sourceLine" id="cb49-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_posterior &lt;-<span class="st"> </span><span class="cf">function</span>(par) {
+  lprior &lt;-<span class="st"> </span><span class="kw">dbeta</span>(par, prior<span class="op">$</span>a, prior<span class="op">$</span>b, <span class="dt">log =</span> <span class="ot">TRUE</span>)
+  lpost &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> par, <span class="dt">log =</span> <span class="ot">TRUE</span>)
+  <span class="op">-</span><span class="st"> </span>(lprior <span class="op">+</span><span class="st"> </span>lpost)
+}</code></pre></div>
 <p>Find <span class="math inline">\(\hat{\theta}\)</span> and the second derivative using <code>optim</code>:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">ret &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="fl">0.5</span>, <span class="dt">fn =</span> calc_posterior, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">method =</span> <span class="st">&quot;Brent&quot;</span>,</a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">             <span class="dt">lower =</span> <span class="dv">0</span>, <span class="dt">upper =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ret &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="fl">0.5</span>, <span class="dt">fn =</span> calc_posterior, <span class="dt">hessian =</span> <span class="ot">TRUE</span>, <span class="dt">method =</span> <span class="st">&quot;Brent&quot;</span>,
+             <span class="dt">lower =</span> <span class="dv">0</span>, <span class="dt">upper =</span> <span class="dv">1</span>)</code></pre></div>
 <p>The Hessian is a matrix of the second partial derivatives, which is what we need.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">theta_max &lt;-<span class="st"> </span>ret<span class="op">$</span>par</a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">theta_var &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">drop</span>(ret<span class="op">$</span>hessian)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta_max &lt;-<span class="st"> </span>ret<span class="op">$</span>par
+theta_var &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">drop</span>(ret<span class="op">$</span>hessian)</code></pre></div>
 <p>Let’s plot the value of the Laplace approximation and the true posterior distribution.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb52-2" data-line-number="2">  <span class="dt">theta =</span> <span class="kw">ppoints</span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb52-3" data-line-number="3">  <span class="dt">approx =</span> <span class="kw">dnorm</span>(theta, theta_max, <span class="kw">sqrt</span>(theta_var)),</a>
-<a class="sourceLine" id="cb52-4" data-line-number="4">  <span class="dt">actual =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)</a>
-<a class="sourceLine" id="cb52-5" data-line-number="5">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb52-6" data-line-number="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> theta)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb52-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> approx)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb52-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> actual), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tibble</span>(
+  <span class="dt">theta =</span> <span class="kw">ppoints</span>(<span class="dv">100</span>),
+  <span class="dt">approx =</span> <span class="kw">dnorm</span>(theta, theta_max, <span class="kw">sqrt</span>(theta_var)),
+  <span class="dt">actual =</span> <span class="kw">dbeta</span>(theta, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> theta)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> approx)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> actual), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
 <p><img src="bayesian-computation_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -699,61 +664,48 @@ We will need to use the option <code>hessian = TRUE</code> in order to calculate
 <h2><span class="header-section-number">7.5</span> Sampling Methods</h2>
 <div id="numerical-integration" class="section level3">
 <h3><span class="header-section-number">7.5.1</span> Numerical Integration</h3>
-<p>Numerical integration calculates a expectation of a function using samples <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from a distribution <span class="math inline">\(p(\theta)\)</span>,
-<span class="math display">\[
+<p>Numerical integration calculates a expectation of a function using samples <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from a distribution <span class="math inline">\(p(\theta)\)</span>, <span class="math display">\[
 \E(h(\theta) | y) = \int h(\theta) p(\theta | y) d\theta \approx \frac{1}{S} \sum_{s = 1}^S h(\theta^s) .
-\]</span>
-The estimation error improves with the number of (independent) samples.</p>
-<p>Deterministic numerical integration is based on evaluating <span class="math inline">\(h(\theta) p(\theta | y)\)</span> at a set of points <span class="math inline">\(\theta^1, \dots, \theta^S\)</span>.
-<span class="math display">\[
+\]</span> The estimation error improves with the number of (independent) samples.</p>
+<p>Deterministic numerical integration is based on evaluating <span class="math inline">\(h(\theta) p(\theta | y)\)</span> at a set of points <span class="math inline">\(\theta^1, \dots, \theta^S\)</span>. <span class="math display">\[
 \E(h(\theta) | y) = \int h(\theta) p(\theta | y) \approx \frac{1}{S} w_s h(\theta^s) p(\theta^s | y) ,
-\]</span>
-with weights <span class="math inline">\(w_s\)</span> for the volume of each point.
-The accuracy of this method can improve with smarter choices of the grid and also better interpolation between points.
-The simplest method is a grid with equal weights, but more sophisticated quadrature methods also exist.</p>
+\]</span> with weights <span class="math inline">\(w_s\)</span> for the volume of each point. The accuracy of this method can improve with smarter choices of the grid and also better interpolation between points. The simplest method is a grid with equal weights, but more sophisticated quadrature methods also exist.</p>
 </div>
 <div id="inverse-transform-sampling" class="section level3">
 <h3><span class="header-section-number">7.5.2</span> Inverse transform sampling</h3>
 <p>A common method of random sampling is <a href="https://en.wikipedia.org/wiki/Inverse_transform_sampling">inverse-transformation sampling</a>.</p>
-<p>Suppose we want to sample from random variable <span class="math inline">\(X\)</span> which has a distribution with a CDF of <span class="math inline">\(P(X)\)</span>.
-We can draw a sample as follows,</p>
+<p>Suppose we want to sample from random variable <span class="math inline">\(X\)</span> which has a distribution with a CDF of <span class="math inline">\(P(X)\)</span>. We can draw a sample as follows,</p>
 <ol style="list-style-type: decimal">
 <li><p>Draw <span class="math inline">\(u\)</span> from <span class="math inline">\(unif(0, 1)\)</span></p></li>
-<li><p>Let <span class="math inline">\(x = P^{-1}(u)\)</span>, where <span class="math inline">\(P^{-1}(X)\)</span> is the inverse of the CDF (quantile)
-function for <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Let <span class="math inline">\(x = P^{-1}(u)\)</span>, where <span class="math inline">\(P^{-1}(X)\)</span> is the inverse of the CDF (quantile) function for <span class="math inline">\(X\)</span>.</p></li>
 </ol>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">post_inverse &lt;-<span class="st"> </span><span class="kw">qbeta</span>(p, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)</a>
-<a class="sourceLine" id="cb53-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb53-4" data-line-number="4"><span class="kw">ggplot</span>(<span class="kw">tibble</span>(<span class="dt">x =</span> post_inverse), <span class="kw">aes</span>(<span class="dt">x =</span> x)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_density</span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)
+post_inverse &lt;-<span class="st"> </span><span class="kw">qbeta</span>(p, <span class="dt">shape1 =</span> posterior<span class="op">$</span>a, <span class="dt">shape2 =</span> posterior<span class="op">$</span>b)
+
+<span class="kw">ggplot</span>(<span class="kw">tibble</span>(<span class="dt">x =</span> post_inverse), <span class="kw">aes</span>(<span class="dt">x =</span> x)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>()</code></pre></div>
 <p><img src="bayesian-computation_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <ol style="list-style-type: decimal">
 <li><p>This generally only works on a univariate distribution</p></li>
-<li><p>We would have to CDF of the posterior distribution analytically, but in
-hard problems that is something we don’t know.</p></li>
+<li><p>We would have to CDF of the posterior distribution analytically, but in hard problems that is something we don’t know.</p></li>
 </ol>
 </div>
 <div id="direct-approximation" class="section level3">
 <h3><span class="header-section-number">7.5.3</span> Direct approximation</h3>
 <p>Compute the target density at the set of of evenly spaced values <span class="math inline">\(\theta_1, \dots, \theta_S\)</span> that cover (most of) the parameter space for <span class="math inline">\(\theta\)</span>.</p>
-<p>Approximate <span class="math inline">\(p(\theta | y)\)</span> by the density at these values with
-<span class="math display">\[
+<p>Approximate <span class="math inline">\(p(\theta | y)\)</span> by the density at these values with <span class="math display">\[
 p(\theta | y) \approx \left\{ \frac{p(\theta_s| y)}{ \sum_{j = 1}^S p(\theta_{j} | y)} \right\}_{s = 1}^S
-\]</span>
-This will also work with an un-normalized density function.</p>
-<p>To draw a random sample from this, sample from the discrete
-approximation with weights proportional to the <span class="math inline">\(p(\theta_s | y)\)</span>.</p>
+\]</span> This will also work with an un-normalized density function.</p>
+<p>To draw a random sample from this, sample from the discrete approximation with weights proportional to the <span class="math inline">\(p(\theta_s | y)\)</span>.</p>
 <div id="example-1" class="section level4">
 <h4><span class="header-section-number">7.5.3.1</span> Example</h4>
-<p>In the water example, there is no reason to do this.
-However, there could be cases where it is possible to calculate the</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">theta_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">512</span>)</a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">w &lt;-<span class="st"> </span>(<span class="kw">dbeta</span>(theta_grid, prior<span class="op">$</span>a, prior<span class="op">$</span>b) <span class="op">*</span></a>
-<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="st">      </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta_grid))</a>
-<a class="sourceLine" id="cb54-4" data-line-number="4">theta_direct &lt;-<span class="st"> </span><span class="kw">sample</span>(theta_grid, <span class="dt">size =</span> <span class="dv">512</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">mean</span>(theta_direct)</a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="co">#&gt; [1] 0.254</span></a></code></pre></div>
+<p>In the water example, there is no reason to do this. However, there could be cases where it is possible to calculate the</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">512</span>)
+w &lt;-<span class="st"> </span>(<span class="kw">dbeta</span>(theta_grid, prior<span class="op">$</span>a, prior<span class="op">$</span>b) <span class="op">*</span>
+<span class="st">      </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta_grid))
+theta_direct &lt;-<span class="st"> </span><span class="kw">sample</span>(theta_grid, <span class="dt">size =</span> <span class="dv">512</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(theta_direct)
+<span class="co">#&gt; [1] 0.254</span></code></pre></div>
 </div>
 </div>
 <div id="rejection-sampling" class="section level3">
@@ -774,9 +726,7 @@ However, there could be cases where it is possible to calculate the</p>
 <li>Sample <span class="math inline">\(\theta\)</span> at random from the probability proportional to <span class="math inline">\(g(\theta)\)</span></li>
 <li>With probability <span class="math inline">\(p(\theta | y) / M g(\theta)\)</span> accept <span class="math inline">\(\theta\)</span> as a draw from <span class="math inline">\(p\)</span>. If rejected, return to 1.</li>
 </ol>
-<p>Need to choose <span class="math inline">\(M\)</span> so that the probability in step 2 is not greater than 1.
-This can be <span class="math inline">\(M = \max p(\theta | y)\)</span>.
-But in general, the efficiency of the algorithm depends on <span class="math inline">\(M\)</span>, but it may be hard to find a good value.</p>
+<p>Need to choose <span class="math inline">\(M\)</span> so that the probability in step 2 is not greater than 1. This can be <span class="math inline">\(M = \max p(\theta | y)\)</span>. But in general, the efficiency of the algorithm depends on <span class="math inline">\(M\)</span>, but it may be hard to find a good value.</p>
 <p>Since the probability of success is <span class="math inline">\(1 / M\)</span>, the expected number of draws from proposal density to get a single draw from the</p>
 <p>The ideal case is that the approximate density <span class="math inline">\(g(\theta)\)</span> is roughly proportional to <span class="math inline">\(p(\theta | y)\)</span>.</p>
 <ul>
@@ -786,113 +736,81 @@ But in general, the efficiency of the algorithm depends on <span class="math inl
 </div>
 <div id="importance-sampling" class="section level3">
 <h3><span class="header-section-number">7.5.5</span> Importance Sampling</h3>
-<p>tl;dr: Draw a sample from a target distribution from an approximate distribution
-weight those samples by the ratio of target distribution to the approximate distribution.
-Works best if the proposal density is close to the target density, or at least wider
-than the target density.</p>
+<p>tl;dr: Draw a sample from a target distribution from an approximate distribution weight those samples by the ratio of target distribution to the approximate distribution. Works best if the proposal density is close to the target density, or at least wider than the target density.</p>
 <p>Suppose that we want to know <span class="math inline">\(\E(h(\theta) | y)\)</span> but cannot directly sample from <span class="math inline">\(p(\theta | y)\)</span>.</p>
-<p>However, we can sample from a distribution <span class="math inline">\(g(\theta)\)</span>.
-Then,
-<span class="math display">\[
+<p>However, we can sample from a distribution <span class="math inline">\(g(\theta)\)</span>. Then, <span class="math display">\[
 \E(h(\theta | y)) = \frac{\int h(\theta) q(\theta | y) d\theta}{\int q(\theta | y) d\theta} = \frac{\int \left[h(\theta) q(\theta | y) / g(\theta) \right] g(\theta) d\theta}{\int \left[ q(\theta | y) / g(\theta) \right] g(\theta) d\theta}  
-\]</span>
-This can be estimated using <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from <span class="math inline">\(g(\theta)\)</span>,
-<span class="math display">\[
+\]</span> This can be estimated using <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from <span class="math inline">\(g(\theta)\)</span>, <span class="math display">\[
 \frac{\frac{1}{S} \sum_{s = 1}^s h(\theta^s) w(\theta^s)}{\frac{1}{S} \sum_{s = 1}^S w(\theta^s)} ,
-\]</span>
-where
-<span class="math display">\[
+\]</span> where <span class="math display">\[
 w(\theta^s) = \frac{q(\theta^s | y)}{g(\theta^s)}
-\]</span>
-are called the <em>importance ratios</em> or <em>importance weights</em>.</p>
+\]</span> are called the <em>importance ratios</em> or <em>importance weights</em>.</p>
 <ul>
 <li><p>use the same set of random draws for the numerator and denominator to reduce sampling error.</p></li>
-<li><p>worst case: importance ratio are small with high probability, but with a
-low probability are very high. This occurs when the <span class="math inline">\(q\)</span> has wide tails
-relative to <span class="math inline">\(g\)</span>. Can use a <span class="math inline">\(t_4\)</span> distribution as a proposal distribution for
-a normal distribution, but not a normal distribution for a proposal
-distribution of a <span class="math inline">\(t_4\)</span> distribution.</p></li>
+<li><p>worst case: importance ratio are small with high probability, but with a low probability are very high. This occurs when the <span class="math inline">\(q\)</span> has wide tails relative to <span class="math inline">\(g\)</span>. Can use a <span class="math inline">\(t_4\)</span> distribution as a proposal distribution for a normal distribution, but not a normal distribution for a proposal distribution of a <span class="math inline">\(t_4\)</span> distribution.</p></li>
 </ul>
-<p>The values of the importance weights can be used to discover problems with the method.
-If any ratios are too large, estimates will be poor.</p>
-<p>If the variance of the weights is finite, the effective sample size is
-<span class="math display">\[
+<p>The values of the importance weights can be used to discover problems with the method. If any ratios are too large, estimates will be poor.</p>
+<p>If the variance of the weights is finite, the effective sample size is <span class="math display">\[
 S_{eff} = \frac{1}{\sum_{s = 1}^S (\tilde{w}(\theta^s))^2} .
-\]</span>
-where <span class="math inline">\(\tilde{w}\)</span> are the normalized weights,
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\tilde{w}\)</span> are the normalized weights, <span class="math display">\[
 \tilde{w}(\theta^s) = \frac{w(\theta^S)}{\sum_{s&#39; = 1}^S w(\theta^{s&#39;})}.
 \]</span></p>
-<p>The <strong>loo</strong> package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights <span class="citation">(Vehtari, Gelman, and Gabry 2015, 2017a)</span>.</p>
+<p>The <strong>loo</strong> package uses a method to smooth these importance weights as well as diagnostics for overly large sample weights <span class="citation">(Vehtari, Gelman, and Gabry 2015; Vehtari, Gelman, and Gabry 2017a)</span>.</p>
 <p><em>Importance resampling</em> (or <em>sampling-importance resampling</em>) obtains independent samples with equal weights.</p>
 <p>Draw <span class="math inline">\(S\)</span> draws <span class="math inline">\(\theta^1, \dots, \theta^S\)</span> from the approximate distribution <span class="math inline">\(g\)</span>.</p>
-<p>Then to draw a sample of size <span class="math inline">\(k &lt; S\)</span>, sample <em>without replacement</em>
-where sampling <span class="math inline">\(\theta^s\)</span> is proportional to its weight,
-<span class="math display">\[
+<p>Then to draw a sample of size <span class="math inline">\(k &lt; S\)</span>, sample <em>without replacement</em> where sampling <span class="math inline">\(\theta^s\)</span> is proportional to its weight, <span class="math display">\[
     \Pr(\theta^s) \propto w(\theta^s) = \frac{q(\theta^s | y)}{g(\theta^s)} .
 \]</span></p>
 <p>Sampling <em>without replacement</em> helps to prevent a degenerate case where all or most of the <span class="math inline">\(k\)</span> samples are the same <span class="math inline">\(\theta^s\)</span> due to large importance ratios.</p>
-<p>If the proposal distribution is the prior, then the weights are proportional to the likelihood,
-<span class="math display">\[
+<p>If the proposal distribution is the prior, then the weights are proportional to the likelihood, <span class="math display">\[
 w(\theta^S) = \frac{p(\theta | y)}{p(\theta)} = \frac{p(y | \theta) p(\theta)}{p(\theta)} = p(y | \theta)
 \]</span></p>
 <p>Other notes</p>
 <ul>
 <li><p>Similar to both rejection sampling and the Metropolis algorithm</p></li>
-<li><p>Sequential Monte Carlo (SMC) is a variant that is particularly useful for
-updating posterior distributions when the data arrives sequentially—either
-real time or because it involves time series data <span class="citation">(Carvalho et al. 2010)</span>.</p></li>
-<li><p>To update a model when a similar posterior is available. E.g. the posterior
-distribution for leave-one-out cross validation <span class="citation">(Vehtari, Gelman, and Gabry 2015)</span>.
-The distribution <span class="math inline">\(p(\theta | y_{-i})\)</span> is likely to be similar to <span class="math inline">\(p(\theta | y)\)</span>,
-so if we have already calculated <span class="math inline">\(p(\theta | y)\)</span> we can use the later as the
-proposal distribution for <span class="math inline">\(p(\theta | y)\)</span>.</p></li>
+<li><p>Sequential Monte Carlo (SMC) is a variant that is particularly useful for updating posterior distributions when the data arrives sequentially—either real time or because it involves time series data <span class="citation">(Carvalho et al. 2010)</span>.</p></li>
+<li><p>To update a model when a similar posterior is available. E.g. the posterior distribution for leave-one-out cross validation <span class="citation">(Vehtari, Gelman, and Gabry 2015)</span>. The distribution <span class="math inline">\(p(\theta | y_{-i})\)</span> is likely to be similar to <span class="math inline">\(p(\theta | y)\)</span>, so if we have already calculated <span class="math inline">\(p(\theta | y)\)</span> we can use the later as the proposal distribution for <span class="math inline">\(p(\theta | y)\)</span>.</p></li>
 </ul>
-<p>See <span class="citation">A. Gelman et al. (2013 Sec 10.4)</span>, <span class="citation">Gelfand and Smith (1990)</span>, <span class="citation">Lopes, Polson, and Carvalho (2012)</span>, and
-<span class="citation">Smith and Gelfand (1992)</span> for more on importance sampling.</p>
+<p>See <span class="citation">Gelman et al. (2013 Sec 10.4)</span>, <span class="citation">Gelfand and Smith (1990)</span>, <span class="citation">Lopes, Polson, and Carvalho (2012)</span>, and <span class="citation">Smith and Gelfand (1992)</span> for more on importance sampling.</p>
 <div id="example-2" class="section level4">
 <h4><span class="header-section-number">7.5.5.1</span> Example</h4>
 <p>Use the prior as the proposal distribution.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">512</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">theta &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, prior<span class="op">$</span>a, prior<span class="op">$</span>b)</a>
-<a class="sourceLine" id="cb56-3" data-line-number="3">w &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">S &lt;-<span class="st"> </span><span class="dv">512</span>
+theta &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, prior<span class="op">$</span>a, prior<span class="op">$</span>b)
+w &lt;-<span class="st"> </span><span class="kw">dbinom</span>(y, <span class="dt">size =</span> n, <span class="dt">prob =</span> theta)</code></pre></div>
 <p>The mean value of the posterior is</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">sum</span>(theta <span class="op">*</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)</a>
-<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="co">#&gt; [1] 0.246</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(theta <span class="op">*</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)
+<span class="co">#&gt; [1] 0.246</span></code></pre></div>
 <p>The effective sample size of this sample is,</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">w_tilde &lt;-<span class="st"> </span>w <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)</a>
-<a class="sourceLine" id="cb58-2" data-line-number="2"><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w_tilde <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="co">#&gt; [1] 215</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">w_tilde &lt;-<span class="st"> </span>w <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w)
+<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(w_tilde <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)
+<span class="co">#&gt; [1] 215</span></code></pre></div>
 <p>Finally, to draw a new sample from this, we can draw without replacement (works if the new sample size is much smaller than the original),</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">post_sir1 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">post_sir1 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre></div>
 <p>or with replacement,</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">post_sir2 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">post_sir2 &lt;-<span class="st"> </span><span class="kw">sample</span>(theta, <span class="dt">size =</span> S, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> w)</code></pre></div>
 <p>depending on our purposes.</p>
 </div>
 </div>
 <div id="mcmc-methods" class="section level3">
 <h3><span class="header-section-number">7.5.6</span> MCMC Methods</h3>
-<p>See <span class="citation">A. Gelman et al. (2013 Ch 11–12)</span> for more on MCMC methods.</p>
+<p>See <span class="citation">Gelman et al. (2013 Ch 11–12)</span> for more on MCMC methods.</p>
 <div id="metropolis-hastings" class="section level4">
 <h4><span class="header-section-number">7.5.6.1</span> Metropolis-Hastings</h4>
 <p>The <em>Metropolis-Hastings</em> algorithm is a family of MCMC methods useful for sampling from posterior distributions.</p>
 <ol style="list-style-type: decimal">
-<li><p>Draw a starting value <span class="math inline">\(\theta^0\)</span> for which <span class="math inline">\(p(\theta^0 | y) &gt; 0\)</span>.
-This can be specified manually or sampled from a crude approximation.</p></li>
+<li><p>Draw a starting value <span class="math inline">\(\theta^0\)</span> for which <span class="math inline">\(p(\theta^0 | y) &gt; 0\)</span>. This can be specified manually or sampled from a crude approximation.</p></li>
 <li><p>For iterations *t = 1, 2, …$:</p>
 <!-- lint disable no-inline-padding -->
 <ol style="list-style-type: decimal">
-<li>Sample a <em>proposal</em> value <span class="math inline">\(\theta^{*}\)</span> from a <em>jumping distribution</em>
-(<em>proposal distribution</em>) at time <span class="math inline">\(t\)</span>, <span class="math inline">\(J_t(\theta^{*} | \theta^{t - 1})\)</span>.</li>
+<li>Sample a <em>proposal</em> value <span class="math inline">\(\theta^{*}\)</span> from a <em>jumping distribution</em> (<em>proposal distribution</em>) at time <span class="math inline">\(t\)</span>, <span class="math inline">\(J_t(\theta^{*} | \theta^{t - 1})\)</span>.</li>
 </ol>
 <!-- lint enable no-inline-padding -->
 <ol style="list-style-type: decimal">
-<li><p>Calculate the ratio of the density of the proposal and target distributions,
-<span class="math display">\[
+<li><p>Calculate the ratio of the density of the proposal and target distributions, <span class="math display">\[
 r = \frac{p(\theta^{*} | y) / J_t(\theta^* | \theta^{t - 1})}{p(\theta^{t - 1} | y) / J_t(\theta^{t - 1} | \theta^{*})} .
 \]</span></p></li>
-<li><p>Set
-<span class="math display">\[
+<li><p>Set <span class="math display">\[
 \theta^t =
 \begin{cases}
 \theta^* &amp; \text{with probability } \min(r, 1)
@@ -912,24 +830,14 @@ r = \frac{p(\theta^{*} | y) / J_t(\theta^* | \theta^{t - 1})}{p(\theta^{t - 1} |
 <li>Be able to draw samples from the jumping distribution <span class="math inline">\(J_t(\theta^* | \theta)\)</span></li>
 <li>Be able to calculate the density ratio <span class="math inline">\(r\)</span>, usually meaning that both <span class="math inline">\(p(\theta^* | y)\)</span> and <span class="math inline">\(p(\theta^{t - 1} | y)\)</span> must be able to be calculated for all <span class="math inline">\(\theta\)</span>.</li>
 </ol>
-<p>The jumping distribution can be asymmetric.
-However, it if is symmetric (Metropolis algorithm), then the ratio acceptance ratio simplifies to,
-<span class="math display">\[
+<p>The jumping distribution can be asymmetric. However, it if is symmetric (Metropolis algorithm), then the ratio acceptance ratio simplifies to, <span class="math display">\[
 r = \frac{p(\theta^* | y)}{p(\theta^{t - 1} | y)} .
 \]</span></p>
 <p>Notes:</p>
 <ul>
-<li><p>For this to work the Markov chain this produces must have stationary
-distribution that <span class="citation">(A. Gelman et al. 2013, 279)</span>.</p></li>
-<li><p>MH is similar is like a stochastic optimization algorithm. Instead of
-<strong>always</strong> moving towards the region of higher density, it only stochastically
-moves towards the region of higher density. It tunes how often it moves
-towards the region of higher density in order to ensure that it samples
-from the distribution in proportion to the density.</p></li>
-<li><p>MH is similar to a dynamic form of rejection sampling or importance sampling.
-However, whereas those methods have a static proposal distribution, the
-jumping distribution, while fixed in its parameters, of the HM algorithm
-is re-centered around the last draw, so it can move to areas of higher density.</p></li>
+<li><p>For this to work the Markov chain this produces must have stationary distribution that <span class="citation">(Gelman et al. 2013, 279)</span>.</p></li>
+<li><p>MH is similar is like a stochastic optimization algorithm. Instead of <strong>always</strong> moving towards the region of higher density, it only stochastically moves towards the region of higher density. It tunes how often it moves towards the region of higher density in order to ensure that it samples from the distribution in proportion to the density.</p></li>
+<li><p>MH is similar to a dynamic form of rejection sampling or importance sampling. However, whereas those methods have a static proposal distribution, the jumping distribution, while fixed in its parameters, of the HM algorithm is re-centered around the last draw, so it can move to areas of higher density.</p></li>
 </ul>
 <p>When does MH not work well?</p>
 <ol style="list-style-type: decimal">
@@ -940,26 +848,21 @@ is re-centered around the last draw, so it can move to areas of higher density.<
 <div id="gibbs-sampler" class="section level4">
 <h4><span class="header-section-number">7.5.6.2</span> Gibbs Sampler</h4>
 <p>The Gibbs sampler has been one of the most common methods used to sample from posterior distributions.</p>
-<p>The Gibbs sampler is a special case of the Metropolis-Hastings sampler.
-Suppose that the parameter vector <span class="math inline">\(\theta\)</span> can be divided into <span class="math inline">\(d\)</span> subvectors.</p>
+<p>The Gibbs sampler is a special case of the Metropolis-Hastings sampler. Suppose that the parameter vector <span class="math inline">\(\theta\)</span> can be divided into <span class="math inline">\(d\)</span> subvectors.</p>
 <ul>
 <li><p>For iterations, <span class="math inline">\(t = 1, \dots\)</span>:</p>
 <ul>
 <li><p>For <span class="math inline">\(j \in 1, \dots, d\)</span></p>
 <ul>
-<li>Draw a value from the conditional distribution of <span class="math inline">\(\theta_j\)</span> given all the other parameters,
-<span class="math display">\[
+<li>Draw a value from the conditional distribution of <span class="math inline">\(\theta_j\)</span> given all the other parameters, <span class="math display">\[
 \theta_{j}^t \sim p(\theta_j | \theta^{t - 1}_{-j}, y),
-\]</span>
-where <span class="math inline">\(\theta^{t - 1}_{-j}\)</span> has consists of updated parameters for all parameters preceding <span class="math inline">\(j\)</span> and the previous iteration’s values for all succeeding parameters,
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\theta^{t - 1}_{-j}\)</span> has consists of updated parameters for all parameters preceding <span class="math inline">\(j\)</span> and the previous iteration’s values for all succeeding parameters, <span class="math display">\[
 \theta_{-j}^{t - 1} = \left(\theta_1^t, \dots, \theta_{j - 1}^t, \theta_{j - 1}^{t - 1}, \dots, \theta_d^{t - 1}\right) .
 \]</span></li>
 </ul></li>
 </ul></li>
 <li><p>Gibbs sampler is a special case of MH algorithm. It is appealing because the use of full-conditional distributions means that draws are <strong>never</strong> rejected.</p></li>
-<li><p>The use of full-conditional distributions often results in highly correlated iterations.
-Many applications adjust the method to reduce these correlations.</p></li>
+<li><p>The use of full-conditional distributions often results in highly correlated iterations. Many applications adjust the method to reduce these correlations.</p></li>
 <li><p>It can be difficult to derive the full-conditional distributions in many cases.</p></li>
 </ul>
 </div>
@@ -967,23 +870,16 @@ Many applications adjust the method to reduce these correlations.</p></li>
 <h4><span class="header-section-number">7.5.6.3</span> Hamiltonian Monte Carlo (HMC)</h4>
 <div id="assessing-convergence" class="section level5">
 <h5><span class="header-section-number">7.5.6.3.1</span> Assessing Convergence</h5>
-<p>Iterative simulation methods have two additional issues above and beyond those of simulations <span class="citation">(A. Gelman et al. 2013, 282)</span>:</p>
+<p>Iterative simulation methods have two additional issues above and beyond those of simulations <span class="citation">(Gelman et al. 2013, 282)</span>:</p>
 <ol style="list-style-type: decimal">
-<li><p>The iterations have not proceeded long enough to find the typical set and
-are not drawing samples from the target distribution.</p></li>
-<li><p>The samples have within-sequence correlations.
-Serial correlation is not a fatal problem.</p></li>
+<li><p>The iterations have not proceeded long enough to find the typical set and are not drawing samples from the target distribution.</p></li>
+<li><p>The samples have within-sequence correlations. Serial correlation is not a fatal problem.</p></li>
 </ol>
 <p>How to monitor and assess iterative simulation</p>
 <ol style="list-style-type: decimal">
-<li><p>Design simulations to allow monitoring of convergence by running multiple chains
-from dispersed starting points.</p></li>
-<li><p>Monitor convergence by comparing within chain variation and between variation
-using the <span class="math inline">\(\hat{R}\)</span> statistic. Only when the between and within variations are
-approximately equal will the multiple chains appear to be sampling from the same distribution.</p></li>
-<li><p>Require a certain level of efficiency in the output in terms of acceptable sample size.
-If that that efficiency is too costly to obtain, it may require tweaking the model
-or the algorithm to be more efficient. See <span class="citation">A. Gelman et al. (2013 Ch. 12)</span> for methods to speed up MCMC.</p></li>
+<li><p>Design simulations to allow monitoring of convergence by running multiple chains from dispersed starting points.</p></li>
+<li><p>Monitor convergence by comparing within chain variation and between variation using the <span class="math inline">\(\hat{R}\)</span> statistic. Only when the between and within variations are approximately equal will the multiple chains appear to be sampling from the same distribution.</p></li>
+<li><p>Require a certain level of efficiency in the output in terms of acceptable sample size. If that that efficiency is too costly to obtain, it may require tweaking the model or the algorithm to be more efficient. See <span class="citation">Gelman et al. (2013 Ch. 12)</span> for methods to speed up MCMC.</p></li>
 </ol>
 </div>
 </div>
@@ -991,53 +887,37 @@ or the algorithm to be more efficient. See <span class="citation">A. Gelman et a
 <div id="discarding-early-iterations" class="section level3">
 <h3><span class="header-section-number">7.5.7</span> Discarding early iterations</h3>
 <p>Because iterative algorithms may take time to find the typical set of the target distribution, sometimes the early iterations are discarded.</p>
-<p>In Gibbs sampling, it is common to have a “burn-in” period which is discarded.
-The algorithm is theoretically still sampling from the posterior distribution, but in the burn-in period it may not have wandered into the typical yet and thus those draws are unrepresentative.</p>
-<p>In HMC methods, there is a “warmup” period of each chain.
-In this period the algorithm is <strong>not</strong> sampling using a method guaranteed to draw a sample from the posterior distribution.
-Instead it is searching for values of the <em>tuning-parameters</em> of the algorithm.
-Only after these turning-parameters are set are samples used for analysis.
-This is similar to the burn-in period of Gibbs sampling in that those iterations are discarded.
-However, it is serving a fundamentally different role in that the</p>
-<p>Generally, the issue with MCMC algorithms is not in finding the typical set.
-In application, they tend to find typical set quickly (FIND CITE – Jackman?).
-Generally, the larger issue is that the draws are correlated and it may take a long time to explore the posterior distribution.</p>
-<p>See <span class="citation">A. Gelman et al. (2013, 282)</span>.</p>
+<p>In Gibbs sampling, it is common to have a “burn-in” period which is discarded. The algorithm is theoretically still sampling from the posterior distribution, but in the burn-in period it may not have wandered into the typical yet and thus those draws are unrepresentative.</p>
+<p>In HMC methods, there is a “warmup” period of each chain. In this period the algorithm is <strong>not</strong> sampling using a method guaranteed to draw a sample from the posterior distribution. Instead it is searching for values of the <em>tuning-parameters</em> of the algorithm. Only after these turning-parameters are set are samples used for analysis. This is similar to the burn-in period of Gibbs sampling in that those iterations are discarded. However, it is serving a fundamentally different role in that the</p>
+<p>Generally, the issue with MCMC algorithms is not in finding the typical set. In application, they tend to find typical set quickly (FIND CITE – Jackman?). Generally, the larger issue is that the draws are correlated and it may take a long time to explore the posterior distribution.</p>
+<p>See <span class="citation">Gelman et al. (2013, 282)</span>.</p>
 </div>
 <div id="monte-carlo-sampling" class="section level3">
 <h3><span class="header-section-number">7.5.8</span> Monte Carlo Sampling</h3>
 <p>Monte Carlo methods are used to numerically approximate integrals, when the integral function is not tractable but the function being integrated is.</p>
-<p>In Bayesian stats, the mean of a probability density <span class="math inline">\(p(\theta)\)</span> is
-<span class="math display">\[
+<p>In Bayesian stats, the mean of a probability density <span class="math inline">\(p(\theta)\)</span> is <span class="math display">\[
 \mu = \int_{\Theta} \theta p(\theta) \, d \theta .
-\]</span>
-Except for cases in which the distribution <span class="math inline">\(p(\theta)\)</span> has a known form (not the case for most applied models) for functional form of the integral isn’t known, but <span class="math inline">\(p(\theta)\)</span> is</p>
+\]</span> Except for cases in which the distribution <span class="math inline">\(p(\theta)\)</span> has a known form (not the case for most applied models) for functional form of the integral isn’t known, but <span class="math inline">\(p(\theta)\)</span> is</p>
 <p>The Monte Carlo estimate of <span class="math inline">\(\mu\)</span> is.</p>
 <ul>
 <li><p>Draw <span class="math inline">\(N\)</span> independent samples, <span class="math inline">\(\theta^{(1)}, \dots, \theta^{(N)}\)</span>, from <span class="math inline">\(p(\theta)\)</span>.</p></li>
-<li><p>Estimate <span class="math inline">\(\hat{\mu}\)</span> with
-<span class="math display">\[
+<li><p>Estimate <span class="math inline">\(\hat{\mu}\)</span> with <span class="math display">\[
 \hat{\mu} = \frac{1}{N} \sum_{n = 1}^N \theta^{(N)} .
 \]</span></p></li>
 </ul>
-<p>If <span class="math inline">\(p(\theta)\)</span> has finite mean and variance, the law of large numbers ensures
-that the Monte Carlo estimate converges to the true value
-<span class="math display">\[
+<p>If <span class="math inline">\(p(\theta)\)</span> has finite mean and variance, the law of large numbers ensures that the Monte Carlo estimate converges to the true value <span class="math display">\[
 \lim_{N \to \infty} \hat\mu \to \mu
-\]</span>
-and the estimation error is governed by the CLT,
-<span class="math display">\[
+\]</span> and the estimation error is governed by the CLT, <span class="math display">\[
 | \mu - \hat{\mu} | \propto \frac{\sigma}{\sqrt{N}}
 \]</span></p>
-<p><strong>Example:</strong> The mean of <span class="math inline">\(Y = X^2\)</span> where <span class="math inline">\(X \sim \dnorm(0, 1)\)</span>.
-Draw a sample from <span class="math inline">\(Y\)</span>,</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1024</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
+<p><strong>Example:</strong> The mean of <span class="math inline">\(Y = X^2\)</span> where <span class="math inline">\(X \sim \dnorm(0, 1)\)</span>. Draw a sample from <span class="math inline">\(Y\)</span>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1024</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
 <p>The Monte Carlo estimates of the mean is</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="kw">mean</span>(x)</a>
-<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="co">#&gt; [1] 1.03</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(x)
+<span class="co">#&gt; [1] 1.07</span></code></pre></div>
 <p>with standard error,</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">sd</span>(x) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</a>
-<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="co">#&gt; [1] 0.0456</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(x) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))
+<span class="co">#&gt; [1] 0.0486</span></code></pre></div>
 
 </div>
 </div>
@@ -1084,7 +964,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

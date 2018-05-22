@@ -60,69 +60,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 </head>
@@ -359,36 +331,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html"><i class="fa fa-check"></i><b>19</b> Shrinkage and Regularized Regression</a><ul>
 <li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-11"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="19.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#introduction-6"><i class="fa fa-check"></i><b>19.1</b> Introduction</a></li>
-<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
-<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
-<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
-<li class="chapter" data-level="19.2.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#constrained-optimization-interpretation"><i class="fa fa-check"></i><b>19.2.3</b> Constrained Optimization Interpretation</a></li>
-<li class="chapter" data-level="19.2.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-interpretation"><i class="fa fa-check"></i><b>19.2.4</b> Bayesian Interpretation</a></li>
+<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-estimators"><i class="fa fa-check"></i><b>19.2</b> Shrinkage Estimators</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2.1</b> Penalized Maximum Likelihood Regression</a></li>
+<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.2.2</b> Bayesian Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
-<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
-<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.3.2</b> Spike and Slab prior</a></li>
-<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#normal-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Normal Distribution</a></li>
-<li class="chapter" data-level="19.3.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.4</b> Laplace Distribution</a></li>
-<li class="chapter" data-level="19.3.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.3.5</b> Student-t and Cauchy Distributions</a></li>
-<li class="chapter" data-level="19.3.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-prior"><i class="fa fa-check"></i><b>19.3.6</b> Horseshore Prior</a></li>
+<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#sparse-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Sparse Shrinkage</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-likelihood"><i class="fa fa-check"></i><b>19.3.1</b> Penalized Likelihood</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-sparse-shrinkage-models"><i class="fa fa-check"></i><b>19.3.2</b> Bayesian Sparse Shrinkage Models</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.4</b> Understanding Shrinkage Models</a></li>
-<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.6</b> Differences between Bayesian and Penalized ML</a></li>
-<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#section"><i class="fa fa-check"></i><b>19.4</b> </a><ul>
+<li class="chapter" data-level="19.4.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-factor"><i class="fa fa-check"></i><b>19.4.1</b> Shrinkage Factor</a></li>
+<li class="chapter" data-level="19.4.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prior-on-the-global-scale"><i class="fa fa-check"></i><b>19.4.2</b> Prior on the Global Scale</a></li>
 </ul></li>
-<li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
-<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
-<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="19.9.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.9.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="19.9.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="19.9.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.9.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="19.9.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.9.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.5</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.6</b> Examples</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#diabetes"><i class="fa fa-check"></i><b>19.6.1</b> Diabetes</a></li>
+<li class="chapter" data-level="19.6.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#example-4"><i class="fa fa-check"></i><b>19.6.2</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-with-correlated-variables"><i class="fa fa-check"></i><b>19.7</b> Shrinkage with Correlated Variables</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#variable-selection"><i class="fa fa-check"></i><b>19.8</b> Variable Selection</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="19.9" data-path="appendix.html"><a href="appendix.html#parameters"><i class="fa fa-check"></i><b>19.9</b> Parameters</a></li>
+<li class="chapter" data-level="19.10" data-path="appendix.html"><a href="appendix.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.10</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="19.10.1" data-path="appendix.html"><a href="appendix.html#location-scale-families"><i class="fa fa-check"></i><b>19.10.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="19.10.2" data-path="appendix.html"><a href="appendix.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.10.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="19.10.3" data-path="appendix.html"><a href="appendix.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.10.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="19.10.4" data-path="appendix.html"><a href="appendix.html#qr-factorization"><i class="fa fa-check"></i><b>19.10.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="19.10.5" data-path="appendix.html"><a href="appendix.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.10.5</b> Cholesky Decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="19.11" data-path="appendix.html"><a href="appendix.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.11</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a></li>
 <li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
@@ -403,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="21.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>21.5.4</b> Bayesian Hypothesis Testing</a></li>
 <li class="chapter" data-level="21.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>21.5.5</b> Bayesian Frequentist Debates</a></li>
 <li class="chapter" data-level="21.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>21.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection-1"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
 <li class="chapter" data-level="21.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>21.5.8</b> Multiple Testing</a></li>
 <li class="chapter" data-level="21.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>21.5.9</b> Rare Events</a></li>
 <li class="chapter" data-level="21.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>21.5.10</b> Identifiability</a></li>
@@ -412,11 +385,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="21.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>21.6</b> Software</a><ul>
 <li class="chapter" data-level="21.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>21.6.1</b> Stan</a></li>
 <li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
+<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
 </ul></li>
 <li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
 <li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models-1"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
 <li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
 <li class="chapter" data-level="21.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>21.10.1</b> Discussion of Bayesian Inference</a></li>
 </ul></li>
@@ -529,10 +502,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="refs" class="references">
 <div>
-<p>Albert, A., and J. A. Anderson. 1984. “On the Existence of Maximum Likelihood Estimates in Logistic Regression Models.” <em>Biometrika</em> 71 (1): 1–10. <a href="https://doi.org/10.1093/biomet/71.1.1" class="uri">https://doi.org/10.1093/biomet/71.1.1</a>.</p>
+<p>Albert, A., and J. A. Anderson. 1984. “On the Existence of Maximum Likelihood Estimates in Logistic Regression Models.” <em>Biometrika</em> 71 (1): 1–10. doi:<a href="https://doi.org/10.1093/biomet/71.1.1">10.1093/biomet/71.1.1</a>.</p>
 </div>
 <div>
-<p>Albert, Jim. 2009. <em>Bayesian Computation with R</em>. Use R! Springer. <a href="https://doi.org/10.1007/978-0-387-92298-0" class="uri">https://doi.org/10.1007/978-0-387-92298-0</a>.</p>
+<p>Albert, Jim. 2009. <em>Bayesian Computation with R</em>. Use R! Springer. doi:<a href="https://doi.org/10.1007/978-0-387-92298-0">10.1007/978-0-387-92298-0</a>.</p>
 </div>
 <div>
 <p>Asquith, William H. 2011. <em>Distributional Analysis with L-Moment Statistics Using the R Environment for Statistical Computing</em>.</p>
@@ -541,16 +514,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Barnard, John, Robert McCulloch, and Xiao-Li Meng. 2000. “Modeling Covariance Matrices in Terms of Standard Deviations and Correlations, with Application to Shrinkage.” <em>Statistica Sinica</em> 10 (4). Institute of Statistical Science, Academia Sinica: 1281–1311. <a href="http://www.jstor.org/stable/24306780" class="uri">http://www.jstor.org/stable/24306780</a>.</p>
 </div>
 <div>
-<p>Barrilleaux, Charles, and Carlisle Rainey. 2014. “The Politics of Need.” <em>State Politics &amp; Policy Quarterly</em> 14 (4). SAGE Publications: 437–60. <a href="https://doi.org/10.1177/1532440014561644" class="uri">https://doi.org/10.1177/1532440014561644</a>.</p>
+<p>Barrilleaux, Charles, and Carlisle Rainey. 2014. “The Politics of Need.” <em>State Politics &amp; Policy Quarterly</em> 14 (4). SAGE Publications: 437–60. doi:<a href="https://doi.org/10.1177/1532440014561644">10.1177/1532440014561644</a>.</p>
 </div>
 <div>
-<p>Beck, Nathaniel, and Jonathan N. Katz. 2007. “Random Coefficient Models for Time-Series—Cross-Section Data: Monte Carlo Experiments.” <em>Political Analysis</em> 15 (02). Cambridge University Press (CUP): 182–95. <a href="https://doi.org/10.1093/pan/mpl001" class="uri">https://doi.org/10.1093/pan/mpl001</a>.</p>
+<p>Beck, Nathaniel, and Jonathan N. Katz. 2007. “Random Coefficient Models for Time-Series—cross-Section Data: Monte Carlo Experiments.” <em>Political Analysis</em> 15 (02). Cambridge University Press (CUP): 182–95. doi:<a href="https://doi.org/10.1093/pan/mpl001">10.1093/pan/mpl001</a>.</p>
 </div>
 <div>
 <p>Beck, Nathaniel, Jonathan N. Katz, and Richard Tucker. 1998. “Taking Time Seriously: Time-Series-Cross-Section Analysis with a Binary Dependent Variable.” <em>American Journal of Political Science</em> 42 (4). [Midwest Political Science Association, Wiley]: 1260–88. <a href="http://www.jstor.org/stable/2991857" class="uri">http://www.jstor.org/stable/2991857</a>.</p>
 </div>
 <div>
-<p>Benoit, Dries F., and Dirk Van den Poel. 2017. “bayesQR: A Bayesian Approach to Quantile Regression.” <em>Journal of Statistical Software</em> 76 (7). Foundation for Open Access Statistic. <a href="https://doi.org/10.18637/jss.v076.i07" class="uri">https://doi.org/10.18637/jss.v076.i07</a>.</p>
+<p>Benoit, Dries F., and Dirk Van den Poel. 2017. “bayesQR: A Bayesian Approach to Quantile Regression.” <em>Journal of Statistical Software</em> 76 (7). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v076.i07">10.18637/jss.v076.i07</a>.</p>
 </div>
 <div>
 <p>Berger, James O. 1993. <em>Statistical Decision Theory and Bayesian Analysis</em>. Springer.</p>
@@ -562,61 +535,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>———. 2017. “How the Shape of a Weakly Informative Prior Affects Inferences.” <em>Stan Case Studies</em>, January. <a href="http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html" class="uri">http://mc-stan.org/documentation/case-studies/weakly_informative_shapes.html</a>.</p>
 </div>
 <div>
-<p>Blei, David M., Alp Kucukelbir, and Jon D. McAuliffe. 2017. “Variational Inference: A Review for Statisticians.” <em>Journal of the American Statistical Association</em> 112 (518): 859–77. <a href="https://doi.org/10.1080/01621459.2017.1285773" class="uri">https://doi.org/10.1080/01621459.2017.1285773</a>.</p>
+<p>Blei, David M., Alp Kucukelbir, and Jon D. McAuliffe. 2017. “Variational Inference: A Review for Statisticians.” <em>Journal of the American Statistical Association</em> 112 (518): 859–77. doi:<a href="https://doi.org/10.1080/01621459.2017.1285773">10.1080/01621459.2017.1285773</a>.</p>
 </div>
 <div>
-<p>Box, George E. P. 1976. “Science and Statistics.” <em>Journal of the American Statistical Association</em> 71 (356): 791–99. <a href="https://doi.org/10.1080/01621459.1976.10480949" class="uri">https://doi.org/10.1080/01621459.1976.10480949</a>.</p>
+<p>Box, George E. P. 1976. “Science and Statistics.” <em>Journal of the American Statistical Association</em> 71 (356): 791–99. doi:<a href="https://doi.org/10.1080/01621459.1976.10480949">10.1080/01621459.1976.10480949</a>.</p>
 </div>
 <div>
 <p>Carpenter, Bob, Jonah Gabry, and Ben Goodrich. 2017. “Hierarchical Partial Pooling for Repeated Binary Trials.” <em>Stan Case Studies</em>, January. <a href="http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html" class="uri">http://mc-stan.org/documentation/case-studies/pool-binary-trials-rstanarm.html</a>.</p>
 </div>
 <div>
-<p>Carvalho, Carlos M., Michael S. Johannes, Hedibert F. Lopes, and Nicholas G. Polson. 2010. “Particle Learning and Smoothing.” <em>Statistical Science</em> 25 (1). The Institute of Mathematical Statistics: 88–106. <a href="https://doi.org/10.1214/10-STS325" class="uri">https://doi.org/10.1214/10-STS325</a>.</p>
+<p>Carvalho, Carlos M., Michael S. Johannes, Hedibert F. Lopes, and Nicholas G. Polson. 2010. “Particle Learning and Smoothing.” <em>Statistical Science</em> 25 (1). The Institute of Mathematical Statistics: 88–106. doi:<a href="https://doi.org/10.1214/10-STS325">10.1214/10-STS325</a>.</p>
 </div>
 <div>
-<p>Chernoff, Herman. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 5–6. <a href="https://doi.org/10.1080/00031305.1986.10475343" class="uri">https://doi.org/10.1080/00031305.1986.10475343</a>.</p>
+<p>Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. 2009. “Handling Sparsity via the Horseshoe.” Edited by David van Dyk and Max Welling, Proceedings of machine learning research, 5. Hilton Clearwater Beach Resort, Clearwater Beach, Florida USA: PMLR: 73–80. <a href="http://proceedings.mlr.press/v5/carvalho09a.html" class="uri">http://proceedings.mlr.press/v5/carvalho09a.html</a>.</p>
 </div>
 <div>
-<p>Chung, Yeojin, Sophia Rabe-Hesketh, Vincent Dorie, Andrew Gelman, and Jingchen Liu. 2013. “A Nondegenerate Penalized Likelihood Estimator for Variance Parameters in Multilevel Models.” <em>Psychometrika</em> 78 (4). Springer Nature: 685–709. <a href="https://doi.org/10.1007/s11336-013-9328-2" class="uri">https://doi.org/10.1007/s11336-013-9328-2</a>.</p>
+<p>Chernoff, Herman. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 5–6. doi:<a href="https://doi.org/10.1080/00031305.1986.10475343">10.1080/00031305.1986.10475343</a>.</p>
+</div>
+<div>
+<p>Chung, Yeojin, Sophia Rabe-Hesketh, Vincent Dorie, Andrew Gelman, and Jingchen Liu. 2013. “A Nondegenerate Penalized Likelihood Estimator for Variance Parameters in Multilevel Models.” <em>Psychometrika</em> 78 (4). Springer Nature: 685–709. doi:<a href="https://doi.org/10.1007/s11336-013-9328-2">10.1007/s11336-013-9328-2</a>.</p>
 </div>
 <div>
 <p>Congdon, Peter. 2014. <em>Applied Bayesian Modelling</em>. 2nd ed. Wiley Series in Probability and Statistics. Wiley.</p>
 </div>
 <div>
-<p>Cribari-Neto, Francisco, and Achim Zeileis. 2010. “Beta Regression in R.” <em>Journal of Statistical Software</em> 34 (2). Foundation for Open Access Statistic. <a href="https://doi.org/10.18637/jss.v034.i02" class="uri">https://doi.org/10.18637/jss.v034.i02</a>.</p>
+<p>Cribari-Neto, Francisco, and Achim Zeileis. 2010. “Beta Regression in R.” <em>Journal of Statistical Software</em> 34 (2). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v034.i02">10.18637/jss.v034.i02</a>.</p>
 </div>
 <div>
-<p>Datta, Jyotishka, and Jayanta. K. Ghosh. 2013. “Asymptotic Properties of Bayes Risk for the Horseshoe Prior.” <em>Bayesian Analysis</em> 8 (1). International Society for Bayesian Analysis: 111–32. <a href="https://doi.org/10.1214/13-BA805" class="uri">https://doi.org/10.1214/13-BA805</a>.</p>
+<p>Datta, Jyotishka, and Jayanta. K. Ghosh. 2013. “Asymptotic Properties of Bayes Risk for the Horseshoe Prior.” <em>Bayesian Analysis</em> 8 (1). International Society for Bayesian Analysis: 111–32. doi:<a href="https://doi.org/10.1214/13-BA805">10.1214/13-BA805</a>.</p>
 </div>
 <div>
 <p>Duncan, O. D. 1961. “A Socioeconomic Index for All Occupations.” In <em>Occupations and Social Status</em>, edited by Jr. Reiss A. J. Frre Press.</p>
 </div>
 <div>
-<p>Efron, B. 1986a. “Reply.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 11–11. <a href="https://doi.org/10.1080/00031305.1986.10475348" class="uri">https://doi.org/10.1080/00031305.1986.10475348</a>.</p>
+<p>Efron, B. 1986a. “Reply.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 11–11. doi:<a href="https://doi.org/10.1080/00031305.1986.10475348">10.1080/00031305.1986.10475348</a>.</p>
 </div>
 <div>
-<p>———. 1986b. “Why Isn’t Everyone a Bayesian?” <em>The American Statistician</em> 40 (1). Informa UK Limited: 1–5. <a href="https://doi.org/10.1080/00031305.1986.10475342" class="uri">https://doi.org/10.1080/00031305.1986.10475342</a>.</p>
+<p>———. 1986b. “Why Isn’t Everyone a Bayesian?” <em>The American Statistician</em> 40 (1). Informa UK Limited: 1–5. doi:<a href="https://doi.org/10.1080/00031305.1986.10475342">10.1080/00031305.1986.10475342</a>.</p>
 </div>
 <div>
 <p>Efron, Bradley, and Trevor Hastie. 2016. <em>Computer Age Statistical Inference</em>. Cambridge University Pr.</p>
 </div>
 <div>
-<p>Efron, Bradley, and Carl Morris. 1975. “Data Analysis Using Stein’s Estimator and Its Generalizations.” <em>Journal of the American Statistical Association</em> 70 (350). Informa UK Limited: 311–19. <a href="https://doi.org/10.1080/01621459.1975.10479864" class="uri">https://doi.org/10.1080/01621459.1975.10479864</a>.</p>
+<p>Efron, Bradley, and Carl Morris. 1975. “Data Analysis Using Stein’s Estimator and Its Generalizations.” <em>Journal of the American Statistical Association</em> 70 (350). Informa UK Limited: 311–19. doi:<a href="https://doi.org/10.1080/01621459.1975.10479864">10.1080/01621459.1975.10479864</a>.</p>
 </div>
 <div>
-<p>Ferrari, Silvia, and Francisco Cribari-Neto. 2004. “Beta Regression for Modelling Rates and Proportions.” <em>Journal of Applied Statistics</em> 31 (7). Informa UK Limited: 799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="uri">https://doi.org/10.1080/0266476042000214501</a>.</p>
+<p>Ferrari, Silvia, and Francisco Cribari-Neto. 2004. “Beta Regression for Modelling Rates and Proportions.” <em>Journal of Applied Statistics</em> 31 (7). Informa UK Limited: 799–815. doi:<a href="https://doi.org/10.1080/0266476042000214501">10.1080/0266476042000214501</a>.</p>
 </div>
 <div>
-<p>Fienberg, Stephen E. 2006. “When Did Bayesian Inference Become &quot;Bayesian&quot;?” <em>Bayesian Analysis</em> 1 (1). International Society for Bayesian Analysis: 1–40. <a href="https://doi.org/10.1214/06-BA101" class="uri">https://doi.org/10.1214/06-BA101</a>.</p>
+<p>Fienberg, Stephen E. 2006. “When Did Bayesian Inference Become ‘Bayesian’?” <em>Bayesian Analysis</em> 1 (1). International Society for Bayesian Analysis: 1–40. doi:<a href="https://doi.org/10.1214/06-BA101">10.1214/06-BA101</a>.</p>
 </div>
 <div>
 <p>Fink, Daniel. 1997. “A Compendium of Conjugate Priors.” <a href="https://www.johndcook.com/CompendiumOfConjugatePriors.pdf" class="uri">https://www.johndcook.com/CompendiumOfConjugatePriors.pdf</a>.</p>
 </div>
 <div>
-<p>Firth, David. 1993. “Bias Reduction of Maximum Likelihood Estimates.” <em>Biometrika</em> 80 (1). Oxford University Press (OUP): 27–38. <a href="https://doi.org/10.1093/biomet/80.1.27" class="uri">https://doi.org/10.1093/biomet/80.1.27</a>.</p>
+<p>Firth, David. 1993. “Bias Reduction of Maximum Likelihood Estimates.” <em>Biometrika</em> 80 (1). Oxford University Press (OUP): 27–38. doi:<a href="https://doi.org/10.1093/biomet/80.1.27">10.1093/biomet/80.1.27</a>.</p>
 </div>
 <div>
-<p>Flegal, James M., Murali Haran, and Galin L. Jones. 2008. “Markov Chain Monte Carlo: Can We Trust the Third Significant Figure?” <em>Statistical Science</em> 23 (2). Institute of Mathematical Statistics: 250–60. <a href="https://doi.org/10.1214/08-sts257" class="uri">https://doi.org/10.1214/08-sts257</a>.</p>
+<p>Flegal, James M., Murali Haran, and Galin L. Jones. 2008. “Markov Chain Monte Carlo: Can We Trust the Third Significant Figure?” <em>Statistical Science</em> 23 (2). Institute of Mathematical Statistics: 250–60. doi:<a href="https://doi.org/10.1214/08-sts257">10.1214/08-sts257</a>.</p>
 </div>
 <div>
 <p>Forbes, Catherine, Merran Evans, Nicholas Hastings, and Brian Peacock. 2010. <em>Statistical Distributions</em>. 4th ed. Wiley. <a href="https://www.wiley.com/en-us/Statistical+Distributions%2C+4th+Edition-p-9781118097823">https://www.wiley.com/en-us/Statistical+Distributions%2C+4th+Edition-p-9781118097823</a>.</p>
@@ -631,46 +607,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Gelfand, Alan E. 1995. “Model Determination Using Sampling-Based Methods.” In.</p>
 </div>
 <div>
-<p>Gelfand, Alan E., and Adrian F. M. Smith. 1990. “Sampling-Based Approaches to Calculating Marginal Densities.” <em>Journal of the American Statistical Association</em> 85 (410). Informa UK Limited: 398–409. <a href="https://doi.org/10.1080/01621459.1990.10476213" class="uri">https://doi.org/10.1080/01621459.1990.10476213</a>.</p>
+<p>Gelfand, Alan E., and Adrian F. M. Smith. 1990. “Sampling-Based Approaches to Calculating Marginal Densities.” <em>Journal of the American Statistical Association</em> 85 (410). Informa UK Limited: 398–409. doi:<a href="https://doi.org/10.1080/01621459.1990.10476213">10.1080/01621459.1990.10476213</a>.</p>
 </div>
 <div>
-<p>Gelman, Andrew. 2006. “Prior Distributions for Variance Parameters in Hierarchical Models (Comment on Article by Browne and Draper).” <em>Bayesian Analysis</em> 1 (3). Institute of Mathematical Statistics: 515–34. <a href="https://doi.org/10.1214/06-ba117a" class="uri">https://doi.org/10.1214/06-ba117a</a>.</p>
+<p>Gelman, Andrew. 2006. “Prior Distributions for Variance Parameters in Hierarchical Models (Comment on Article by Browne and Draper).” <em>Bayesian Analysis</em> 1 (3). Institute of Mathematical Statistics: 515–34. doi:<a href="https://doi.org/10.1214/06-ba117a">10.1214/06-ba117a</a>.</p>
 </div>
 <div>
-<p>———. 2007. “A Bayesian Formulation of Exploratory Data Analysis and Goodness-of-Fit Testinga.” <em>International Statistical Review</em> 71 (2). Wiley-Blackwell: 369–82. <a href="https://doi.org/10.1111/j.1751-5823.2003.tb00203.x" class="uri">https://doi.org/10.1111/j.1751-5823.2003.tb00203.x</a>.</p>
+<p>———. 2007. “A Bayesian Formulation of Exploratory Data Analysis and Goodness-of-Fit Testinga.” <em>International Statistical Review</em> 71 (2). Wiley-Blackwell: 369–82. doi:<a href="https://doi.org/10.1111/j.1751-5823.2003.tb00203.x">10.1111/j.1751-5823.2003.tb00203.x</a>.</p>
 </div>
 <div>
-<p>———. 2009. “Confusions About Posterior Predictive Checks.” February 7, 2009. <a href="http://andrewgelman.com/2009/02/07/confusions_abou/" class="uri">http://andrewgelman.com/2009/02/07/confusions_abou/</a>.</p>
+<p>———. 2009. “Confusions About Posterior Predictive Checks.” February 7. <a href="http://andrewgelman.com/2009/02/07/confusions_abou/" class="uri">http://andrewgelman.com/2009/02/07/confusions_abou/</a>.</p>
 </div>
 <div>
 <p>———. 2014. “Discussion with Sander Greenland on Posterior Predictive Checks.” <em>Statistical Modeling, Causal Inference, and Social Science</em>, August. <a href="http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/" class="uri">http://andrewgelman.com/2014/08/11/discussion-sander-greenland-posterior-predictive-checks/</a>.</p>
 </div>
 <div>
-<p>Gelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, and Aki Vehtari. 2013. <em>Bayesian Data Analysis</em>. Taylor &amp; Francis Ltd.</p>
-</div>
-<div>
 <p>Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel / Hierarchical Models</em>. Cambridge University Pr.</p>
-</div>
-<div>
-<p>Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2013. “Understanding Predictive Information Criteria for Bayesian Models.” <em>Statistics and Computing</em> 24 (6). Springer Nature: 997–1016. <a href="https://doi.org/10.1007/s11222-013-9416-2" class="uri">https://doi.org/10.1007/s11222-013-9416-2</a>.</p>
-</div>
-<div>
-<p>Gelman, Andrew, Aleks Jakulin, Maria Grazia Pittau, and Yu-Sung Su. 2008. “A Weakly Informative Default Prior Distribution for Logistic and Other Regression Models.” <em>The Annals of Applied Statistics</em> 2 (4). Institute of Mathematical Statistics: 1360–83. <a href="https://doi.org/10.1214/08-aoas191" class="uri">https://doi.org/10.1214/08-aoas191</a>.</p>
-</div>
-<div>
-<p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive Assessment of Model Fitness via Realized Discrepancies.” <em>Statistica Sinica</em> 6 (4). Institute of Statistical Science, Academia Sinica: 733–60. <a href="http://www.jstor.org/stable/24306036" class="uri">http://www.jstor.org/stable/24306036</a>.</p>
 </div>
 <div>
 <p>Gelman, Andrew, and Donald B. Rubin. 1992. “Inference from Iterative Simulation Using Multiple Sequences.” <em>Statistical Science</em> 7 (4). Institute of Mathematical Statistics: 457–72. <a href="http://www.jstor.org/stable/2246093" class="uri">http://www.jstor.org/stable/2246093</a>.</p>
 </div>
 <div>
-<p>Gelman, Andrew, and Cosma Shalizi. 2012a. “Rejoinder to Discussion of ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 76–80. <a href="https://doi.org/10.1111/j.2044-8317.2012.02066.x" class="uri">https://doi.org/10.1111/j.2044-8317.2012.02066.x</a>.</p>
+<p>Gelman, Andrew, and Cosma Shalizi. 2012a. “Rejoinder to Discussion of ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 76–80. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02066.x">10.1111/j.2044-8317.2012.02066.x</a>.</p>
 </div>
 <div>
-<p>Gelman, Andrew, and Cosma Rohilla Shalizi. 2012b. “Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 8–38. <a href="https://doi.org/10.1111/j.2044-8317.2011.02037.x" class="uri">https://doi.org/10.1111/j.2044-8317.2011.02037.x</a>.</p>
+<p>Gelman, Andrew, and Cosma Rohilla Shalizi. 2012b. “Philosophy and the Practice of Bayesian Statistics.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1). Wiley-Blackwell: 8–38. doi:<a href="https://doi.org/10.1111/j.2044-8317.2011.02037.x">10.1111/j.2044-8317.2011.02037.x</a>.</p>
 </div>
 <div>
-<p>George, Edward I., and Robert E. McCulloch. 1993. “Variable Selection via Gibbs Sampling.” <em>Journal of the American Statistical Association</em> 88 (423). Informa UK Limited: 881–89. <a href="https://doi.org/10.1080/01621459.1993.10476353" class="uri">https://doi.org/10.1080/01621459.1993.10476353</a>.</p>
+<p>Gelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, and Aki Vehtari. 2013. <em>Bayesian Data Analysis</em>. Taylor &amp; Francis Ltd.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2013. “Understanding Predictive Information Criteria for Bayesian Models.” <em>Statistics and Computing</em> 24 (6). Springer Nature: 997–1016. doi:<a href="https://doi.org/10.1007/s11222-013-9416-2">10.1007/s11222-013-9416-2</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Aleks Jakulin, Maria Grazia Pittau, and Yu-Sung Su. 2008. “A Weakly Informative Default Prior Distribution for Logistic and Other Regression Models.” <em>The Annals of Applied Statistics</em> 2 (4). Institute of Mathematical Statistics: 1360–83. doi:<a href="https://doi.org/10.1214/08-aoas191">10.1214/08-aoas191</a>.</p>
+</div>
+<div>
+<p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive Assessment of Model Fitness via Realized Discrepancies.” <em>Statistica Sinica</em> 6 (4). Institute of Statistical Science, Academia Sinica: 733–60. <a href="http://www.jstor.org/stable/24306036" class="uri">http://www.jstor.org/stable/24306036</a>.</p>
+</div>
+<div>
+<p>George, Edward I., and Robert E. McCulloch. 1993. “Variable Selection via Gibbs Sampling.” <em>Journal of the American Statistical Association</em> 88 (423). Informa UK Limited: 881–89. doi:<a href="https://doi.org/10.1080/01621459.1993.10476353">10.1080/01621459.1993.10476353</a>.</p>
 </div>
 <div>
 <p>Geweke, J. 1993. “Bayesian Treatment of the Independent Student-t Linear Model.” <em>Journal of Applied Econometrics</em> 8. Wiley: S19–S40. <a href="http://www.jstor.org/stable/2285073" class="uri">http://www.jstor.org/stable/2285073</a>.</p>
@@ -679,40 +655,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Geyer, C. J. 2011. “Introduction to Markov Chain Monte Carlo.” In <em>Handbook of Markov Chain Monte Carlo</em>, edited by S. Brooks, Gelman, A. G. L. Jones, and X.-L. Meng. Chapman; Hall/CRC.</p>
 </div>
 <div>
-<p>Ghosh, Joyee, and Andrew E. Ghattas. 2015. “Bayesian Variable Selection Under Collinearity.” <em>The American Statistician</em> 69 (3). Informa UK Limited: 165–73. <a href="https://doi.org/10.1080/00031305.2015.1031827" class="uri">https://doi.org/10.1080/00031305.2015.1031827</a>.</p>
+<p>Ghosh, Joyee, and Andrew E. Ghattas. 2015. “Bayesian Variable Selection Under Collinearity.” <em>The American Statistician</em> 69 (3). Informa UK Limited: 165–73. doi:<a href="https://doi.org/10.1080/00031305.2015.1031827">10.1080/00031305.2015.1031827</a>.</p>
 </div>
 <div>
 <p>Ghosh, Joyee, Yingbo Li, and Robin Mitra. 2015. “On the Use of Cauchy Prior Distributions for Bayesian Logistic Regression,” July. <a href="http://arxiv.org/abs/1507.07170v2" class="uri">http://arxiv.org/abs/1507.07170v2</a>.</p>
 </div>
 <div>
-<p>Greenland, Sander, and Mohammad Ali Mansournia. 2015. “Penalization, Bias Reduction, and Default Priors in Logistic and Related Categorical and Survival Regressions.” <em>Statistics in Medicine</em> 34 (23). Wiley-Blackwell: 3133–43. <a href="https://doi.org/10.1002/sim.6537" class="uri">https://doi.org/10.1002/sim.6537</a>.</p>
+<p>Greenland, Sander, and Mohammad Ali Mansournia. 2015. “Penalization, Bias Reduction, and Default Priors in Logistic and Related Categorical and Survival Regressions.” <em>Statistics in Medicine</em> 34 (23). Wiley-Blackwell: 3133–43. doi:<a href="https://doi.org/10.1002/sim.6537">10.1002/sim.6537</a>.</p>
 </div>
 <div>
-<p>Grimmer, Justin. 2011. “An Introduction to Bayesian Inference via Variational Approximations.” <em>Political Analysis</em> 19 (01). Cambridge University Press (CUP): 32–47. <a href="https://doi.org/10.1093/pan/mpq027" class="uri">https://doi.org/10.1093/pan/mpq027</a>.</p>
+<p>Grimmer, Justin. 2011. “An Introduction to Bayesian Inference via Variational Approximations.” <em>Political Analysis</em> 19 (01). Cambridge University Press (CUP): 32–47. doi:<a href="https://doi.org/10.1093/pan/mpq027">10.1093/pan/mpq027</a>.</p>
 </div>
 <div>
-<p>Gross, Justin H. 2014. “Testing What Matters (If You Must Test at All): A Context-Driven Approach to Substantive and Statistical Significance.” <em>American Journal of Political Science</em> 59 (3). Wiley-Blackwell: 775–88. <a href="https://doi.org/10.1111/ajps.12149" class="uri">https://doi.org/10.1111/ajps.12149</a>.</p>
+<p>Gross, Justin H. 2014. “Testing What Matters (If You Must Test at All): A Context-Driven Approach to Substantive and Statistical Significance.” <em>American Journal of Political Science</em> 59 (3). Wiley-Blackwell: 775–88. doi:<a href="https://doi.org/10.1111/ajps.12149">10.1111/ajps.12149</a>.</p>
 </div>
 <div>
-<p>Grün, Bettina, Ioannis Kosmidis, and Achim Zeileis. 2012. “Extended Beta Regression in R: Shaken, Stirred, Mixed, and Partitioned.” <em>Journal of Statistical Software</em> 48 (11). Foundation for Open Access Statistic. <a href="https://doi.org/10.18637/jss.v048.i11" class="uri">https://doi.org/10.18637/jss.v048.i11</a>.</p>
+<p>Grün, Bettina, Ioannis Kosmidis, and Achim Zeileis. 2012. “Extended Beta Regression in R: Shaken, Stirred, Mixed, and Partitioned.” <em>Journal of Statistical Software</em> 48 (11). Foundation for Open Access Statistic. doi:<a href="https://doi.org/10.18637/jss.v048.i11">10.18637/jss.v048.i11</a>.</p>
 </div>
 <div>
-<p>Heinze, Georg. 2006. “A Comparative Investigation of Methods for Logistic Regressionwith Separated or Nearly Separated Data.” <em>Statistics in Medicine</em>. <a href="https://doi.org/10.1002/sim.2687" class="uri">https://doi.org/10.1002/sim.2687</a>.</p>
+<p>Heinze, Georg. 2006. “A Comparative Investigation of Methods for Logistic Regressionwith Separated or Nearly Separated Data.” <em>Statistics in Medicine</em>. doi:<a href="https://doi.org/10.1002/sim.2687">10.1002/sim.2687</a>.</p>
 </div>
 <div>
-<p>Heinze, Georg, and Michael Schemper. 2002. “A Solution to the Problem of Separation in Logistic Regression.” <em>Statistics in Medicine</em>. <a href="https://doi.org/10.1002/sim.1047" class="uri">https://doi.org/10.1002/sim.1047</a>.</p>
+<p>Heinze, Georg, and Michael Schemper. 2002. “A Solution to the Problem of Separation in Logistic Regression.” <em>Statistics in Medicine</em>. doi:<a href="https://doi.org/10.1002/sim.1047">10.1002/sim.1047</a>.</p>
 </div>
 <div>
-<p>Hoerl, Arthur E., and Robert W. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12 (1). Informa UK Limited: 55–67. <a href="https://doi.org/10.1080/00401706.1970.10488634" class="uri">https://doi.org/10.1080/00401706.1970.10488634</a>.</p>
+<p>Hoerl, Arthur E., and Robert W. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12 (1). Informa UK Limited: 55–67. doi:<a href="https://doi.org/10.1080/00401706.1970.10488634">10.1080/00401706.1970.10488634</a>.</p>
 </div>
 <div>
-<p>Hoff, Peter D. 2009. <em>A First Course in Bayesian Statistical Methods</em>. Springer Texts in Statistics. Springer-Verlag GmbH. <a href="https://doi.org/10.1007/978-0-387-92407-6" class="uri">https://doi.org/10.1007/978-0-387-92407-6</a>.</p>
+<p>Hoff, Peter D. 2009. <em>A First Course in Bayesian Statistical Methods</em>. Springer Texts in Statistics. Springer-Verlag GmbH. doi:<a href="https://doi.org/10.1007/978-0-387-92407-6">10.1007/978-0-387-92407-6</a>.</p>
+</div>
+<div>
+<p>Ishwaran, Hemant, and J. Sunil Rao. 2005. “Spike and Slab Variable Selection: Frequentist and Bayesian Strategies.” <em>The Annals of Statistics</em> 33 (2). Institute of Mathematical Statistics: 730–73. doi:<a href="https://doi.org/10.1214/009053604000001147">10.1214/009053604000001147</a>.</p>
 </div>
 <div>
 <p>Ishwaran, Hemant, Udaya B. Kogalur, and J. Sunil Rao. 2010. “spikeslab: Prediction and Variable Selection Using Spike and Slab Regression.” <em>R Journal</em>. <a href="https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf" class="uri">https://journal.r-project.org/archive/2010-2/RJournal_2010-2_Ishwaran~et~al.pdf</a>.</p>
-</div>
-<div>
-<p>Ishwaran, Hemant, and J. Sunil Rao. 2005. “Spike and Slab Variable Selection: Frequentist and Bayesian Strategies.” <em>The Annals of Statistics</em> 33 (2). Institute of Mathematical Statistics: 730–73. <a href="https://doi.org/10.1214/009053604000001147" class="uri">https://doi.org/10.1214/009053604000001147</a>.</p>
 </div>
 <div>
 <p>Jackman, Simon. 2009. <em>Bayesian Analysis for the Social Sciences</em>. John Wiley; Sons Ltd.</p>
@@ -727,10 +703,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>———. 1997. <em>Discrete Multivariate Distributions</em>. 1st ed. Wiley Series in Probability and Statistics. Wiley-Interscience.</p>
 </div>
 <div>
-<p>Juárez, Miguel A., and Mark F. J. Steel. 2010. “Model-Based Clustering of Non-Gaussian Panel Data Based on Skew-t Distributions.” <em>Journal of Business &amp; Economic Statistics</em> 28 (1). Informa UK Limited: 52–66. <a href="https://doi.org/10.1198/jbes.2009.07145" class="uri">https://doi.org/10.1198/jbes.2009.07145</a>.</p>
+<p>Juárez, Miguel A., and Mark F. J. Steel. 2010. “Model-Based Clustering of Non-Gaussian Panel Data Based on Skew-t Distributions.” <em>Journal of Business &amp; Economic Statistics</em> 28 (1). Informa UK Limited: 52–66. doi:<a href="https://doi.org/10.1198/jbes.2009.07145">10.1198/jbes.2009.07145</a>.</p>
 </div>
 <div>
-<p>Kass, Robert E., and Adrian E. Raftery. 1995. “Bayes Factors.” <em>Journal of the American Statistical Association</em> 90 (430). Informa UK Limited: 773–95. <a href="https://doi.org/10.1080/01621459.1995.10476572" class="uri">https://doi.org/10.1080/01621459.1995.10476572</a>.</p>
+<p>Kass, Robert E., and Adrian E. Raftery. 1995. “Bayes Factors.” <em>Journal of the American Statistical Association</em> 90 (430). Informa UK Limited: 773–95. doi:<a href="https://doi.org/10.1080/01621459.1995.10476572">10.1080/01621459.1995.10476572</a>.</p>
 </div>
 <div>
 <p>King, Gary. 1998. <em>Unifying Political Methodology: The Likelihood Theory of Statistical Inference</em>. UNIV OF MICHIGAN PR.</p>
@@ -739,13 +715,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>King, Gary, and Langche Zeng. 2001a. “Logistic Regression in Rare Events Data.” <em>Political Analysis</em> 9 (2). [Oxford University Press, Society for Political Methodology]: 137–63. <a href="http://www.jstor.org/stable/25791637" class="uri">http://www.jstor.org/stable/25791637</a>.</p>
 </div>
 <div>
-<p>———. 2001b. “Explaining Rare Events in International Relations.” <em>International Organization</em> 55 (3). Cambridge University Press (CUP): 693–715. <a href="https://doi.org/10.1162/00208180152507597" class="uri">https://doi.org/10.1162/00208180152507597</a>.</p>
+<p>———. 2001b. “Explaining Rare Events in International Relations.” <em>International Organization</em> 55 (3). Cambridge University Press (CUP): 693–715. doi:<a href="https://doi.org/10.1162/00208180152507597">10.1162/00208180152507597</a>.</p>
 </div>
 <div>
 <p>Kotz, Samuel, N. Balakrishnan, and Norman L. Johnson. 2000. <em>Continuous Multivariate Distributions, Volume 1: Models and Applications</em>. 2nd ed. Wiley Series in Probability and Statistics. Wiley-Interscience.</p>
 </div>
 <div>
-<p>Kruschke, John K. 2013. “Posterior Predictive Checks Can and Should Be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1): 45–56. <a href="https://doi.org/10.1111/j.2044-8317.2012.02063.x" class="uri">https://doi.org/10.1111/j.2044-8317.2012.02063.x</a>.</p>
+<p>Kruschke, John K. 2013. “Posterior Predictive Checks Can and Should Be Bayesian: Comment on Gelman and Shalizi, ‘Philosophy and the Practice of Bayesian Statistics’.” <em>British Journal of Mathematical and Statistical Psychology</em> 66 (1): 45–56. doi:<a href="https://doi.org/10.1111/j.2044-8317.2012.02063.x">10.1111/j.2044-8317.2012.02063.x</a>.</p>
 </div>
 <div>
 <p>———. 2015. <em>Doing Bayesian Data Analysis</em>. Elsevier LTD, Oxford.</p>
@@ -757,13 +733,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Lee, Peter M. 2012. <em>Bayesian Statistics: An Introduction</em>. Wiley.</p>
 </div>
 <div>
-<p>Leemis, Lawrence M., and Jacquelyn T. McQueston. 2008. “Univariate Distribution Relationships.” <em>The American Statistician</em> 62 (1). Taylor &amp; Francis: 45–53. <a href="https://doi.org/10.1198/000313008X270448" class="uri">https://doi.org/10.1198/000313008X270448</a>.</p>
+<p>Leemis, Lawrence M., and Jacquelyn T. McQueston. 2008. “Univariate Distribution Relationships.” <em>The American Statistician</em> 62 (1). Taylor &amp; Francis: 45–53. doi:<a href="https://doi.org/10.1198/000313008X270448">10.1198/000313008X270448</a>.</p>
 </div>
 <div>
-<p>Lindley, D. V. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 6–7. <a href="https://doi.org/10.1080/00031305.1986.10475344" class="uri">https://doi.org/10.1080/00031305.1986.10475344</a>.</p>
+<p>Lindley, D. V. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 6–7. doi:<a href="https://doi.org/10.1080/00031305.1986.10475344">10.1080/00031305.1986.10475344</a>.</p>
 </div>
 <div>
-<p>Liu, Chuanhai. 2005. “Robit Regression: A Simple Robust Alternative to Logistic and Probit Regression.” In <em>Applied Bayesian Modeling and Causal Inference from Incomplete-Data Perspectives</em>, 227–38. John Wiley &amp; Sons, Ltd. <a href="https://doi.org/10.1002/0470090456.ch21" class="uri">https://doi.org/10.1002/0470090456.ch21</a>.</p>
+<p>Liu, Chuanhai. 2005. “Robit Regression: A Simple Robust Alternative to Logistic and Probit Regression.” In <em>Applied Bayesian Modeling and Causal Inference from Incomplete-Data Perspectives</em>, 227–38. John Wiley &amp; Sons, Ltd. doi:<a href="https://doi.org/10.1002/0470090456.ch21">10.1002/0470090456.ch21</a>.</p>
 </div>
 <div>
 <p>Lopes, Hedibert F., Nicholas G. Polson, and Carlos M. Carvalho. 2012. “Bayesian Statistics with a Smile: A Resampling-Sampling Perspective.” <em>Brazilian Journal of Probability and Statistics</em> 26 (4). [Brazilian Statistical Association, Institute of Mathematical Statistics]: 358–71. <a href="http://www.jstor.org/stable/43601224" class="uri">http://www.jstor.org/stable/43601224</a>.</p>
@@ -775,58 +751,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>MacKay, David J. C. 2003. <em>Information Theory, Inference and Learning Algorithms</em>. Cambridge University Pr.</p>
 </div>
 <div>
-<p>Marin, Jean-Michel, and Christian P. Robert. 2014. <em>Bayesian Essentials with R</em>. Springer. <a href="https://doi.org/10.1007/978-1-4614-8687-9" class="uri">https://doi.org/10.1007/978-1-4614-8687-9</a>.</p>
+<p>Marin, Jean-Michel, and Christian P. Robert. 2014. <em>Bayesian Essentials with R</em>. Springer. doi:<a href="https://doi.org/10.1007/978-1-4614-8687-9">10.1007/978-1-4614-8687-9</a>.</p>
 </div>
 <div>
 <p>McElreath, Richard. 2016. <em>Statistical Rethinking</em>. Apple Academic Press Inc.</p>
 </div>
 <div>
-<p>Mitchell, T. J., and J. J. Beauchamp. 1988. “Bayesian Variable Selection in Linear Regression.” <em>Journal of the American Statistical Association</em> 83 (404). Informa UK Limited: 1023–32. <a href="https://doi.org/10.1080/01621459.1988.10478694" class="uri">https://doi.org/10.1080/01621459.1988.10478694</a>.</p>
+<p>Mitchell, T. J., and J. J. Beauchamp. 1988. “Bayesian Variable Selection in Linear Regression.” <em>Journal of the American Statistical Association</em> 83 (404). Informa UK Limited: 1023–32. doi:<a href="https://doi.org/10.1080/01621459.1988.10478694">10.1080/01621459.1988.10478694</a>.</p>
 </div>
 <div>
-<p>Morris, C. N. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 7–8. <a href="https://doi.org/10.1080/00031305.1986.10475345" class="uri">https://doi.org/10.1080/00031305.1986.10475345</a>.</p>
+<p>Morris, C. N. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 7–8. doi:<a href="https://doi.org/10.1080/00031305.1986.10475345">10.1080/00031305.1986.10475345</a>.</p>
 </div>
 <div>
 <p>Murphy, Kevin P. 2012. <em>Machine Learning</em>. MIT Press Ltd.</p>
 </div>
 <div>
-<p>Ntzoufras, Ioannis. 2009. <em>Bayesian Modeling Using WinBUGS</em>. Wiley Series in Computational Statitistics. Wiley. <a href="https://doi.org/10.1002/9780470434567" class="uri">https://doi.org/10.1002/9780470434567</a>.</p>
+<p>Ntzoufras, Ioannis. 2009. <em>Bayesian Modeling Using WinBUGS</em>. Wiley Series in Computational Statitistics. Wiley. doi:<a href="https://doi.org/10.1002/9780470434567">10.1002/9780470434567</a>.</p>
 </div>
 <div>
-<p>Pas, S. L. van der, B. J. K. Kleijn, and A. W. van der Vaart. 2014. “The Horseshoe Estimator: Posterior Concentration Around Nearly Black Vectors.” <em>Electronic Journal of Statistics</em> 8 (2). Institute of Mathematical Statistics: 2585–2618. <a href="https://doi.org/10.1214/14-ejs962" class="uri">https://doi.org/10.1214/14-ejs962</a>.</p>
+<p>Pas, S. L. van der, B. J. K. Kleijn, and A. W. van der Vaart. 2014. “The Horseshoe Estimator: Posterior Concentration Around Nearly Black Vectors.” <em>Electronic Journal of Statistics</em> 8 (2). Institute of Mathematical Statistics: 2585–2618. doi:<a href="https://doi.org/10.1214/14-ejs962">10.1214/14-ejs962</a>.</p>
 </div>
 <div>
-<p>Piironen, Juho, and Aki Vehtari. 2017. “Sparsity Information and Regularization in the Horseshoe and Other Shrinkage Priors.” <em>Electron. J. Statist.</em> 11 (2). The Institute of Mathematical Statistics; the Bernoulli Society: 5018–51. <a href="https://doi.org/10.1214/17-EJS1337SI" class="uri">https://doi.org/10.1214/17-EJS1337SI</a>.</p>
+<p>Piironen, Juho, and Aki Vehtari. 2016. “On the Hyperprior Choice for the Global Shrinkage Parameter in the Horseshoe Prior,” October. <a href="http://arxiv.org/abs/1610.05559v1" class="uri">http://arxiv.org/abs/1610.05559v1</a>.</p>
 </div>
 <div>
-<p>Polson, Nicholas G., and James G. Scott. 2012. “On the Half-Cauchy Prior for a Global Scale Parameter.” <em>Bayesian Analysis</em> 7 (4). Institute of Mathematical Statistics: 887–902. <a href="https://doi.org/10.1214/12-ba730" class="uri">https://doi.org/10.1214/12-ba730</a>.</p>
+<p>———. 2017. “Sparsity Information and Regularization in the Horseshoe and Other Shrinkage Priors.” <em>Electron. J. Statist.</em> 11 (2). The Institute of Mathematical Statistics; the Bernoulli Society: 5018–51. doi:<a href="https://doi.org/10.1214/17-EJS1337SI">10.1214/17-EJS1337SI</a>.</p>
 </div>
 <div>
-<p>Press, S. James. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 9–10. <a href="https://doi.org/10.1080/00031305.1986.10475346" class="uri">https://doi.org/10.1080/00031305.1986.10475346</a>.</p>
+<p>Polson, Nicholas G., and James G. Scott. 2011. “Shrink Globally, Act Locally: Sparse Bayesian Regularization and Prediction.” In <em>Bayesian Statistics</em>, 501–38. Oxford University Press. doi:<a href="https://doi.org/10.1093/acprof:oso/9780199694587.003.0017">10.1093/acprof:oso/9780199694587.003.0017</a>.</p>
 </div>
 <div>
-<p>Rainey, Carlisle. 2016. “Dealing with Separation in Logistic Regression Models.” <em>Political Analysis</em> 24 (03). Cambridge University Press (CUP): 339–55. <a href="https://doi.org/10.1093/pan/mpw014" class="uri">https://doi.org/10.1093/pan/mpw014</a>.</p>
+<p>———. 2012. “On the Half-Cauchy Prior for a Global Scale Parameter.” <em>Bayesian Analysis</em> 7 (4). Institute of Mathematical Statistics: 887–902. doi:<a href="https://doi.org/10.1214/12-ba730">10.1214/12-ba730</a>.</p>
+</div>
+<div>
+<p>Press, S. James. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 9–10. doi:<a href="https://doi.org/10.1080/00031305.1986.10475346">10.1080/00031305.1986.10475346</a>.</p>
+</div>
+<div>
+<p>Rainey, Carlisle. 2016. “Dealing with Separation in Logistic Regression Models.” <em>Political Analysis</em> 24 (03). Cambridge University Press (CUP): 339–55. doi:<a href="https://doi.org/10.1093/pan/mpw014">10.1093/pan/mpw014</a>.</p>
 </div>
 <div>
 <p>Ranganath, R., S. Gerrish, and D. M. Blei. 2014. “Black box variational inference.” <em>ArXiv E-Prints</em>, December. <a href="https://arxiv.org/abs/1401.0118" class="uri">https://arxiv.org/abs/1401.0118</a>.</p>
 </div>
 <div>
-<p>Robert, Christian P. 2016. “The Expected Demise of the Bayes Factor.” <em>Journal of Mathematical Psychology</em> 72 (June): 33–37. <a href="https://doi.org/10.1016/j.jmp.2015.08.002" class="uri">https://doi.org/10.1016/j.jmp.2015.08.002</a>.</p>
+<p>Robert, Christian P. 2016. “The Expected Demise of the Bayes Factor.” <em>Journal of Mathematical Psychology</em> 72 (June): 33–37. doi:<a href="https://doi.org/10.1016/j.jmp.2015.08.002">10.1016/j.jmp.2015.08.002</a>.</p>
 </div>
 <div>
-<p>Robert, Christian P., and George Casella. 2004. <em>Monte Carlo Statistical Methods</em>. Springer New York. <a href="https://doi.org/10.1007/978-1-4757-4145-2" class="uri">https://doi.org/10.1007/978-1-4757-4145-2</a>.</p>
+<p>Robert, Christian P., and George Casella. 2004. <em>Monte Carlo Statistical Methods</em>. Springer New York. doi:<a href="https://doi.org/10.1007/978-1-4757-4145-2">10.1007/978-1-4757-4145-2</a>.</p>
 </div>
 <div>
-<p>———. 2009. <em>Introducing Monte Carlo Methods with R</em>. Springer. <a href="https://doi.org/10.1007/978-1-4419-1576-4" class="uri">https://doi.org/10.1007/978-1-4419-1576-4</a>.</p>
+<p>———. 2009. <em>Introducing Monte Carlo Methods with R</em>. Springer. doi:<a href="https://doi.org/10.1007/978-1-4419-1576-4">10.1007/978-1-4419-1576-4</a>.</p>
 </div>
 <div>
-<p>Scott, James G., and James O. Berger. 2010. “Bayes and Empirical-Bayes Multiplicity Adjustment in the Variable-Selection Problem.” <em>The Annals of Statistics</em> 38 (5). Institute of Mathematical Statistics: 2587–2619. <a href="https://doi.org/10.1214/10-Aos792" class="uri">https://doi.org/10.1214/10-Aos792</a>.</p>
+<p>Scott, James G., and James O. Berger. 2010. “Bayes and Empirical-Bayes Multiplicity Adjustment in the Variable-Selection Problem.” <em>The Annals of Statistics</em> 38 (5). Institute of Mathematical Statistics: 2587–2619. doi:<a href="https://doi.org/10.1214/10-Aos792">10.1214/10-Aos792</a>.</p>
 </div>
 <div>
-<p>Smith, Adrian F. M. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 10–10. <a href="https://doi.org/10.1080/00031305.1986.10475347" class="uri">https://doi.org/10.1080/00031305.1986.10475347</a>.</p>
+<p>Smith, A. F. M., and A. E. Gelfand. 1992. “Bayesian Statistics Without Tears: A Sampling/Resampling Perspective.” <em>The American Statistician</em> 46 (2). Informa UK Limited: 84–88. doi:<a href="https://doi.org/10.1080/00031305.1992.10475856">10.1080/00031305.1992.10475856</a>.</p>
 </div>
 <div>
-<p>Smith, A. F. M., and A. E. Gelfand. 1992. “Bayesian Statistics Without Tears: A Sampling/Resampling Perspective.” <em>The American Statistician</em> 46 (2). Informa UK Limited: 84–88. <a href="https://doi.org/10.1080/00031305.1992.10475856" class="uri">https://doi.org/10.1080/00031305.1992.10475856</a>.</p>
+<p>Smith, Adrian F. M. 1986. “Comment.” <em>The American Statistician</em> 40 (1). Informa UK Limited: 10–10. doi:<a href="https://doi.org/10.1080/00031305.1986.10475347">10.1080/00031305.1986.10475347</a>.</p>
 </div>
 <div>
 <p>Stan Development Team. 2016. <em>Stan Modeling Language Users Guide and Reference Manual, Version 2.14.0</em>. <a href="https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf" class="uri">https://github.com/stan-dev/stan/releases/download/v2.14.0/stan-reference-2.14.0.pdf</a>.</p>
@@ -835,13 +817,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>“Stan Prior Choice Recommendations.” n.d. <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations" class="uri">https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations</a>.</p>
 </div>
 <div>
-<p>Stegmueller, Daniel. 2013. “How Many Countries for Multilevel Modeling? A Comparison of Frequentist and Bayesian Approaches.” <em>American Journal of Political Science</em> 57 (3). Wiley-Blackwell: 748–61. <a href="https://doi.org/10.1111/ajps.12001" class="uri">https://doi.org/10.1111/ajps.12001</a>.</p>
+<p>Stegmueller, Daniel. 2013. “How Many Countries for Multilevel Modeling? A Comparison of Frequentist and Bayesian Approaches.” <em>American Journal of Political Science</em> 57 (3). Wiley-Blackwell: 748–61. doi:<a href="https://doi.org/10.1111/ajps.12001">10.1111/ajps.12001</a>.</p>
 </div>
 <div>
 <p>Stigler, Stephen M. 1983. “Who Discovered Bayes’s Theorem?” <em>The American Statistician</em> 37 (4). [American Statistical Association, Taylor &amp; Francis, Ltd.]: 290–96. <a href="http://www.jstor.org/stable/2682766" class="uri">http://www.jstor.org/stable/2682766</a>.</p>
 </div>
 <div>
-<p>———. 2018. “Richard Price, the First Bayesian.” <em>Statistical Science</em> 33 (1). The Institute of Mathematical Statistics: 117–25. <a href="https://doi.org/10.1214/17-STS635" class="uri">https://doi.org/10.1214/17-STS635</a>.</p>
+<p>———. 2018. “Richard Price, the First Bayesian.” <em>Statistical Science</em> 33 (1). The Institute of Mathematical Statistics: 117–25. doi:<a href="https://doi.org/10.1214/17-STS635">10.1214/17-STS635</a>.</p>
 </div>
 <div>
 <p>Tibshirani, Robert. 1996. “Regression Shrinkage and Selection via the Lasso.” <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (1). [Royal Statistical Society, Wiley]: 267–88. <a href="http://www.jstor.org/stable/2346178" class="uri">http://www.jstor.org/stable/2346178</a>.</p>
@@ -850,40 +832,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Vehtari, Aki, Andrew Gelman, and Jonah Gabry. 2015. “Pareto smoothed importance sampling.” <em>ArXiv E-Prints</em>, July. <a href="https://arxiv.org/abs/1507.02646" class="uri">https://arxiv.org/abs/1507.02646</a>.</p>
 </div>
 <div>
-<p>———. 2017a. “Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.” <em>Statistics and Computing</em> 27 (5): 1413–32. <a href="https://doi.org/10.1007/s11222-016-9696-4" class="uri">https://doi.org/10.1007/s11222-016-9696-4</a>.</p>
+<p>———. 2017a. “Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.” <em>Statistics and Computing</em> 27 (5): 1413–32. doi:<a href="https://doi.org/10.1007/s11222-016-9696-4">10.1007/s11222-016-9696-4</a>.</p>
 </div>
 <div>
-<p>———. 2017b. “Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.” <em>Statistics and Computing</em> 27 (5): 1413–32. <a href="https://doi.org/10.1007/s11222-016-9696-4" class="uri">https://doi.org/10.1007/s11222-016-9696-4</a>.</p>
+<p>———. 2017b. “Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.” <em>Statistics and Computing</em> 27 (5): 1413–32. doi:<a href="https://doi.org/10.1007/s11222-016-9696-4">10.1007/s11222-016-9696-4</a>.</p>
 </div>
 <div>
-<p>Wechsler, Sergio, Rafael Izbicki, and Luìs Gustavo Esteves. 2013. “A Bayesian Look at Nonidentifiability: A Simple Example.” <em>The American Statistician</em> 67 (2). Informa UK Limited: 90–93. <a href="https://doi.org/10.1080/00031305.2013.778787" class="uri">https://doi.org/10.1080/00031305.2013.778787</a>.</p>
+<p>Wechsler, Sergio, Rafael Izbicki, and Luìs Gustavo Esteves. 2013. “A Bayesian Look at Nonidentifiability: A Simple Example.” <em>The American Statistician</em> 67 (2). Informa UK Limited: 90–93. doi:<a href="https://doi.org/10.1080/00031305.2013.778787">10.1080/00031305.2013.778787</a>.</p>
 </div>
 <div>
-<p>West, Mike. 1987. “On Scale Mixtures of Normal Distributions.” <em>Biometrika</em> 74 (3). Oxford University Press (OUP): 646–48. <a href="https://doi.org/10.1093/biomet/74.3.646" class="uri">https://doi.org/10.1093/biomet/74.3.646</a>.</p>
+<p>West, Mike. 1987. “On Scale Mixtures of Normal Distributions.” <em>Biometrika</em> 74 (3). Oxford University Press (OUP): 646–48. doi:<a href="https://doi.org/10.1093/biomet/74.3.646">10.1093/biomet/74.3.646</a>.</p>
 </div>
 <div>
-<p>Western, Bruce, and Simon Jackman. 1994. “Bayesian Inference for Comparative Research.” <em>American Political Science Review</em> 88 (02). Cambridge University Press (CUP): 412–23. <a href="https://doi.org/10.2307/2944713" class="uri">https://doi.org/10.2307/2944713</a>.</p>
+<p>Western, Bruce, and Simon Jackman. 1994. “Bayesian Inference for Comparative Research.” <em>American Political Science Review</em> 88 (02). Cambridge University Press (CUP): 412–23. doi:<a href="https://doi.org/10.2307/2944713">10.2307/2944713</a>.</p>
 </div>
 <div>
-<p>Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” <em>IEEE Transactions on Visualization and Computer Graphics</em> 16 (6). Institute of Electrical; Electronics Engineers (IEEE): 973–79. <a href="https://doi.org/10.1109/tvcg.2010.161" class="uri">https://doi.org/10.1109/tvcg.2010.161</a>.</p>
+<p>Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” <em>IEEE Transactions on Visualization and Computer Graphics</em> 16 (6). Institute of Electrical; Electronics Engineers (IEEE): 973–79. doi:<a href="https://doi.org/10.1109/tvcg.2010.161">10.1109/tvcg.2010.161</a>.</p>
 </div>
 <div>
 <p>Wimmer, G., and G. Altmann. 1999. <em>Thesaurus of Univariate Discrete Probability Distributions</em>. Stamm.</p>
 </div>
 <div>
-<p>Yu, Keming, and Jin Zhang. 2005. “A Three-Parameter Asymmetric Laplace Distribution and Its Extension.” <em>Communications in Statistics - Theory and Methods</em> 34 (9-10). Informa UK Limited: 1867–79. <a href="https://doi.org/10.1080/03610920500199018" class="uri">https://doi.org/10.1080/03610920500199018</a>.</p>
+<p>Yu, Keming, and Jin Zhang. 2005. “A Three-Parameter Asymmetric Laplace Distribution and Its Extension.” <em>Communications in Statistics - Theory and Methods</em> 34 (9-10). Informa UK Limited: 1867–79. doi:<a href="https://doi.org/10.1080/03610920500199018">10.1080/03610920500199018</a>.</p>
 </div>
 <div>
-<p>Zorn, Christopher. 2005. “A Solution to Separation in Binary Response Models.” <em>Political Analysis</em> 13 (2). [Oxford University Press, Society for Political Methodology]: 157–70. <a href="https://doi.org/10.1093/pan/mpi009" class="uri">https://doi.org/10.1093/pan/mpi009</a>.</p>
+<p>Zorn, Christopher. 2005. “A Solution to Separation in Binary Response Models.” <em>Political Analysis</em> 13 (2). [Oxford University Press, Society for Political Methodology]: 157–70. doi:<a href="https://doi.org/10.1093/pan/mpi009">10.1093/pan/mpi009</a>.</p>
 </div>
 </div>
 </div>
-
-
-
-
-
-
 
 
 
@@ -944,7 +920,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

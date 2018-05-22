@@ -26,7 +26,7 @@ rmd_files:
   - "rare-events.Rmd"
   - "hierarchical.Rmd"
   - "regression-shrinkage.Rmd"
-  # - "multilevel.Rmd"
+  - "multilevel.Rmd"
   - "appendix.Rmd"
   - "distributions.Rmd"
   - "annotated.Rmd"
