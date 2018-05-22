@@ -1,4 +1,14 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Multilevel Models
+
+```{r include=FALSE}
+library("rstanarm")
+ggplot2::theme_set(theme_minimal())
+```
 
 ```{r message=FALSE}
 library("rstan")
@@ -188,9 +198,6 @@ y_i &\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
 \end{aligned}
 $$
 
-
-
-
 ## Example: Radon
 
 This example models the presence of radon in houses in Minnesota which appears in @GelmanHill2007a and @BDA3.
@@ -212,39 +219,168 @@ radon_county <- radon %>%
   summarise(log_radon_mean = mean(log_radon),
             log_radon_sd = sd(log_radon),
             log_uranium = mean(log_uranium),
-            n = length(county))
-
+            n = length(county)) %>%
+  mutate(log_radon_se = log_radon_sd / sqrt(n))
 ```
 
 ```{r fig.asp=2}
 ggplot() +
+  geom_boxplot(data = radon, 
+               mapping = aes(y = log_radon,
+                             x = fct_reorder(county, log_radon, mean)),
+               colour = "gray") +
   geom_point(data = radon,
              mapping = aes(y = log_radon,
-                           x = fct_reorder(county, log_radon, mean))) +
+                           x = fct_reorder(county, log_radon, mean)),
+             colour = "gray") +
   geom_point(data = radon_county,
              mapping = aes(x = fct_reorder(county, log_radon_mean),
                            y = log_radon_mean),
-             colour = "red") +
+             colour = "black") +
   coord_flip() +
   labs(y = "log(radon)", x = "")
 ```
 
-Relationship between mean and sample size
+The observations in counties vary in size,
 ```{r}
-ggplot(radon_county, aes(y = log_radon_mean, x = log2(n))) +
-  geom_point()
+ggplot(radon_county, aes(x = log2(n))) +
+         geom_density() + 
+         geom_rug()
 ```
 
-### Varying Intercepts Models
+Unsurprisingly, there is more variation in county means among counties with smaller numbers
+of observations.
+```{r}
+ggplot(radon_county, aes(y = log_radon_mean,
+                         x = log2(n))) +
+  geom_point()
+```
+Much of this can be explained simply by sampling error.
 
-Consider the general model with an intercept for each county representing the baseline average of the county:
+
+## Modeling
+
+In this example we want to model the amount of radon (log scale) in a home.
+Let $y_i$ be the *centered* and *scaled* log amount of radon in home $i$.
+
+The simplest model is a pooled model, where all homes are modeled as iid draws 
+from a common distribution.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha, \sigma) & \text{for } i \in 1, \dots, n \\
+\alpha &\sim \dnorm(0, 10) \\
+\sigma &\sim \dexp(1)
+\end{aligned}
+$$
+where $\alpha$ and $\sigma$ are given weakly informative priors.
+We will estimate these models **rstanarm** functions `stan_glm` and `stan_glmer`.
+
+```{r}
+fit_radon_1 <- stan_glm(log_radon ~ 1, data = radon, refresh = -1)
+```
+
+We can extend this to a no-pooling model with a different mean for each county.
+Let $j[i] \in 1, \dots, m$ be the county of observation $i$.
+
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
+\alpha_j &\sim \dnorm(0, 10) & \text{for } j \in 1, \dots, m
+\end{aligned}
+$$
+The $\alpha_j$ are all drawn from weakly informative prior distributions.
+And although the $\alpha_j$ are drawn from the same prior distribution, 
+it has fixed parameters and thus no information is shared between observations in different counties.
+
+```{r}
+fit_radon_2 <- stan_glm(log_radon ~ -1 + county, data = radon, refresh = -1)
+```
+
+Finally, consider a partially pooled model.
+Like the previous model, each county has its own mean value. 
+However, now these county-means share a prior which has its own parameters.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
+\alpha_j &\sim \dnorm(\mu, \tau) & \text{for } j \in 1, \dots, m
+\end{aligned}
+$$
+We could also write the model with the country-level average in the 
+mean equation for $y$, and the $\alpha_j$ values distributed around the county
+level average, $\gamma$.
+$$
+\begin{aligned}[t]
+y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
+\alpha_j &\sim \dnorm(\gamma, \tau) & \text{for } j \in 1, \dots, m \\
+\tau &\sim \dexp(1)
+\end{aligned}
+$$
+
+Hierarchical/multi-level generalized linear models can be estimated with 
+`stan_glmer`.
+```{r}
+fit_radon_3 <- stan_glmer(log_radon ~ (1 | county), data = radon,
+                          refresh = -1)
+```
+
+```{r}
+alpha_1 <- tidyMCMC(fit_radon_1, conf.int = TRUE) %>%
+  filter(term == "(Intercept)") %>%
+  # add county
+  mutate(county = list(unique(as.character(radon[["county"]])))) %>%
+  unnest(county) %>%
+  select(-term) %>%
+  mutate(model = "Complete")
+```
+
+```{r}
+alpha_2 <- tidyMCMC(fit_radon_2, conf.int = TRUE) %>%
+  filter(str_detect(term, "^county")) %>%
+  mutate(county = str_replace(term, "^county", "")) %>%
+  select(-term) %>%
+  mutate(model = "No")
+```
+
+See this [vignette](http://mc-stan.org/rstanarm/articles/pooling.html) for
+extracting the random intercepts.
+```{r}
+alphas <- as.matrix(fit_radon_3, regex_pars = "^b\\[")
+alpha_mean <- as.matrix(fit_radon_3, pars = "(Intercept)")
+alpha_3 <- sweep(alphas, 1, alpha_mean, FUN = "+") %>%
+  as_tibble() %>%
+  gather(term, value) %>%
+  group_by(term) %>%
+  summarise(estimate = mean(value), conf.low = quantile(value, 0.025),
+            conf.high = quantile(value, 0.975)) %>%
+  ungroup() %>%
+  mutate(county = str_match(term, "county:(.*)\\]")[ , 2]) %>%
+  select(-term) %>%
+  mutate(model = "Partial")
+
+```
+
+```{r}
+bind_rows(alpha_1, alpha_2, alpha_3) %>%
+  mutate(county = fct_reorder(county, estimate, mean)) %>%
+  ggplot(aes(x = county, y = estimate, ymin = conf.low, ymax = conf.high,
+             color = model)) +
+  geom_pointrange(position = position_dodge(width = 1)) +
+  coord_flip()
+```
+
+### Individual Covariates
+
+We can add individual covariates to a varying-intercept model.
+
 $$
 \begin{aligned}
 y_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta x_i
+\mu_i &= \alpha_{j[i]} + \beta~\mathtt{floor}_i  \\
+\alpha_j &\sim \dnorm(\gamma, \tau) & \text{for } j \in 1, \dots, m \\
+\beta &\sim \dnorm(0, 2.5)\\
+\tau &\sim \dexp(1)
 \end{aligned}
 $$
-where $j[i]$ means that observation $i$ is in county $j \in (1, \dots, `r nlevels(radon$county)`)$.
 
 In this particular example, $y = \mathtt{log_radon}$ and $x = \mathtt{basement}$.
 $$
@@ -254,65 +390,63 @@ $$
 \end{aligned}
 $$
 
-We can put a prior distribution on $\alpha_{j[i]}$,
+## Pooling of Hierarchical Parameters
+
+What does partial pooling do?  
+This is easiest to understand in a simple mean-model with normal errors.
 $$
 \begin{aligned}[t]
-\alpha_{j} &\sim N(\gamma, \tau) & \text{for $i \in (1, \dots, `r nlevels(radon$county)`)}
+y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
+\mu_{j} &\sim \dnorm(\gamma, \tau^2) .
 \end{aligned}
 $$
-This parameterization nests common cases,
-
-*Complete pooling:* When $\tau \to 0$, the intercepts are the same,
+If the hyperparameters were known, the posterior of $\mu_j$ is
+$$
+\mu_j | y, \gamma, \sigma, \tau \sim \dnorm(\hat{\mu}_j, V_j)
+$$
+where
 $$
 \begin{aligned}[t]
-\alpha_j &= \gamma  & \text{for all $j$.}
+\hat{\mu}_j &= \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\tau^2} \gamma}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}} \\
+V_j &= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
 \end{aligned}
 $$
 
-*No pooling:* When $\tau \to \infty$, prior distribution on the intercepts is equivalent to an improper normal distribution, and there is no shrinkage,
+How does this vary depending on the size of the group, $n_j$? 
+
+| Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
+| ------------------------------- | --------------------------------------------------------------- |
+| $n_j = 0$                       | $\hat{\mu}_j = \gamma$ (complete pooling)                       |
+| $n_j < \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\gamma$                                |
+| $n_j = \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$      |
+| $n_j > \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\bar{y}_j$                             |
+| $n_j = \infty$                  | $\hat{\mu}_j = \bar{y}_j$ (no pooling)                          |
+
+When the sample size of the group is large, the prior data from other groups provides little additional informiation and the posterior is dominated by the observations in that group.
+However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior.
+We even have posterior estimates of groups and observations from groups we have not seen before due to the estimated distribution of group means.
+
+This is a good reason to use partial pooling. 
+If there is enough data it will converge to the no-pooling case, but if there is not it will degrade to the full-pooling case.
+
+If instead the group means $\mu_j$ were known, we can calculate some crude estimates.
+The *data variance*, $\sigma^2$, is the residual variance,
 $$
-p(\alpha_j) \propto 1,
+\E(\sigma^2 | y, \mu)  = \frac{1}{n} \sum_{i = 1}^n (y - \mu_{j[i]})^2 .
 $$
-for all $j$.
-
-*Partial pooling:* When $\tau$ is a parameter, the amount of shrinkage can be estimated from the data.
-
-### Varying Intercept Model
-
-### Varying Slope Model
-
+The global mean is approximately the average of the group-level means,
 $$
-\begin{aligned}
-\mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{basement}_i
+\begin{aligned}[t]
+\E(\gamma | y, \mu) &= \frac{1}{J} \sum_{i = 1}^n \mu_j \\
+\Var(\gamma | y, \mu) &= \frac{1}{J} \tau^2
 \end{aligned}
 $$
-
-### Group Level Predictors
-
-The `radon` dataset also contains the county-level measurements of `uranium`.
-
-One way to include county level measurements is to model the county-level intercepts.
-The values of each county intercept is a function of the county-level uranium.
+The group level variance is $\tau^2$ is,
 $$
-\begin{aligned}
-\mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{basement}_i
-\alpha_{j} \sim  N(\gamma_0 + \gamma_1~\mathtt{log\_uranium}_j, \tau)
-\end{aligned}
+\E(\tau^2 | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
 $$
 
-Alternatively, we can model model the county-level intercepts.
-The values of each county intercept is a function of the county-level uranium.
-$$
-\begin{aligned}
-\mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{basement}_i \\
-\alpha_{j} &\sim  N(\gamma_0 + \gamma_1~\mathtt{log\_uranium}_j, \tau)
-\end{aligned}
-$$
-
-### lme4
+## lme4
 
 In R, the most widely used package to estimate mixed-effects models is **lme4**.
 This estimates models using maximum likelihood or restricted maximum likelihood methods (REML).
@@ -347,8 +481,7 @@ Varying slopes with partial pooling:
 fit_slope_partial <- lmer(log_radon ~ (1 + floor | county), data = radon)
 ```
 
-Including a county-level variable (`log_uranium`) in various models:
-
+We can also include a county-level variable (`log_uranium`) in various models:
 With no-pooling,
 ```{r}
 fit_slope_partial <- lm(log_radon ~ floor + log_uranium, data = radon)
@@ -364,118 +497,61 @@ fit_slope_partial <- lmer(log_radon ~ (1 + floor | county) +  log_uranium,
                           data = radon)
 ```
 
-### rstanarm
 
-Some multilevel models can also be estimated using the **rstanarm** functions `stan_glmer` and `stan_lmer`.
-These functions have syntax similar to **lme4** functions, but estimate the mixed models using Bayesian methods with Stan.
+## Cetered and Non-centered Parameterizations
 
-Complete pooling
-```{r}
-fit_pooled <- stan_glm(log_radon ~ county + floor, data = radon)
-```
-County-varying intercepts with no-pooling
-```{r}
-fit_intercept_nopool <- stan_glm(log_radon ~ floor, data = radon)
-```
-County-varying intercepts with partial-pooling
-```{r}
-fit_intercept_partial <- stan_glmer(log_radon ~ (1 | county) + floor,
-                                    data = radon)
-```
-Varying slopes with no pooling. *There is an error estimating this*
-```{r eval=FALSE}
-fit_slope_nopool <- stan_glm(log_radon ~ -1 + county + county:floor,
-                             data = radon,
-                             prior = normal(scale = 1))
-```
-Varying slopes with partial pooling:
-```{r}
-fit_slope_partial <- stan_glmer(log_radon ~ (1 + floor | county), data = radon)
-```
-
-Including a county-level variable (`log_uranium`) in various models:
-
-With no-pooling,
-```{r}
-fit_slope_partial <- stan_glm(log_radon ~ floor + log_uranium, data = radon)
-```
-With varying-intercepts
-```{r}
-fit_slope_partial <-
-  stan_glmer(log_radon ~ (1 | county) + floor + log_uranium,
-             data = radon)
-```
-With varying-intercepts and slopes,
-```{r}
-fit_slope_partial <-
-  stan_glmer(log_radon ~ (1 + floor | county) +  log_uranium,
-             data = radon)
-```
-
-## Pooling of Hierarchical Parameters
-
-What does partial pooling do?  
-This is easiest to understand in a simple mean-model with normal errors.
+The natural way to write a hiearchical model is with a centered parameterization:
 $$
 \begin{aligned}[t]
-y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
-\mu_{j} &\sim \dnorm(\gamma, \tau^2) .
+y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) \\
+\alpha_{j} &\sim \dnorm(\mu_\alpha, \omega_{\alpha})
 \end{aligned}
 $$
-If the hyperparameters were known, the posterior of $\mu_j$ is
-$$
-\mu_j | y, \gamma, \sigma, \tau \sim \dnorm(\hat{\mu}_j, V_j)
-$$
-where
+However, this can be difficult to sample from. In particular, by construction, 
+the values of $\mu_{\alpha}$, $\omega_{\alpha}$, and $\alpha_j$ are going to be highly correlated.
+This results in a posterior pattern called a "funnel" which is difficult for HMC
+to sample due to the changes in the posterior curvature.
+
+The centered paramerization centers and scales the distribution of the intercepts.
 $$
 \begin{aligned}[t]
-\hat{\mu}_j &= \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\tau^2} \gamma}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}} \\
-V_j &= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
+y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) \\
+\alpha_{j} &\sim \mu_{\alpha} + \omega_{\alpha} \alpha^* \\
+\alpha^*_{j} &\sim \dnorm(0, 1)
 \end{aligned}
 $$
 
-How does this vary depending on the size of the group, $n_j$? 
+These are two ways of writing the *same* model.
+However, they change the parameters that the HMC algorithm is actively sampling
+and thus can have different sampling performance.
 
-| Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
-| ------------------------------- | --------------------------------------------------------------- |
-| $n_j = 0$                       | $\hat{\mu}_j = \gamma$ (complete pooling)                       |
-| $n_j < \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\gamma$                                |
-| $n_j = \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j = \frac{1}{2} \bar{y}_j + \frac{1}{2} \gamma$      |
-| $n_j > \frac{\sigma^2}{\tau^2}$ | $\hat{\mu}_j$ closer to $\bar{y}_j$                             |
-| $n_j = \infty$                  | $\hat{\mu}_j = \bar{y}_j$ (no pooling)                          |
+However, neither is universally better.
 
-When the sample size of the group is large, the prior data from other groups provides little additional informiation and the posterior 
-is dominated by the observations in that group.
-However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior.
-We even have posterior estimates of groups and observations from groups we have not seen before due to
-the estimated distribution of group means.
+-   If much data, the non-centered parameterization works better
+-   If less data, the centered parameterization works better
 
-If instead the group means $\mu_j$ were known, we can calculate some crude estimates.
-The *data variance*, $\sigma^2$, is the residual variance,
-$$
-\E(\sigma^2 | y, \mu)  = \frac{1}{n} \sum_{i = 1}^n (y - \mu_{j[i]})^2 .
-$$
-The global mean is approximately the average of the group-level means,
-$$
-\begin{aligned}[t]
-\E(\gamma | y, \mu) &= \frac{1}{J} \sum_{i = 1}^n \mu_j \\
-\Var(\gamma | y, \mu) &= \frac{1}{J} \tau^2
-\end{aligned}
-$$
-The group level variance is $\tau^2$ is,
-$$
-\E(\tau^2 | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
-$$
+And there is currently no ex-ante way to know which will work better, and at 
+what amount of "data" that the performance of one or the other is better.
+However, one other reason to use the centered parameterization (if it is also scaled),
+is that the Stan HMC implementation tends to be more efficient if all parameters
+are on the scale.
 
+See also
 
+-   Stan Ref Ch 9 "Regression" has sections on hierarchical/multi-level models
+-   Stan Ref Ch 22 "Reparameterizations & Change of Variables"
+
+-   http://twiecki.github.io/blog/2017/02/08/bayesian-hierchical-non-centered/
+-   https://arxiv.org/pdf/1312.0906.pdf
+-   https://www.youtube.com/watch?v=pHsuIaPbNbY&t=8s
 
 ## Extensions
 
 -   Including group-level covariates
 
--   Prior distributions
+-   Prior distributions for hierarchical scale
 
--   Prediction
+-   Prediction. Hierarchical models can be use
 
     -   new obs in existing groups
     -   new group
