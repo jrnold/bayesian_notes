@@ -60,69 +60,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 </head>
@@ -359,85 +331,105 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html"><i class="fa fa-check"></i><b>19</b> Shrinkage and Regularized Regression</a><ul>
 <li class="chapter" data-level="" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prerequisites-11"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="19.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#introduction-6"><i class="fa fa-check"></i><b>19.1</b> Introduction</a></li>
-<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2</b> Penalized Maximum Likelihood Regression</a><ul>
-<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#ridge-regression"><i class="fa fa-check"></i><b>19.2.1</b> Ridge Regression</a></li>
-<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#lasso"><i class="fa fa-check"></i><b>19.2.2</b> Lasso</a></li>
-<li class="chapter" data-level="19.2.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#constrained-optimization-interpretation"><i class="fa fa-check"></i><b>19.2.3</b> Constrained Optimization Interpretation</a></li>
-<li class="chapter" data-level="19.2.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-interpretation"><i class="fa fa-check"></i><b>19.2.4</b> Bayesian Interpretation</a></li>
+<li class="chapter" data-level="19.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-estimators"><i class="fa fa-check"></i><b>19.2</b> Shrinkage Estimators</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-maximum-likelihood-regression"><i class="fa fa-check"></i><b>19.2.1</b> Penalized Maximum Likelihood Regression</a></li>
+<li class="chapter" data-level="19.2.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.2.2</b> Bayesian Shrinkage</a></li>
 </ul></li>
-<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Bayesian Shrinkage</a><ul>
-<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#priors-1"><i class="fa fa-check"></i><b>19.3.1</b> Priors</a></li>
-<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#spike-and-slab-prior"><i class="fa fa-check"></i><b>19.3.2</b> Spike and Slab prior</a></li>
-<li class="chapter" data-level="19.3.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#normal-distribution"><i class="fa fa-check"></i><b>19.3.3</b> Normal Distribution</a></li>
-<li class="chapter" data-level="19.3.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#laplace-distribution"><i class="fa fa-check"></i><b>19.3.4</b> Laplace Distribution</a></li>
-<li class="chapter" data-level="19.3.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#student-t-and-cauchy-distributions"><i class="fa fa-check"></i><b>19.3.5</b> Student-t and Cauchy Distributions</a></li>
-<li class="chapter" data-level="19.3.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#horseshore-prior"><i class="fa fa-check"></i><b>19.3.6</b> Horseshore Prior</a></li>
+<li class="chapter" data-level="19.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#sparse-shrinkage"><i class="fa fa-check"></i><b>19.3</b> Sparse Shrinkage</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#penalized-likelihood"><i class="fa fa-check"></i><b>19.3.1</b> Penalized Likelihood</a></li>
+<li class="chapter" data-level="19.3.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#bayesian-sparse-shrinkage-models"><i class="fa fa-check"></i><b>19.3.2</b> Bayesian Sparse Shrinkage Models</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#understanding-shrinkage-models"><i class="fa fa-check"></i><b>19.4</b> Understanding Shrinkage Models</a></li>
-<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#choice-of-hyperparameter-on-tau"><i class="fa fa-check"></i><b>19.5</b> Choice of Hyperparameter on <span class="math inline">\(\tau\)</span></a></li>
-<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.6</b> Differences between Bayesian and Penalized ML</a></li>
-<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.7</b> Examples</a></li>
+<li class="chapter" data-level="19.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#section"><i class="fa fa-check"></i><b>19.4</b> </a><ul>
+<li class="chapter" data-level="19.4.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-factor"><i class="fa fa-check"></i><b>19.4.1</b> Shrinkage Factor</a></li>
+<li class="chapter" data-level="19.4.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#prior-on-the-global-scale"><i class="fa fa-check"></i><b>19.4.2</b> Prior on the Global Scale</a></li>
 </ul></li>
-<li class="part"><span><b>IV Appendix</b></span><ul>
-<li class="chapter" data-level="" data-path=""><a href="#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
-<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#parameters"><i class="fa fa-check"></i><b>19.8</b> Parameters</a></li>
-<li class="chapter" data-level="19.9" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>19.9</b> Miscellaneous Mathematical Background</a><ul>
-<li class="chapter" data-level="19.9.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#location-scale-families"><i class="fa fa-check"></i><b>19.9.1</b> Location-Scale Families</a></li>
-<li class="chapter" data-level="19.9.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>19.9.2</b> Scale Mixtures of Normal Distributions</a></li>
-<li class="chapter" data-level="19.9.3" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>19.9.3</b> Covariance-Correlation Matrix Decomposition</a></li>
-<li class="chapter" data-level="19.9.4" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#qr-factorization"><i class="fa fa-check"></i><b>19.9.4</b> QR Factorization</a></li>
-<li class="chapter" data-level="19.9.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#cholesky-decomposition"><i class="fa fa-check"></i><b>19.9.5</b> Cholesky Decomposition</a></li>
+<li class="chapter" data-level="19.5" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#differences-between-bayesian-and-penalized-ml"><i class="fa fa-check"></i><b>19.5</b> Differences between Bayesian and Penalized ML</a></li>
+<li class="chapter" data-level="19.6" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#examples-3"><i class="fa fa-check"></i><b>19.6</b> Examples</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#diabetes"><i class="fa fa-check"></i><b>19.6.1</b> Diabetes</a></li>
+<li class="chapter" data-level="19.6.2" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#example-4"><i class="fa fa-check"></i><b>19.6.2</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="19.10" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>19.10</b> Scaled and Unscaled Variables</a></li>
+<li class="chapter" data-level="19.7" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#shrinkage-with-correlated-variables"><i class="fa fa-check"></i><b>19.7</b> Shrinkage with Correlated Variables</a></li>
+<li class="chapter" data-level="19.8" data-path="shrinkage-and-regularized-regression.html"><a href="shrinkage-and-regularized-regression.html#variable-selection"><i class="fa fa-check"></i><b>19.8</b> Variable Selection</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>20</b> Distributions</a></li>
-<li class="chapter" data-level="21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>21</b> Annotated Bibliography</a><ul>
-<li class="chapter" data-level="21.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>21.1</b> Textbooks</a></li>
-<li class="chapter" data-level="21.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>21.2</b> Syllabi</a></li>
-<li class="chapter" data-level="21.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>21.3</b> Topics</a></li>
-<li class="chapter" data-level="21.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>21.4</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="21.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>21.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
-<li class="chapter" data-level="21.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>21.5.1</b> Why Bayesian</a></li>
-<li class="chapter" data-level="21.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>21.5.2</b> Modern Statistical Workflow</a></li>
-<li class="chapter" data-level="21.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>21.5.3</b> Bayesian Philosophy</a></li>
-<li class="chapter" data-level="21.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>21.5.4</b> Bayesian Hypothesis Testing</a></li>
-<li class="chapter" data-level="21.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>21.5.5</b> Bayesian Frequentist Debates</a></li>
-<li class="chapter" data-level="21.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>21.5.6</b> Categorical</a></li>
-<li class="chapter" data-level="21.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection"><i class="fa fa-check"></i><b>21.5.7</b> Variable Selection</a></li>
-<li class="chapter" data-level="21.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>21.5.8</b> Multiple Testing</a></li>
-<li class="chapter" data-level="21.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>21.5.9</b> Rare Events</a></li>
-<li class="chapter" data-level="21.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>21.5.10</b> Identifiability</a></li>
-<li class="chapter" data-level="21.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>21.5.11</b> Shrinkage</a></li>
+<li class="chapter" data-level="20" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>20</b> Multilevel Models</a><ul>
+<li class="chapter" data-level="20.1" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.1</b> Example: Radon</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.1.1</b> Data</a></li>
+<li class="chapter" data-level="20.1.2" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercepts-models"><i class="fa fa-check"></i><b>20.1.2</b> Varying Intercepts Models</a></li>
+<li class="chapter" data-level="20.1.3" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-intercept-model"><i class="fa fa-check"></i><b>20.1.3</b> Varying Intercept Model</a></li>
+<li class="chapter" data-level="20.1.4" data-path="multilevel-models.html"><a href="multilevel-models.html#varying-slope-model"><i class="fa fa-check"></i><b>20.1.4</b> Varying Slope Model</a></li>
+<li class="chapter" data-level="20.1.5" data-path="multilevel-models.html"><a href="multilevel-models.html#group-level-predictors"><i class="fa fa-check"></i><b>20.1.5</b> Group Level Predictors</a></li>
+<li class="chapter" data-level="20.1.6" data-path="multilevel-models.html"><a href="multilevel-models.html#lme4"><i class="fa fa-check"></i><b>20.1.6</b> lme4</a></li>
+<li class="chapter" data-level="20.1.7" data-path="multilevel-models.html"><a href="multilevel-models.html#rstanarm-2"><i class="fa fa-check"></i><b>20.1.7</b> rstanarm</a></li>
 </ul></li>
-<li class="chapter" data-level="21.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>21.6</b> Software</a><ul>
-<li class="chapter" data-level="21.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>21.6.1</b> Stan</a></li>
-<li class="chapter" data-level="21.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>21.6.2</b> Diagrams</a></li>
-<li class="chapter" data-level="21.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-2"><i class="fa fa-check"></i><b>21.6.3</b> Priors</a></li>
+<li class="chapter" data-level="20.2" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.2</b> Pooling of Hierarchical Parameters</a></li>
+<li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#anova"><i class="fa fa-check"></i><b>20.3</b> ANOVA</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#time-series-cross-section"><i class="fa fa-check"></i><b>20.4</b> Time-Series Cross Section</a></li>
+<li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#miscellaneous"><i class="fa fa-check"></i><b>20.5</b> Miscellaneous</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="multilevel-models.html"><a href="multilevel-models.html#how-many-groups"><i class="fa fa-check"></i><b>20.5.1</b> How many groups?</a></li>
+<li class="chapter" data-level="20.5.2" data-path="multilevel-models.html"><a href="multilevel-models.html#correlation-between-predictors-and-errors"><i class="fa fa-check"></i><b>20.5.2</b> Correlation between Predictors and Errors</a></li>
 </ul></li>
-<li class="chapter" data-level="21.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>21.7</b> Bayesian Model Averaging</a></li>
-<li class="chapter" data-level="21.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>21.8</b> Multilevel Modeling</a></li>
-<li class="chapter" data-level="21.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models"><i class="fa fa-check"></i><b>21.9</b> Mixture Models</a></li>
-<li class="chapter" data-level="21.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>21.10</b> Inference</a><ul>
-<li class="chapter" data-level="21.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>21.10.1</b> Discussion of Bayesian Inference</a></li>
+<li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#references-11"><i class="fa fa-check"></i><b>20.6</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="21.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>21.11</b> Model Checking</a><ul>
-<li class="chapter" data-level="21.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>21.11.1</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="21.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>21.11.2</b> Prediction Criteria</a></li>
-<li class="chapter" data-level="21.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>21.11.3</b> Software Validation</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#prerequisites-12"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="20.7" data-path="appendix.html"><a href="appendix.html#parameters"><i class="fa fa-check"></i><b>20.7</b> Parameters</a></li>
+<li class="chapter" data-level="20.8" data-path="appendix.html"><a href="appendix.html#miscellaneous-mathematical-background"><i class="fa fa-check"></i><b>20.8</b> Miscellaneous Mathematical Background</a><ul>
+<li class="chapter" data-level="20.8.1" data-path="appendix.html"><a href="appendix.html#location-scale-families"><i class="fa fa-check"></i><b>20.8.1</b> Location-Scale Families</a></li>
+<li class="chapter" data-level="20.8.2" data-path="appendix.html"><a href="appendix.html#scale-mixtures-of-normal-distributions"><i class="fa fa-check"></i><b>20.8.2</b> Scale Mixtures of Normal Distributions</a></li>
+<li class="chapter" data-level="20.8.3" data-path="appendix.html"><a href="appendix.html#covariance-correlation-matrix-decomposition"><i class="fa fa-check"></i><b>20.8.3</b> Covariance-Correlation Matrix Decomposition</a></li>
+<li class="chapter" data-level="20.8.4" data-path="appendix.html"><a href="appendix.html#qr-factorization"><i class="fa fa-check"></i><b>20.8.4</b> QR Factorization</a></li>
+<li class="chapter" data-level="20.8.5" data-path="appendix.html"><a href="appendix.html#cholesky-decomposition"><i class="fa fa-check"></i><b>20.8.5</b> Cholesky Decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="21.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>21.12</b> Hierarchical Modeling</a></li>
-<li class="chapter" data-level="21.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>21.13</b> Shrinkage/Regularization</a></li>
-<li class="chapter" data-level="21.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>21.14</b> Empirical Bayes</a></li>
-<li class="chapter" data-level="21.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>21.15</b> History of Bayesian Statistics</a></li>
-<li class="chapter" data-level="21.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>21.16</b> Sampling Difficulties</a></li>
-<li class="chapter" data-level="21.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>21.17</b> Complicated Estimation and Testing</a></li>
-<li class="chapter" data-level="21.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>21.18</b> Pooling Polls</a></li>
-<li class="chapter" data-level="21.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>21.19</b> Visualizing MCMC Methods</a></li>
-<li class="chapter" data-level="21.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>21.20</b> Bayesian point estimation / Decision</a></li>
-<li class="chapter" data-level="21.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>21.21</b> Stan Modeling Language</a></li>
-<li class="chapter" data-level="21.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>21.22</b> Bayes Factors</a></li>
+<li class="chapter" data-level="20.9" data-path="appendix.html"><a href="appendix.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>20.9</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references-11.html"><a href="references-11.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
+<li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
+<li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
+<li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
+<li class="chapter" data-level="22.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#topics"><i class="fa fa-check"></i><b>22.3</b> Topics</a></li>
+<li class="chapter" data-level="22.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-theorem-1"><i class="fa fa-check"></i><b>22.4</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="22.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#article-length-introductions-to-bayesian-statistics"><i class="fa fa-check"></i><b>22.5</b> Article Length Introductions to Bayesian Statistics</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#why-bayesian"><i class="fa fa-check"></i><b>22.5.1</b> Why Bayesian</a></li>
+<li class="chapter" data-level="22.5.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#modern-statistical-workflow"><i class="fa fa-check"></i><b>22.5.2</b> Modern Statistical Workflow</a></li>
+<li class="chapter" data-level="22.5.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-philosophy"><i class="fa fa-check"></i><b>22.5.3</b> Bayesian Philosophy</a></li>
+<li class="chapter" data-level="22.5.4" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>22.5.4</b> Bayesian Hypothesis Testing</a></li>
+<li class="chapter" data-level="22.5.5" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-frequentist-debates"><i class="fa fa-check"></i><b>22.5.5</b> Bayesian Frequentist Debates</a></li>
+<li class="chapter" data-level="22.5.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#categorical"><i class="fa fa-check"></i><b>22.5.6</b> Categorical</a></li>
+<li class="chapter" data-level="22.5.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#variable-selection-1"><i class="fa fa-check"></i><b>22.5.7</b> Variable Selection</a></li>
+<li class="chapter" data-level="22.5.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multiple-testing"><i class="fa fa-check"></i><b>22.5.8</b> Multiple Testing</a></li>
+<li class="chapter" data-level="22.5.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#rare-events-1"><i class="fa fa-check"></i><b>22.5.9</b> Rare Events</a></li>
+<li class="chapter" data-level="22.5.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#identifiability"><i class="fa fa-check"></i><b>22.5.10</b> Identifiability</a></li>
+<li class="chapter" data-level="22.5.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkage"><i class="fa fa-check"></i><b>22.5.11</b> Shrinkage</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software"><i class="fa fa-check"></i><b>22.6</b> Software</a><ul>
+<li class="chapter" data-level="22.6.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-2"><i class="fa fa-check"></i><b>22.6.1</b> Stan</a></li>
+<li class="chapter" data-level="22.6.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#diagrams"><i class="fa fa-check"></i><b>22.6.2</b> Diagrams</a></li>
+<li class="chapter" data-level="22.6.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#priors-1"><i class="fa fa-check"></i><b>22.6.3</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="22.7" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-model-averaging-1"><i class="fa fa-check"></i><b>22.7</b> Bayesian Model Averaging</a></li>
+<li class="chapter" data-level="22.8" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#multilevel-modeling"><i class="fa fa-check"></i><b>22.8</b> Multilevel Modeling</a></li>
+<li class="chapter" data-level="22.9" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#mixture-models-1"><i class="fa fa-check"></i><b>22.9</b> Mixture Models</a></li>
+<li class="chapter" data-level="22.10" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#inference"><i class="fa fa-check"></i><b>22.10</b> Inference</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#discussion-of-bayesian-inference"><i class="fa fa-check"></i><b>22.10.1</b> Discussion of Bayesian Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#model-checking-1"><i class="fa fa-check"></i><b>22.11</b> Model Checking</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#posterior-predictive-checks-1"><i class="fa fa-check"></i><b>22.11.1</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="22.11.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#prediction-criteria"><i class="fa fa-check"></i><b>22.11.2</b> Prediction Criteria</a></li>
+<li class="chapter" data-level="22.11.3" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#software-validation"><i class="fa fa-check"></i><b>22.11.3</b> Software Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#hierarchical-modeling"><i class="fa fa-check"></i><b>22.12</b> Hierarchical Modeling</a></li>
+<li class="chapter" data-level="22.13" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#shrinkageregularization"><i class="fa fa-check"></i><b>22.13</b> Shrinkage/Regularization</a></li>
+<li class="chapter" data-level="22.14" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#empirical-bayes"><i class="fa fa-check"></i><b>22.14</b> Empirical Bayes</a></li>
+<li class="chapter" data-level="22.15" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#history-of-bayesian-statistics"><i class="fa fa-check"></i><b>22.15</b> History of Bayesian Statistics</a></li>
+<li class="chapter" data-level="22.16" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#sampling-difficulties"><i class="fa fa-check"></i><b>22.16</b> Sampling Difficulties</a></li>
+<li class="chapter" data-level="22.17" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#complicated-estimation-and-testing"><i class="fa fa-check"></i><b>22.17</b> Complicated Estimation and Testing</a></li>
+<li class="chapter" data-level="22.18" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#pooling-polls"><i class="fa fa-check"></i><b>22.18</b> Pooling Polls</a></li>
+<li class="chapter" data-level="22.19" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#visualizing-mcmc-methods"><i class="fa fa-check"></i><b>22.19</b> Visualizing MCMC Methods</a></li>
+<li class="chapter" data-level="22.20" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayesian-point-estimation-decision"><i class="fa fa-check"></i><b>22.20</b> Bayesian point estimation / Decision</a></li>
+<li class="chapter" data-level="22.21" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#stan-modeling-language"><i class="fa fa-check"></i><b>22.21</b> Stan Modeling Language</a></li>
+<li class="chapter" data-level="22.22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#bayes-factors"><i class="fa fa-check"></i><b>22.22</b> Bayes Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references-12.html"><a href="references-12.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -543,15 +535,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="classes-of-model-spaces" class="section level2">
 <h2><span class="header-section-number">10.2</span> Classes of Model Spaces</h2>
 <p>See Vehtari and Ojanen (2012) and Piironen and Vehtari (2015).</p>
-<p>Let <span class="math inline">\(\mathcal{M} = \{M_1, \dots M_K\}\)</span> be a set of <span class="math inline">\(K\)</span> models.
-Let <span class="math inline">\(M_T\)</span> be the model for the true data generating process.
-Let <span class="math inline">\(M_R\)</span> be a reference model which is not the true model, but is the best available model to predict future observations.</p>
-<div class="line-block">Generalization utility estimation | <span class="math inline">\(\mathcal{M}-open\)</span> | <span class="math inline">\(M_T, M_R \notin \mathcal{M}\)</span> |<br />
-Model Space approach | <span class="math inline">\(\mathcal{M}-closed\)</span> | <span class="math inline">\(M_T \in \mathcal{M}\)</span> |<br />
+<p>Let <span class="math inline">\(\mathcal{M} = \{M_1, \dots M_K\}\)</span> be a set of <span class="math inline">\(K\)</span> models. Let <span class="math inline">\(M_T\)</span> be the model for the true data generating process. Let <span class="math inline">\(M_R\)</span> be a reference model which is not the true model, but is the best available model to predict future observations.</p>
+<div style="white-space: pre-line;">Generalization utility estimation | <span class="math inline">\(\mathcal{M}-open\)</span> | <span class="math inline">\(M_T, M_R \notin \mathcal{M}\)</span> |
+Model Space approach | <span class="math inline">\(\mathcal{M}-closed\)</span> | <span class="math inline">\(M_T \in \mathcal{M}\)</span> |
 Reference Model approach | <span class="math inline">\(\mathcal{M}-completed\)</span> | <span class="math inline">\(M_R \in \mathcal{M}\)</span> |</div>
 <p>The <span class="math inline">\(\mathcal{M}\)</span>-closed view asserts that there is a true DGP model <em>and</em> that model is in the set of models under consideration.</p>
-<p>The <span class="math inline">\(\mathcal{M}\)</span>-open view either asserts that there is no true DGP or does not care.
-It only compares models in the set against each other.</p>
+<p>The <span class="math inline">\(\mathcal{M}\)</span>-open view either asserts that there is no true DGP or does not care. It only compares models in the set against each other.</p>
 <p>The <span class="math inline">\(\mathcal{M}\)</span>-complete view does not believe there is a true model in the set of models, but still uses a reference model which is believed be the best available description of the future observations.</p>
 </div>
 <div id="continuous-model-expansion" class="section level2">
@@ -563,11 +552,9 @@ It only compares models in the set against each other.</p>
 <li>combine different models into a super-model that includes both as special cases</li>
 <li>add new data. For example, embed the data into a hierarchical model to draw strength from other data.</li>
 </ul>
-<p>More formally, suppose that the old model is a <span class="math inline">\(p(y, \theta)\)</span> is embedded or replaced by <span class="math inline">\(p(y, y^*, \theta, \phi)\)</span>, where
-<span class="math display">\[
+<p>More formally, suppose that the old model is a <span class="math inline">\(p(y, \theta)\)</span> is embedded or replaced by <span class="math inline">\(p(y, y^*, \theta, \phi)\)</span>, where <span class="math display">\[
 p(\theta, \phi | y, y^*) \propto p(\phi) p(\theta | \phi) p(y, y^* | \theta, \phi)  .
-\]</span>
-This will require a specifying</p>
+\]</span> This will require a specifying</p>
 <ul>
 <li><span class="math inline">\(p(\theta | \phi)\)</span>: a new prior on <span class="math inline">\(\theta\)</span> that is conditional on the new parameters, <span class="math inline">\(\phi\)</span>.</li>
 <li><span class="math inline">\(p(\phi)\)</span>: a prior for the new parameters, <span class="math inline">\(\phi\)</span>.</li>
@@ -575,12 +562,9 @@ This will require a specifying</p>
 <p>Continuous model expansion can also be used to fit</p>
 <p>Some examples of continuous model expansion:</p>
 <ul>
-<li><p>The normal distribution can be expanded to the Student-t distribution since
-<span class="math display">\[
+<li><p>The normal distribution can be expanded to the Student-t distribution since <span class="math display">\[
 \dnorm(\mu, \sigma^2) = \dt(\nu = \infty, ) .
-\]</span>
-Let <span class="math inline">\(\nu\)</span> be a parameter to be estimated instead of imposing <span class="math inline">\(\nu = \infty\)</span>
-as in the normal distribution.</p></li>
+\]</span> Let <span class="math inline">\(\nu\)</span> be a parameter to be estimated instead of imposing <span class="math inline">\(\nu = \infty\)</span> as in the normal distribution.</p></li>
 <li><p>Any case where a distribution is a special case of a more general distribution:</p>
 <ul>
 <li>Normal to skew normal</li>
@@ -590,72 +574,40 @@ as in the normal distribution.</p></li>
 <li>Poisson to Negative-Binomial</li>
 <li>… and many others</li>
 </ul></li>
-<li><p>Linear regression can be thought of a case of model expansion, where
-a model where all observations have the same mean,
-<span class="math display">\[
+<li><p>Linear regression can be thought of a case of model expansion, where a model where all observations have the same mean, <span class="math display">\[
 y_i \sim \dnorm(\mu, \sigma^2) ,
-\]</span>
-is replaced by one in which each observation has a different mean,
-<span class="math display">\[
+\]</span> is replaced by one in which each observation has a different mean, <span class="math display">\[
 y_i \sim \dnorm(\mu_i, \sigma^2)
-\]</span>
-with a particular model,
-<span class="math display">\[
+\]</span> with a particular model, <span class="math display">\[
 \mu_i = x_i \beta .
 \]</span></p></li>
-<li>Given a regression where observation <span class="math inline">\(i\)</span> is a group <span class="math inline">\(k \in \{1, \dots, K \}\)</span>,
-a regression where the slope an intercept coefficients are assumed to be
-the same across groups,
-<span class="math display">\[
+<li>Given a regression where observation <span class="math inline">\(i\)</span> is a group <span class="math inline">\(k \in \{1, \dots, K \}\)</span>, a regression where the slope an intercept coefficients are assumed to be the same across groups, <span class="math display">\[
 y_{i,k} \sim \dnorm(\alpha + x_i \beta, \sigma^2) ,
-\]</span>
-can be generalized to a model in which the intercepts and slopes vary across groups,
-<span class="math display">\[
+\]</span> can be generalized to a model in which the intercepts and slopes vary across groups, <span class="math display">\[
 y_{i,k} \sim \dnorm(\alpha_k + x_i \beta_k, \sigma^2) .
 \]</span></li>
-<li><p>A linear regression with heterskedastic errors,
-<span class="math display">\[
+<li><p>A linear regression with heterskedastic errors, <span class="math display">\[
 y_i \sim \dnorm(\alpha + x_i \beta, \sigma_i^2)
-\]</span>
-is a continuous model expansion of a homoskedastic regression model which
-assumes <span class="math inline">\(\sigma_i = \sigma\)</span> for all <span class="math inline">\(i\)</span>.</p></li>
-<li><p>The regression model which adds a variable(s) is a continuous model expansion.
-For example, the regression,
-<span class="math display">\[
+\]</span> is a continuous model expansion of a homoskedastic regression model which assumes <span class="math inline">\(\sigma_i = \sigma\)</span> for all <span class="math inline">\(i\)</span>.</p></li>
+<li><p>The regression model which adds a variable(s) is a continuous model expansion. For example, the regression, <span class="math display">\[
 y_i \sim \dnorm(\alpha + x_1 \beta_1, \sigma_i^2), 
-\]</span>
-is a special case of the larger regression model,
-<span class="math display">\[
+\]</span> is a special case of the larger regression model, <span class="math display">\[
 y_i \sim \dnorm(\alpha + x_1 \beta_1 + x_2 \beta_2, \sigma_i^2) ,
-\]</span>
-where <span class="math inline">\(\beta_2 = 0\)</span>.
-Adding a variable to a regression is estimating the coefficient of that
-new variable rather than assuming it is zero.</p></li>
-<li><p>Continuous model expansion can also apply to cases where several models
-can be subsumed into a larger model in which they are all special cases.</p></li>
+\]</span> where <span class="math inline">\(\beta_2 = 0\)</span>. Adding a variable to a regression is estimating the coefficient of that new variable rather than assuming it is zero.</p></li>
+<li><p>Continuous model expansion can also apply to cases where several models can be subsumed into a larger model in which they are all special cases.</p></li>
 </ul>
 <p>There are several issues with continuous model expansion:</p>
 <ul>
-<li><p>Model selection choices can lead to overfitting. Embedding a model inside a
-larger model, incorporates <em>some</em>, but not all sources of uncertainty.
-Using continuous model expansion is better than choosing one, “best” model.
-However, the choice of how to expand the model will be but one of many possibilities
-and that choice can subtly overfit the data.</p></li>
-<li><p>Specifying a more general model can be costly in both researcher time
-and computational time.</p></li>
+<li><p>Model selection choices can lead to overfitting. Embedding a model inside a larger model, incorporates <em>some</em>, but not all sources of uncertainty. Using continuous model expansion is better than choosing one, “best” model. However, the choice of how to expand the model will be but one of many possibilities and that choice can subtly overfit the data.</p></li>
+<li><p>Specifying a more general model can be costly in both researcher time and computational time.</p></li>
 <li><p>Even disregarding computational constraints, no useful model can be completely general. See the <a href="https://en.wikipedia.org/wiki/No_free_lunch_theorem">No Free Lunch Theorem</a>.</p></li>
 </ul>
 </div>
 <div id="discrete-model-expansion" class="section level2">
 <h2><span class="header-section-number">10.4</span> Discrete Model Expansion</h2>
-<p>Suppose that you are considering <span class="math inline">\(\mathcal{M} = \{M_1, \dots, M_K\}\)</span> models, estimate a model that is a weighted average of those models.
-<span class="math display">\[
+<p>Suppose that you are considering <span class="math inline">\(\mathcal{M} = \{M_1, \dots, M_K\}\)</span> models, estimate a model that is a weighted average of those models. <span class="math display">\[
 p(\theta | y) = \sum_{k = 1}^K \pi_k p(\theta_k | y), 
-\]</span>
-where <span class="math inline">\(\pi_k \geq 0\)</span> and <span class="math inline">\(\sum \pi_k = 1\)</span>.
-Like continuous model expansion this embeds models in a larger meta-model.
-However, whereas the continuous model expansion generally involves models being specific cases of a continuous parameter value in the meta-model, the discrete model expansion is a brute-force approach that treats models as discrete and independent, and averages them.
-There are two general approaches to this,</p>
+\]</span> where <span class="math inline">\(\pi_k \geq 0\)</span> and <span class="math inline">\(\sum \pi_k = 1\)</span>. Like continuous model expansion this embeds models in a larger meta-model. However, whereas the continuous model expansion generally involves models being specific cases of a continuous parameter value in the meta-model, the discrete model expansion is a brute-force approach that treats models as discrete and independent, and averages them. There are two general approaches to this,</p>
 <ol style="list-style-type: decimal">
 <li>Mixture models estimate <span class="math inline">\(\pi_k\)</span> simultaneously with <span class="math inline">\(p(\theta_k | y)\)</span>.</li>
 <li><p>Bayesian model averaging is a two step process.</p>
@@ -667,73 +619,53 @@ There are two general approaches to this,</p>
 </div>
 <div id="out-of-sample-predictive-accuracy" class="section level2">
 <h2><span class="header-section-number">10.5</span> Out-of-sample predictive accuracy</h2>
-<p>Consider data <span class="math inline">\(y_1, \dots, y_n\)</span>, which is independnet given parameters <span class="math inline">\(\theta\)</span>.
-Thus the likelihood can be decomposed into a product of pointwise likelihoods,
-<span class="math display">\[
+<p>Consider data <span class="math inline">\(y_1, \dots, y_n\)</span>, which is independnet given parameters <span class="math inline">\(\theta\)</span>. Thus the likelihood can be decomposed into a product of pointwise likelihoods, <span class="math display">\[
 p(y | \theta) = \prod_{i = 1}^n p(y_i | \theta) .
-\]</span>
-Suppose a prior distribution <span class="math inline">\(p(\theta)\)</span> and a posterior predictive distribution for new data <span class="math inline">\(\tilde{y}\)</span>,
-<span class="math display">\[
+\]</span> Suppose a prior distribution <span class="math inline">\(p(\theta)\)</span> and a posterior predictive distribution for new data <span class="math inline">\(\tilde{y}\)</span>, <span class="math display">\[
 p(\tilde{y} | y) = \int p(\tilde{y}_i | \theta) p(\theta | y)\,d\theta .
-\]</span>
-The expected log-predictive accuracy for a new point is,
-<span class="math display">\[
+\]</span> The expected log-predictive accuracy for a new point is, <span class="math display">\[
 \begin{aligned}[t]
 \text{elpd} &amp;= \text{expected log pointwise predictive density for a new dataset} \\
 &amp;= \sum_{i = 1}^n \int p_t(\tilde{y}_i) \log p(\tilde{y}_i | y)\,d\tilde{y}_i ,
 \end{aligned}
-\]</span>
-where <span class="math inline">\(p_t(\tilde{y}_i)\)</span> is the distribution of the true DGP for <span class="math inline">\(\tilde{y}_i\)</span>.
-Since the true DGP is unknown, it will be needed to be approximated.
-The most common way to approximate <span class="math inline">\(p_t(\tilde{y}_i)\)</span> is via either cross-validation or information criteria.</p>
+\]</span> where <span class="math inline">\(p_t(\tilde{y}_i)\)</span> is the distribution of the true DGP for <span class="math inline">\(\tilde{y}_i\)</span>. Since the true DGP is unknown, it will be needed to be approximated. The most common way to approximate <span class="math inline">\(p_t(\tilde{y}_i)\)</span> is via either cross-validation or information criteria.</p>
 <p><span class="math display">\[
 \begin{aligned}[t]
 \text{lpd} &amp;= \text{log pointwise predictive density} \\
 &amp;= \sum_{i = 1}^n \log p(y_i | y) \\
 &amp;= \sum_{i = 1}^n \log \int p(y_i | \theta) p(\theta | y) \,d\theta .
 \end{aligned}
-\]</span>
-The lpd of observed data is overly optimistic for future data.
-To compute the lpd from <span class="math inline">\(S\)</span> draws from a posterior distribution <span class="math inline">\(p_{post}(\theta)\)</span>,
-<span class="math display">\[
+\]</span> The lpd of observed data is overly optimistic for future data. To compute the lpd from <span class="math inline">\(S\)</span> draws from a posterior distribution <span class="math inline">\(p_{post}(\theta)\)</span>, <span class="math display">\[
 \begin{aligned}[t]
 \widehat{\text{lpd}} &amp;= \text{computed log pointwise predictive density} \\
 &amp;= \sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_i | 
 \theta^s) \right) .
 \end{aligned}
 \]</span></p>
-<p>The Bayesian LOO-CV estimate of elpd is,
-<span class="math display">\[
+<p>The Bayesian LOO-CV estimate of elpd is, <span class="math display">\[
 \text{elpd}_{\text{loo}} = \sum_{i = 1}^n \log p(y_i | y_{-i}) ,
-\]</span>
-where
-<span class="math display">\[
+\]</span> where <span class="math display">\[
 p(y_i | y_{-i}) = \int p(y_i | \theta) p(\theta | y_{-i})\,d\theta .
 \]</span></p>
 <p>The value of <span class="math inline">\(\text{elpd}_{\text{loo}}\)</span> can be calculated by cross-validation (running the model <span class="math inline">\(n\)</span> times) or by an approximation of LOO-CV using importance sampling, which PSIS-LOO being the best implementation of this approach.</p>
 </div>
 <div id="stacking" class="section level2">
 <h2><span class="header-section-number">10.6</span> Stacking</h2>
-<p>Stacking is a method for averaging (point) estimates from models.
-It proceeds in two steps.</p>
+<p>Stacking is a method for averaging (point) estimates from models. It proceeds in two steps.</p>
 <ol style="list-style-type: decimal">
 <li><p>Fit <span class="math inline">\(K\)</span> models where each model where <span class="math inline">\(\hat{y}_i\)</span> is predicted value of <span class="math inline">\(y_i\)</span> from a model trained on data not including <span class="math inline">\(y\)</span> (e.g. LOO-CV).</p></li>
-<li><p>Calculate a weight for each model by minimizing the LOO-mean squared error,
-<span class="math display">\[
+<li><p>Calculate a weight for each model by minimizing the LOO-mean squared error, <span class="math display">\[
 \hat{w} = \arg \min_{w} \sum_{i = 1}^n \left( y_i - \sum_{k} w_k \hat{y}_i \right)^2
 \]</span></p></li>
-<li><p>The pint prediction for a new point is,
-<span class="math display">\[
+<li><p>The pint prediction for a new point is, <span class="math display">\[
 \hat{\tilde{y}} = \sum_{k = 1}^K \hat{w}_k f_k\left(\tilde{x} | \tilde{\theta}_k, y_{1:n} \right)
 \]</span></p></li>
 </ol>
-<p>Whereas stacking is typically used with point estimates, CITE generalize stacking to use proper scoring rules.
-In particular, CITE use the logarithmic scoring rule (e.g. the log predictive distribution).
-This is implemented in the <strong>loo</strong> package.</p>
+<p>Whereas stacking is typically used with point estimates, CITE generalize stacking to use proper scoring rules. In particular, CITE use the logarithmic scoring rule (e.g. the log predictive distribution). This is implemented in the <strong>loo</strong> package.</p>
 </div>
 <div id="posterior-predictive-criteria" class="section level2">
 <h2><span class="header-section-number">10.7</span> Posterior Predictive Criteria</h2>
-<p>Most of these notes summarize the more complete treatment in <span class="citation">A. Gelman, Hwang, and Vehtari (2013)</span> and <span class="citation">Vehtari, Gelman, and Gabry (2015)</span>.</p>
+<p>Most of these notes summarize the more complete treatment in <span class="citation">Gelman, Hwang, and Vehtari (2013)</span> and <span class="citation">Vehtari, Gelman, and Gabry (2015)</span>.</p>
 <div id="summary-and-advice" class="section level3">
 <h3><span class="header-section-number">10.7.1</span> Summary and Advice</h3>
 <p>Models can be compared using its <em>expected predictive accuracy</em> on new data. Ways to evaluate predictive accuracy:</p>
@@ -751,35 +683,24 @@ This is implemented in the <strong>loo</strong> package.</p>
 <ul>
 <li><p>Use the Pareto Smoothed Importance Sampling LOO <span class="citation">(Vehtari, Gelman, and Gabry 2015)</span> implemented in the <strong><a href="https://cran.r-project.org/package=loo">loo</a></strong> package:</p>
 <ul>
-<li><p>It is computationally efficient as it doesn’t require completely
-re-fitting the model, unlike actual cross-validation</p></li>
+<li><p>It is computationally efficient as it doesn’t require completely re-fitting the model, unlike actual cross-validation</p></li>
 <li><p>it is fully Bayesian, unlike AIC and DIC</p></li>
 <li><p>it often perform better than WAIC</p></li>
-<li><p>it provides indicators for when it is a poor approximation (unlike AIC,
-DIC, and WAIC)</p></li>
+<li><p>it provides indicators for when it is a poor approximation (unlike AIC, DIC, and WAIC)</p></li>
 <li><p>next best approximation would be the WAIC. No reason to use AIC or DIC ever.</p></li>
 </ul></li>
-<li><p>For observations which the PSIS-LOO has <span class="math inline">\(\hat{k} &gt; 0.7\)</span> (the estimator has
-infinite variance) and there aren’t too many, use LOO-CV.</p></li>
+<li><p>For observations which the PSIS-LOO has <span class="math inline">\(\hat{k} &gt; 0.7\)</span> (the estimator has infinite variance) and there aren’t too many, use LOO-CV.</p></li>
 <li><p>If PSIS-LOO has many observations with with <span class="math inline">\(k &gt; 0.7\)</span>, then use LOO-CV or k-fold CV</p></li>
-<li><p>If the likelihood doesn’t easily partition into observations or LOO is not
-an appropriate prediction task, use the appropriate CV method (block k-fold,
-partitioned k-fold, time-series k-fold, rolling forecasts, etc.)</p></li>
-<li><p>Note that AIC/DIC/WAIC/CV vs. BIC/Bayes Factors are not different estimators of the same estimand. They are answering fundamentally different questions.
-Cross validations and its IC approximations are asking a question in a <span class="math inline">\(\mathcal{M}\)</span>-open world as to which model predict the best (w.r.t. a loss function).
-Bayes factors, BIC, and marginal likelihood-based measures are used to find the true model, with the assumption that the true model is one of the models under consideration (which unless another human computationally generated the data is unlikely to be the case).</p></li>
+<li><p>If the likelihood doesn’t easily partition into observations or LOO is not an appropriate prediction task, use the appropriate CV method (block k-fold, partitioned k-fold, time-series k-fold, rolling forecasts, etc.)</p></li>
+<li><p>Note that AIC/DIC/WAIC/CV vs. BIC/Bayes Factors are not different estimators of the same estimand. They are answering fundamentally different questions. Cross validations and its IC approximations are asking a question in a <span class="math inline">\(\mathcal{M}\)</span>-open world as to which model predict the best (w.r.t. a loss function). Bayes factors, BIC, and marginal likelihood-based measures are used to find the true model, with the assumption that the true model is one of the models under consideration (which unless another human computationally generated the data is unlikely to be the case).</p></li>
 </ul>
 </div>
 <div id="expected-log-predictive-density" class="section level3">
 <h3><span class="header-section-number">10.7.2</span> Expected Log Predictive Density</h3>
-<p>Let <span class="math inline">\(f\)</span> be the true model, <span class="math inline">\(y\)</span> be the observed data, and <span class="math inline">\(\tilde{y}\)</span> be future data or alternative data not used in fitting the model.
-The out-of-sample predictive fit for new data is
-<span class="math display">\[
+<p>Let <span class="math inline">\(f\)</span> be the true model, <span class="math inline">\(y\)</span> be the observed data, and <span class="math inline">\(\tilde{y}\)</span> be future data or alternative data not used in fitting the model. The out-of-sample predictive fit for new data is <span class="math display">\[
 \log p_{post}(\tilde{y}_i) = -\log \E_{post}(p(\tilde{y}_i)) = \log \int p(\tilde{y}_i | \theta) p_{post}(\theta) d\,\theta
-\]</span>
-where <span class="math inline">\(p_{post}(\tilde{y}_i)\)</span> is the predictive density for <span class="math inline">\(\tilde{y}_i\)</span> from <span class="math inline">\(p_{post}(\theta)\)</span>. <span class="math inline">\(\E_{post}\)</span> is an expectation that averages over the values posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
-<p>Since the future data <span class="math inline">\(\tilde{y}_i\)</span> are unknown, the <strong>expected out-of-sample log predictive density</strong> (elpd) is,
-<span class="math display">\[
+\]</span> where <span class="math inline">\(p_{post}(\tilde{y}_i)\)</span> is the predictive density for <span class="math inline">\(\tilde{y}_i\)</span> from <span class="math inline">\(p_{post}(\theta)\)</span>. <span class="math inline">\(\E_{post}\)</span> is an expectation that averages over the values posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
+<p>Since the future data <span class="math inline">\(\tilde{y}_i\)</span> are unknown, the <strong>expected out-of-sample log predictive density</strong> (elpd) is, <span class="math display">\[
 \begin{aligned}[t]
 \mathrm{elpd} &amp;= \text{expected log predictive density for a new data point} \\
 &amp;= E_f(\log p_{post}(\tilde{y}_i)) \\
@@ -790,20 +711,13 @@ where <span class="math inline">\(p_{post}(\tilde{y}_i)\)</span> is the predicti
 </div>
 <div id="bayesian-model-averaging" class="section level2">
 <h2><span class="header-section-number">10.8</span> Bayesian Model Averaging</h2>
-<p>Suppose there is an exhaustive list of candidate models, <span class="math inline">\(\{M_k\}_{k = 1}^K\)</span>, the distribution over the model space is,
-<span class="math display">\[
+<p>Suppose there is an exhaustive list of candidate models, <span class="math inline">\(\{M_k\}_{k = 1}^K\)</span>, the distribution over the model space is, <span class="math display">\[
 p(M | D) \propto p(D | M) p(M).
-\]</span>
-The predictions from Bayesian Model Averaging (BMA) are
-<span class="math display">\[
+\]</span> The predictions from Bayesian Model Averaging (BMA) are <span class="math display">\[
 p(\tilde{y} | D) = \sum_{k = 1}^{K} p(\tilde{y} | D, M_k) p(M_k | D)
-\]</span>
-In BMA each model is weighted by its marginal likelihood,
-<span class="math display">\[
+\]</span> In BMA each model is weighted by its marginal likelihood, <span class="math display">\[
 p(M_k | y) = \frac{p(y | M_k) p(M_k)}{\sum_{k = 1}^K p(y | M_k) p(M_K)},
-\]</span>
-where
-<span class="math display">\[
+\]</span> where <span class="math display">\[
 p(y | M) = \int p(y | \theta_k, M_k) p(\theta_k| M_k) \,d\theta_k.
 \]</span></p>
 <ul>
@@ -811,60 +725,42 @@ p(y | M) = \int p(y | \theta_k, M_k) p(\theta_k| M_k) \,d\theta_k.
 <li>In the <span class="math inline">\(\mathcal{M}\)</span>-open and -complete cases, it will asympmtotically select the closest, in terms of KL-divergence, model to the true model.</li>
 <li>Since the BMA weights by marginal likelihood, these weights extremely sensitive to the choices of the priors <span class="math inline">\(p(\theta_k)\)</span> for each model.</li>
 </ul>
-<p>The sensitivity to prior distributions make the BMA weights suspect.
-The difficulty of computing marginal likelihood generally make the BMA hard to generalize.</p>
-<p>BMA has been most successfully implemented in (generalized) linear regression, where a particular choice of prior (<a href="https://en.wikipedia.org/wiki/G-prior">Zellner’s g-prior</a>) provides an analytical solution to the Bayes’ Factor with respect to the null model.
-However, this is also the area where methods using regularization and sparse shrinkage priors have made extensive progress recently.
-Sparse shrinkage priors, e.g. horseshoe priors, and the use of methods that provide a sparse summarization of the prior, e.g. projection-prediction, provide a competitive and more coherent solution to the variable selection problem in regression than BMA.</p>
+<p>The sensitivity to prior distributions make the BMA weights suspect. The difficulty of computing marginal likelihood generally make the BMA hard to generalize.</p>
+<p>BMA has been most successfully implemented in (generalized) linear regression, where a particular choice of prior (<a href="https://en.wikipedia.org/wiki/G-prior">Zellner’s g-prior</a>) provides an analytical solution to the Bayes’ Factor with respect to the null model. However, this is also the area where methods using regularization and sparse shrinkage priors have made extensive progress recently. Sparse shrinkage priors, e.g. horseshoe priors, and the use of methods that provide a sparse summarization of the prior, e.g. projection-prediction, provide a competitive and more coherent solution to the variable selection problem in regression than BMA.</p>
 </div>
 <div id="pseudo-bma" class="section level2">
 <h2><span class="header-section-number">10.9</span> Pseudo-BMA</h2>
 <p>Pseudo-BMA is similar to Bayesian model averaging, but instead of using weighting models by marginal likleihoods, it weights models using an approximation of the predictive distribution: e.g. AIC, DIC, or WAIC.</p>
 <p>The use of the predictive distribution rather than the marginal likelihood makes the weights less sensitive to the prior distributions of the priors.</p>
-<p>CITE propose using the expected log-pointwise predictive density (elpd) PSIS-LOO weights to weight each model.
-<span class="math display">\[
+<p>CITE propose using the expected log-pointwise predictive density (elpd) PSIS-LOO weights to weight each model. <span class="math display">\[
 w_k = \frac{\exp\left( \widehat{\text{elpd}}_{\text{loo}}^k \right)}{ \sum_{k = 1}^K \exp \left( \widehat{\text{elpd}}_{\text{loo}}^k \right)}
-\]</span>
-where <span class="math inline">\(\widehat{\text{elpd}}_{\text{loo}}^k\)</span> is estimated using PSIS-LOO.</p>
-<p>These point-estimates of the elpd are adjusted by estimates of the uncertainty calculated via a log-normal approximation or Bayesian bootstrap [CITE].
-The effect of adjusting for uncertainty is to regularize weights by adjusting them towards equal weighting for each model, and away from weights of 0 or 1.</p>
+\]</span> where <span class="math inline">\(\widehat{\text{elpd}}_{\text{loo}}^k\)</span> is estimated using PSIS-LOO.</p>
+<p>These point-estimates of the elpd are adjusted by estimates of the uncertainty calculated via a log-normal approximation or Bayesian bootstrap [CITE]. The effect of adjusting for uncertainty is to regularize weights by adjusting them towards equal weighting for each model, and away from weights of 0 or 1.</p>
 <p>This is implemented in the <strong>loo</strong> package.</p>
 </div>
 <div id="loo-cv-via-importance-sampling" class="section level2">
 <h2><span class="header-section-number">10.10</span> LOO-CV via importance sampling</h2>
-<p>Leave-one-out cross validation (LOO-CV) is costly because it requires re-estimating the model <span class="math inline">\(n\)</span> times.
-The LOO predictive density is,
-<span class="math display">\[
+<p>Leave-one-out cross validation (LOO-CV) is costly because it requires re-estimating the model <span class="math inline">\(n\)</span> times. The LOO predictive density is, <span class="math display">\[
 p(y_{i} | y_{-i})  = \int p(y_i | \theta) p(\theta | y_{-i})\,d\theta .
 \]</span></p>
-<p>However, if the model was computed for <span class="math inline">\(y_{1:n}\)</span> it seems wasteful to ignore it when calculating LOO posterior distributions since <span class="math inline">\(p(\theta | y_{1:n}) \approx p(\theta | y_{-i})\)</span>.
-Importance sampling can be used to sample from the LOO predictive density using the already estimated posterior density as a proposal distribution.</p>
-<p>Suppose that there a <span class="math inline">\(S\)</span> simulation draws from the full-posterior <span class="math inline">\(p(\theta | y)\)</span>, the importance sampling weights are
-<span class="math display">\[
+<p>However, if the model was computed for <span class="math inline">\(y_{1:n}\)</span> it seems wasteful to ignore it when calculating LOO posterior distributions since <span class="math inline">\(p(\theta | y_{1:n}) \approx p(\theta | y_{-i})\)</span>. Importance sampling can be used to sample from the LOO predictive density using the already estimated posterior density as a proposal distribution.</p>
+<p>Suppose that there a <span class="math inline">\(S\)</span> simulation draws from the full-posterior <span class="math inline">\(p(\theta | y)\)</span>, the importance sampling weights are <span class="math display">\[
 r^{s}_i = \frac{1}{p(y_i | \theta^s)} \propto \frac{p(\theta^s | y_{-i})}{p(\theta^{s} | y)}
-\]</span>
-The LOO predictive distribution is approximated by,
-<span class="math display">\[
+\]</span> The LOO predictive distribution is approximated by, <span class="math display">\[
 \begin{aligned}[t]
 p(y_i | y_{-i}) &amp;= \int p(y_i | \theta) \frac{p(\theta|y_{-i})}{p(\theta |y)} p(\theta | y)\,d \theta \\
 &amp;\approx \frac{\sum_{s = 1}^S r^s_i p(y_i | \theta^{s})}{\sum_{s = 1}^S r_i^s
 } .
 \end{aligned}
 \]</span></p>
-<p>An issue with these proposal weights it that the full posterior distribution is likely to be narrower than the LOO posterior distribution.
-This causes problems for importance sampling, and the weights can be unstable.
-<span class="citation">Vehtari, Gelman, and Gabry (2017b)</span> propose a method to regularize the importance weights called Pareto-Smoothed Importance Sampling (PSIS-LOO).</p>
-<p>A useful side-effect of this method for smoothing these importance weights is that it also provides an indicator for when these weights are unstable.
-The PSIS is so-called because it estimates a generalized Pareto distribution.
-Observations where the estimated shape parameter of that Pareto distribution is <span class="math inline">\(\hat{k} &gt; 0.7\)</span> are unstable, and the PSIS-LOO approximation is poor <span class="citation">(Vehtari, Gelman, and Gabry 2017b)</span>.</p>
-<p>If a few observations have <span class="math inline">\(\hat{k} &gt; 0.7\)</span>, each of those should be re-estimated with LOO-CV.
-If many observations have <span class="math inline">\(\hat{k} &gt; 0.7\)</span>, then it may be worth re-estiamting the model using a <span class="math inline">\(k\)</span>-fold cross validation.</p>
+<p>An issue with these proposal weights it that the full posterior distribution is likely to be narrower than the LOO posterior distribution. This causes problems for importance sampling, and the weights can be unstable. <span class="citation">Vehtari, Gelman, and Gabry (2017b)</span> propose a method to regularize the importance weights called Pareto-Smoothed Importance Sampling (PSIS-LOO).</p>
+<p>A useful side-effect of this method for smoothing these importance weights is that it also provides an indicator for when these weights are unstable. The PSIS is so-called because it estimates a generalized Pareto distribution. Observations where the estimated shape parameter of that Pareto distribution is <span class="math inline">\(\hat{k} &gt; 0.7\)</span> are unstable, and the PSIS-LOO approximation is poor <span class="citation">(Vehtari, Gelman, and Gabry 2017b)</span>.</p>
+<p>If a few observations have <span class="math inline">\(\hat{k} &gt; 0.7\)</span>, each of those should be re-estimated with LOO-CV. If many observations have <span class="math inline">\(\hat{k} &gt; 0.7\)</span>, then it may be worth re-estiamting the model using a <span class="math inline">\(k\)</span>-fold cross validation.</p>
 </div>
 <div id="selection-induced-bias" class="section level2">
 <h2><span class="header-section-number">10.11</span> Selection induced Bias</h2>
 <p>See Pirronen and Vehtari (2015), p. 10</p>
-<p>Using the training set to select models produces an optimistic estimate. High variance.
-The model selection process needs to be CV in order to get good estimate of generalization error.</p>
+<p>Using the training set to select models produces an optimistic estimate. High variance. The model selection process needs to be CV in order to get good estimate of generalization error.</p>
 <ul>
 <li>CV/WAIC/DIC are highly variable</li>
 <li>MPP/BMA less so</li>
@@ -919,7 +815,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

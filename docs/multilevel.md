@@ -8,8 +8,18 @@ library("rstanarm")
 library("tidyverse")
 ```
 
-Multilevel models are commonly used hierarchical model.
+Multilevel models are a commonly used hierarchical model.
 They extend (generalized) linear models to include coefficients that vary by discrete groups.
+
+
+Notation
+
+-   Units: $i = 1, \dots, n$.
+-   Outcomes: $y = (y_1, \dots, y_n)$
+-   Predictors: $X$ is a $n \times p$ matrix; $X_i$ is the $1 \times K$ 
+    row vector of individual $i$'s predictors.
+-   
+
 
 Suppose that there are $i = 1, dots, n$ observations, and each observation is in one of $j = 1, \dots, J$ groups.
 Let $j[i]$ be the group for

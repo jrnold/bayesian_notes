@@ -545,15 +545,14 @@ funs <- list(
     tibble(kappa = x,
            dens = dexp(f2(kappa), 0.5) * f2_jacobian(kappa),
            name = "Double Exponential")
-  },
-
+  }
 )
 
 shrinkages <- 
   bind_rows(invoke_map_df(funs, x = kappa),
             tibble(kappa = seq(0, 1, by = 0.01),
-                   dens = case_when(kappa == 0 ~ p,
-                                    kappa == 1 ~ 1 - p,
+                   dens = case_when(kappa == 0 ~ 0.5,
+                                    kappa == 1 ~ 0.5,
                                     TRUE ~ 0),
                    name = "Spike-Slab (pi = 0.5)"))
 
@@ -903,6 +902,7 @@ fit_diabetes[["weak_inf"]] <- stan_glm(y ~ x,
 
 Estimate a model using the hierarchical shrinkage prior included in **rstanarm**.
 ```{r}
+tau0 <- 4 / (ncol(diabetes$x) - 4) / sqrt(nrow(diabetes$x))
 fit_diabetes[["hs"]] <- 
   stan_glm(y ~ x,
            family = gaussian(), 
