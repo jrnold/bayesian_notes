@@ -818,6 +818,18 @@ effective number of parameters, and local scales.
 1.  Shrinkage with Laplace priors
 1.  Shrinkage with Horseshoe priors
 
+```{r}
+model_names <- c("lm_normal_1",
+                 "lm_shrinkage_normal_1",
+                 "lm_shrinkage_student_t_1",
+                 "lm_shrinkage_laplace_1",
+                 "lm_shrinkage_hs")
+models <- map(model_names, function(nm) {
+  stan_model(file.path("stan", str_c(nm, ".stan")))
+})
+names(models) <- model_names
+```
+
 This preprocesses the data that will be used by all the models.
 ```{r}
 diabetes_standata <- lst(
@@ -830,6 +842,14 @@ diabetes_standata <- lst(
   use_log_lik = 1,
   use_y_rep = 1
 )
+```
+
+```{r}
+diabetes_standata_winf <- within(diabetes_standata, {
+  scale_beta <- rep(2.5, K)
+})
+fit_normal <- sampling(models[["lm_normal_1"]],
+                       data = diabetes_standata_winf)
 ```
 
 ```{r}
@@ -846,11 +866,11 @@ fit_normal <- sampling(models[["lm_shrinkage_normal_1"]],
 diabetes_standata_student_t <- within(diabetes_standata, {
   df_tau <- 4
   scale_tau <- 1
-  df_lambda <- 1
+  df_lambda <- 2
 })
 fit_student <- sampling(models[["lm_shrinkage_student_t_1"]], 
                         data = diabetes_standata_student_t,
-                        control = list(adapt_delta = 0.99))
+                        control = list(adapt_delta = 0.99, max_treedepth = 13))
 ```
 
 ```{r}
@@ -910,6 +930,18 @@ fit_diabetes[["lasso"]] <- stan_glm(y ~ x,
                      data = diabetes)
 ```
 
+### Example 
+
+Some fake sparse data[^sparse-fake]
+```{r}
+n <- 100
+p <- 100 # number of variables
+s <- 3 # number of variables with non-zero coefficients
+X <- matrix(rnorm(n * p), ncol = p)
+beta <- c(rep(5, s), rep(0, p - s))
+Y <- X %*% beta + rnorm(n)
+```
+
 ## Shrinkage with Correlated Variables
 
 Up until now, the various approaches modeled regression coefficients hieararchically, 
@@ -930,11 +962,26 @@ Some alternative models for correlated variables.
 -  `rstanarm::stan_lm` will shrink the regression QR decomposition by a
 -  Zellner's g-prior
 
-
 ## Variable Selection
 
 Variable selection is closely related to sparse shrinkage methods.
 Sparse shrinkage methods can be seen as offering an alternative.
 
--  Use the **projpred** package
--  Use `lambda`
+Can sparse shrinkage estimators do variable selection? It depends on the
+what estimator is being used.
+
+-   MAP - posterior mode. Yes, it can se some coefficients to zero.
+-   Posterior mean. No, it only shrinks them.
+
+Note that the shrinkage/not selection properties of the posterior mean also
+applied to BMA and the mixture methods.
+They will assign some probability to both zero and non-zero values of each coefficient values, so the posterior mean will (almost certainly) be non-zero, even if the posterior includes a point mass at zero.
+
+However, we can calculate the posterior distribution and then use a second step to decide on the "sparse" model.
+
+-   HPD: select the combination of coefficients with the highest posterior density (BMA, spike-and-slab).
+-   MPD: select any variables where the median of the probability of inclusion is greater than 0.5 (BMA, spike-and-slab).
+-   Ad hoc-rule for horseshoe priro: select if $\kappa_k < 0.5$ (Datta and Ghosh). This is the equivalent of the MPD rule.
+-   Decision problem: e.g. projpred, and Hahn and Carvalho.
+
+[sparse-fake]: Data generating process used in <https://arxiv.org/pdf/1608.00354.pdf>.
