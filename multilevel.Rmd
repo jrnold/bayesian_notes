@@ -14,6 +14,7 @@ ggplot2::theme_set(theme_minimal())
 library("rstan")
 library("rstanarm")
 library("tidyverse")
+library("broom")
 ```
 
 Multilevel models are a commonly used hierarchical model.
@@ -34,7 +35,7 @@ In classical statistics there two main approaches to these models:
 1.  OLS and adjusted standard errors: See the **plm** packge. This is the 
     stanard econometric approach.
 
-See ["Some false friends"](https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf) in the **plm** vignette and @GelmanHill2007 [p. 245, fn. 5] for discussion of the differences between these approaches.
+See ["Some false friends"](https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf) in the **plm** vignette and @GelmanHill2007a [p. 245, fn. 5] for discussion of the differences between these approaches.
 
 
 ## Normal
@@ -257,8 +258,7 @@ ggplot(radon_county, aes(y = log_radon_mean,
 ```
 Much of this can be explained simply by sampling error.
 
-
-## Modeling
+## Radon Example
 
 In this example we want to model the amount of radon (log scale) in a home.
 Let $y_i$ be the *centered* and *scaled* log amount of radon in home $i$.
@@ -323,7 +323,8 @@ fit_radon_3 <- stan_glmer(log_radon ~ (1 | county), data = radon,
                           refresh = -1)
 ```
 
-```{r}
+For each of these models extract the county means.
+```{r alpha_1}
 alpha_1 <- tidyMCMC(fit_radon_1, conf.int = TRUE) %>%
   filter(term == "(Intercept)") %>%
   # add county
@@ -356,39 +357,129 @@ alpha_3 <- sweep(alphas, 1, alpha_mean, FUN = "+") %>%
   mutate(county = str_match(term, "county:(.*)\\]")[ , 2]) %>%
   select(-term) %>%
   mutate(model = "Partial")
-
 ```
 
 ```{r}
-bind_rows(alpha_1, alpha_2, alpha_3) %>%
-  mutate(county = fct_reorder(county, estimate, mean)) %>%
-  ggplot(aes(x = county, y = estimate, ymin = conf.low, ymax = conf.high,
+all_models <- 
+  bind_rows(alpha_1, alpha_2, alpha_3) %>%
+  # reorder county by size
+  mutate(county = fct_reorder(county, estimate, mean))
+```
+
+```{r}
+ggplot(all_models, aes(x = county, y = estimate, ymin = conf.low, ymax = conf.high,
              color = model)) +
   geom_pointrange(position = position_dodge(width = 1)) +
   coord_flip()
 ```
 
-### Individual Covariates
+## With Individual Covariates
 
-We can add individual covariates to a varying-intercept model.
-
+Individual covariates can also be added.
 $$
 \begin{aligned}
 y_i &\sim  N(\mu_i, \sigma^2) \\
 \mu_i &= \alpha_{j[i]} + \beta~\mathtt{floor}_i  \\
 \alpha_j &\sim \dnorm(\gamma, \tau) & \text{for } j \in 1, \dots, m \\
 \beta &\sim \dnorm(0, 2.5)\\
-\tau &\sim \dexp(1)
+\tau &\sim \dexp(1) \\
+\gamma &\sim \dnorm(0, 10)
+\end{aligned}
+$$
+This is often called a *varying intercept* model or the *random effects* model.
+Each county has a different intercept, but a common value of $\beta$.
+Note that the prior on $\beta$ assumes that $y$ and $\mathtt{floor}$ are centered and scaled.
+
+We can estimate this with `stan_glmer` as follows:
+```{r}
+fit_radon_4 <- stan_glmer(log_radon ~ (1 | county) + floor,
+                          data = radon,
+                          refresh = -1)
+```
+
+We could also allow the parameter of $\beta$ to vary between counties and give it a prior distribution.
+$$
+\begin{aligned}
+y_i &\sim  N(\mu_i, \sigma^2) \\
+\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{floor}_i 
+\end{aligned}
+$$
+Both $\alpha_j$ and $\beta_j$ need to be given hierarchical priors.
+Since there are features common to each group, it is common to specify a prior 
+that allows these parameters to be correlated, such as a multivariate normal
+distribution with mean $\gamma$ and covariance $\Sigma$,
+$$
+\begin{aligned}[t]
+\begin{bmatrix}
+\alpha_j \\
+\beta_j
+\end{bmatrix} &\sim
+\dnorm\left(\begin{bmatrix}\gamma_{\alpha} \\ \gamma_{\beta} \end{bmatrix}, \Sigma\right) \\
+\end{aligned}
+$$
+The vector of locations of $\alpha$ and $\beta$ can be given weakly informative
+priors, which can be the same as the pooled parameters would be given,
+$$
+\begin{aligned}
+\gamma_{\alpha} &\sim \dnorm(0, 10) \\
+\gamma_{\beta} &\sim \dnorm(0, 2.5) \\
+\end{aligned}
+$$
+The prior distribution for the covariance matrix is more complicated.
+See the section [Priors for Covariances] for a discussion of appropriate prior
+distirbutions.
+
+If instead, $\alpha_j$ and $\beta_j$ were given inproper priors, or
+alternatively, $\Sigma \to \tau I$ where $\tau \to \infty$, then this model
+would be equivalent to an MLE model in with county fixed effects, and with
+`county` interacted with `floor`, e.g. `log_radon ~ county * floor`.
+
+This model is often called a *(varying-intercept) varying-slope* model, or
+a *random coefficients* model.
+It can be estimated as:
+```{r}
+fit_radon_5 <- stan_glmer(log_radon ~ (1 + floor | county),
+                          data = radon,
+                          refresh = -1)
+```
+
+```{r}
+plot(fit_radon_5, regex_pars = c("^b\\[floor"))
+```
+
+
+## With Group-Level Covariates
+
+Group-level covariates could also be added as predictors.
+$$
+\begin{aligned}
+y_i &\sim  N(\mu_i, \sigma^2) \\
+\mu_i &= \alpha_{j[i]} + \beta~\mathtt{log\_uranium}_{j[i]}  \\
+\alpha_j &\sim \dnorm(\gamma, \tau) & \text{for } j \in 1, \dots, m \\
+\beta &\sim \dnorm(0, 2.5)\\
+\tau &\sim \dexp(1) \\
+\gamma &\sim \dnorm(0, 10)
 \end{aligned}
 $$
 
-In this particular example, $y = \mathtt{log_radon}$ and $x = \mathtt{basement}$.
+We could also write that model with group-level predictors included in the prior fthe group level intercepts as 
 $$
 \begin{aligned}
-\mathtt{log\_radon}_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta~\mathtt{basement}_i
+y_i &\sim  N(\mu_i, \sigma^2) \\
+\mu_i &= \alpha_{j[i]} \\
+\alpha_j &\sim \dnorm(\gamma +  \beta~\mathtt{log\_uranium}_j, \tau) & \text{for } j \in 1, \dots, m \\
 \end{aligned}
 $$
+These two models are equivalent.
+However, they may have different sampling efficiencies.
+Generally, in estimation, the first form in which the group-level predictors are included in the top level is used.
+
+To estimate this model with `stan_glmer` run the following.
+```{r}
+fit_radon_6 <- stan_glmer(log_radon ~ (1 | county) + log_uranium,
+                          data = radon,
+                          refresh = -1)
+```
 
 ## Pooling of Hierarchical Parameters
 
@@ -396,8 +487,8 @@ What does partial pooling do?
 This is easiest to understand in a simple mean-model with normal errors.
 $$
 \begin{aligned}[t]
-y &\sim \dnorm(\mu_{j[i]}, \sigma^2) \\
-\mu_{j} &\sim \dnorm(\gamma, \tau^2) .
+y &\sim \dnorm(\mu_{j[i]}, \sigma) \\
+\mu_{j} &\sim \dnorm(\gamma, \tau) .
 \end{aligned}
 $$
 If the hyperparameters were known, the posterior of $\mu_j$ is
@@ -497,6 +588,60 @@ fit_slope_partial <- lmer(log_radon ~ (1 + floor | county) +  log_uranium,
                           data = radon)
 ```
 
+## Priors for Covariances {#covariance-priors}
+
+Traditinally the Wishart and inverse Wishart distributions have been used for modeling covariance  distributions. This was largely because they were in some cases conjugate
+distributions. However, they have several poor properties.
+See <https://github.com/pymc-devs/pymc3/issues/538#issuecomment-94153586>
+
+A preferred approach is to first decompose the covariance matrix ($\Sigma$) into
+a vector of standard deviations ($\omega$) and a correlation matrix ($R$),
+$$
+\Sigma = \diag(\omega) R \diag(\omega) ,
+$$
+and then place priors on each of those.
+
+The preferred distribution for a  correlation distribution is
+the LKJ distribution.
+This distribution is proportional to a product of the determinant of the correlation matrix.
+The LKJ distribution takes a single parameter $\eta > 0$. 
+It can be interpreted similarly to the the shape parameter of a symmetric Beta distribution.
+When $\eta = 1$, then there is a uniform distribution over all correlation matrices.
+As $\eta \to 1$, the correlation matrix approaches the identity matrix.
+As $\eta \to 0$, the density has a trough at the identity matrix.
+$$
+\mathsf{LKJ}(R | \eta) \propto |R|^{\eta - 1}
+$$
+
+There are a few ways to assign prior distributions to the standard deviation vector, $\omega$.
+
+The `lkj()` prior used by `stan_mvmer()` and `stan_jm()` assigns independent Half Student-t priors, with degrees of freedom $d$, and scale, $s_j$,
+$$
+\omega_j \sim \HalfStudentT(d, 0, s_j) .
+$$
+
+The `deconv()` prior used by `stan_glmer` decomposes the standard deviation vector further.
+It notes that the trace of a covariance matrix is equal to the sum of the variances.
+This suggests decomposing the variance vector ($\omega^2$) into the product of the 
+trace ($\psi^2$) and a simplex ($\pi$) which allocates how much of the total variance
+is associated with each element.
+$$
+\begin{aligned}
+\omega &= \psi \sqrt{\pi}
+\end{aligned}
+$$
+The simplex is given a symmetric Dirichlet prior with concentration parameter $k$,
+$$
+\pi &\sim \ddirchlet(k, 1 / p).
+$$
+The default for `deconv()` is 1, for a uniform distribution over the space of simplex vectors of that size.
+
+The square root of the trace ($\psi$) is given a gamma prior with shape parameter $a$ 
+and scale parameter $b$,
+$$
+\psi &\sim \dgamma(a, b) .
+$$
+The default for `deconv()` is $a = 1$ and $b = 1$, which is equal to $\dexp(\psi | 1)$.
 
 ## Cetered and Non-centered Parameterizations
 
@@ -540,10 +685,9 @@ See also
 
 -   Stan Ref Ch 9 "Regression" has sections on hierarchical/multi-level models
 -   Stan Ref Ch 22 "Reparameterizations & Change of Variables"
-
--   http://twiecki.github.io/blog/2017/02/08/bayesian-hierchical-non-centered/
--   https://arxiv.org/pdf/1312.0906.pdf
--   https://www.youtube.com/watch?v=pHsuIaPbNbY&t=8s
+-   <http://twiecki.github.io/blog/2017/02/08/bayesian-hierchical-non-centered/>
+-   <https://arxiv.org/pdf/1312.0906.pdf>
+-   <https://www.youtube.com/watch?v=pHsuIaPbNbY&t=8s
 
 ## Extensions
 

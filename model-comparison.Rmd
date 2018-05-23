@@ -356,11 +356,11 @@ $$
 
 An issue with these proposal weights it that the full posterior distribution is likely to be narrower than the LOO posterior distribution.
 This causes problems for importance sampling, and the weights can be unstable.
-@VehtariGelmanGabry2017b propose a method to regularize the importance weights called Pareto-Smoothed Importance Sampling (PSIS-LOO).
+@VehtariGelmanGabry2017a propose a method to regularize the importance weights called Pareto-Smoothed Importance Sampling (PSIS-LOO).
 
 A useful side-effect of this method for smoothing these importance weights is that it also provides an indicator for when these weights are unstable.
 The PSIS is so-called because it estimates a generalized Pareto distribution.
-Observations where the estimated shape parameter of that Pareto distribution is $\hat{k} > 0.7$ are unstable, and the PSIS-LOO approximation is poor [@VehtariGelmanGabry2017b].
+Observations where the estimated shape parameter of that Pareto distribution is $\hat{k} > 0.7$ are unstable, and the PSIS-LOO approximation is poor [@VehtariGelmanGabry2017a].
 
 If a few observations have $\hat{k} > 0.7$, each of those should be re-estimated with LOO-CV.
 If many observations have $\hat{k} > 0.7$, then it may be worth re-estiamting the model using a $k$-fold cross validation.

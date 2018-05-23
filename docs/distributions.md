@@ -19,6 +19,7 @@ There are a few variations of this chart online:
 
 -   [Univariate Distribution Relationships](http://www.math.wm.edu/~leemis/chart/UDR/UDR.html)
 -   [Diagram of distribution relationships](https://www.johndcook.com/blog/distribution_chart/)
+-   [ProbOnto](https://en.wikipedia.org/wiki/ProbOnto)
 
 <!--
 ### Beta Distribution
