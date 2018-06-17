@@ -257,7 +257,6 @@ ggplot(radon_county, aes(y = log_radon_mean,
 ```
 Much of this can be explained simply by sampling error.
 
-
 ## Modeling
 
 In this example we want to model the amount of radon (log scale) in a home.
@@ -319,7 +318,7 @@ $$
 Hierarchical/multi-level generalized linear models can be estimated with 
 `stan_glmer`.
 ```{r}
-fit_radon_3 <- stan_glmer(log_radon ~ (1 | county), data = radon,
+fit_radon_3 <- stan_glmer(log_radon ~ (1 + floor | county), data = radon,
                           refresh = -1)
 ```
 
