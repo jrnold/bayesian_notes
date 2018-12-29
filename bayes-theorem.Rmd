@@ -73,7 +73,7 @@ The marginal likelihood (model evidence) is the overall probability that a cab i
 This considers both the probabilities that a witness reports that the cab is blue when it is blue and reports that it is blue when it is green.
 $$
 \begin{aligned}[t]
-\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_B) \Pr(H_B)
+\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_G) \Pr(H_G)
 \end{aligned}
 $$
 
