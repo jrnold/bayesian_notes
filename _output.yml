@@ -8,6 +8,7 @@ bookdown::gitbook:
       link: https://github.com/jrnold/bayesian_notes/edit/master/%s
       text: "Edit"
     sharing: no
+  md_extensions: "+native_divs+native_spans+escaped_line_breaks+smart"
   includes:
     in_header: includes/in_header.html
     before_body: includes/before_body.html
