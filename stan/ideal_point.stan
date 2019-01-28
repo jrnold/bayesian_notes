@@ -1,54 +1,80 @@
+// ideal point model
+// identification:
 data {
-  // number of items
-  int K;
-  // number of individuals
+  // Total legislators
   int N;
+  // number of items
+  int M;
   // observed votes
-  int<lower = 0, upper = N * K> Y_obs;
-  int y_idx_leg[Y_obs];
-  int y_idx_vote[Y_obs];
-  int y[Y_obs];
-  // ideal points
-  // for identification, some ideal points are fixed
-  int<lower = 0, upper = N> N_obs;
-  int<lower = 0, upper = N> N_param;
-  int<lower = 1, upper = N> theta_obs_idx[N_obs];
-  int theta_obs[N_obs];
-  int<lower = 1, upper = N> theta_param_idx[N_param];
+  int<lower = 0, upper = N * M> P;
+  int y_idx_leg[P];
+  int y_idx_vote[P];
+  int y[P];
+  // priors on items
+  real loc_alpha;
+  real<lower = 0.> scale_alpha;
+  real loc_beta;
+  real<lower = 0.> scale_beta;
+  // Number of legislators with fixed ideal points
+  int<lower=0, upper=N> N_obs;
+  int idx_xi_obs[N_obs];
+  vector[N_obs] xi_obs;
+  int idx_xi_param[N - N_obs];
+  // prior on ideal point parameters
+  real loc_xi;
+  real<lower = 0.> scale_xi;
+  real<lower = 1.> df_xi;
+}
+transformed data {
+  int N_param;
+  N_param = N - N_obs;
 }
 parameters {
   // item difficulties
-  vector[K] alpha;
-  // item cutpoints
-  vector[K] lambda;
+  vector[M] alpha_z;
+  // item discrimination
+  vector[M] beta_z;
   // unknown ideal points
-  vector[N_param] theta_param;
+  vector[N_param] xi_param_z;
 }
 transformed parameters {
-  // create theta from observed and parameter ideal points
-  vector[N] theta;
-  vector[Y_obs] mu;
-  for (k in 1:N_param) {
-    theta[theta_param_idx[k]] = theta_param[k];
+  // create xi from observed and parameter ideal points
+  matrix[N, M] eta;
+  // item difficulties
+  vector[M] alpha;
+  // item discrimination
+  vector[M] beta;
+  // this is extra mem, but convenient
+  vector[N] xi;
+
+  alpha = loc_alpha + scale_alpha * alpha_z;
+  beta = loc_beta + scale_beta * beta_z;
+
+  // fill in xi vector
+  for (i in 1:N_obs) {
+    xi[idx_xi_obs[i]] = xi_obs[i];
   }
-  for (k in 1:N_obs) {
-    theta[theta_obs_idx[k]] = theta_obs[k];
+  for (i in 1:N_param) {
+    xi[idx_xi_param[i]] = loc_xi + scale_xi * xi_param_z[i];
   }
-  for (i in 1:Y_obs) {
-    mu[i] = alpha[y_idx_vote[i]] + lambda[y_idx_vote[i]] * theta[y_idx_leg[i]];
+
+  for (i in 1:N) {
+    for (j in 1:M) {
+      eta[i, j] = alpha[j] + beta[j] * xi[i];
+    }
   }
 }
 model {
-  alpha ~ normal(0., 1.);
-  lambda ~ normal(0., 1.);
-  theta_param ~ normal(0., 1.);
-  y ~ binomial_logit(1, mu);
+  alpha_z ~ normal(0., 1.);
+  beta_z ~ normal(0., 1.);
+  xi_param_z ~ student_t(df_xi, 0., 1.);
+  for (p in 1:P) {
+    y[p] ~ bernoulli_logit(eta[y_idx_leg[p], y_idx_vote[p]]);
+  }
 }
 generated quantities {
-  vector[Y_obs] log_lik;
-  // int y_rep[Y_obs];
-  for (i in 1:Y_obs) {
-    log_lik[i] = binomial_logit_lpmf(y[i] | 1, mu[i]);
-    // y_rep[i] = binomial_rng(1, inv_logit(mu[i]));
+  vector[P] log_lik;
+  for (p in 1:P) {
+    log_lik[p] = bernoulli_logit_lpmf(y[p] | eta[y_idx_leg[p], y_idx_vote[p]]);
   }
 }

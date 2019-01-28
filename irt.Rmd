@@ -1,0 +1,322 @@
+# Item Response Models
+
+## Prerequisites {-}
+```{r legislators_setup,message=FALSE}
+library("pscl")
+library("tidyverse")
+library("forcats")
+library("stringr")
+library("rstan")
+library("sn")
+```
+
+## Introduction
+
+Item response theory (IRT) models are a measurment model for binary outcomes.
+The data ($\Mat{y}$) are a $n \times m$ matrix.
+The element $y_{ij} \in \{0, 1}$ is the response of subject $i \in 1, \dots, n$ answer to item $j \in 1, \dots, m$.
+Common social science applications of this type of data include question outcomes for test-takers and yea-or-nay votes of legislators or judges.
+The inferential problem is one of dimension reduction.
+
+A common IRT model is the two-parameter model,
+$$
+\begin{aligned}[t]
+y_{ij} &\sim \dbernoulli(\pi_{ij}) \\
+\pi_{ij} &= \logit(\eta_{ij}) \\
+\eta_{ij} &= \xi_i \beta_j - \alpha_j
+\end{aligned}
+$$
+where
+
+-   $\xi_i \in \R$ is a latent attribute of subject $i$.
+    In test-taking, this would be the subject's ability.
+    In voting, this would be the ideology or revealed preferences
+    of the legislators.
+
+-   $\alpha_j \in \R$ is called the *item difficulty*.
+    Items with higher difficulty have a lower probability of $y_{ij}$.
+
+-   $\beta_j \in \R$ is called the *item discrimination*.
+    Items with higher magnitudes of discrimination are more
+    highly related to the latent $\Vec{\xi}$ dimension.
+    If $\beta_j = 0$, then the probability of $y_{ij}$ is 
+    unrelated to the latent attribute of the subject.
+
+Note that if $\Vec{xi}$ (or $\alpha_i$ and $\beta_j$) were known, then this model would be a typical binomial-logistic regression.
+However, in this case, only the outcome $\Mat{y}$ is known.
+
+Another way of writing this is as decomposing the $n \times m$ matrix $\Mat{\eta}$ into a $n \times 1$ vector of latent attributes $\Vec{\xi}$, a $m \times 1$ vector of item discriminations,
+and a $m \times 1$ vector or item difficulties.
+$$
+\Mat{\eta} = \Vec{\xi} \Vec{\beta}' - \Vec{\alpha}
+$$
+The IRT model uses $2 m + n$ parameters to represent the $nm$ elements of $\Mat{\eta}$.
+In many applied settings, $2 m + n \leq nm$; If $m \geq 1$, then this holds for all $n \geq 2m / (m - 1)$.
+
+
+### Identification
+
+The parameters $\xi$, $\beta$, and $\alpha$ are not identified in an IRT model.
+This is common in many latent space models, including factor analysis.
+In particular, there are three types of invariance:
+
+1.  Scale invariance:
+    $$
+    \begin{aligned}[t]
+    \mu_{i,j} &= \alpha_j + \beta_j \xi_i \\
+             &= \alpha_j + \left(\frac{\beta_j}{c}\right) \left(\xi_i c \right) \\
+             &= \alpha_j + \beta^*_j \xi^*_i
+    \end{aligned}
+    $$
+
+1.  Location invariance:
+    $$
+    \begin{aligned}[t]
+    \mu_{i,j} &= \alpha_j + \beta_j \xi_i \\
+              &= \alpha_j - \beta_j c + \beta_j c + \beta_j \xi_i \\
+             &= (\alpha_j - \beta_j c) + \beta_j (\xi_i + c) \\
+             &= \alpha_j^{*} + \beta_j \xi^{*}_i
+    \end{aligned}
+    $$
+
+1.  Rotation invariance:
+    $$
+    \begin{aligned}[t]
+    \mu_{i,j} &= \alpha_j + \beta_j \xi_i \\
+              &= \alpha_j  + \beta_j (-1) (-1) \xi_i \\
+              &= \alpha_j  + (-\beta_j) (-\xi_i) \\
+              &= \alpha_j + \beta_j^{*} \xi^{*}_i
+    \end{aligned}
+    $$
+
+```{r legislators_identification}
+xi <- c(-1, -0.5, 0.5, 1)
+alpha <- c(1, 0, -1)
+beta <- c(-0.5, 0, 0.5)
+y <- matrix(c(1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1), 3, 4)
+k <- 1
+
+list(sum(plogis(y - (alpha + beta %o% xi))),
+     sum(plogis(y - (alpha + -beta %o% -xi))),
+     sum(plogis(y - ((alpha - beta * k) + beta %o% (xi + k)))),
+     sum(plogis(y - ((alpha + (beta / k) %o% (xi * k))))))
+```
+
+**Question:** For each of these: Which types of rotation does it solve?
+
+1.  Fix one element of $\beta$.
+1.  Fix one element of $\xi$.
+1.  Fix one element of $\alpha$.
+1.  Fix two elements of $\alpha$.
+1.  Fix two elements of $\xi$.
+1.  Fix two elements of $\beta$.
+
+There are multiple ways to identify these models.
+
+-   For $m = 1$, fix the values of two elements $\xi_{ij}$. 
+-   For $m > 1$, 
+
+# Legislators: Estimating Legislators' Ideal Points From Voting Histories {#legislators}
+
+In political science, using this
+
+## 109th Senate
+
+This example models the voting of the [109th U.S. Senate](https://en.wikipedia.org/wiki/109th_United_States_Congress).
+Votes for the 109th Senate (2015--2017) is included in the **pscl** package:
+
+```{r}
+data("s109", package = "pscl")
+```
+
+The `s109` object is not a data frame, so see its documentation for information about its structure.
+
+This data includes all
+[roll-call](https://en.wikipedia.org/wiki/Voting_methods_in_deliberative_assemblies)
+votes, votes in which the responses of the senators are recorded.
+
+For simplicity, the ideal point model uses binary responses, but the `s109`
+data includes multiple [codes](http://voteview.com/senate109.htm) for response
+to roll-calls.
+
+| 0   | not a member                                              |
+| 1   | Yea                                                       |
+| 2   | Paired Yea                                                |
+| 3   | Announced Yea                                             |
+| 4   | Announced Nay                                             |
+| 5   | Paired Nay                                                |
+| 6   | Nay                                                       |
+| 7   | Present (some Congresses, also not used some Congresses)  |
+| 8   | Present (some Congresses, also not used some Congresses)  |
+| 6   | Nay                                                       |
+| 9   | Not Voting                                                |
+
+In the data processing, we will aggregate the responses into "Yes", "No", and missing values.
+
+-   `close`: Definition of non-lopsided votes in ; votes with between 35% and 65% yeas in which the parties are likely to whip members.
+-   `lopsided`: Definition of lopsided votes used in W-NOMINATE and dropped. Votes with less than 2.5% or greater than 97.5% yeas.
+
+```{r}
+s109_vote_data <- as.data.frame(s109$vote.data) %>%
+  mutate(rollcall = paste(session, number, sep = "-"),
+         passed = result %in% c("Confirmed", "Agreed To", "Passed"),
+         votestotal = yeatotal + naytotal,
+         yea_pct = yeatotal / (yeatotal + naytotal),
+         unanimous = yea_pct %in% c(0, 1),
+         close = yea_pct < 0.35 | yea_pct > 0.65,
+         lopsided = yea_pct < 0.025 | yea_pct > 0.975) %>%
+  filter(!unanimous) %>%
+  select(-unanimous) %>%
+  mutate(.rollcall_id = row_number())
+
+s109_legis_data <- as.data.frame(s109$legis.data) %>%
+  rownames_to_column("legislator") %>%
+  mutate(.legis_id = row_number(),
+         party = fct_recode(party,
+                            "Democratic" = "D",
+                            "Republican" = "R",
+                            "Independent" = "Indep"))
+
+s109_votes <- s109$votes %>%
+  as.data.frame() %>%
+  rownames_to_column("legislator") %>%
+  gather(rollcall, vote, -legislator) %>%
+  # recode to Yea (TRUE), Nay (FALSE), or missing
+  mutate(yea = NA,
+         yea = if_else(vote %in% c(1, 2, 3), TRUE, yea),
+         yea = if_else(vote %in% c(4, 5, 6), FALSE, yea)
+         ) %>%
+  filter(!is.na(yea)) %>%
+  inner_join(dplyr::select(s109_vote_data, rollcall, .rollcall_id),
+             by = "rollcall") %>%
+  inner_join(dplyr::select(s109_legis_data, legislator, party, .legis_id), by = "legislator")
+
+partyline <-
+  s109_votes %>%
+  group_by(.rollcall_id, party) %>%
+  summarise(yea = mean(yea)) %>%
+  spread(party, yea) %>%
+  ungroup() %>%
+  mutate(partyline = NA_character_,
+         partyline = if_else(Republican < 0.1 & Democratic > 0.9,
+                             "Democratic", partyline),
+         partyline = if_else(Republican > 0.9 & Democratic < 0.1,
+                             "Republican", partyline)) %>%
+  rename(pct_yea_D = Democratic, pct_yea_R = Republican) %>%
+  select(-Independent)
+
+s109_vote_data <-
+  left_join(s109_vote_data, partyline, by = ".rollcall_id")
+```
+
+## Identification by Fixing Legislator's Ideal Points
+
+Identification of latent state models can be challenging. The first method for identifying ideal point models is to fix the values of two legislators.
+These can be arbitrary, but if they are chosen along the ideological dimension of
+interest it can help the substantive interpretation.
+
+Since we \textit{a priori} know, or expect, that the primary ideological dimension is Liberal-Conservative [@PooleRosenthal2000a], I'll fix the ideal points of the two
+party leaders in that congress.
+In the 109th Congress, the Republican party was the majority party and [Bill Frist](https://en.wikipedia.org/wiki/Bill_Frist) (Tennessee) was the majority (Republican) leader, and [Harry Reid](https://en.wikipedia.org/wiki/Harry_Reid) (Nevada) wad the minority (Democratic) leader:
+$$
+\begin{aligned}[t]
+\xi_\text{FRIST (R TN)} & = 1 \\
+\xi_\text{REID (D NV)} & = -1
+\end{aligned}
+$$
+
+For all of those give a weakly informative prior to the ideal points, and item difficulty and discrimination parameters,
+$$
+\begin{aligned}[t]
+\xi &\sim \mathsf{Normal}(0., 10) \\
+\alpha_{j} &\sim \mathsf{Normal}(0, 10) \\
+\beta_{j} &\sim \mathsf{Normal}(0, 2.5) && j \in 1, \dots, J
+\end{aligned}
+$$
+
+```{r legislators_mod_ideal_point_1,results='hide',cache.extra=tools::md5sum("stan/ideal_point_1.stan")}
+mod_ideal_point <- stan_model("stan/ideal_point.stan")
+```
+
+```{r echo=FALSE,results,comment=''}
+cat(readLines("stan/ideal_point.stan"), sep = "\n")
+```
+
+Create a data frame with the fixed values for identification.
+
+```{r legislators_xi_init_1}
+ideal_points <-
+  s109_legis_data %>%
+  mutate(xi = if_else(legislator == "FRIST (R TN)", 1,
+                      if_else(legislator == "REID (D NV)", -1, NA_real_)),
+         init = if_else(party == "Republican", 1,
+                        if_else(party == "Democratic", -1, 0)))         
+```
+
+Setup the data for Stan.
+```{r legislators_data_1}
+legislators_data <-
+  dplyr::lst(y = as.integer(s109_votes$yea),
+    P = length(y),
+    y_idx_leg = as.integer(s109_votes$.legis_id),
+    y_idx_vote =  as.integer(s109_votes$.rollcall_id),
+    y_obs = length(y),
+    N = max(s109_votes$.legis_id),
+    M = max(s109_votes$.rollcall_id),
+    # priors
+    loc_alpha = 0,
+    scale_alpha = 10,
+    loc_beta = 0,
+    scale_beta = 2.5,
+    N_obs = sum(!is.na(ideal_points$xi)),
+    idx_xi_obs = which(!is.na(ideal_points$xi)),
+    xi_obs = ideal_points$xi[!is.na(ideal_points$xi)],
+    idx_xi_param = which(is.na(ideal_points$xi)),
+    loc_xi = 5,
+    scale_xi = 20,
+    df_xi = 4
+  )
+```
+
+```{r legislators_init_1}
+legislators_init <- list(
+  list(xi_param = ideal_points$init[is.na(ideal_points$xi)])
+)
+```
+
+```{r legislators_fit,results='hide'}
+legislators_fit <- sampling(mod_ideal_point, data = legislators_data,
+                            chains = 1, iter = 500, refresh = 100)
+```
+
+Extract the ideal point data:
+```{r legislator_summary}
+legislator_summary <-
+  bind_cols(s109_legis_data,
+           as_tibble(summary(legislators_fit, par = "xi")$summary)) %>%
+  mutate(legislator = fct_reorder(legislator, mean))
+```
+
+```{r legislator_plot_1,fig.height=8,fig.width=4,fig.cap="Estimated Ideal Points of the Senators of the 109th Congress"}
+ggplot(legislator_summary,
+       aes(x = legislator, y = mean,
+           ymin = `2.5%`, ymax = `97.5%`, colour = party)) +
+  geom_pointrange() +
+  coord_flip() +
+  scale_color_manual(values = c(Democratic = "blue", Independent = "gray",
+                                Republican = "red")) +
+  labs(y = expression(xi[i]), x = "", colour = "Party") +
+  theme(legend.position = "bottom")
+```
+
+## References
+
+See the links in [Education Research Using Stan](https://education-stan.github.io/)
+for examples of IRT models with Stan.
+In particular, the package **edstan** and **idealstan** have education IRT and ideal point  models implemented in Stan.
+
+There are numerous other IRT models implementations in R. 
+In the **MCMCpack** package see functions `MCMCirt1d`, `MCMCirtKd`, `MCMCirtKdRob`, and
+`MCMCirtHir1d`.
+
+[^legislators-src]: Example derived from Simon Jackman, "Legislators: estimating legislators' ideal points from voting histories (roll call data)", *BUGS Examples,* 2007-07-24, [URL](https://web-beta.archive.org/web/20070724034141/http://jackman.stanford.edu:80/mcmc/legislators.odc).
