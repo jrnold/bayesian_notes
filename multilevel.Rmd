@@ -1,6 +1,6 @@
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 # Multilevel Models
@@ -26,13 +26,13 @@ These models go by different names in different literatures:
 *hierarchical (generalized) linear models*, *nested data models*,
 *mixed models*, *random coefficients*, *random-effects*,
 *random parameter models*,  *split-plot designs* [^mlm-names].
-There are further names for specific types of these models including varying-intercept, varying-slope,rando etc. 
+There are further names for specific types of these models including varying-intercept, varying-slope,rando etc.
 
 In classical statistics there two main approaches to these models:
 
 1.  Maximum likelihood (and variations): See the **lme4** package. This
     is more common in statistics and many social sciences (except economics).
-1.  OLS and adjusted standard errors: See the **plm** packge. This is the 
+1.  OLS and adjusted standard errors: See the **plm** packge. This is the
     stanard econometric approach.
 
 See ["Some false friends"](https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf) in the **plm** vignette and @GelmanHill2007a [p. 245, fn. 5] for discussion of the differences between these approaches.
@@ -44,8 +44,8 @@ Notation:
 
 -   Units: $i = 1, \dots, n$.
 -   Outcomes: $y = (y_1, \dots, y_n)$
--   Predictors: $X$ is a $n \times p$ matrix; $x_i$ is the $K \times 1$ 
-    column vector of individual $i$'s predictors. 
+-   Predictors: $X$ is a $n \times p$ matrix; $x_i$ is the $K \times 1$
+    column vector of individual $i$'s predictors.
 -   Groups: $j = 1, \dots, m$. Each observation is in a group.
     Let $j[i]$ indicate the group that observation $i$ is in.
 
@@ -58,14 +58,14 @@ three ways
 2.  Individual models
 3.  Partially pooled model
 
-In the *pooled model* we ignore differences between groups and use common 
+In the *pooled model* we ignore differences between groups and use common
 coefficients.
 $$
 \begin{aligned}[t]
 y_i &\sim \dnorm(\alpha + x_i' \beta, \sigma) \\
 \end{aligned}
 $$
-The pooled model estimates one model, with three parameters: $\alpha$, $\beta$, 
+The pooled model estimates one model, with three parameters: $\alpha$, $\beta$,
 and $\sigma$.
 
 In an *individual* or *non-pooled model*, a sepearate model is estimated for each group.
@@ -75,7 +75,7 @@ $$
 y_i &\sim \dnorm(\alpha_{j[i]} + x_i' \beta_{j[i]}, \sigma_{j[i]}) & \text{ where } j[i] = j' .
 \end{aligned}
 $$
-The non-pooled model estimates $m$ separate models with $m \times 3$ parameters, one $\alpha$, $\beta$, and $\sigma$ for each group. 
+The non-pooled model estimates $m$ separate models with $m \times 3$ parameters, one $\alpha$, $\beta$, and $\sigma$ for each group.
 Note that in this model, no information is shared between groups.
 The data from another group and its estimates of $\alpha$ or $\beta$ do not help in the estimation of another group.
 However, if these are in any way similar problems we may think that the values of $\alpha$ and $\beta$ differ between groups, but that they should be similar.
@@ -168,7 +168,7 @@ y_i &\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma) \\
 \end{aligned}
 $$
 
-In a *varying-slope model*, the groups share a common intercept, $\alpha$, but the slope coefficient ($\beta$), varies between groups. 
+In a *varying-slope model*, the groups share a common intercept, $\alpha$, but the slope coefficient ($\beta$), varies between groups.
 
 $$
 \begin{aligned}[t]
@@ -226,7 +226,7 @@ radon_county <- radon %>%
 
 ```{r fig.asp=2}
 ggplot() +
-  geom_boxplot(data = radon, 
+  geom_boxplot(data = radon,
                mapping = aes(y = log_radon,
                              x = fct_reorder(county, log_radon, mean)),
                colour = "gray") +
@@ -245,7 +245,7 @@ ggplot() +
 The observations in counties vary in size,
 ```{r}
 ggplot(radon_county, aes(x = log2(n))) +
-         geom_density() + 
+         geom_density() +
          geom_rug()
 ```
 
@@ -263,7 +263,7 @@ Much of this can be explained simply by sampling error.
 In this example we want to model the amount of radon (log scale) in a home.
 Let $y_i$ be the *centered* and *scaled* log amount of radon in home $i$.
 
-The simplest model is a pooled model, where all homes are modeled as iid draws 
+The simplest model is a pooled model, where all homes are modeled as iid draws
 from a common distribution.
 $$
 \begin{aligned}[t]
@@ -289,7 +289,7 @@ y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
 \end{aligned}
 $$
 The $\alpha_j$ are all drawn from weakly informative prior distributions.
-And although the $\alpha_j$ are drawn from the same prior distribution, 
+And although the $\alpha_j$ are drawn from the same prior distribution,
 it has fixed parameters and thus no information is shared between observations in different counties.
 
 ```{r}
@@ -297,7 +297,7 @@ fit_radon_2 <- stan_glm(log_radon ~ -1 + county, data = radon, refresh = -1)
 ```
 
 Finally, consider a partially pooled model.
-Like the previous model, each county has its own mean value. 
+Like the previous model, each county has its own mean value.
 However, now these county-means share a prior which has its own parameters.
 $$
 \begin{aligned}[t]
@@ -305,7 +305,7 @@ y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
 \alpha_j &\sim \dnorm(\mu, \tau) & \text{for } j \in 1, \dots, m
 \end{aligned}
 $$
-We could also write the model with the country-level average in the 
+We could also write the model with the country-level average in the
 mean equation for $y$, and the $\alpha_j$ values distributed around the county
 level average, $\gamma$.
 $$
@@ -316,10 +316,10 @@ y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) & \text{for } i \in 1, \dots, n \\
 \end{aligned}
 $$
 
-Hierarchical/multi-level generalized linear models can be estimated with 
+Hierarchical/multi-level generalized linear models can be estimated with
 `stan_glmer`.
 ```{r}
-fit_radon_3 <- stan_glmer(log_radon ~ (1 | county), data = radon,
+fit_radon_3 <- stan_glmer(log_radon ~ (1 + floor | county), data = radon,
                           refresh = -1)
 ```
 
@@ -360,7 +360,7 @@ alpha_3 <- sweep(alphas, 1, alpha_mean, FUN = "+") %>%
 ```
 
 ```{r}
-all_models <- 
+all_models <-
   bind_rows(alpha_1, alpha_2, alpha_3) %>%
   # reorder county by size
   mutate(county = fct_reorder(county, estimate, mean))
@@ -401,11 +401,11 @@ We could also allow the parameter of $\beta$ to vary between counties and give i
 $$
 \begin{aligned}
 y_i &\sim  N(\mu_i, \sigma^2) \\
-\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{floor}_i 
+\mu_i &= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{floor}_i
 \end{aligned}
 $$
 Both $\alpha_j$ and $\beta_j$ need to be given hierarchical priors.
-Since there are features common to each group, it is common to specify a prior 
+Since there are features common to each group, it is common to specify a prior
 that allows these parameters to be correlated, such as a multivariate normal
 distribution with mean $\gamma$ and covariance $\Sigma$,
 $$
@@ -462,7 +462,7 @@ y_i &\sim  N(\mu_i, \sigma^2) \\
 \end{aligned}
 $$
 
-We could also write that model with group-level predictors included in the prior fthe group level intercepts as 
+We could also write that model with group-level predictors included in the prior fthe group level intercepts as
 $$
 \begin{aligned}
 y_i &\sim  N(\mu_i, \sigma^2) \\
@@ -503,7 +503,7 @@ V_j &= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
 \end{aligned}
 $$
 
-How does this vary depending on the size of the group, $n_j$? 
+How does this vary depending on the size of the group, $n_j$?
 
 | Sample size, $n_j$              | Estimate of $\hat{\mu}_j$                                       |
 | ------------------------------- | --------------------------------------------------------------- |
@@ -517,7 +517,7 @@ When the sample size of the group is large, the prior data from other groups pro
 However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior.
 We even have posterior estimates of groups and observations from groups we have not seen before due to the estimated distribution of group means.
 
-This is a good reason to use partial pooling. 
+This is a good reason to use partial pooling.
 If there is enough data it will converge to the no-pooling case, but if there is not it will degrade to the full-pooling case.
 
 If instead the group means $\mu_j$ were known, we can calculate some crude estimates.
@@ -604,7 +604,7 @@ and then place priors on each of those.
 The preferred distribution for a  correlation distribution is
 the LKJ distribution.
 This distribution is proportional to a product of the determinant of the correlation matrix.
-The LKJ distribution takes a single parameter $\eta > 0$. 
+The LKJ distribution takes a single parameter $\eta > 0$.
 It can be interpreted similarly to the the shape parameter of a symmetric Beta distribution.
 When $\eta = 1$, then there is a uniform distribution over all correlation matrices.
 As $\eta \to 1$, the correlation matrix approaches the identity matrix.
@@ -622,7 +622,7 @@ $$
 
 The `deconv()` prior used by `stan_glmer` decomposes the standard deviation vector further.
 It notes that the trace of a covariance matrix is equal to the sum of the variances.
-This suggests decomposing the variance vector ($\omega^2$) into the product of the 
+This suggests decomposing the variance vector ($\omega^2$) into the product of the
 trace ($\psi^2$) and a simplex ($\pi$) which allocates how much of the total variance
 is associated with each element.
 $$
@@ -636,7 +636,7 @@ $$
 $$
 The default for `deconv()` is 1, for a uniform distribution over the space of simplex vectors of that size.
 
-The square root of the trace ($\psi$) is given a gamma prior with shape parameter $a$ 
+The square root of the trace ($\psi$) is given a gamma prior with shape parameter $a$
 and scale parameter $b$,
 $$
 \psi &\sim \dgamma(a, b) .
@@ -652,7 +652,7 @@ y_i &\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 \alpha_{j} &\sim \dnorm(\mu_\alpha, \omega_{\alpha})
 \end{aligned}
 $$
-However, this can be difficult to sample from. In particular, by construction, 
+However, this can be difficult to sample from. In particular, by construction,
 the values of $\mu_{\alpha}$, $\omega_{\alpha}$, and $\alpha_j$ are going to be highly correlated.
 This results in a posterior pattern called a "funnel" which is difficult for HMC
 to sample due to the changes in the posterior curvature.
@@ -675,7 +675,7 @@ However, neither is universally better.
 -   If much data, the non-centered parameterization works better
 -   If less data, the centered parameterization works better
 
-And there is currently no ex-ante way to know which will work better, and at 
+And there is currently no ex-ante way to know which will work better, and at
 what amount of "data" that the performance of one or the other is better.
 However, one other reason to use the centered parameterization (if it is also scaled),
 is that the Stan HMC implementation tends to be more efficient if all parameters

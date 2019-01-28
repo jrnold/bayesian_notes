@@ -76,7 +76,7 @@ For this example, we will only use the counts of the 70 function words (and othe
 
 For a single document, let $y$ be the author of the document.
 Let $w$ be the total number of words in the document.
-Let $x_1, dots, x_K \geq 0, \sum x_k = w$ be the counts of each word in our vocabulary.
+Let $x_1, \dots, x_K \geq 0, \sum x_k = w$ be the counts of each word in our vocabulary.
 These word counts are our features.
 
 We need to choose distributional forms of $p(x_1, \dots, x_K | y)$ and $p(y)$.
@@ -90,7 +90,7 @@ For the distribution $p(x_1, \dots, x_K | y)$, we will use the multinomial distr
 $$
 p(x | y = j, \theta) = \mathrm{Multinomial}(x | \theta^{(j)}) .
 $$
-The parameter $\theta_j$ is length $K$ vector, such that $\sum_{k = 1}^K \theta_k^{(j)} = 1$.
+The parameter $\theta^{(j)}$ is length $K$ vector, such that $\sum_{k = 1}^K \theta_k^{(j)} = 1$.
 The superscript $(j)$ indicates that $\theta^{(j)}$ is specific to a particular class.
 Thus there are $\text{classes} \times \text{features} = J \times K$ parameters to estimate for this model.
 $$
@@ -142,7 +142,7 @@ These can be justified using as [conjugate prior distributions](https://en.wikip
 
 Now that we've estimated $\hat{p}(y | x)$ and $\hat{p}(y)$ we can predict the classes for both the papers where the author was observed, and those that it wasn't observed.
 
-Calculate the probability of each class, $p(y_{test} | x_{test}, \hat{theta})$, for all documents given the learned parameters $\theta$.
+Calculate the probability of each class, $p(y_{test} | x_{test}, \hat{\theta})$, for all documents given the learned parameters $\theta$.
 ```{r}
 pred_doc_author <- federalist$wordcounts %>%
   # keep only Hamilton, Madison, and undetermined
