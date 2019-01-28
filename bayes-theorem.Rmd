@@ -186,7 +186,7 @@ science <- tribble(
 
 Calculate the posterior probability for each value of `theta`,
 for the different cases of `x`:
-  ```{r}
+```{r}
 group_by(science, x) %>%
   mutate(marginal   = sum(likelihood * prior),
          posterior = likelihood * prior / marginal
