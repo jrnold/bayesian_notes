@@ -76,7 +76,7 @@ For this example, we will only use the counts of the 70 function words (and othe
 
 For a single document, let $y$ be the author of the document.
 Let $w$ be the total number of words in the document.
-Let $x_1, dots, x_K \geq 0, \sum x_k = w$ be the counts of each word in our vocabulary.
+Let $x_1, \dots, x_K \geq 0, \sum x_k = w$ be the counts of each word in our vocabulary.
 These word counts are our features.
 
 We need to choose distributional forms of $p(x_1, \dots, x_K | y)$ and $p(y)$.
