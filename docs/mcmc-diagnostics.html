@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>8 MCMC Diagnostics | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="8 MCMC Diagnostics | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="8 MCMC Diagnostics | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="8 MCMC Diagnostics | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="model-checking.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
@@ -357,7 +384,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.3</b> Example: Radon</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.3.1</b> Data</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#modeling"><i class="fa fa-check"></i><b>20.4</b> Modeling</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#radon-example"><i class="fa fa-check"></i><b>20.4</b> Radon Example</a></li>
 <li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#with-individual-covariates"><i class="fa fa-check"></i><b>20.5</b> With Individual Covariates</a></li>
 <li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#with-group-level-covariates"><i class="fa fa-check"></i><b>20.6</b> With Group-Level Covariates</a></li>
 <li class="chapter" data-level="20.7" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.7</b> Pooling of Hierarchical Parameters</a></li>
@@ -528,33 +555,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Also see the <strong><a href="https://cran.r-project.org/package=bayesplot">bayesplot</a></strong> vignette <a href="https://cran.r-project.org/web/packages/bayesplot/vignettes/MCMC-diagnostics.html">Visual MCMC diagnostics using the bayesplot package</a>, which though specific to the provides, provides a good overview of these diagnostics.</p>
 <div id="prerequisites-3" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre>
 </div>
 <div id="reparameterize-models" class="section level2">
 <h2><span class="header-section-number">8.1</span> Reparameterize Models</h2>
 <ol style="list-style-type: decimal">
 <li>Reduce correlation between parameters (e.g. see <code>mcmc_pairs</code>)</li>
-<li>Put parameters on the same scale. The samplers work best when all parameters are roughly on the same scale, e.g. <span class="math inline">\(\approx 1\)</span>. Try to avoid situations where parameters are orders of magnitude different, e.g. 1e-5 and 1e+10.</li>
+<li>Put parameters on the same scale. The samplers work best when all parameters are roughly on the same scale, e.g. <span class="math inline">\(\approx 1\)</span>. Try to avoid situations where parameters are orders of magnitude different, e.g. 1e-5 and 1e+10.</li>
 <li>Increase the informativeness of priors. If parameters are too uninformative, the posterior distribution may have wide tails that hamper sampling. One way of thinking about it is that the model is only “weakly identified” and requires either more data or more informative priors to estimate.</li>
 </ol>
 </div>
 <div id="convergence-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.2</span> Convergence Diagnostics</h2>
-<p>Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilibrium. However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.</p>
-<p>In general there is no way to prove that the sampler has converged.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> However, there are several statistics that indicate that a sampler has not converged.</p>
+<p>Under certain conditions, MCMC algorithms will draw a sample from the target posterior distribution after it has converged to equilibrium.
+However, since in practice, any sample is finite, there is no guarantee about whether its converged, or is close enough to the posterior distribution.</p>
+<p>In general there is no way to prove that the sampler has converged.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>
+However, there are several statistics that indicate that a sampler has not converged.</p>
 <div id="potential-scale-reduction-hatr" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Potential Scale Reduction (<span class="math inline">\(\hat{R}\)</span>)</h3>
-<p>In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting values of the chains <span class="citation">(Stan Development Team 2016, Sec 28.2)</span>.</p>
-<p>One way to check this is to compare the distributions of multiple chains—in equilibrium they should all have the same mean. Additionally, the split <span class="math inline">\(\hat{R}\)</span> tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.</p>
+<p>In equilibrium, the distribution of samples from chains should be the same regardless of the initial starting
+values of the chains <span class="citation">(Stan Development Team 2016, Sec 28.2)</span>.</p>
+<p>One way to check this is to compare the distributions of multiple chains—in equilibrium they should all have the same mean.
+Additionally, the split <span class="math inline">\(\hat{R}\)</span> tests for convergence by splitting the chain in half, and testing the hypothesis that the means are the same in each half. This tests for non-stationarity within a chain.</p>
 <p>See <span class="citation">Stan Development Team (2016 Sec 28.2)</span> for the equations to calculate these.</p>
 <p><strong>TODO:</strong> Examples of passing and non-passing <span class="math inline">\(\hat{R}\)</span> chains using fake data generated from known functions with a given autocorrelation.</p>
-<p><strong>Rule of Thumb:</strong> The rule of thumb is that R-hat values for all less than 1.1 <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">source</a>. Note that <strong>all</strong> parameters must show convergence. This is a necessary but not sufficient condition for convergence.</p>
+<p><strong>Rule of Thumb:</strong> The rule of thumb is that R-hat values for all less than 1.1 <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">source</a>.
+Note that <strong>all</strong> parameters must show convergence.
+This is a necessary but not sufficient condition for convergence.</p>
 </div>
 <div id="references-3" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> References</h3>
 <ul>
-<li><span class="citation">Gelman et al. (2013, 267)</span></li>
+<li><span class="citation">A. Gelman, Carlin, et al. (2013, 267)</span></li>
 <li><span class="citation">Stan Development Team (2016 Ch 28.)</span> for how Stan calculates Hat, autocorrelations, and ESS.</li>
 <li><span class="citation">Gelman and Rubin (1992)</span> introduce the R-hat statistic</li>
 </ul>
@@ -566,22 +599,34 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In other words, highly correlated MCMC samplers requires more samples to produce the same level of Monte Carlo error for an estimate.</p>
 <div id="effective-sample-size" class="section level3">
 <h3><span class="header-section-number">8.3.1</span> Effective Sample Size</h3>
-<p>The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample. Suppose that the <span class="math inline">\(\rho^2_t\)</span> is the ACF function of a sample of size <span class="math inline">\(N\)</span>, the effective sample size, <span class="math inline">\(N_eff\)</span>, is <span class="math display">\[
+<p>The effective sample size (ESS) measures the amount by which autocorrelation in samples increases uncertainty (standard errors) relative to an independent sample.
+Suppose that the <span class="math inline">\(\rho^2_t\)</span> is the ACF function of a sample of size <span class="math inline">\(N\)</span>, the effective sample size, <span class="math inline">\(N_eff\)</span>, is
+<span class="math display">\[
 N_{eff} = \frac{N}{\sum_{t = -\infty}^\infty \rho_t} = \frac{N}{1 + 2 \sum_{t = -\infty}^\infty \rho_t}.
-\]</span> <strong>TODO</strong> show that if <span class="math inline">\(\rho_t = 1\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = 1\)</span>, and if <span class="math inline">\(\rho_t = 0\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = N\)</span></p>
-<p>Computing the effective sample size requires calculating an autocorrelation. A multi-chain estimate of the autocorrelation is found by computing the <em>variogram</em> with the correlations for all lags, <span class="math display">\[
+\]</span>
+<strong>TODO</strong> show that if <span class="math inline">\(\rho_t = 1\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = 1\)</span>, and if <span class="math inline">\(\rho_t = 0\)</span> for all <span class="math inline">\(t\)</span> then <span class="math inline">\(N_eff = N\)</span></p>
+<p>Computing the effective sample size requires calculating an autocorrelation.
+A multi-chain estimate of the autocorrelation is found by computing the <em>variogram</em> with the correlations for all lags,
+<span class="math display">\[
 V_t = \frac{1}{m(n - t)} \sum_{j = 1}^m \sum_{i = t + 1}^n (\psi_{i,j} - \psi_{i - t,j})^2
-\]</span> The estimate of the autocorrelations <span class="math inline">\(\hat{\rho}_t\)</span> is <span class="math display">\[
+\]</span>
+The estimate of the autocorrelations <span class="math inline">\(\hat{\rho}_t\)</span> is
+<span class="math display">\[
 \hat{\rho}_t = 1 - \frac{V_t}{2 \widehat{\mathrm{var}}^+}
-\]</span> The estimates of the autocorrelations can be noisy, so <span class="math inline">\(\hat{\rho}_t\)</span> are summed from 0, to the last <span class="math inline">\(t\)</span> such that <span class="math inline">\(\rho\)</span> is positive (<span class="math inline">\(T\)</span>), <span class="math display">\[
+\]</span>
+The estimates of the autocorrelations can be noisy, so <span class="math inline">\(\hat{\rho}_t\)</span> are summed from 0, to the last <span class="math inline">\(t\)</span> such that <span class="math inline">\(\rho\)</span> is positive (<span class="math inline">\(T\)</span>),
+<span class="math display">\[
 \hat{n}_{eff} = \frac{mn}{1 + 2 \sum_{t = 1}^T \hat{\rho}_t}
 \]</span></p>
 <ul>
-<li><p>See also <span class="citation">Stan Development Team (2016 Sec 28.4)</span>, <span class="citation">Geyer (2011)</span>, and <span class="citation">Gelman et al. (2013 Sec 11.5)</span>.</p></li>
-<li><p>This isn’t the only way to calculate the effective sample size. The <strong><a href="https://cran.r-project.org/package=coda">coda</a></strong> package function <a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">coda</a> uses a different method. The differences are due to how the autocorrelation is calculated.</p></li>
+<li><p>See also <span class="citation">Stan Development Team (2016 Sec 28.4)</span>, <span class="citation">Geyer (2011)</span>, and <span class="citation">A. Gelman, Carlin, et al. (2013 Sec 11.5)</span>.</p></li>
+<li><p>This isn’t the only way to calculate the effective sample size. The
+<strong><a href="https://cran.r-project.org/package=coda">coda</a></strong> package function <a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">coda</a>
+uses a different method. The differences are due to how the autocorrelation is calculated.</p></li>
 </ul>
-<p><strong>Example:</strong> Comparison of the effective sample sizes for data generated with various levels of autocorrelation. The package <code>rstan</code> does not directly expose the function it uses to calculate ESS, so this <code>ess</code> function does so (for a single chain).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+<p><strong>Example:</strong> Comparison of the effective sample sizes for data generated with various levels of autocorrelation.
+The package <code>rstan</code> does not directly expose the function it uses to calculate ESS, so this <code>ess</code> function does so (for a single chain).</p>
+<pre class="sourceCode r"><code class="sourceCode r">ess &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
   N &lt;-<span class="st"> </span><span class="kw">length</span>(x)
   V &lt;-<span class="st"> </span><span class="kw">map_dbl</span>(<span class="kw">seq_len</span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>),
           <span class="cf">function</span>(t) {
@@ -603,31 +648,36 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
            <span class="dt">n_eff =</span> <span class="kw">ess</span>(y),
            <span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;AR = %.2f (n_eff = %.0f)&quot;</span>, ar, n_eff))
   }
-)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sims, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span>
+)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sims, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>label, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>)</code></pre>
 <p><img src="diagnostics_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="thinning" class="section level2">
 <h2><span class="header-section-number">8.4</span> Thinning</h2>
-<p>Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved. Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.</p>
+<p>Since the autocorrelation tends to decrease as the lag increases, thinning samples will reduce the final autocorrelation in the sample while also reducing the total number of samples saved.
+Due to the autocorrelation, the reduction in the number of effective samples will often be less than number of samples removed in thinning.</p>
 <p>Both of these will produce 1,000 samples from the posterior, but effective sample size of <span class="math inline">\(B\)</span> will be greater than the effective sample size of <span class="math inline">\(A\)</span>, since after thinning g the autocorrelation in <span class="math inline">\(B\)</span> will be lower.</p>
 <ul>
 <li><em>A</em> Generating 1,000 samples after convergence and save all of them</li>
 <li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
 </ul>
-<p>In this case, A produces 10,000 samples, and B produces 1,000. The effective sample size of A will be higher than B. However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: <span class="math inline">\(N_{eff}(A) / N_{eff}(B) &lt; 10\)</span>.</p>
+<p>In this case, A produces 10,000 samples, and B produces 1,000.
+The effective sample size of A will be higher than B.
+However, due to autocorrelation, the proportional reduction in the effective sample size in B will be less than the thinning: <span class="math inline">\(N_{eff}(A) / N_{eff}(B) &lt; 10\)</span>.</p>
 <ul>
 <li><em>A</em> Generating 10,000 samples after convergence and save all of them</li>
 <li><em>B</em> Generating 10,000 samples after convergence and save every 10th sample</li>
 </ul>
 <p>Thinning trades off sample size for memory, and due to autocorrelation in samples, loss in effective sample size is less than the loss in sample size.</p>
 <p>Thinning has become less of an issue as memory has become less of a computational constraint, and samplers have become more efficient.</p>
-<p>The following example simulates random values from an autocorrelated series, and applies different levels of thinning. Thinning is always decreasing the effective sample size. However, the number of effective samples per sample (<code>n_eff / n</code>) increases until the thinning is large enough that the thinned samples are uncorrelated.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">thin_ess &lt;-<span class="st"> </span><span class="cf">function</span>(thin, x) {
+<p>The following example simulates random values from an autocorrelated series, and applies different levels of thinning.
+Thinning is always decreasing the effective sample size.
+However, the number of effective samples per sample (<code>n_eff / n</code>) increases until the thinning is large enough that the thinned samples are uncorrelated.</p>
+<pre class="sourceCode r"><code class="sourceCode r">thin_ess &lt;-<span class="st"> </span><span class="cf">function</span>(thin, x) {
   <span class="cf">if</span> (thin <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) {
     <span class="co"># keep only thinned rows</span>
     x_thinned &lt;-<span class="st"> </span>x[(<span class="kw">seq_len</span>(<span class="kw">length</span>(x)) <span class="op">%%</span><span class="st"> </span>thin) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]
@@ -641,7 +691,7 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 }
 
 <span class="kw">map_df</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>), thin_ess,
-       <span class="dt">x =</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> .<span class="dv">9</span>), <span class="dv">4096</span>))
+       <span class="dt">x =</span> <span class="kw">arima.sim</span>(<span class="kw">list</span>(<span class="dt">ar =</span> <span class="fl">.9</span>), <span class="dv">4096</span>))
 <span class="co">#&gt; # A tibble: 6 x 4</span>
 <span class="co">#&gt;    thin     n n_eff `n_eff / n`</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;</span>
@@ -650,9 +700,9 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 <span class="co">#&gt; 3     4  1024  791.       0.773</span>
 <span class="co">#&gt; 4     8   512  512        1    </span>
 <span class="co">#&gt; 5    16   256  256        1    </span>
-<span class="co">#&gt; 6    32   128  128        1</span></code></pre></div>
+<span class="co">#&gt; 6    32   128  128        1</span></code></pre>
 <ul>
-<li><span class="citation">Gelman et al. (2013, 282–83)</span></li>
+<li><span class="citation">A. Gelman, Carlin, et al. (2013, 282–83)</span></li>
 <li><span class="citation">Stan Development Team (2016, 354–55)</span></li>
 </ul>
 <div id="traceplots" class="section level3">
@@ -660,7 +710,7 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 <p>Trace plots are a time series of sampler iterations, e.g. as produced by <a href="https://www.rdocumentation.org/packages/bayesplot/topics/mcmc_trace">bayesplot</a>.</p>
 <p>These can, but <strong>should not</strong>, be used to assess convergence,</p>
 <ul>
-<li>such visual inspection is ‘notoriously unreliable’ <span class="citation">(Gelman et al. 2013, 285)</span></li>
+<li>such visual inspection is ‘notoriously unreliable’ <span class="citation">(A. Gelman, Carlin, et al. 2013, 285)</span></li>
 <li>it cannot scale to many parameters</li>
 </ul>
 <p>Trace plots may be useful for diagnosing convergence problems <em>after</em> <span class="math inline">\(\hat{R}\)</span> or or <span class="math inline">\(n_eff\)</span> indicates problems. Some possible issues to check in these plots are</p>
@@ -671,22 +721,30 @@ sims &lt;-<span class="st"> </span><span class="kw">map_df</span>(<span class="k
 </div>
 <div id="monte-carlo-standard-error-mcse" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Monte Carlo Standard Error (MCSE)</h3>
-<p>The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error. With a independent sample of size <span class="math inline">\(N\)</span>, the MCSE for the sample mean is <span class="math display">\[
+<p>The Monte Carlo standard error is the uncertainty about a statistic in the sample due to sampling error.
+With a independent sample of size <span class="math inline">\(N\)</span>, the MCSE for the sample mean is
+<span class="math display">\[
 MCSE(\bar{\theta}) = \frac{s}{\sqrt{N}}
-\]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
-<p>However, MCMC are generally not independent, and the MCSE will be higher than that of an independent sample. One way to calculate the MCSE with autocorrelated samples is to use the effective sample size instead of the sample size, <span class="math display">\[
+\]</span>
+where <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
+<p>However, MCMC are generally not independent, and the MCSE will be higher than that
+of an independent sample. One way to calculate the MCSE with autocorrelated samples is to use the effective sample size instead of the sample size,
+<span class="math display">\[
 MCSE(\bar{\theta}) = \frac{s}{\sqrt{N_{eff}}}
 \]</span></p>
-<p>An MCSE estimator for the mean is <span class="math display">\[
+<p>An MCSE estimator for the mean is
+<span class="math display">\[
 \mathrm{MCSE}(\hat{\theta}) = \frac{\sd(\theta)}{\sqrt{n_{neff}}}
-\]</span> An MCSE estimator for any posterior probability, where <span class="math inline">\(\hat{p} = \Pr(f(\theta))\)</span>, follows from the standard error of a proportion, but using the effective sample size, <span class="math display">\[
+\]</span>
+An MCSE estimator for any posterior probability, where <span class="math inline">\(\hat{p} = \Pr(f(\theta))\)</span>, follows from the standard error of a proportion, but using the effective sample size,
+<span class="math display">\[
 MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 \]</span></p>
 <p>See <span class="citation">Flegal, Haran, and Jones (2008)</span> and the <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for methods to calculate MCMC standard errors for means and quantiles using sub-sampling methods.</p>
 <p><span class="citation">Flegal, Haran, and Jones (2008)</span> argues for using ESS as a stopping rule and convergence diagnostic for Bayesian inference.</p>
 <p>The estimation of standard errors for quantiles, as would be used in is more complicated. See the package <strong><a href="https://cran.r-project.org/package=mcmcse">mcmcse</a></strong> for Monte Carlo standard errors of quantiles (though calculated in a different method than <strong>rstan</strong>).</p>
 <ul>
-<li><span class="citation">Gelman et al. (2013 Sec. 10.5)</span></li>
+<li><span class="citation">A. Gelman, Carlin, et al. (2013 Sec. 10.5)</span></li>
 <li><span class="citation">Flegal, Haran, and Jones (2008)</span></li>
 <li><a href="http://www.stat.umn.edu/geyer/mcmc/talk/mcmc.pdf">Talk by Geyer on MCSE</a></li>
 </ul>
@@ -694,7 +752,8 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 </div>
 <div id="hmc-nut-specific-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.5</span> HMC-NUT Specific Diagnostics</h2>
-<p>Hamiltonian Monte Carlo (HMC), and the No-U-Turn Sampler (HMC-NUTS) in particular, produce several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution. This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods such <span class="math inline">\(\hat{R}\)</span>.</p>
+<p>Hamiltonian Monte Carlo (HMC), and the No-U-Turn Sampler (HMC-NUTS) in particular, produce several diagnostics that indicate that the sampler is breaking and, thus, not sampling from the posterior distribution.
+This is unusual, as most Bayesian sampling methods do not give indication of whether they are working well, and all that can be checked are the properties of the samples themselves with methods such <span class="math inline">\(\hat{R}\)</span>.</p>
 <p>Three specific HMC-NUTS diagnostics are</p>
 <ol style="list-style-type: decimal">
 <li>divergent transitions</li>
@@ -706,17 +765,25 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 <li>Stepsize: Length of the steps to take</li>
 <li>Tree-depth: Number of steps to take</li>
 </ol>
-<p>During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal. The other alternative is to reparameterize the models.</p>
+<p>During the warmup period, Stan tunes these values, however these auto-tuned parameters may not always be optimal.
+The other alternative is to reparameterize the models.</p>
 <div id="divergent-transitions" class="section level3">
 <h3><span class="header-section-number">8.5.1</span> Divergent transitions</h3>
-<p>The details of the HMC are technical and can be found <strong>TODO</strong>. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating. If the step sizes are too large, the discrete approximation does not work. Helpfully, when the approximation is poor it does not fail without any indication but will produce “divergent transitions”.</p>
+<p>The details of the HMC are technical and can be found <strong>TODO</strong>. The gist of the problem is that Stan is using a discrete approximation of a continuous function when integrating.
+If the step sizes are too large, the discrete approximation does not work.
+Helpfully, when the approximation is poor it does not fail without any indication but will produce “divergent transitions”.</p>
 <p>If there are too many divergent transitions, then the sampler is not drawing samples from the entire posterior and inferences will be biased.</p>
-<p>Reduce the step size. This can be done by increasing the the <code>adapt_delta</code> parameter. This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup. A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.</p>
+<p>Reduce the step size. This can be done by increasing the the <code>adapt_delta</code> parameter.
+This is the target average proposal acceptance probability in the adaptation, which is used to determine the step size during warmup.
+A higher desired acceptance probability (closer to 1) reduces the the step size. A smaller step size means that it will require more steps to explore the posterior distribution.</p>
 <p>See <span class="citation">Stan Development Team (2016, 380)</span></p>
 </div>
 <div id="maximum-tree-depth" class="section level3">
 <h3><span class="header-section-number">8.5.2</span> Maximum Tree-depth</h3>
-<p>NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try. If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum. While divergent transitions bias inference, a too-small maximum tree-depth only affects efficiency. The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum tree-depth were set higher.</p>
+<p>NUTS is an intelligent method to select the number of steps to take in each iteration. However, there is still a maximum number of steps that NUTS will try.
+If the sampler is often hitting the maximum number of steps, it means that the optimal number of steps to take in each iteration is higher than the maximum.
+While divergent transitions bias inference, a too-small maximum tree-depth only affects efficiency.
+The sampler is still exploring the posterior distribution, but the exploration will be slower and the autocorrelation higher (effective sample size lower) than if the maximum tree-depth were set higher.</p>
 <p>Increase the maximum tree-depth.</p>
 </div>
 <div id="bayesian-fraction-of-missing-information" class="section level3">
@@ -726,7 +793,7 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 </div>
 <div id="debugging-bayesian-computing" class="section level2">
 <h2><span class="header-section-number">8.6</span> Debugging Bayesian Computing</h2>
-<p>See <span class="citation">Gelman et al. (2013, 270)</span>, …</p>
+<p>See <span class="citation">A. Gelman, Carlin, et al. (2013, 270)</span>, …</p>
 <ol style="list-style-type: decimal">
 <li>Pick a reasonable value for the “true” parameter vector <span class="math inline">\(\theta^* \sim p(\theta)\)</span>. This should be a random draw from the prior, but if <span class="math inline">\(\theta\)</span> is uninformative, then any reasonable value of <span class="math inline">\(\theta\)</span> should work.</li>
 <li>Draw all other parameters that are conditional on <span class="math inline">\(\theta^*\)</span>.</li>
@@ -752,7 +819,7 @@ MCSE(\hat{p}) = \sqrt{\hat{p} (1 - \hat{p}) / n_{eff}}
 <div class="footnotes">
 <hr />
 <ol start="6">
-<li id="fn6"><p>This is also the case in optimization with non-convex objective functions.<a href="mcmc-diagnostics.html#fnref6">↩</a></p></li>
+<li id="fn6"><p>This is also the case in optimization with non-convex objective functions.<a href="mcmc-diagnostics.html#fnref6" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -784,6 +851,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/diagnostics.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -797,8 +868,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

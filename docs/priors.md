@@ -60,7 +60,7 @@ $$
 \begin{aligned}[t]
 p(\theta | \alpha, \beta) &= \dbeta(\theta | \alpha, \beta) && \text{Beta prior} \\
 p(y | \theta) &= \dBinom(y | n, \theta)  && \text{Binomial likelihood} \\
-p \theta | y, \alpha, \beta) &= \dbeta(\theta | \alpha + y, \beta + n - y) && \text{Beta posterior}
+p(\theta | y, \alpha, \beta) &= \dbeta(\theta | \alpha + y, \beta + n - y) && \text{Beta posterior}
 \end{aligned}
 $$
 

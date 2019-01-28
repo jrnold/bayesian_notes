@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>11 Introduction to Stan and Linear Regression | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="11 Introduction to Stan and Linear Regression | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="11 Introduction to Stan and Linear Regression | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="11 Introduction to Stan and Linear Regression | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="generalized-linear-models.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
@@ -357,7 +384,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.3</b> Example: Radon</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.3.1</b> Data</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#modeling"><i class="fa fa-check"></i><b>20.4</b> Modeling</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#radon-example"><i class="fa fa-check"></i><b>20.4</b> Radon Example</a></li>
 <li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#with-individual-covariates"><i class="fa fa-check"></i><b>20.5</b> With Individual Covariates</a></li>
 <li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#with-group-level-covariates"><i class="fa fa-check"></i><b>20.6</b> With Group-Level Covariates</a></li>
 <li class="chapter" data-level="20.7" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.7</b> Pooling of Hierarchical Parameters</a></li>
@@ -519,44 +546,61 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \]
 <div id="introduction-to-stan-and-linear-regression" class="section level1">
 <h1><span class="header-section-number">11</span> Introduction to Stan and Linear Regression</h1>
-<p>This chapter is an introduction to writing and running a Stan model in R. Also see the <strong>rstan</strong> <a href="https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html">vignette</a> for similar content.</p>
+<p>This chapter is an introduction to writing and running a Stan model in R.
+Also see the <strong>rstan</strong>
+<a href="https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html">vignette</a>
+for similar content.</p>
 <div id="prerequisites-4" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</code></pre></div>
-<p>For this section we will use the <code>duncan</code> dataset included in the <strong>carData</strong> package. Duncan’s occupational prestige data is an example dataset used throughout the popular Fox regression text, <em>Applied Regression Analysis and Generalized Linear Models</em> <span class="citation">(Fox 2016)</span>. It is originally from <span class="citation">Duncan (1961)</span> consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;Duncan&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;carData&quot;</span>)</code></pre></div>
+<span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</code></pre>
+<p>For this section we will use the <code>duncan</code> dataset included in the <strong>carData</strong> package.
+Duncan’s occupational prestige data is an example dataset used throughout the popular Fox regression text, <em>Applied Regression Analysis and Generalized Linear Models</em> <span class="citation">(Fox 2016)</span>.
+It is originally from <span class="citation">Duncan (1961)</span> consists of survey data on the prestige of occupations in the US in 1950, and several predictors: type of occupation, income, and education of that</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;Duncan&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;carData&quot;</span>)</code></pre>
 </div>
 <div id="ols-and-mle-linear-regression" class="section level2">
 <h2><span class="header-section-number">11.1</span> OLS and MLE Linear Regression</h2>
 <p>The first step in running a Stan model is defining the Bayesian statistical model that will be used for inference.</p>
 <p>We will model <code>prestige</code> of each occupation as a function of its <code>education</code>, <code>occupation</code>, and <code>type</code>.</p>
-<p>A standard way to do this is with the OLS estimator: <span class="math display">\[
+<p>A standard way to do this is with the OLS estimator:
+<span class="math display">\[
 \begin{multline}
 y_i = \beta_0 + \beta_1 I(\mathtt{type} = \mathtt{&quot;prof&quot;}) + \beta_2 I(\mathtt{type} = \mathtt{&quot;wc&quot;}) \\
 \quad + \beta_3 \mathtt{income} + \beta_4 \mathtt{education} + \epsilon_i
 \end{multline}
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">duncan_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(prestige <span class="op">~</span><span class="st"> </span>type <span class="op">+</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education, <span class="dt">data =</span> Duncan)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">duncan_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(prestige <span class="op">~</span><span class="st"> </span>type <span class="op">+</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education, <span class="dt">data =</span> Duncan)</code></pre>
 <p><span class="math display">\[
 y_i = x_i&#39; \beta + \epsilon_i
-\]</span> OLS finds <span class="math inline">\(\hat{\beta}_{OLS}\)</span> by minimizing the squared errors, <span class="math display">\[
+\]</span>
+OLS finds <span class="math inline">\(\hat{\beta}_{OLS}\)</span> by minimizing the squared errors,
+<span class="math display">\[
 \hat{\beta}_{\text{OLS}} = \arg \min_{b} \sum_{i = 1}^n (y_i - x_i&#39; b)^2 .
-\]</span> OLS is an estimator of the (linear approximation of) the conditional expectation function, <span class="math display">\[
+\]</span>
+OLS is an estimator of the (linear approximation of) the conditional expectation function,
+<span class="math display">\[
 \mathrm{CEF}(y_i | x_i) = E(y_i, x_i&#39; \beta) .
 \]</span></p>
-<p>For valid inference we need to make assumptions about <span class="math inline">\(\epsilon_i\)</span>, namely that they are uncorrelated with <span class="math inline">\(X\)</span>, <span class="math inline">\(\Cov(\epsilon, X) = 0\)</span>, and that they are i.i.d, <span class="math inline">\(\Cov(\epsilon_i, \epsilon_j) = 0\)</span>, <span class="math inline">\(\Var(\epsilon_i) = \sigma^2\)</span> for all <span class="math inline">\(i\)</span>. However, no specific distributional form is or needs to be assumed for <span class="math inline">\(\epsilon\)</span> since CLT results show that, asymptotically the sampling distribution of <span class="math inline">\(\beta\)</span> approaches the normal. Additionally, although <span class="math inline">\(\hat\sigma^2 = \sum_{i = 1}^n \epsilon_i / (n - k - 1)\)</span> is a estimator of <span class="math inline">\(\sigma^2\)</span>, standard errors of the standard error of the regression are not directly provided.</p>
-<p>However, the OLS estimator is also the same as the MLE estimator for <span class="math inline">\(\beta\)</span> (but not <span class="math inline">\(\sigma\)</span>): <span class="math display">\[
+<p>For valid inference we need to make assumptions about <span class="math inline">\(\epsilon_i\)</span>, namely that they are uncorrelated with <span class="math inline">\(X\)</span>, <span class="math inline">\(\Cov(\epsilon, X) = 0\)</span>, and that they are i.i.d, <span class="math inline">\(\Cov(\epsilon_i, \epsilon_j) = 0\)</span>, <span class="math inline">\(\Var(\epsilon_i) = \sigma^2\)</span> for all <span class="math inline">\(i\)</span>.
+However, no specific distributional form is or needs to be assumed for <span class="math inline">\(\epsilon\)</span> since CLT results show that, asymptotically the sampling distribution of <span class="math inline">\(\beta\)</span> approaches the normal.
+Additionally, although <span class="math inline">\(\hat\sigma^2 = \sum_{i = 1}^n \epsilon_i / (n - k - 1)\)</span> is a estimator of <span class="math inline">\(\sigma^2\)</span>, standard errors of the standard error of the regression are not directly provided.</p>
+<p>However, the OLS estimator is also the same as the MLE estimator for <span class="math inline">\(\beta\)</span> (but not <span class="math inline">\(\sigma\)</span>):
+<span class="math display">\[
 \begin{aligned}[t]
 p(y_1, \dots, y_n | \beta, \sigma, x_1, \dots, x_n) &amp;= \prod_{i = 1}^n p(y_i | \beta, x_i) \\
 &amp;= \prod_{i = 1}^n N(y_i | x_i&#39; \beta) \\
 &amp;= \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2 \pi}} \left( \frac{-(y_i - x_i&#39; \beta)}{2 \sigma^2} \right)
 \end{aligned}
-\]</span> so, <span class="math display">\[
+\]</span>
+so,
+<span class="math display">\[
 \hat{\beta}_{MLE}, \hat{\sigma}_{MLE} = \arg\max_{b,s} \prod_{i = 1}^n N(y_i | x_i&#39; b, s^2)  .
-\]</span> And <span class="math inline">\(\hat{\beta}_{MLE} = \hat{\beta}_{OLS}\)</span>.</p>
-<p>Note that the OLS estimator is equivalent to the MLE estimator of <span class="math inline">\(\beta\)</span>, <span class="math display">\[
+\]</span>
+And <span class="math inline">\(\hat{\beta}_{MLE} = \hat{\beta}_{OLS}\)</span>.</p>
+<p>Note that the OLS estimator is equivalent to the MLE estimator of <span class="math inline">\(\beta\)</span>,
+<span class="math display">\[
 \begin{aligned}[t]
 \hat{\beta}_{MLE} &amp;= \arg \max_{b} \prod_{i = 1}^n N(y_i | x_i&#39; b, \sigma^2) \\
 &amp;=  \arg \max_{b} \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2 \pi}} \exp \left( \frac{-(y_i - x_i&#39; \beta)^2}{2 \sigma^2} \right) \\
@@ -566,7 +610,8 @@ p(y_1, \dots, y_n | \beta, \sigma, x_1, \dots, x_n) &amp;= \prod_{i = 1}^n p(y_i
 &amp;= \arg \min_{b} \sum_{i = 1}^n  (y_i - x_i&#39; \beta)^2  \\
 &amp;= \hat{\beta}_{OLS}
 \end{aligned}
-\]</span> However, the estimator of <span class="math inline">\(\sigma^2_{MLE} \neq \sigma^2_{OLS}\)</span>.</p>
+\]</span>
+However, the estimator of <span class="math inline">\(\sigma^2_{MLE} \neq \sigma^2_{OLS}\)</span>.</p>
 <div id="bayesian-model-with-improper-priors" class="section level3">
 <h3><span class="header-section-number">11.1.1</span> Bayesian Model with Improper priors</h3>
 <p>In Bayesian inference, our target is the posterior distribution of the parameters, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>: <span class="math inline">\(p(\beta, \sigma^2 | y, X)\)</span>.</p>
@@ -574,13 +619,23 @@ p(y_1, \dots, y_n | \beta, \sigma, x_1, \dots, x_n) &amp;= \prod_{i = 1}^n p(y_i
 p(\beta, \sigma | y, X) \propto p(y | \beta, \sigma) p(\beta, \sigma)
 \]</span></p>
 <p>For a Bayesian linear regression model, we’ll need to specify distributions for <span class="math inline">\(p(y | \beta, \sigma)\)</span> and <span class="math inline">\(p(\beta, \sigma)\)</span>.</p>
-<p><strong>Likelihood:</strong> <span class="math inline">\(p(y_i | x_i, \beta, \sigma)\)</span> suppose that the observations are distributed independent normal: <span class="math display">\[
+<p><strong>Likelihood:</strong> <span class="math inline">\(p(y_i | x_i, \beta, \sigma)\)</span> suppose that the observations are distributed independent normal:
+<span class="math display">\[
 y_i \sim \dnorm(\beta&#39;x_i, \sigma^2)
 \]</span></p>
-<p><strong>Priors:</strong> The model needs to specify a prior distribution for the parameters <span class="math inline">\((\beta, \sigma)\)</span>. Rather than specify a single distribution for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>, it will be easier to specify independent (separate) distributions for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
-<p>We will use what are called an <em>improper uniform priors</em>. An improper prior is, <span class="math display">\[
+<p><strong>Priors:</strong> The model needs to specify a prior distribution for the parameters <span class="math inline">\((\beta, \sigma)\)</span>.
+Rather than specify a single distribution for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>, it will be easier to specify independent (separate) distributions for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
+<p>We will use what are called an <em>improper uniform priors</em>.
+An improper prior is,
+<span class="math display">\[
 p(\theta) \propto C
-\]</span> where <span class="math inline">\(C\)</span> is some constants. This function puts an equal density on all values of the support of <span class="math inline">\(\theta\)</span>. This function is not a proper probability density function since <span class="math inline">\(\int_{\theta \in \Theta} C d \theta = \infty\)</span>. However, for some Bayesian models, the prior does not need to be a proper probability function for the posterior to be a probability function. In this example we will put improper prior distributions on <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>. <span class="math display">\[
+\]</span>
+where <span class="math inline">\(C\)</span> is some constants.
+This function puts an equal density on all values of the support of <span class="math inline">\(\theta\)</span>.
+This function is not a proper probability density function since <span class="math inline">\(\int_{\theta \in \Theta} C d \theta = \infty\)</span>.
+However, for some Bayesian models, the prior does not need to be a proper probability function for the posterior to be a probability function.
+In this example we will put improper prior distributions on <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>.
+<span class="math display">\[
 p(\beta, \sigma) = C
 \]</span></p>
 <p><span class="math display">\[
@@ -590,17 +645,22 @@ p(\beta, \sigma | x, y) &amp;\propto p(y| \beta, \sigma, x) p(\beta, \sigma, x) 
 &amp;\propto \prod_{i = 1}^n N(y_i | x_i&#39; \beta, \sigma^2)
 \end{aligned}
 \]</span></p>
-<p>Note that under the improper priors, the posterior is proportional to the likelihood, <span class="math display">\[
+<p>Note that under the improper priors, the posterior is proportional to the likelihood,
+<span class="math display">\[
 p(\beta, \sigma | x, y) \propto p(y | x, \beta, \sigma)
-\]</span> Thus the MAP (maximum a posterior) estimator is the same as the MLE, <span class="math display">\[
+\]</span>
+Thus the MAP (maximum a posterior) estimator is the same as the MLE,
+<span class="math display">\[
 \hat{\beta}_{MAP}, \hat{\sigma}_{MAP} = \arg\max_{\beta, \sigma} p(\beta, \sigma | x, y) = \arg \max_{\beta, \sigma} p(y | x, \beta, \sigma) = \hat{\beta}_{MLE}, \hat{\sigma}_{MLE}
 \]</span></p>
 </div>
 </div>
 <div id="stan-model" class="section level2">
 <h2><span class="header-section-number">11.2</span> Stan Model</h2>
-<p>Let’s write and estimate our model in Stan. Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.</p>
-<p>A Stan model consists of <em>blocks</em> which contain declarations of variables and/or statements. Each block has a specific purpose in the model.</p>
+<p>Let’s write and estimate our model in Stan.
+Stan models are written in its own domain-specific language that focuses on declaring the statistical model (parameters, variables, distributions) while leaving the details of the sampling algorithm to Stan.</p>
+<p>A Stan model consists of <em>blocks</em> which contain declarations of variables and/or statements.
+Each block has a specific purpose in the model.</p>
 </div>
 <div id="sampling-model-with-stan" class="section level2">
 <h2><span class="header-section-number">11.3</span> Sampling Model with Stan</h2>
@@ -679,7 +739,7 @@ generated quantities {
   }
 }</code>
 </pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/lm_normal_1.stan&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;stan/lm_normal_1.stan&quot;</span>)</code></pre>
 <p>See the <a href="http://mc-stan.org/documentation/">Stan Modeling Language User’s Guide and Reference Manual</a> for details of the Stan Language.</p>
 <p><strong>Note</strong>Since a Stan model compiles to C++ code, you may receive some warning messages such as</p>
 <pre><code>/Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:17: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]
@@ -687,44 +747,60 @@ generated quantities {
                 ^
 In file included from file1d4a4d50faa.cpp:8:
 In file included from /Library/Frameworks/R.framework/Versions/3.3/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:</code></pre>
-<p>As long as your model compiles, you can ignore these compiler warnings (On the other hard, warnings that occur during sampling should not be ignored). If the Stan model does not give you a syntax error when parsing the model, it should compile to valid C++.[^bugs][^c-warnings] See</p>
-<p>[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the <a href="http://mc-stan.org/issues/">instructions</a> on how to inform the Stan developers about bugs. [c-warnings]: The extended installation instructions for <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux">MacOS/Linux</a> and <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">Windows</a> have instructions for adding compiler options to the R <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">Makevars</a> file.</p>
+<p>As long as your model compiles, you can ignore these compiler warnings (On the other hard, warnings that occur during sampling should not be ignored).
+If the Stan model does not give you a syntax error when parsing the model, it should compile to valid C++.[^bugs][^c-warnings]
+See</p>
+<p>[bugs]: In the rare case that the Stan parser transpiles the Stan model to C++ but cannot compile the C++ code, it is a bug in Stan. Follow the <a href="http://mc-stan.org/issues/">instructions</a> on how to inform the Stan developers about bugs.
+[c-warnings]: The extended installation instructions for <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Mac-or-Linux">MacOS/Linux</a> and <a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">Windows</a> have instructions for adding compiler options to the R <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">Makevars</a> file.</p>
 <div id="sampling" class="section level3">
 <h3><span class="header-section-number">11.3.1</span> Sampling</h3>
 <p>In order to sample from the model, we need to at least give it the values for the data to use: `<code>,</code>k<code>,</code>y<code>,</code>X`, and the data associated with the priors.</p>
-<p>The data types in Stan are all numeric (either integers or reals), but they include matrices and vectors. However, there is nothing like a data frame in Stan. Whereas in the R function <code>lm</code> we can provide a formula and a data set for where to look for objects, and the function will create the appropriate <span class="math inline">\(X\)</span> matrix for the regression, we will need to create that matrix ourselves—expanding categorical variables to indicator variables, and expanding interactions and other functions of the predictors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(prestige <span class="op">~</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> Duncan) <span class="op">%&gt;%</span>
+<p>The data types in Stan are all numeric (either integers or reals), but they
+include matrices and vectors. However, there is nothing like a data frame in
+Stan. Whereas in the R function <code>lm</code> we can provide a formula and a data set
+for where to look for objects, and the function will create the appropriate <span class="math inline">\(X\)</span>
+matrix for the regression, we will need to create that matrix
+ourselves—expanding categorical variables to indicator variables, and
+expanding interactions and other functions of the predictors.</p>
+<pre class="sourceCode r"><code class="sourceCode r">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(prestige <span class="op">~</span><span class="st"> </span>income <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>type, <span class="dt">data =</span> Duncan) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">step_dummy</span>(type) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">prep</span>(<span class="dt">data =</span> Duncan, <span class="dt">retain =</span> <span class="ot">TRUE</span>) 
 X &lt;-<span class="st"> </span><span class="kw">juice</span>(rec, <span class="kw">all_predictors</span>(), <span class="dt">composition =</span> <span class="st">&quot;matrix&quot;</span>)
-y &lt;-<span class="st"> </span><span class="kw">drop</span>(<span class="kw">juice</span>(rec, <span class="kw">all_outcomes</span>(), <span class="dt">composition =</span> <span class="st">&quot;matrix&quot;</span>))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data &lt;-<span class="st"> </span><span class="kw">list</span>(
+y &lt;-<span class="st"> </span><span class="kw">drop</span>(<span class="kw">juice</span>(rec, <span class="kw">all_outcomes</span>(), <span class="dt">composition =</span> <span class="st">&quot;matrix&quot;</span>))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod1_data &lt;-<span class="st"> </span><span class="kw">list</span>(
   <span class="dt">X =</span> X,
   <span class="dt">K =</span> <span class="kw">ncol</span>(X),
   <span class="dt">N =</span> <span class="kw">nrow</span>(X),
   <span class="dt">y =</span> y,
   <span class="dt">use_y_rep =</span> <span class="ot">FALSE</span>,
   <span class="dt">use_log_lik =</span> <span class="ot">FALSE</span>
-)</code></pre></div>
-<p>We still need to provide the values for the prior distributions. For specific values of the prior distributions, assume uninformative priors for <code>beta</code> by setting the mean to zero and the variances to large numbers.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_data<span class="op">$</span>scale_alpha &lt;-<span class="st"> </span><span class="kw">sd</span>(y) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>
+)</code></pre>
+<p>We still need to provide the values for the prior distributions.
+For specific values of the prior distributions, assume uninformative priors for <code>beta</code> by setting the mean to zero and the variances to large numbers.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mod1_data<span class="op">$</span>scale_alpha &lt;-<span class="st"> </span><span class="kw">sd</span>(y) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>
 mod1_data<span class="op">$</span>scale_beta &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="dv">2</span>, sd) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(y) <span class="op">*</span><span class="st"> </span><span class="fl">2.5</span>
-mod1_data<span class="op">$</span>loc_sigma &lt;-<span class="st"> </span><span class="kw">sd</span>(y)</code></pre></div>
+mod1_data<span class="op">$</span>loc_sigma &lt;-<span class="st"> </span><span class="kw">sd</span>(y)</code></pre>
 <p>Now, sample from the posterior, using the function <code>sampling</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod1, <span class="dt">data =</span> mod1_data)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod1_fit)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">mod1_fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(mod1, <span class="dt">data =</span> mod1_data)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod1_fit)</code></pre>
 </div>
 <div id="convergence-diagnostics-and-model-fit" class="section level3">
 <h3><span class="header-section-number">11.3.2</span> Convergence Diagnostics and Model Fit</h3>
 <ul>
-<li><p><strong>Convergence Diagnostics:</strong> Is this the posterior distribution that you were looking for? These don’t directly say anything about how “good” the model is in terms representing the data, they are only evaluating how well the sampler is doing at sampling the posterior distribution of the given model. If there are problems with these, then the sample results do not represent the posterior distribution, and your inferences will be biased.</p>
+<li><p><strong>Convergence Diagnostics:</strong> Is this the posterior distribution that you
+were looking for? These don’t directly say anything about how “good” the
+model is in terms representing the data, they are only evaluating how well
+the sampler is doing at sampling the posterior distribution of the given
+model. If there are problems with these, then the sample results do not
+represent the posterior distribution, and your inferences will be biased.</p>
 <ul>
 <li><code>mcse</code>:</li>
 <li><code>n_eff</code>:</li>
 <li><code>Rhat</code></li>
 <li><code>divergences</code></li>
 </ul></li>
-<li><p><strong>Model fit:</strong> Is this statistical model appropriate for the data? Or better than other models?</p>
+<li><p><strong>Model fit:</strong> Is this statistical model appropriate for the data?
+Or better than other models?</p>
 <ul>
 <li><p>Posterior predictive checks</p></li>
 <li><p>Information criteria:</p>
@@ -767,6 +843,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/intro-regression.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -780,8 +860,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

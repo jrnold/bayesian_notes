@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>20 Multilevel Models | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="20 Multilevel Models | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="20 Multilevel Models | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="20 Multilevel Models | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="appendix.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,13 +251,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#average-predictive-comparisons"><i class="fa fa-check"></i><b>9.3</b> Average Predictive Comparisons</a></li>
-<li class="chapter" data-level="9.4" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.4</b> References</a></li>
+<li class="chapter" data-level="9.3" data-path="model-checking.html"><a href="model-checking.html#references-4"><i class="fa fa-check"></i><b>9.3</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> Model Comparison</a><ul>
 <li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#models"><i class="fa fa-check"></i><b>10.1</b> Models</a></li>
@@ -384,10 +410,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="20.16" data-path="appendix.html"><a href="appendix.html#scaled-and-unscaled-variables"><i class="fa fa-check"></i><b>20.16</b> Scaled and Unscaled Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a><ul>
-<li class="chapter" data-level="21.0.1" data-path="distributions.html"><a href="distributions.html#beta-distribution"><i class="fa fa-check"></i><b>21.0.1</b> Beta Distribution</a></li>
-<li class="chapter" data-level="21.0.2" data-path="distributions.html"><a href="distributions.html#gamma-distribution"><i class="fa fa-check"></i><b>21.0.2</b> Gamma Distribution</a></li>
-</ul></li>
+<li class="chapter" data-level="21" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>21</b> Distributions</a></li>
 <li class="chapter" data-level="22" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html"><i class="fa fa-check"></i><b>22</b> Annotated Bibliography</a><ul>
 <li class="chapter" data-level="22.1" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#textbooks"><i class="fa fa-check"></i><b>22.1</b> Textbooks</a></li>
 <li class="chapter" data-level="22.2" data-path="annotated-bibliography.html"><a href="annotated-bibliography.html#syllabi"><i class="fa fa-check"></i><b>22.2</b> Syllabi</a></li>
@@ -523,20 +546,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 \]
 <div id="multilevel-models" class="section level1">
 <h1><span class="header-section-number">20</span> Multilevel Models</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)</code></pre></div>
-<p>Multilevel models are a commonly used hierarchical model. They extend (generalized) linear models to include coefficients that vary by discrete groups.</p>
+<span class="kw">library</span>(<span class="st">&quot;broom&quot;</span>)</code></pre>
+<p>Multilevel models are a commonly used hierarchical model.
+They extend (generalized) linear models to include coefficients that vary by discrete groups.</p>
 <div id="terminology" class="section level2">
 <h2><span class="header-section-number">20.1</span> Terminology</h2>
-<p>These models go by different names in different literatures: <em>hierarchical (generalized) linear models</em>, <em>nested data models</em>, <em>mixed models</em>, <em>random coefficients</em>, <em>random-effects</em>, <em>random parameter models</em>, <em>split-plot designs</em>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> There are further names for specific types of these models including varying-intercept, varying-slope,rando etc.</p>
+<p>These models go by different names in different literatures:
+<em>hierarchical (generalized) linear models</em>, <em>nested data models</em>,
+<em>mixed models</em>, <em>random coefficients</em>, <em>random-effects</em>,
+<em>random parameter models</em>, <em>split-plot designs</em>.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>
+There are further names for specific types of these models including varying-intercept, varying-slope,rando etc.</p>
 <p>In classical statistics there two main approaches to these models:</p>
 <ol style="list-style-type: decimal">
-<li>Maximum likelihood (and variations): See the <strong>lme4</strong> package. This is more common in statistics and many social sciences (except economics).</li>
-<li>OLS and adjusted standard errors: See the <strong>plm</strong> packge. This is the stanard econometric approach.</li>
+<li>Maximum likelihood (and variations): See the <strong>lme4</strong> package. This
+is more common in statistics and many social sciences (except economics).</li>
+<li>OLS and adjusted standard errors: See the <strong>plm</strong> packge. This is the
+stanard econometric approach.</li>
 </ol>
-<p>See <a href="https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf">“Some false friends”</a> in the <strong>plm</strong> vignette and <span class="citation">Gelman and Hill (2007, 245, fn. 5)</span> for discussion of the differences between these approaches.</p>
+<p>See <a href="https://cran.r-project.org/web/packages/plm/vignettes/plm.pdf">“Some false friends”</a> in the <strong>plm</strong> vignette and <span class="citation">A. Gelman and Hill (2007, 245, fn. 5)</span> for discussion of the differences between these approaches.</p>
 </div>
 <div id="normal" class="section level2">
 <h2><span class="header-section-number">20.2</span> Normal</h2>
@@ -544,27 +574,45 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li>Units: <span class="math inline">\(i = 1, \dots, n\)</span>.</li>
 <li>Outcomes: <span class="math inline">\(y = (y_1, \dots, y_n)\)</span></li>
-<li>Predictors: <span class="math inline">\(X\)</span> is a <span class="math inline">\(n \times p\)</span> matrix; <span class="math inline">\(x_i\)</span> is the <span class="math inline">\(K \times 1\)</span> column vector of individual <span class="math inline">\(i\)</span>’s predictors.</li>
-<li>Groups: <span class="math inline">\(j = 1, \dots, m\)</span>. Each observation is in a group. Let <span class="math inline">\(j[i]\)</span> indicate the group that observation <span class="math inline">\(i\)</span> is in.</li>
+<li>Predictors: <span class="math inline">\(X\)</span> is a <span class="math inline">\(n \times p\)</span> matrix; <span class="math inline">\(x_i\)</span> is the <span class="math inline">\(K \times 1\)</span>
+column vector of individual <span class="math inline">\(i\)</span>’s predictors.</li>
+<li>Groups: <span class="math inline">\(j = 1, \dots, m\)</span>. Each observation is in a group.
+Let <span class="math inline">\(j[i]\)</span> indicate the group that observation <span class="math inline">\(i\)</span> is in.</li>
 </ul>
 <p>Suppose we want to estimate a regression for these data, where thet data generating process is <span class="math inline">\(y_i = \alpha_i + X_i \beta_i\)</span> with normal errors.</p>
-<p>Depending on how we model differences between groups we can approach this in three ways</p>
+<p>Depending on how we model differences between groups we can approach this in
+three ways</p>
 <ol style="list-style-type: decimal">
 <li>Pooled model</li>
 <li>Individual models</li>
 <li>Partially pooled model</li>
 </ol>
-<p>In the <em>pooled model</em> we ignore differences between groups and use common coefficients. <span class="math display">\[
+<p>In the <em>pooled model</em> we ignore differences between groups and use common
+coefficients.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha + x_i&#39; \beta, \sigma) \\
 \end{aligned}
-\]</span> The pooled model estimates one model, with three parameters: <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\sigma\)</span>.</p>
-<p>In an <em>individual</em> or <em>non-pooled model</em>, a sepearate model is estimated for each group. For each <span class="math inline">\(j&#39; \in 1, \dots, m\)</span>, estimate the model <span class="math display">\[
+\]</span>
+The pooled model estimates one model, with three parameters: <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>,
+and <span class="math inline">\(\sigma\)</span>.</p>
+<p>In an <em>individual</em> or <em>non-pooled model</em>, a sepearate model is estimated for each group.
+For each <span class="math inline">\(j&#39; \in 1, \dots, m\)</span>, estimate the model
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]} + x_i&#39; \beta_{j[i]}, \sigma_{j[i]}) &amp; \text{ where } j[i] = j&#39; .
 \end{aligned}
-\]</span> The non-pooled model estimates <span class="math inline">\(m\)</span> separate models with <span class="math inline">\(m \times 3\)</span> parameters, one <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\sigma\)</span> for each group. Note that in this model, no information is shared between groups. The data from another group and its estimates of <span class="math inline">\(\alpha\)</span> or <span class="math inline">\(\beta\)</span> do not help in the estimation of another group. However, if these are in any way similar problems we may think that the values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> differ between groups, but that they should be similar. We should think that there must be a way to share that information via a prior. This insight will lead to the partially pooled model.</p>
-<p>In a <em>partially pooled</em> model, different groups have different parameters, but these group parameters share common hyperpriors—priors in which the distribution is a function of parameters estimated from the data. This is an example of a partially pooled model, <span class="math display">\[
+\]</span>
+The non-pooled model estimates <span class="math inline">\(m\)</span> separate models with <span class="math inline">\(m \times 3\)</span> parameters, one <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\sigma\)</span> for each group.
+Note that in this model, no information is shared between groups.
+The data from another group and its estimates of <span class="math inline">\(\alpha\)</span> or <span class="math inline">\(\beta\)</span> do not help in the estimation of another group.
+However, if these are in any way similar problems we may think that the values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> differ between groups, but that they should be similar.
+We should think that there must be a way to share that information via a prior.
+This insight will lead to the partially pooled model.</p>
+<p>In a <em>partially pooled</em> model, different groups have different parameters, but
+these group parameters share common hyperpriors—priors in which the distribution is a function of parameters estimated from the data.
+This is an example of a partially pooled model,
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma_{j[i]}) \\
   \begin{bmatrix}
@@ -582,7 +630,12 @@ y_i &amp;\sim \dnorm(\alpha_{j[i]} + \beta_{j[i]} x_i, \sigma_{j[i]}) \\
 \right) \\
 \sigma_{j[i]} &amp;\sim p(.)
 \end{aligned} .
-\]</span> The imporant feature of this model, is that the priors for the parameters <span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\beta_j\)</span> are functions of other parameters, often called <em>hyperparmeters</em>, <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\mu_{\beta}\)</span>, and <span class="math inline">\(\Omega\)</span>. This is allows for sharing information between groups. The observations from one group help to estimate <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\mu_{\beta}\)</span>, and <span class="math inline">\(\Sigma\)</span>, which in turn help to estimate the <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> in another group. If the parameters of the prior distribution of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> were fixed (data) and not themselves parameters, this sharing of information would not occur.</p>
+\]</span>
+The imporant feature of this model, is that the priors for the parameters <span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\beta_j\)</span> are functions of other parameters, often called <em>hyperparmeters</em>, <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\mu_{\beta}\)</span>, and <span class="math inline">\(\Omega\)</span>.
+This is allows for sharing information between groups.
+The observations from one group help to estimate <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\mu_{\beta}\)</span>,
+and <span class="math inline">\(\Sigma\)</span>, which in turn help to estimate the <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> in another group.
+If the parameters of the prior distribution of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> were fixed (data) and not themselves parameters, this sharing of information would not occur.</p>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
 <img src="multilevel_files/figure-html/unnamed-chunk-4-1.png" alt="Visual representation of hierarchical models" width="70%" />
 <p class="caption">
@@ -590,13 +643,16 @@ Figure 20.1: Visual representation of hierarchical models
 </p>
 </div>
 <p>We can also allow some parameters to vary between groups, but pool other parameters.</p>
-<p><em>Group-heteroskedastic</em>: Assume that the intercept (<span class="math inline">\(\alpha\)</span>) and slope (<span class="math inline">\(\beta\)</span>) are the same across groups, but allow the scale of the regression error to vary between groups. <span class="math display">\[
+<p><em>Group-heteroskedastic</em>: Assume that the intercept (<span class="math inline">\(\alpha\)</span>) and slope (<span class="math inline">\(\beta\)</span>) are the same across groups, but allow the scale of the regression error to vary between groups.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha + x&#39;_i \beta, \sigma_{j[i]}) \\
 \log \sigma_j &amp;\sim \dnorm(\tau, \psi)
 \end{aligned}
-\]</span> The prior on the <span class="math inline">\(\log \sigma_j\)</span> has two parameters, <span class="math inline">\(\tau\)</span> (the average log-standard deviation of the errors) and <span class="math inline">\(\psi\)</span>, which determines the level of heteroskedasticity.</p>
-<p>In a <em>varying-intercept</em> model keep the slope coefficients (<span class="math inline">\(\beta\)</span>) common between groups, but allow the intercepts (<span class="math inline">\(\alpha_j\)</span>) to vary by group. <span class="math display">\[
+\]</span>
+The prior on the <span class="math inline">\(\log \sigma_j\)</span> has two parameters, <span class="math inline">\(\tau\)</span> (the average log-standard deviation of the errors) and <span class="math inline">\(\psi\)</span>, which determines the level of heteroskedasticity.</p>
+<p>In a <em>varying-intercept</em> model keep the slope coefficients (<span class="math inline">\(\beta\)</span>) common between groups, but allow the intercepts (<span class="math inline">\(\alpha_j\)</span>) to vary by group.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma) \\
 \alpha_{j} &amp;\sim \dnorm(\mu_\alpha, \omega_{\alpha})
@@ -608,7 +664,12 @@ y_i &amp;\sim \dnorm(\alpha_{j[i]} + \beta x_i, \sigma) \\
 y_i &amp;\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
 \beta_{j} &amp; \sim \dnorm(\mu_{\beta}, \omega_{\beta})
 \end{aligned}
-\]</span> This is less common since it is hard to think of cases when it is appropriate. More often, if the slope coefficient is allowed to vary between groups, the the intercepts should as well. This is the more-general <em>varying-slope varying-intercept</em> model, <span class="math display">\[
+\]</span>
+This is less common since it is hard to think of cases when it is appropriate.
+More often, if the slope coefficient is allowed to vary between groups,
+the the intercepts should as well.
+This is the more-general <em>varying-slope varying-intercept</em> model,
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
   \begin{bmatrix}
@@ -629,28 +690,29 @@ y_i &amp;\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
 </div>
 <div id="example-radon" class="section level2">
 <h2><span class="header-section-number">20.3</span> Example: Radon</h2>
-<p>This example models the presence of radon in houses in Minnesota which appears in <span class="citation">Gelman and Hill (2007)</span> and <span class="citation">Gelman et al. (2013)</span>. This is partly derived from a <a href="http://mc-stan.org/documentation/case-studies/radon.html">Stan Case Study</a>, which uses <code>PyStan</code> instead of <strong>rstan</strong>.</p>
+<p>This example models the presence of radon in houses in Minnesota which appears in <span class="citation">A. Gelman and Hill (2007)</span> and <span class="citation">A. Gelman, Carlin, et al. (2013)</span>.
+This is partly derived from a <a href="http://mc-stan.org/documentation/case-studies/radon.html">Stan Case Study</a>, which uses <code>PyStan</code> instead of <strong>rstan</strong>.</p>
 <div id="data" class="section level3">
 <h3><span class="header-section-number">20.3.1</span> Data</h3>
 <p>The <a href="https://www.rdocumentation.org/packages/radon/topics/rstanarm">radon</a> data is included in the <strong><a href="https://cran.r-project.org/package=rstanarm">rstanarm</a></strong> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;radon&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;rstanarm&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;radon&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;rstanarm&quot;</span>)
 <span class="kw">glimpse</span>(radon)
 <span class="co">#&gt; Observations: 919</span>
 <span class="co">#&gt; Variables: 4</span>
 <span class="co">#&gt; $ floor       &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...</span>
 <span class="co">#&gt; $ county      &lt;fct&gt; AITKIN, AITKIN, AITKIN, AITKIN, ANOKA, ANOKA, ANOK...</span>
 <span class="co">#&gt; $ log_radon   &lt;dbl&gt; 0.8329, 0.8329, 1.0986, 0.0953, 1.1632, 0.9555, 0....</span>
-<span class="co">#&gt; $ log_uranium &lt;dbl&gt; -0.689, -0.689, -0.689, -0.689, -0.847, -0.847, -0...</span></code></pre></div>
+<span class="co">#&gt; $ log_uranium &lt;dbl&gt; -0.689, -0.689, -0.689, -0.689, -0.847, -0.847, -0...</span></code></pre>
 <p>The data consist of 919 observations of radon levels of houses from 85 counties.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">radon_county &lt;-<span class="st"> </span>radon <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">radon_county &lt;-<span class="st"> </span>radon <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(county) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">log_radon_mean =</span> <span class="kw">mean</span>(log_radon),
             <span class="dt">log_radon_sd =</span> <span class="kw">sd</span>(log_radon),
             <span class="dt">log_uranium =</span> <span class="kw">mean</span>(log_uranium),
             <span class="dt">n =</span> <span class="kw">length</span>(county)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">log_radon_se =</span> log_radon_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(n))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">data =</span> radon, 
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">log_radon_se =</span> log_radon_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(n))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">data =</span> radon,
                <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> log_radon,
                              <span class="dt">x =</span> <span class="kw">fct_reorder</span>(county, log_radon, mean)),
                <span class="dt">colour =</span> <span class="st">&quot;gray&quot;</span>) <span class="op">+</span>
@@ -663,69 +725,89 @@ y_i &amp;\sim \dnorm(\alpha + \beta_{j[i]} x_i, \sigma^2) \\
                            <span class="dt">y =</span> log_radon_mean),
              <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;log(radon)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;log(radon)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>)</code></pre>
 <p><img src="multilevel_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>The observations in counties vary in size,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(radon_county, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log2</span>(n))) <span class="op">+</span>
-<span class="st">         </span><span class="kw">geom_density</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">         </span><span class="kw">geom_rug</span>()</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(radon_county, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log2</span>(n))) <span class="op">+</span>
+<span class="st">         </span><span class="kw">geom_density</span>() <span class="op">+</span>
+<span class="st">         </span><span class="kw">geom_rug</span>()</code></pre>
 <p><img src="multilevel_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>Unsurprisingly, there is more variation in county means among counties with smaller numbers of observations.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(radon_county, <span class="kw">aes</span>(<span class="dt">y =</span> log_radon_mean,
+<p>Unsurprisingly, there is more variation in county means among counties with smaller numbers
+of observations.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(radon_county, <span class="kw">aes</span>(<span class="dt">y =</span> log_radon_mean,
                          <span class="dt">x =</span> <span class="kw">log2</span>(n))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="multilevel_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /> Much of this can be explained simply by sampling error.</p>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre>
+<p><img src="multilevel_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
+Much of this can be explained simply by sampling error.</p>
 </div>
 </div>
 <div id="radon-example" class="section level2">
 <h2><span class="header-section-number">20.4</span> Radon Example</h2>
-<p>In this example we want to model the amount of radon (log scale) in a home. Let <span class="math inline">\(y_i\)</span> be the <em>centered</em> and <em>scaled</em> log amount of radon in home <span class="math inline">\(i\)</span>.</p>
-<p>The simplest model is a pooled model, where all homes are modeled as iid draws from a common distribution. <span class="math display">\[
+<p>In this example we want to model the amount of radon (log scale) in a home.
+Let <span class="math inline">\(y_i\)</span> be the <em>centered</em> and <em>scaled</em> log amount of radon in home <span class="math inline">\(i\)</span>.</p>
+<p>The simplest model is a pooled model, where all homes are modeled as iid draws
+from a common distribution.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha, \sigma) &amp; \text{for } i \in 1, \dots, n \\
 \alpha &amp;\sim \dnorm(0, 10) \\
 \sigma &amp;\sim \dexp(1)
 \end{aligned}
-\]</span> where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\sigma\)</span> are given weakly informative priors. We will estimate these models <strong>rstanarm</strong> functions <code>stan_glm</code> and <code>stan_glmer</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(log_radon <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> radon, <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
-<p>We can extend this to a no-pooling model with a different mean for each county. Let <span class="math inline">\(j[i] \in 1, \dots, m\)</span> be the county of observation <span class="math inline">\(i\)</span>.</p>
+\]</span>
+where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\sigma\)</span> are given weakly informative priors.
+We will estimate these models <strong>rstanarm</strong> functions <code>stan_glm</code> and <code>stan_glmer</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(log_radon <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> radon, <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
+<p>We can extend this to a no-pooling model with a different mean for each county.
+Let <span class="math inline">\(j[i] \in 1, \dots, m\)</span> be the county of observation <span class="math inline">\(i\)</span>.</p>
 <p><span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) &amp; \text{for } i \in 1, \dots, n \\
 \alpha_j &amp;\sim \dnorm(0, 10) &amp; \text{for } j \in 1, \dots, m
 \end{aligned}
-\]</span> The <span class="math inline">\(\alpha_j\)</span> are all drawn from weakly informative prior distributions. And although the <span class="math inline">\(\alpha_j\)</span> are drawn from the same prior distribution, it has fixed parameters and thus no information is shared between observations in different counties.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(log_radon <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>county, <span class="dt">data =</span> radon, <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
-<p>Finally, consider a partially pooled model. Like the previous model, each county has its own mean value. However, now these county-means share a prior which has its own parameters. <span class="math display">\[
+\]</span>
+The <span class="math inline">\(\alpha_j\)</span> are all drawn from weakly informative prior distributions.
+And although the <span class="math inline">\(\alpha_j\)</span> are drawn from the same prior distribution,
+it has fixed parameters and thus no information is shared between observations in different counties.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(log_radon <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>county, <span class="dt">data =</span> radon, <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
+<p>Finally, consider a partially pooled model.
+Like the previous model, each county has its own mean value.
+However, now these county-means share a prior which has its own parameters.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) &amp; \text{for } i \in 1, \dots, n \\
 \alpha_j &amp;\sim \dnorm(\mu, \tau) &amp; \text{for } j \in 1, \dots, m
 \end{aligned}
-\]</span> We could also write the model with the country-level average in the mean equation for <span class="math inline">\(y\)</span>, and the <span class="math inline">\(\alpha_j\)</span> values distributed around the county level average, <span class="math inline">\(\gamma\)</span>. <span class="math display">\[
+\]</span>
+We could also write the model with the country-level average in the
+mean equation for <span class="math inline">\(y\)</span>, and the <span class="math inline">\(\alpha_j\)</span> values distributed around the county
+level average, <span class="math inline">\(\gamma\)</span>.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) &amp; \text{for } i \in 1, \dots, n \\
 \alpha_j &amp;\sim \dnorm(\gamma, \tau) &amp; \text{for } j \in 1, \dots, m \\
 \tau &amp;\sim \dexp(1)
 \end{aligned}
 \]</span></p>
-<p>Hierarchical/multi-level generalized linear models can be estimated with <code>stan_glmer</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county), <span class="dt">data =</span> radon,
-                          <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
+<p>Hierarchical/multi-level generalized linear models can be estimated with
+<code>stan_glmer</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county), <span class="dt">data =</span> radon,
+                          <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
 <p>For each of these models extract the county means.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alpha_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">tidyMCMC</span>(fit_radon_<span class="dv">1</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">alpha_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">tidyMCMC</span>(fit_radon_<span class="dv">1</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># add county</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">county =</span> <span class="kw">list</span>(<span class="kw">unique</span>(<span class="kw">as.character</span>(radon[[<span class="st">&quot;county&quot;</span>]])))) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">unnest</span>(county) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>term) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;Complete&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alpha_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">tidyMCMC</span>(fit_radon_<span class="dv">2</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;Complete&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">alpha_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">tidyMCMC</span>(fit_radon_<span class="dv">2</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;^county&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">county =</span> <span class="kw">str_replace</span>(term, <span class="st">&quot;^county&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>term) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;No&quot;</span>)</code></pre></div>
-<p>See this <a href="http://mc-stan.org/rstanarm/articles/pooling.html">vignette</a> for extracting the random intercepts.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alphas &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(fit_radon_<span class="dv">3</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;^b</span><span class="ch">\\</span><span class="st">[&quot;</span>)
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;No&quot;</span>)</code></pre>
+<p>See this <a href="http://mc-stan.org/rstanarm/articles/pooling.html">vignette</a> for
+extracting the random intercepts.</p>
+<pre class="sourceCode r"><code class="sourceCode r">alphas &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(fit_radon_<span class="dv">3</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;^b</span><span class="ch">\\</span><span class="st">[&quot;</span>)
 alpha_mean &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(fit_radon_<span class="dv">3</span>, <span class="dt">pars =</span> <span class="st">&quot;(Intercept)&quot;</span>)
 alpha_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">sweep</span>(alphas, <span class="dv">1</span>, alpha_mean, <span class="dt">FUN =</span> <span class="st">&quot;+&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span>
@@ -736,20 +818,21 @@ alpha_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">county =</span> <span class="kw">str_match</span>(term, <span class="st">&quot;county:(.*)</span><span class="ch">\\</span><span class="st">]&quot;</span>)[ , <span class="dv">2</span>]) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>term) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;Partial&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all_models &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="st">&quot;Partial&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">all_models &lt;-
 <span class="st">  </span><span class="kw">bind_rows</span>(alpha_<span class="dv">1</span>, alpha_<span class="dv">2</span>, alpha_<span class="dv">3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># reorder county by size</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">county =</span> <span class="kw">fct_reorder</span>(county, estimate, mean))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(all_models, <span class="kw">aes</span>(<span class="dt">x =</span> county, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high,
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">county =</span> <span class="kw">fct_reorder</span>(county, estimate, mean))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(all_models, <span class="kw">aes</span>(<span class="dt">x =</span> county, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high,
              <span class="dt">color =</span> model)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="dv">1</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre>
 <p><img src="multilevel_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="with-individual-covariates" class="section level2">
 <h2><span class="header-section-number">20.5</span> With Individual Covariates</h2>
-<p>Individual covariates can also be added. <span class="math display">\[
+<p>Individual covariates can also be added.
+<span class="math display">\[
 \begin{aligned}
 y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \mu_i &amp;= \alpha_{j[i]} + \beta~\mathtt{floor}_i  \\
@@ -758,17 +841,26 @@ y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \tau &amp;\sim \dexp(1) \\
 \gamma &amp;\sim \dnorm(0, 10)
 \end{aligned}
-\]</span> This is often called a <em>varying intercept</em> model or the <em>random effects</em> model. Each county has a different intercept, but a common value of <span class="math inline">\(\beta\)</span>. Note that the prior on <span class="math inline">\(\beta\)</span> assumes that <span class="math inline">\(y\)</span> and <span class="math inline">\(\mathtt{floor}\)</span> are centered and scaled.</p>
+\]</span>
+This is often called a <em>varying intercept</em> model or the <em>random effects</em> model.
+Each county has a different intercept, but a common value of <span class="math inline">\(\beta\)</span>.
+Note that the prior on <span class="math inline">\(\beta\)</span> assumes that <span class="math inline">\(y\)</span> and <span class="math inline">\(\mathtt{floor}\)</span> are centered and scaled.</p>
 <p>We can estimate this with <code>stan_glmer</code> as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor,
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor,
                           <span class="dt">data =</span> radon,
-                          <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
-<p>We could also allow the parameter of <span class="math inline">\(\beta\)</span> to vary between counties and give it a prior distribution. <span class="math display">\[
+                          <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
+<p>We could also allow the parameter of <span class="math inline">\(\beta\)</span> to vary between counties and give it a prior distribution.
+<span class="math display">\[
 \begin{aligned}
 y_i &amp;\sim  N(\mu_i, \sigma^2) \\
-\mu_i &amp;= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{floor}_i 
+\mu_i &amp;= \alpha_{j[i]} + \beta_{j[i]}~\mathtt{floor}_i
 \end{aligned}
-\]</span> Both <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> need to be given hierarchical priors. Since there are features common to each group, it is common to specify a prior that allows these parameters to be correlated, such as a multivariate normal distribution with mean <span class="math inline">\(\gamma\)</span> and covariance <span class="math inline">\(\Sigma\)</span>, <span class="math display">\[
+\]</span>
+Both <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> need to be given hierarchical priors.
+Since there are features common to each group, it is common to specify a prior
+that allows these parameters to be correlated, such as a multivariate normal
+distribution with mean <span class="math inline">\(\gamma\)</span> and covariance <span class="math inline">\(\Sigma\)</span>,
+<span class="math display">\[
 \begin{aligned}[t]
 \begin{bmatrix}
 \alpha_j \\
@@ -776,23 +868,35 @@ y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \end{bmatrix} &amp;\sim
 \dnorm\left(\begin{bmatrix}\gamma_{\alpha} \\ \gamma_{\beta} \end{bmatrix}, \Sigma\right) \\
 \end{aligned}
-\]</span> The vector of locations of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> can be given weakly informative priors, which can be the same as the pooled parameters would be given, <span class="math display">\[
+\]</span>
+The vector of locations of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> can be given weakly informative
+priors, which can be the same as the pooled parameters would be given,
+<span class="math display">\[
 \begin{aligned}
 \gamma_{\alpha} &amp;\sim \dnorm(0, 10) \\
 \gamma_{\beta} &amp;\sim \dnorm(0, 2.5) \\
 \end{aligned}
-\]</span> The prior distribution for the covariance matrix is more complicated. See the section <a href="multilevel-models.html#covariance-priors">Priors for Covariances</a> for a discussion of appropriate prior distirbutions.</p>
-<p>If instead, <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> were given inproper priors, or alternatively, <span class="math inline">\(\Sigma \to \tau I\)</span> where <span class="math inline">\(\tau \to \infty\)</span>, then this model would be equivalent to an MLE model in with county fixed effects, and with <code>county</code> interacted with <code>floor</code>, e.g. <code>log_radon ~ county * floor</code>.</p>
-<p>This model is often called a <em>(varying-intercept) varying-slope</em> model, or a <em>random coefficients</em> model. It can be estimated as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">5</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county),
+\]</span>
+The prior distribution for the covariance matrix is more complicated.
+See the section <a href="multilevel-models.html#covariance-priors">Priors for Covariances</a> for a discussion of appropriate prior
+distirbutions.</p>
+<p>If instead, <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> were given inproper priors, or
+alternatively, <span class="math inline">\(\Sigma \to \tau I\)</span> where <span class="math inline">\(\tau \to \infty\)</span>, then this model
+would be equivalent to an MLE model in with county fixed effects, and with
+<code>county</code> interacted with <code>floor</code>, e.g. <code>log_radon ~ county * floor</code>.</p>
+<p>This model is often called a <em>(varying-intercept) varying-slope</em> model, or
+a <em>random coefficients</em> model.
+It can be estimated as:</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">5</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county),
                           <span class="dt">data =</span> radon,
-                          <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit_radon_<span class="dv">5</span>, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;^b</span><span class="ch">\\</span><span class="st">[floor&quot;</span>))</code></pre></div>
+                          <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit_radon_<span class="dv">5</span>, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;^b</span><span class="ch">\\</span><span class="st">[floor&quot;</span>))</code></pre>
 <p><img src="multilevel_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="with-group-level-covariates" class="section level2">
 <h2><span class="header-section-number">20.6</span> With Group-Level Covariates</h2>
-<p>Group-level covariates could also be added as predictors. <span class="math display">\[
+<p>Group-level covariates could also be added as predictors.
+<span class="math display">\[
 \begin{aligned}
 y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \mu_i &amp;= \alpha_{j[i]} + \beta~\mathtt{log\_uranium}_{j[i]}  \\
@@ -802,29 +906,38 @@ y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \gamma &amp;\sim \dnorm(0, 10)
 \end{aligned}
 \]</span></p>
-<p>We could also write that model with group-level predictors included in the prior fthe group level intercepts as <span class="math display">\[
+<p>We could also write that model with group-level predictors included in the prior fthe group level intercepts as
+<span class="math display">\[
 \begin{aligned}
 y_i &amp;\sim  N(\mu_i, \sigma^2) \\
 \mu_i &amp;= \alpha_{j[i]} \\
 \alpha_j &amp;\sim \dnorm(\gamma +  \beta~\mathtt{log\_uranium}_j, \tau) &amp; \text{for } j \in 1, \dots, m \\
 \end{aligned}
-\]</span> These two models are equivalent. However, they may have different sampling efficiencies. Generally, in estimation, the first form in which the group-level predictors are included in the top level is used.</p>
+\]</span>
+These two models are equivalent.
+However, they may have different sampling efficiencies.
+Generally, in estimation, the first form in which the group-level predictors are included in the top level is used.</p>
 <p>To estimate this model with <code>stan_glmer</code> run the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">6</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>log_uranium,
+<pre class="sourceCode r"><code class="sourceCode r">fit_radon_<span class="dv">6</span> &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>log_uranium,
                           <span class="dt">data =</span> radon,
-                          <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
+                          <span class="dt">refresh =</span> <span class="dv">-1</span>)</code></pre>
 </div>
 <div id="pooling-of-hierarchical-parameters" class="section level2">
 <h2><span class="header-section-number">20.7</span> Pooling of Hierarchical Parameters</h2>
 <p>What does partial pooling do?<br />
-This is easiest to understand in a simple mean-model with normal errors. <span class="math display">\[
+This is easiest to understand in a simple mean-model with normal errors.
+<span class="math display">\[
 \begin{aligned}[t]
 y &amp;\sim \dnorm(\mu_{j[i]}, \sigma) \\
 \mu_{j} &amp;\sim \dnorm(\gamma, \tau) .
 \end{aligned}
-\]</span> If the hyperparameters were known, the posterior of <span class="math inline">\(\mu_j\)</span> is <span class="math display">\[
+\]</span>
+If the hyperparameters were known, the posterior of <span class="math inline">\(\mu_j\)</span> is
+<span class="math display">\[
 \mu_j | y, \gamma, \sigma, \tau \sim \dnorm(\hat{\mu}_j, V_j)
-\]</span> where <span class="math display">\[
+\]</span>
+where
+<span class="math display">\[
 \begin{aligned}[t]
 \hat{\mu}_j &amp;= \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\tau^2} \gamma}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}} \\
 V_j &amp;= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
@@ -833,8 +946,8 @@ V_j &amp;= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
 <p>How does this vary depending on the size of the group, <span class="math inline">\(n_j\)</span>?</p>
 <table>
 <colgroup>
-<col width="33%" />
-<col width="66%" />
+<col width="32%" />
+<col width="67%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -865,89 +978,140 @@ V_j &amp;= \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
 </tr>
 </tbody>
 </table>
-<p>When the sample size of the group is large, the prior data from other groups provides little additional informiation and the posterior is dominated by the observations in that group. However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior. We even have posterior estimates of groups and observations from groups we have not seen before due to the estimated distribution of group means.</p>
-<p>This is a good reason to use partial pooling. If there is enough data it will converge to the no-pooling case, but if there is not it will degrade to the full-pooling case.</p>
-<p>If instead the group means <span class="math inline">\(\mu_j\)</span> were known, we can calculate some crude estimates. The <em>data variance</em>, <span class="math inline">\(\sigma^2\)</span>, is the residual variance, <span class="math display">\[
+<p>When the sample size of the group is large, the prior data from other groups provides little additional informiation and the posterior is dominated by the observations in that group.
+However, when the sample size of the group is small, there is little information coming from the groups own observations and prior data from other groups can have a big influence on the posterior.
+We even have posterior estimates of groups and observations from groups we have not seen before due to the estimated distribution of group means.</p>
+<p>This is a good reason to use partial pooling.
+If there is enough data it will converge to the no-pooling case, but if there is not it will degrade to the full-pooling case.</p>
+<p>If instead the group means <span class="math inline">\(\mu_j\)</span> were known, we can calculate some crude estimates.
+The <em>data variance</em>, <span class="math inline">\(\sigma^2\)</span>, is the residual variance,
+<span class="math display">\[
 \E(\sigma^2 | y, \mu)  = \frac{1}{n} \sum_{i = 1}^n (y - \mu_{j[i]})^2 .
-\]</span> The global mean is approximately the average of the group-level means, <span class="math display">\[
+\]</span>
+The global mean is approximately the average of the group-level means,
+<span class="math display">\[
 \begin{aligned}[t]
 \E(\gamma | y, \mu) &amp;= \frac{1}{J} \sum_{i = 1}^n \mu_j \\
 \Var(\gamma | y, \mu) &amp;= \frac{1}{J} \tau^2
 \end{aligned}
-\]</span> The group level variance is <span class="math inline">\(\tau^2\)</span> is, <span class="math display">\[
+\]</span>
+The group level variance is <span class="math inline">\(\tau^2\)</span> is,
+<span class="math display">\[
 \E(\tau^2 | y, \mu) = \frac{1}{J} \sum_{j = 1}^J (\mu_j - \gamma)^2
 \]</span></p>
 </div>
 <div id="lme4" class="section level2">
 <h2><span class="header-section-number">20.8</span> lme4</h2>
-<p>In R, the most widely used package to estimate mixed-effects models is <strong>lme4</strong>. This estimates models using maximum likelihood or restricted maximum likelihood methods (REML). This will be faster than using full-Bayesian methods but also underestimate the uncertainty, as well as being a worse approximation of the posterior. Additionally, in frequentist inference, the meaning of the random effects is different; they are nuisance parameters and not given standard errors.</p>
-<p>See <span class="citation">D. M. Bates (2010)</span> and <span class="citation">D. Bates et al. (2014)</span> for introductions to mixed-effects models with <strong>lme4</strong>. These are also good introductions to classical approaches to mixed effects models.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;lme4&quot;</span>)</code></pre></div>
+<p>In R, the most widely used package to estimate mixed-effects models is <strong>lme4</strong>.
+This estimates models using maximum likelihood or restricted maximum likelihood methods (REML).
+This will be faster than using full-Bayesian methods but also underestimate the uncertainty, as well as being a worse approximation of the posterior.
+Additionally, in frequentist inference, the meaning of the random effects is different; they are nuisance parameters and not given standard errors.</p>
+<p>See <span class="citation">Bates (2010)</span> and <span class="citation">Bates et al. (2014)</span> for introductions to mixed-effects models with <strong>lme4</strong>.
+These are also good introductions to classical approaches to mixed effects models.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;lme4&quot;</span>)</code></pre>
 <p>Complete pooling</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_pooled &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>county <span class="op">+</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_pooled &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>county <span class="op">+</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre>
 <p>County-varying intercepts with no-pooling</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_intercept_nopool &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_intercept_nopool &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre>
 <p>County-varying intercepts with partial-pooling</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_intercept_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_intercept_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre>
 <p>Varying slopes with no pooling:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_slope_nopool &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>county <span class="op">*</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_slope_nopool &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>county <span class="op">*</span><span class="st"> </span>floor, <span class="dt">data =</span> radon)</code></pre>
 <p>Varying slopes with partial pooling:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county), <span class="dt">data =</span> radon)</code></pre></div>
-<p>We can also include a county-level variable (<code>log_uranium</code>) in various models: With no-pooling,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>floor <span class="op">+</span><span class="st"> </span>log_uranium, <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county), <span class="dt">data =</span> radon)</code></pre>
+<p>We can also include a county-level variable (<code>log_uranium</code>) in various models:
+With no-pooling,</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lm</span>(log_radon <span class="op">~</span><span class="st"> </span>floor <span class="op">+</span><span class="st"> </span>log_uranium, <span class="dt">data =</span> radon)</code></pre>
 <p>With varying-intercepts</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor <span class="op">+</span><span class="st"> </span>log_uranium,
-                          <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st"> </span>floor <span class="op">+</span><span class="st"> </span>log_uranium,
+                          <span class="dt">data =</span> radon)</code></pre>
 <p>With varying-intercepts and slopes,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st">  </span>log_uranium,
-                          <span class="dt">data =</span> radon)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit_slope_partial &lt;-<span class="st"> </span><span class="kw">lmer</span>(log_radon <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>floor <span class="op">|</span><span class="st"> </span>county) <span class="op">+</span><span class="st">  </span>log_uranium,
+                          <span class="dt">data =</span> radon)</code></pre>
 </div>
 <div id="covariance-priors" class="section level2">
 <h2><span class="header-section-number">20.9</span> Priors for Covariances</h2>
-<p>Traditinally the Wishart and inverse Wishart distributions have been used for modeling covariance distributions. This was largely because they were in some cases conjugate distributions. However, they have several poor properties. See <a href="https://github.com/pymc-devs/pymc3/issues/538#issuecomment-94153586" class="uri">https://github.com/pymc-devs/pymc3/issues/538#issuecomment-94153586</a></p>
-<p>A preferred approach is to first decompose the covariance matrix (<span class="math inline">\(\Sigma\)</span>) into a vector of standard deviations (<span class="math inline">\(\omega\)</span>) and a correlation matrix (<span class="math inline">\(R\)</span>), <span class="math display">\[
+<p>Traditinally the Wishart and inverse Wishart distributions have been used for modeling covariance distributions. This was largely because they were in some cases conjugate
+distributions. However, they have several poor properties.
+See <a href="https://github.com/pymc-devs/pymc3/issues/538#issuecomment-94153586" class="uri">https://github.com/pymc-devs/pymc3/issues/538#issuecomment-94153586</a></p>
+<p>A preferred approach is to first decompose the covariance matrix (<span class="math inline">\(\Sigma\)</span>) into
+a vector of standard deviations (<span class="math inline">\(\omega\)</span>) and a correlation matrix (<span class="math inline">\(R\)</span>),
+<span class="math display">\[
 \Sigma = \diag(\omega) R \diag(\omega) ,
-\]</span> and then place priors on each of those.</p>
-<p>The preferred distribution for a correlation distribution is the LKJ distribution. This distribution is proportional to a product of the determinant of the correlation matrix. The LKJ distribution takes a single parameter <span class="math inline">\(\eta &gt; 0\)</span>. It can be interpreted similarly to the the shape parameter of a symmetric Beta distribution. When <span class="math inline">\(\eta = 1\)</span>, then there is a uniform distribution over all correlation matrices. As <span class="math inline">\(\eta \to 1\)</span>, the correlation matrix approaches the identity matrix. As <span class="math inline">\(\eta \to 0\)</span>, the density has a trough at the identity matrix. <span class="math display">\[
+\]</span>
+and then place priors on each of those.</p>
+<p>The preferred distribution for a correlation distribution is
+the LKJ distribution.
+This distribution is proportional to a product of the determinant of the correlation matrix.
+The LKJ distribution takes a single parameter <span class="math inline">\(\eta &gt; 0\)</span>.
+It can be interpreted similarly to the the shape parameter of a symmetric Beta distribution.
+When <span class="math inline">\(\eta = 1\)</span>, then there is a uniform distribution over all correlation matrices.
+As <span class="math inline">\(\eta \to 1\)</span>, the correlation matrix approaches the identity matrix.
+As <span class="math inline">\(\eta \to 0\)</span>, the density has a trough at the identity matrix.
+<span class="math display">\[
 \mathsf{LKJ}(R | \eta) \propto |R|^{\eta - 1}
 \]</span></p>
 <p>There are a few ways to assign prior distributions to the standard deviation vector, <span class="math inline">\(\omega\)</span>.</p>
-<p>The <code>lkj()</code> prior used by <code>stan_mvmer()</code> and <code>stan_jm()</code> assigns independent Half Student-t priors, with degrees of freedom <span class="math inline">\(d\)</span>, and scale, <span class="math inline">\(s_j\)</span>, <span class="math display">\[
+<p>The <code>lkj()</code> prior used by <code>stan_mvmer()</code> and <code>stan_jm()</code> assigns independent Half Student-t priors, with degrees of freedom <span class="math inline">\(d\)</span>, and scale, <span class="math inline">\(s_j\)</span>,
+<span class="math display">\[
 \omega_j \sim \HalfStudentT(d, 0, s_j) .
 \]</span></p>
-<p>The <code>deconv()</code> prior used by <code>stan_glmer</code> decomposes the standard deviation vector further. It notes that the trace of a covariance matrix is equal to the sum of the variances. This suggests decomposing the variance vector (<span class="math inline">\(\omega^2\)</span>) into the product of the trace (<span class="math inline">\(\psi^2\)</span>) and a simplex (<span class="math inline">\(\pi\)</span>) which allocates how much of the total variance is associated with each element. <span class="math display">\[
+<p>The <code>deconv()</code> prior used by <code>stan_glmer</code> decomposes the standard deviation vector further.
+It notes that the trace of a covariance matrix is equal to the sum of the variances.
+This suggests decomposing the variance vector (<span class="math inline">\(\omega^2\)</span>) into the product of the
+trace (<span class="math inline">\(\psi^2\)</span>) and a simplex (<span class="math inline">\(\pi\)</span>) which allocates how much of the total variance
+is associated with each element.
+<span class="math display">\[
 \begin{aligned}
 \omega &amp;= \psi \sqrt{\pi}
 \end{aligned}
-\]</span> The simplex is given a symmetric Dirichlet prior with concentration parameter <span class="math inline">\(k\)</span>, <span class="math display">\[
+\]</span>
+The simplex is given a symmetric Dirichlet prior with concentration parameter <span class="math inline">\(k\)</span>,
+<span class="math display">\[
 \pi &amp;\sim \ddirchlet(k, 1 / p).
-\]</span> The default for <code>deconv()</code> is 1, for a uniform distribution over the space of simplex vectors of that size.</p>
-<p>The square root of the trace (<span class="math inline">\(\psi\)</span>) is given a gamma prior with shape parameter <span class="math inline">\(a\)</span> and scale parameter <span class="math inline">\(b\)</span>, <span class="math display">\[
+\]</span>
+The default for <code>deconv()</code> is 1, for a uniform distribution over the space of simplex vectors of that size.</p>
+<p>The square root of the trace (<span class="math inline">\(\psi\)</span>) is given a gamma prior with shape parameter <span class="math inline">\(a\)</span>
+and scale parameter <span class="math inline">\(b\)</span>,
+<span class="math display">\[
 \psi &amp;\sim \dgamma(a, b) .
-\]</span> The default for <code>deconv()</code> is <span class="math inline">\(a = 1\)</span> and <span class="math inline">\(b = 1\)</span>, which is equal to <span class="math inline">\(\dexp(\psi | 1)\)</span>.</p>
+\]</span>
+The default for <code>deconv()</code> is <span class="math inline">\(a = 1\)</span> and <span class="math inline">\(b = 1\)</span>, which is equal to <span class="math inline">\(\dexp(\psi | 1)\)</span>.</p>
 </div>
 <div id="cetered-and-non-centered-parameterizations" class="section level2">
 <h2><span class="header-section-number">20.10</span> Cetered and Non-centered Parameterizations</h2>
-<p>The natural way to write a hiearchical model is with a centered parameterization: <span class="math display">\[
+<p>The natural way to write a hiearchical model is with a centered parameterization:
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 \alpha_{j} &amp;\sim \dnorm(\mu_\alpha, \omega_{\alpha})
 \end{aligned}
-\]</span> However, this can be difficult to sample from. In particular, by construction, the values of <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\omega_{\alpha}\)</span>, and <span class="math inline">\(\alpha_j\)</span> are going to be highly correlated. This results in a posterior pattern called a “funnel” which is difficult for HMC to sample due to the changes in the posterior curvature.</p>
-<p>The centered paramerization centers and scales the distribution of the intercepts. <span class="math display">\[
+\]</span>
+However, this can be difficult to sample from. In particular, by construction,
+the values of <span class="math inline">\(\mu_{\alpha}\)</span>, <span class="math inline">\(\omega_{\alpha}\)</span>, and <span class="math inline">\(\alpha_j\)</span> are going to be highly correlated.
+This results in a posterior pattern called a “funnel” which is difficult for HMC
+to sample due to the changes in the posterior curvature.</p>
+<p>The centered paramerization centers and scales the distribution of the intercepts.
+<span class="math display">\[
 \begin{aligned}[t]
 y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 \alpha_{j} &amp;\sim \mu_{\alpha} + \omega_{\alpha} \alpha^* \\
 \alpha^*_{j} &amp;\sim \dnorm(0, 1)
 \end{aligned}
 \]</span></p>
-<p>These are two ways of writing the <em>same</em> model. However, they change the parameters that the HMC algorithm is actively sampling and thus can have different sampling performance.</p>
+<p>These are two ways of writing the <em>same</em> model.
+However, they change the parameters that the HMC algorithm is actively sampling
+and thus can have different sampling performance.</p>
 <p>However, neither is universally better.</p>
 <ul>
 <li>If much data, the non-centered parameterization works better</li>
 <li>If less data, the centered parameterization works better</li>
 </ul>
-<p>And there is currently no ex-ante way to know which will work better, and at what amount of “data” that the performance of one or the other is better. However, one other reason to use the centered parameterization (if it is also scaled), is that the Stan HMC implementation tends to be more efficient if all parameters are on the scale.</p>
+<p>And there is currently no ex-ante way to know which will work better, and at
+what amount of “data” that the performance of one or the other is better.
+However, one other reason to use the centered parameterization (if it is also scaled),
+is that the Stan HMC implementation tends to be more efficient if all parameters
+are on the scale.</p>
 <p>See also</p>
 <ul>
 <li>Stan Ref Ch 9 “Regression” has sections on hierarchical/multi-level models</li>
@@ -976,16 +1140,25 @@ y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 <h2><span class="header-section-number">20.12</span> Miscellaneous</h2>
 <div id="how-many-groups" class="section level3">
 <h3><span class="header-section-number">20.12.1</span> How many groups?</h3>
-<p>In classical discussions of multi-level or hierarchical models, a common question is how many groups are required to be able to use random effects vs. fixed effects.</p>
-<p>As noted earlier, random effects estimates the variance between group means. If there are few groups, there is not much information available to estimate this variance. As such, random effects is not much different than fixed effects.</p>
+<p>In classical discussions of multi-level or hierarchical models,
+a common question is how many groups are required to be able to use random effects vs. fixed effects.</p>
+<p>As noted earlier, random effects estimates the variance between group means. If there are few groups, there is not much information available to estimate this variance.
+As such, random effects is not much different than fixed effects.</p>
 <p>This literature provides many different rules of thumb for the number of groups necessary to be able to use random effects: 8, 10, 30, 50, or 100 <span class="citation">(Stegmueller 2013, 749)</span>.</p>
-<p><span class="citation">Stegmueller (2013)</span> finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups. ML methods do not suffer severe bias above 10-15 groups. Bayesian point estimates are biased for smaller numbers of groups, but less than the ML. Additionally, the Bayesian methods have better frequentist coverage than ML methods.</p>
+<p><span class="citation">Stegmueller (2013)</span> finds that Bayesian method produces better multi-level-models than maximum likelihood methods for all numbers of groups.
+ML methods do not suffer severe bias above 10-15 groups.
+Bayesian point estimates are biased for smaller numbers of groups, but less than the ML.
+Additionally, the Bayesian methods have better frequentist coverage than ML methods.</p>
 <p><span class="citation">Beck and Katz (2007)</span> show that ML random coefficient models are superior in terms of efficiency to many types of pooled and un-pooled estimators in small samples.</p>
 </div>
 <div id="correlation-between-predictors-and-errors" class="section level3">
 <h3><span class="header-section-number">20.12.2</span> Correlation between Predictors and Errors</h3>
 <p><span class="citation">Bafumi and Gelman (2006)</span> analyze this case.</p>
-<p>The standard suggestion in frequentist literature is to use a Hausman test where the null hypothesis is that random effects are consistent. However, <span class="citation">Clark and Linzer (2014)</span> note that in small samples this is likely to fail to reject random effects; and in large samples, random effects behave like fixed effects anyways.</p>
+<p>The standard suggestion in frequentist literature is to use a Hausman test
+where the null hypothesis is that random effects are consistent. However,
+<span class="citation">Clark and Linzer (2014)</span> note that in small samples this is likely to fail to reject
+random effects; and in large samples, random effects behave like fixed effects
+anyways.</p>
 </div>
 </div>
 <div id="references-11" class="section level2">
@@ -994,15 +1167,15 @@ y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 <ul>
 <li><p>Bayesian</p>
 <ul>
-<li><span class="citation">Gelman and Hill (2007 Ch. 11-17)</span>.</li>
-<li><span class="citation">Gelman et al. (2013 Ch 5)</span> “Hierarchical Models”</li>
-<li><span class="citation">Gelman et al. (2013 Ch 15)</span> “Hierarchical Linear Models”</li>
+<li><span class="citation">A. Gelman and Hill (2007 Ch. 11-17)</span>.</li>
+<li><span class="citation">A. Gelman, Carlin, et al. (2013 Ch 5)</span> “Hierarchical Models”</li>
+<li><span class="citation">A. Gelman, Carlin, et al. (2013 Ch 15)</span> “Hierarchical Linear Models”</li>
 <li><span class="citation">Jackman (2009 CHh. 7)</span></li>
 <li><span class="citation">Draper (2008)</span></li>
 </ul></li>
 <li><p>Frequentist</p>
 <ul>
-<li><span class="citation">H. Goldstein (2011)</span></li>
+<li><span class="citation">Goldstein (2011)</span></li>
 <li><span class="citation">Snijders and Bosker (2011)</span></li>
 <li><span class="citation">Rabe-Hesketh and Skrondal (2012)</span></li>
 <li><span class="citation">Jiang (2007)</span></li>
@@ -1018,34 +1191,36 @@ y_i &amp;\sim \dnorm(\alpha_{j[i]}, \sigma) \\
 <ul>
 <li><p><span class="citation">Western (1998)</span>: economic growth for OECD countries</p></li>
 <li><p><span class="citation">Gelman and King (1993)</span>: US election polling</p></li>
-<li><p><span class="citation">D. K. Park, Gelman, and Bafumi (2004)</span>: multi-level models of opinion polls combined with post-stratification to extrapolate national opinion surveys to regions.</p></li>
-<li><p><span class="citation">Steenbergen and Jones (2002)</span>: mostly an intro/review of MLM, but uses the cross-country Eurobarometer to model support for the EU</p></li>
-<li><p><span class="citation">Gelman et al. (2007)</span>: state-level opinion polls</p></li>
+<li><p><span class="citation">Park, Gelman, and Bafumi (2004)</span>: multi-level models of opinion polls combined with post-stratification to extrapolate national opinion surveys to regions.</p></li>
+<li><p><span class="citation">Steenbergen and Jones (2002)</span>: mostly an intro/review of MLM, but uses the
+cross-country Eurobarometer to model support for the EU</p></li>
+<li><p><span class="citation">A. Gelman, Shor, et al. (2007)</span>: state-level opinion polls</p></li>
 <li><p><span class="citation">Raudenbush and Bryk (2001)</span>: student performance with student and school-level indicators</p></li>
 <li><p><span class="citation">Gilardi (2010)</span>: policy diffusion</p></li>
 <li><p><span class="citation">O’Rourke and Sinnott (2006)</span>: attitudes toward immigration</p></li>
 <li><p><span class="citation">Andersen and Fetner (2008)</span>: ethnic and social tolerance</p></li>
 <li><p><span class="citation">Weldon (2006)</span>: ethnic and social tolerance</p></li>
 <li><p><span class="citation">Arzheimer (2009)</span>: right-wing voting</p></li>
-<li><p><span class="citation">M. Hooghe et al. (2009)</span>: social and political trust</p></li>
+<li><p><span class="citation">Hooghe et al. (2009)</span>: social and political trust</p></li>
 <li><p><span class="citation">Anderson and Singer (2008)</span>: satisfaction with democracy</p></li>
 <li><p><span class="citation">Meer, Deth, and Scheepers (2009)</span>: political participation</p></li>
 <li><p><span class="citation">Iversen and Rosenbluth (2006)</span>: political economy of the gender wage gap</p></li>
-<li><p><span class="citation">L. Hooghe and Marks (2004)</span>: support for European integration</p></li>
+<li><p><span class="citation">Hooghe and Marks (2004)</span>: support for European integration</p></li>
 <li><p><span class="citation">Lax and Phillips (2009)</span>: American politics using states and neighborhoods</p></li>
 <li><p><span class="citation">Voeten (2008)</span>: judicial decision making</p></li>
 <li><p><span class="citation">Franchino and Høyland (2009)</span>: legislative politics</p></li>
 <li><p><span class="citation">Denisova et al. (2009)</span>: politics of economic reforms</p></li>
-<li><p><span class="citation">Aitkin and Longford (1986)</span>, <span class="citation">Harvey Goldstein et al. (2000)</span>, <span class="citation">Harvey Goldstein et al. (1993)</span>: education</p></li>
-<li><p><span class="citation">Harvey Goldstein et al. (2000)</span>: medicine</p></li>
+<li><p><span class="citation">Aitkin and Longford (1986)</span>, <span class="citation">Goldstein et al. (2000)</span>,
+<span class="citation">Goldstein et al. (1993)</span>: education</p></li>
+<li><p><span class="citation">Goldstein et al. (2000)</span>: medicine</p></li>
 </ul>
 
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Multilevel_model" class="uri">https://en.wikipedia.org/wiki/Multilevel_model</a><a href="multilevel-models.html#fnref1">↩</a></p></li>
+<ol start="14">
+<li id="fn14"><p><a href="https://en.wikipedia.org/wiki/Multilevel_model" class="uri">https://en.wikipedia.org/wiki/Multilevel_model</a><a href="multilevel-models.html#fnref14" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -1077,6 +1252,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/multilevel.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -1090,8 +1269,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

@@ -12,6 +12,13 @@ documentclass: book
 
 # Preface {-}
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+<div class="alert alert-danger">
+These notes are unfinished and certainly full of typos and such.
+However, I'm no longer working on these notes. 
+</div>
+
 Notes on Bayesian methods - written to supplement CS&SS/STAT 564: Bayesian Statistics for the Social Sciences.
 
 These notes largely focus on the application and theory necessary for quantitative social scientists to successfully apply Bayesian statistical methods.

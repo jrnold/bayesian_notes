@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>14 Separation | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="14 Separation | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="14 Separation | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="14 Separation | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="robust-regression.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
@@ -357,7 +384,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.3</b> Example: Radon</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.3.1</b> Data</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#modeling"><i class="fa fa-check"></i><b>20.4</b> Modeling</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#radon-example"><i class="fa fa-check"></i><b>20.4</b> Radon Example</a></li>
 <li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#with-individual-covariates"><i class="fa fa-check"></i><b>20.5</b> With Individual Covariates</a></li>
 <li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#with-group-level-covariates"><i class="fa fa-check"></i><b>20.6</b> With Group-Level Covariates</a></li>
 <li class="chapter" data-level="20.7" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.7</b> Pooling of Hierarchical Parameters</a></li>
@@ -521,15 +548,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">14</span> Separation</h1>
 <div id="prerequisites-7" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;rstan&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;rstanarm&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;jrnold.bayes.notes&quot;</span>)</code></pre></div>
+<span class="kw">library</span>(<span class="st">&quot;jrnold.bayes.notes&quot;</span>)</code></pre>
 </div>
 <div id="introduction-3" class="section level2">
 <h2><span class="header-section-number">14.1</span> Introduction</h2>
-<p>Separation is when a predictor perfectly predicts a binary response variable <span class="citation">(Rainey 2016, <span class="citation">Zorn (2005)</span>)</span>.</p>
+<p>Separation is when a predictor perfectly predicts a binary response variable <span class="citation">(Rainey 2016, @Zorn2005a)</span>.</p>
 <p>For classification problems, there are three cases.</p>
 <ul>
 <li><em>complete separation</em>: the predictor perfectly predicts both 0’s and 1’s.</li>
@@ -540,8 +567,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="complete-separation" class="section level2">
 <h2><span class="header-section-number">14.2</span> Complete Separation</h2>
-<p>The following data is an example of data with complete separation.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CompleteSeparation
+<p>The following data is an example of data with complete separation.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+<pre class="sourceCode r"><code class="sourceCode r">CompleteSeparation
 <span class="co">#&gt; # A tibble: 8 x 3</span>
 <span class="co">#&gt;       y    x1    x2</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
@@ -551,8 +578,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; 4     0     3    -1</span>
 <span class="co">#&gt; 5     1     5     2</span>
 <span class="co">#&gt; 6     1     6     4</span>
-<span class="co">#&gt; # ... with 2 more rows</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(CompleteSeparation, y, x1) <span class="op">%&gt;%</span>
+<span class="co">#&gt; # ... with 2 more rows</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(CompleteSeparation, y, x1) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(x1) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span>
@@ -567,17 +594,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; 4     5     0     1</span>
 <span class="co">#&gt; 5     6     0     1</span>
 <span class="co">#&gt; 6    10     0     1</span>
-<span class="co">#&gt; # ... with 1 more row</span></code></pre></div>
-<p>The variable <code>x1</code> perfectly separates <code>y</code>, since when <code>x1 &lt;= 3</code>, <code>y = 0</code>, and when <code>x1 &gt; 3</code>, <code>y = 1</code>.</p>
+<span class="co">#&gt; # ... with 1 more row</span></code></pre>
+<p>The variable <code>x1</code> perfectly separates <code>y</code>, since when <code>x1 &lt;= 3</code>, <code>y = 0</code>,
+and when <code>x1 &gt; 3</code>, <code>y = 1</code>.</p>
 <p>The MLE of the binomial likelihood with a logistic link function for this data has a finite log-likelihood, but the optimal line is a step function. This pushes the coefficient for the separating variable to <span class="math inline">\(\infty\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(CompleteSeparation, <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> y)) <span class="op">+</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(CompleteSeparation, <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;glm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x, <span class="dt">se =</span> <span class="ot">FALSE</span>,
               <span class="dt">method.args =</span> <span class="kw">list</span>(<span class="dt">family =</span> <span class="kw">binomial</span>()), <span class="dt">colour =</span> <span class="st">&quot;gray&quot;</span>)
-<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></code></pre></div>
+<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></code></pre>
 <p><img src="separation_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>If we estimate a binomial model with this data, it will warn that some observations have predicted probabilities close to zero or one.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_cs1 &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> CompleteSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
+<pre class="sourceCode r"><code class="sourceCode r">fit_cs1 &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> CompleteSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
 <span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span>
 <span class="kw">summary</span>(fit_cs1)
 <span class="co">#&gt; </span>
@@ -602,13 +630,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; Residual deviance: 4.5454e-10  on 5  degrees of freedom</span>
 <span class="co">#&gt; AIC: 6</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Number of Fisher Scoring iterations: 24</span></code></pre></div>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 24</span></code></pre>
 <p>Additionally, the standard errors are implausibly large.</p>
 </div>
 <div id="quasi-separation" class="section level2">
 <h2><span class="header-section-number">14.3</span> Quasi-Separation</h2>
 <p>The following generated data is an example of quasi-separation.[^quasi-separation]</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(QuasiSeparation)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(QuasiSeparation)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -670,8 +698,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 </tbody>
 </table>
-<p>The variable <code>x1</code> <em>almost</em> separates <code>y</code>. When <code>x1 &lt; 3</code>, <code>y = 0</code>, and when <code>x1 &gt; 3</code>, <code>y = 1</code>. Only when <code>x1 = 3</code>, does <code>y</code> takes values of both 0 and 1.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(QuasiSeparation, y, x1) <span class="op">%&gt;%</span>
+<p>The variable <code>x1</code> <em>almost</em> separates <code>y</code>.
+When <code>x1 &lt; 3</code>, <code>y = 0</code>, and when <code>x1 &gt; 3</code>, <code>y = 1</code>.
+Only when <code>x1 = 3</code>, does <code>y</code> takes values of both 0 and 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(QuasiSeparation, y, x1) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(x1) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span>
@@ -686,15 +716,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; 4     4 0     1    </span>
 <span class="co">#&gt; 5     5 0     1    </span>
 <span class="co">#&gt; 6     6 0     1    </span>
-<span class="co">#&gt; # ... with 2 more rows</span></code></pre></div>
-<p>In the quasi-separation case, like the complete separation case, the best line is something close to a step function. Unlike the <strong>complete separation</strong> case, the coefficient for the separating variable takes a finite, but very large value.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(QuasiSeparation, <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> y)) <span class="op">+</span>
+<span class="co">#&gt; # ... with 2 more rows</span></code></pre>
+<p>In the quasi-separation case, like the complete separation case, the best line is something close to a step function.
+Unlike the <strong>complete separation</strong> case, the coefficient for the separating variable takes a finite, but very large value.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(QuasiSeparation, <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;glm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x, <span class="dt">se =</span> <span class="ot">FALSE</span>,
               <span class="dt">method.args =</span> <span class="kw">list</span>(<span class="dt">family =</span> <span class="kw">binomial</span>()), <span class="dt">colour =</span> <span class="st">&quot;gray&quot;</span>)
-<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></code></pre></div>
+<span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></code></pre>
 <p><img src="separation_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_qs1 &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> QuasiSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
+<pre class="sourceCode r"><code class="sourceCode r">fit_qs1 &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> QuasiSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
 <span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span>
 <span class="kw">summary</span>(fit_qs1)
 <span class="co">#&gt; </span>
@@ -717,16 +748,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; Residual deviance:  3.7792  on 7  degrees of freedom</span>
 <span class="co">#&gt; AIC: 9.779</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Number of Fisher Scoring iterations: 21</span></code></pre></div>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 21</span></code></pre>
 </div>
 <div id="weak-priors" class="section level2">
 <h2><span class="header-section-number">14.4</span> Weak Priors</h2>
-<p>While the likelihood is unidentified, weakly informative priors on the regression coefficients will deal with separation. <span class="math display">\[
+<p>While the likelihood is unidentified, weakly informative priors on the regression coefficients will deal with separation.
+<span class="math display">\[
 \beta_k \sim \dnorm(0, 2.5)
-\]</span> where all the columns of <span class="math inline">\(\code{x}\)</span> are assumed to have unit variance (or be otherwise standardized). The half-Cauchy prior, <span class="math inline">\(\dhalfcauchy(0, 2.5)\)</span>, suggested in <span class="citation">Gelman et al. (2008)</span> is insufficiently informative to to deal with separation <span class="citation">(Ghosh, Li, and Mitra 2015)</span>, but finite-variance weakly informative Student-t or Normal distributions will work.</p>
-<p>These are the priors suggested by <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">Stan</a> and used by default in <strong>rstanarm</strong> <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
+\]</span>
+where all the columns of <span class="math inline">\(\code{x}\)</span> are assumed to have unit variance (or be otherwise standardized).
+The half-Cauchy prior, <span class="math inline">\(\dhalfcauchy(0, 2.5)\)</span>, suggested in <span class="citation">Gelman et al. (2008)</span> is insufficiently informative to to deal with separation <span class="citation">(J. Ghosh, Li, and Mitra 2015)</span>, but finite-variance weakly informative Student-t or Normal distributions will work.</p>
+<p>These are the priors suggested by <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">Stan</a> and
+used by default in <strong>rstanarm</strong> <a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">rstanarm</a>.</p>
 <p>When estimated with <code>stan_glm()</code>, the coefficients of both the complete separation and quasi-separated data are finite.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_cs2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> CompleteSeparation,
+<pre class="sourceCode r"><code class="sourceCode r">fit_cs2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> CompleteSeparation,
                     <span class="dt">family =</span> <span class="kw">binomial</span>())
 <span class="kw">summary</span>(fit_cs2)
 <span class="co">#&gt; </span>
@@ -757,8 +792,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; mean_PPD      0.0  1.0  3796 </span>
 <span class="co">#&gt; log-posterior 0.0  1.0  1641 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_qs2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> QuasiSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
+<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">fit_qs2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> QuasiSeparation, <span class="dt">family =</span> <span class="kw">binomial</span>())
 <span class="kw">summary</span>(fit_qs2)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Model Info:</span>
@@ -788,17 +823,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; mean_PPD      0.0  1.0  3688 </span>
 <span class="co">#&gt; log-posterior 0.0  1.0  1509 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre></div>
+<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre>
 </div>
 <div id="example-support-of-aca-medicaid-expansion" class="section level2">
 <h2><span class="header-section-number">14.5</span> Example: Support of ACA Medicaid Expansion</h2>
-<p>This example is from <span class="citation">Rainey (2016)</span> from the original paper <span class="citation">Barrilleaux and Rainey (2014)</span> with replication code <a href="https://github.com/carlislerainey/separation">here</a>. Load the data included in the <strong>jrnold.bayes.notes</strong> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;politics_and_need&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;jrnold.bayes.notes&quot;</span>)</code></pre></div>
-<p>The observations are the governors of the US states. The outcome variable is their votes on the Affordable Care Act (ACA) Medicaid Expansion. The dataset includes multiple predictors, including whether the governor is a Republican (<code>gop_governor</code>). Add Democratic governors supported the expansion (<code>gop_governor == 0</code>), and only Republican governors (<code>gop_governor == 1</code>) opposed it (though not all).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count(politics_and_need, gop_governor, oppose_expansion)</span></code></pre></div>
+<p>This example is from <span class="citation">Rainey (2016)</span> from the original paper <span class="citation">Barrilleaux and Rainey (2014)</span>
+with replication code <a href="https://github.com/carlislerainey/separation">here</a>.
+Load the data included in the <strong>jrnold.bayes.notes</strong> package:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;politics_and_need&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;jrnold.bayes.notes&quot;</span>)</code></pre>
+<p>The observations are the governors of the US states.
+The outcome variable is their votes on the Affordable Care Act (ACA) Medicaid Expansion.
+The dataset includes multiple predictors, including whether the governor is a Republican (<code>gop_governor</code>).
+Add Democratic governors supported the expansion (<code>gop_governor == 0</code>),
+and only Republican governors (<code>gop_governor == 1</code>) opposed it (though not all).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count(politics_and_need, gop_governor, oppose_expansion)</span></code></pre>
 <p>This is a case of quasi-separation.</p>
 <p>What happens when this model is estimated with MLE by <code>glm()</code>?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aca_fmla &lt;-
+<pre class="sourceCode r"><code class="sourceCode r">aca_fmla &lt;-
 <span class="st">  </span>oppose_expansion <span class="op">~</span><span class="st"> </span>gop_governor <span class="op">+</span><span class="st"> </span>percent_favorable_aca <span class="op">+</span><span class="st"> </span>gop_leg <span class="op">+</span>
 <span class="st">         </span>percent_uninsured <span class="op">+</span><span class="st"> </span>bal2012 <span class="op">+</span><span class="st"> </span>multiplier <span class="op">+</span><span class="st"> </span>percent_nonwhite <span class="op">+</span>
 <span class="st">         </span>percent_metro
@@ -830,13 +871,13 @@ fit_aca1 &lt;-<span class="st"> </span><span class="kw">glm</span>(aca_fmla, <sp
 <span class="co">#&gt; Residual deviance: 31.710  on 41  degrees of freedom</span>
 <span class="co">#&gt; AIC: 49.71</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Number of Fisher Scoring iterations: 19</span></code></pre></div>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 19</span></code></pre>
 <p>Now estimate with <strong>rstanarm</strong> using the default weakly informative priors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_aca2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(aca_fmla, <span class="dt">data =</span> politics_and_need,
+<pre class="sourceCode r"><code class="sourceCode r">fit_aca2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(aca_fmla, <span class="dt">data =</span> politics_and_need,
                      <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>,
-                     <span class="dt">show_messages =</span> <span class="ot">FALSE</span>, <span class="dt">refresh =</span> <span class="op">-</span><span class="dv">1</span>,
-                     <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fit_aca2)
+                     <span class="dt">show_messages =</span> <span class="ot">FALSE</span>, <span class="dt">refresh =</span> <span class="dv">-1</span>,
+                     <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fit_aca2)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Model Info:</span>
 <span class="co">#&gt; </span>
@@ -879,20 +920,29 @@ fit_aca1 &lt;-<span class="st"> </span><span class="kw">glm</span>(aca_fmla, <sp
 <span class="co">#&gt; mean_PPD              0.0  1.0  4000 </span>
 <span class="co">#&gt; log-posterior         0.1  1.0  1385 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre></div>
+<span class="co">#&gt; For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</span></code></pre>
 </div>
 <div id="questions-2" class="section level2">
 <h2><span class="header-section-number">14.6</span> Questions</h2>
 <ul>
-<li><p>Estimate the model using <code>stan_glm()</code> with a flat prior, and a Student-t distribution with <code>df = 3</code>. Compare the coefficient estimates and the efficiency (<span class="math inline">\(\hat{R}\)</span>, ESS).</p></li>
-<li><p><span class="citation">Ghosh, Li, and Mitra (2015)</span> suggest that a Half-Cauchy prior distribution is insufficient for dealing with separation. Try estimating this model with a Cauchy prior with a scale of 2.5. Compare the coefficient estimates and efficiency (<span class="math inline">\(\hat{R}\)</span>, ESS).</p></li>
-<li><p>See the other application in <span class="citation">Rainey (2016)</span> on nuclear proliferation and war. Replicate the analysis with the informative, skeptical, and enthusiastic priors. The data can be found at <a href="https://github.com/carlislerainey/priors-for-separation/tree/master/bm-replication">carlislerainey/priors-for-separation</a>.</p></li>
+<li><p>Estimate the model using <code>stan_glm()</code> with a flat prior, and a Student-t
+distribution with <code>df = 3</code>. Compare the coefficient estimates and the
+efficiency (<span class="math inline">\(\hat{R}\)</span>, ESS).</p></li>
+<li><p><span class="citation">J. Ghosh, Li, and Mitra (2015)</span> suggest that a Half-Cauchy prior distribution is
+insufficient for dealing with separation. Try estimating this model with
+a Cauchy prior with a scale of 2.5. Compare the coefficient estimates
+and efficiency (<span class="math inline">\(\hat{R}\)</span>, ESS).</p></li>
+<li><p>See the other application in <span class="citation">Rainey (2016)</span> on nuclear proliferation and
+war. Replicate the analysis with the informative, skeptical, and
+enthusiastic priors. The data can be found at <a href="https://github.com/carlislerainey/priors-for-separation/tree/master/bm-replication">carlislerainey/priors-for-separation</a>.</p></li>
 </ul>
 </div>
 <div id="references-7" class="section level2">
 <h2><span class="header-section-number">14.7</span> References</h2>
-<p>See <span class="citation">Albert and Anderson (1984)</span>, <span class="citation">Heinze and Schemper (2002)</span>, and <span class="citation">Heinze (2006)</span> for discussion about separation.</p>
-<p><span class="citation">Rainey (2016)</span> provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values. Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).</p>
+<p>See <span class="citation">Albert and Anderson (1984)</span>, <span class="citation">Heinze and Schemper (2002)</span>, and <span class="citation">Heinze (2006)</span> for discussion
+about separation.</p>
+<p><span class="citation">Rainey (2016)</span> provides a mixed MLE/Bayesian simulation based approach to apply a prior to the variable with separation, while keeping the other coefficients at their MLE values.
+Since the results are highly sensitive to the prior, multiple priors should be tried (informative, skeptical, and enthusiastic).</p>
 <p><span class="citation">Firth (1993)</span> suggests a data-driven Jeffreys invariant prior. This prior was also recommended in <span class="citation">Zorn (2005)</span>.</p>
 <p><span class="citation">Greenland and Mansournia (2015)</span> suggest a log-F prior distribution which has an intuitive interpretation related to the number of observations.</p>
 
@@ -901,7 +951,7 @@ fit_aca1 &lt;-<span class="st"> </span><span class="kw">glm</span>(aca_fmla, <sp
 <div class="footnotes">
 <hr />
 <ol start="10">
-<li id="fn10"><p><a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">FAQ: What is Complete or Quasi-Complete Separation in Logistic/Probit Regression and How do We Deal With Them?</a><a href="separtion.html#fnref10">↩</a></p></li>
+<li id="fn10"><p><a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">FAQ: What is Complete or Quasi-Complete Separation in Logistic/Probit Regression and How do We Deal With Them?</a><a href="separtion.html#fnref10" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -933,6 +983,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/separation.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -946,8 +1000,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

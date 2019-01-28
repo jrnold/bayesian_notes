@@ -75,7 +75,7 @@ The marginal likelihood (model evidence) is the overall probability that a cab i
 This considers both the probabilities that a witness reports that the cab is blue when it is blue and reports that it is blue when it is green.
 $$
 \begin{aligned}[t]
-\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_B) \Pr(H_B)
+\Pr(W_B) = \Pr(W_B | H_B) \Pr(H_B) + \Pr(W_B | H_G) \Pr(H_G)
 \end{aligned}
 $$
 
@@ -198,22 +198,22 @@ science <- tribble(
 
 Calculate the posterior probability for each value of `theta`,
 for the different cases of `x`:
-  
-  ```r
-  group_by(science, x) %>%
+
+```r
+group_by(science, x) %>%
   mutate(marginal   = sum(likelihood * prior),
          posterior = likelihood * prior / marginal
   ) %>%
   arrange(x)
-  #> # A tibble: 4 x 6
-  #> # Groups:   x [2]
-  #>   theta x     prior likelihood marginal posterior
-  #>   <lgl> <lgl> <dbl>      <dbl>    <dbl>     <dbl>
-  #> 1 TRUE  FALSE   0.1      0.200    0.875    0.0229
-  #> 2 FALSE FALSE   0.9      0.95     0.875    0.977 
-  #> 3 TRUE  TRUE    0.1      0.8      0.125    0.64  
-  #> 4 FALSE TRUE    0.9      0.05     0.125    0.36
-  ```
+#> # A tibble: 4 x 6
+#> # Groups:   x [2]
+#>   theta x     prior likelihood marginal posterior
+#>   <lgl> <lgl> <dbl>      <dbl>    <dbl>     <dbl>
+#> 1 TRUE  FALSE   0.1      0.200    0.875    0.0229
+#> 2 FALSE FALSE   0.9      0.95     0.875    0.977 
+#> 3 TRUE  TRUE    0.1      0.8      0.125    0.64  
+#> 4 FALSE TRUE    0.9      0.05     0.125    0.36
+```
 
 ### Questions
 

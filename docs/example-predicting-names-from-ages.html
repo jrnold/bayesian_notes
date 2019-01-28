@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>3 Example: Predicting Names from Ages | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="3 Example: Predicting Names from Ages | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="3 Example: Predicting Names from Ages | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="3 Example: Predicting Names from Ages | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="naive-bayes.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
@@ -357,7 +384,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.3</b> Example: Radon</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.3.1</b> Data</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#modeling"><i class="fa fa-check"></i><b>20.4</b> Modeling</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#radon-example"><i class="fa fa-check"></i><b>20.4</b> Radon Example</a></li>
 <li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#with-individual-covariates"><i class="fa fa-check"></i><b>20.5</b> With Individual Covariates</a></li>
 <li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#with-group-level-covariates"><i class="fa fa-check"></i><b>20.6</b> With Group-Level Covariates</a></li>
 <li class="chapter" data-level="20.7" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.7</b> Pooling of Hierarchical Parameters</a></li>
@@ -522,23 +549,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="prerequisites-1" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
 <p>This analysis uses these packages.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
-<span class="kw">library</span>(<span class="st">&quot;babynames&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;babynames&quot;</span>)</code></pre>
 </div>
 <div id="statement-of-the-problem" class="section level2">
 <h2><span class="header-section-number">3.1</span> Statement of the problem</h2>
 <p>Suppose I know your sex and name, can I guess you age?</p>
-<p>The probability of an age given a name and sex, <span class="math display">\[
+<p>The probability of an age given a name and sex,
+<span class="math display">\[
 P(\text{age} | \text{name}, \text{sex}) \propto P(\text{name} | \text{age}, \text{sex}) P(\text{age} | \text{sex})
 \]</span></p>
 </div>
 <div id="data-wrangling" class="section level2">
 <h2><span class="header-section-number">3.2</span> Data Wrangling</h2>
 <p>The source of our data is the <strong>babynames</strong> package in R.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">YEAR &lt;-<span class="st"> </span><span class="dv">2015</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">YEAR &lt;-<span class="st"> </span><span class="dv">2015</span></code></pre>
 <p>We’ll consider a single year in our analysis 2015, which is the last year in the <code>babynames</code> package.</p>
-<p>The life tables are only provided for the decades from 1900 to 2010. We need to fill in the full life table for all birth years. For years between 1900 and 2010, we will linearly impute the probability of being alive at each age for non-decadal birth years. We’ll use 2010 for all birth-years after 2010.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">life_table &lt;-<span class="st"> </span>babynames<span class="op">::</span>lifetables <span class="op">%&gt;%</span>
+<p>The life tables are only provided for the decades from 1900 to 2010. We need to fill in the full life table for all birth years.
+For years between 1900 and 2010, we will linearly impute the probability of being alive at each age for non-decadal birth years.
+We’ll use 2010 for all birth-years after 2010.</p>
+<pre class="sourceCode r"><code class="sourceCode r">life_table &lt;-<span class="st"> </span>babynames<span class="op">::</span>lifetables <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">px =</span> lx <span class="op">/</span><span class="st"> </span><span class="fl">1e+05</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">rename</span>(<span class="dt">age =</span> x) <span class="op">%&gt;%</span>
@@ -551,108 +581,115 @@ P(\text{age} | \text{name}, \text{sex}) \propto P(\text{name} | \text{age}, \tex
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_alive =</span> zoo<span class="op">::</span><span class="kw">na.approx</span>(p_alive, <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">fill</span>(p_alive, <span class="dt">.direction =</span> <span class="st">&quot;down&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(sex, age, birthyear)</code></pre></div>
+<span class="st">  </span><span class="kw">arrange</span>(sex, age, birthyear)</code></pre>
 <p>For this analysis, we only need the age distribution in 2015.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">age_distr &lt;-<span class="st"> </span>life_table <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">age_distr &lt;-<span class="st"> </span>life_table <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> birthyear <span class="op">+</span><span class="st"> </span>age,
          <span class="co"># convert sex to character to avoid join warning</span>
          <span class="dt">sex =</span> <span class="kw">as.character</span>(sex)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(year <span class="op">==</span><span class="st"> </span>YEAR) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>year)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(life_table)
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>year)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(life_table)
 <span class="co">#&gt; Observations: 27,840</span>
 <span class="co">#&gt; Variables: 4</span>
 <span class="co">#&gt; $ sex       &lt;fct&gt; M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M...</span>
 <span class="co">#&gt; $ birthyear &lt;dbl&gt; 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908...</span>
 <span class="co">#&gt; $ age       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...</span>
-<span class="co">#&gt; $ p_alive   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...</span></code></pre></div>
+<span class="co">#&gt; $ p_alive   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...</span></code></pre>
 <p>However, the <code>p_alive</code> column of <code>age_distr</code> only provides the probability of being alive in 2015 conditional on having been born in a given year (and sex),</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(age_distr,
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(age_distr,
        <span class="kw">aes</span>(<span class="dt">x =</span> birthyear, <span class="dt">y =</span> p_alive, <span class="dt">color =</span> sex)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;P&quot;</span>, <span class="kw">group</span>(<span class="st">&quot;(&quot;</span>, <span class="kw">paste</span>(alive, <span class="st">&quot;|&quot;</span>, year), <span class="st">&quot;)&quot;</span>))),
-       <span class="dt">x =</span> <span class="st">&quot;Year of Birth&quot;</span>)</code></pre></div>
+       <span class="dt">x =</span> <span class="st">&quot;Year of Birth&quot;</span>)</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
 <img src="example-names-and-ages_files/figure-html/unnamed-chunk-5-1.png" alt="Probability" width="70%" />
 <p class="caption">
 Figure 3.1: Probability
 </p>
 </div>
-<p>We need the number born each year to be able to calculate the number alive in each year, and the age distribution. Suppose that the number born in each year was equal, the age distribution would be:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">age_distr <span class="op">%&gt;%</span>
+<p>We need the number born each year to be able to calculate the number alive in each year, and the age distribution.
+Suppose that the number born in each year was equal, the age distribution would be:</p>
+<pre class="sourceCode r"><code class="sourceCode r">age_distr <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p =</span> p_alive <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(p_alive)) <span class="op">%&gt;%</span>
 <span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> p, <span class="dt">color =</span> sex)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;P(age)&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre>
 <p><img src="example-names-and-ages_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>As a proxy for the number born each year we’ll use the proportion of Social Security applicants each year, provided by the <code>babynames::applicants</code>. Since the baby-name information will also come from the Social Security data this is no less restrictive.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(babynames<span class="op">::</span>applicants, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> n_all <span class="op">/</span><span class="st"> </span><span class="fl">1e6</span>, <span class="dt">color =</span> sex)) <span class="op">+</span>
+<p>As a proxy for the number born each year we’ll use the proportion of Social Security applicants each year, provided by the <code>babynames::applicants</code>.
+Since the baby-name information will also come from the Social Security data this is no less restrictive.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(babynames<span class="op">::</span>applicants, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> n_all <span class="op">/</span><span class="st"> </span><span class="fl">1e6</span>, <span class="dt">color =</span> sex)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;SSA Applicants (mn)&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre>
 <p><img src="example-names-and-ages_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Clearly, the number of births is not constant per year.</p>
 <p>Join the SSA applicant numbers and calculate the probability of each age by sex in 2015.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">age_distr &lt;-<span class="st"> </span><span class="kw">left_join</span>(age_distr,
+<pre class="sourceCode r"><code class="sourceCode r">age_distr &lt;-<span class="st"> </span><span class="kw">left_join</span>(age_distr,
                        <span class="kw">rename</span>(babynames<span class="op">::</span>applicants, <span class="dt">n_apps =</span> n_all),
                        <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;birthyear&quot;</span> =<span class="st"> &quot;year&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n_alive =</span> p_alive <span class="op">*</span><span class="st"> </span>n_apps) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_age =</span> n_alive <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n_alive)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(sex, age)</code></pre></div>
-<p>After accounting for different numbers of births in each year, the age distribution is different.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(age_distr, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> p_age, <span class="dt">color =</span> sex)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">arrange</span>(sex, age)</code></pre>
+<p>After accounting for different numbers of births in each year, the
+age distribution is different.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(age_distr, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> p_age, <span class="dt">color =</span> sex)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;P(age)&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.pos =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre>
 <p><img src="example-names-and-ages_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>The <code>babynames</code> dataset has the number in each sex born each year with a given name (and registered by the SSA).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(babynames)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(babynames)
 <span class="co">#&gt; Observations: 1,858,689</span>
 <span class="co">#&gt; Variables: 5</span>
 <span class="co">#&gt; $ year &lt;dbl&gt; 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 188...</span>
 <span class="co">#&gt; $ sex  &lt;chr&gt; &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F...</span>
 <span class="co">#&gt; $ name &lt;chr&gt; &quot;Mary&quot;, &quot;Anna&quot;, &quot;Emma&quot;, &quot;Elizabeth&quot;, &quot;Minnie&quot;, &quot;Margaret&quot;...</span>
 <span class="co">#&gt; $ n    &lt;int&gt; 7065, 2604, 2003, 1939, 1746, 1578, 1472, 1414, 1320, 128...</span>
-<span class="co">#&gt; $ prop &lt;dbl&gt; 0.07238, 0.02668, 0.02052, 0.01987, 0.01789, 0.01617, 0.0...</span></code></pre></div>
+<span class="co">#&gt; $ prop &lt;dbl&gt; 0.07238, 0.02668, 0.02052, 0.01987, 0.01789, 0.01617, 0.0...</span></code></pre>
 <p>The column <code>prop</code> is the proportion of people of that gender with that name born in each year, <span class="math inline">\(P(\text{name} | \text{age}, \text{sex})\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_names &lt;-<span class="st"> </span>babynames<span class="op">::</span>babynames</code></pre></div>
-<p>Also, since the SSA only releases names with &gt; 5 individuals in a year, add an additional entry for each year for babies born and given rare names.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">babynames_other &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">baby_names &lt;-<span class="st"> </span>babynames<span class="op">::</span>babynames</code></pre>
+<p>Also, since the SSA only releases names with &gt; 5 individuals in a year, add
+an additional entry for each year for babies born and given rare names.</p>
+<pre class="sourceCode r"><code class="sourceCode r">babynames_other &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(sex, year) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">p_named =</span> <span class="kw">sum</span>(prop), <span class="dt">n_named =</span> <span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p_named, <span class="dt">n =</span> n_named <span class="op">/</span><span class="st"> </span>p_named <span class="op">*</span><span class="st"> </span>prop,
          <span class="dt">name =</span> <span class="st">&quot;OTHER&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(sex, year, prop, name, n, prop) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_names &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(baby_names, babynames_other)</code></pre></div>
+<span class="st">  </span><span class="kw">ungroup</span>()</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">baby_names &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(baby_names, babynames_other)</code></pre>
 </div>
 <div id="probability-of-age-given-name-and-sex" class="section level2">
 <h2><span class="header-section-number">3.3</span> Probability of age given name and sex</h2>
-<p>Consider someone with the name of “Emma” and sex is “female”. What is the posterior distribution of their age, <span class="math display">\[
+<p>Consider someone with the name of “Emma” and sex is “female”.
+What is the posterior distribution of their age,
+<span class="math display">\[
 p(\text{age} | \text{name} = \text{&quot;Emma&quot;}, \text{sex} = \text{&quot;F&quot;}) =
 p(\text{name} = \text{&quot;Emma&quot;} | \text{age}, \text{sex} = \text{&quot;F&quot;}) p(\text{age} | \text{sex} = \text{&quot;F&quot;}) .
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">name &lt;-<span class="st"> &quot;Emma&quot;</span>
-sex &lt;-<span class="st"> &quot;F&quot;</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">name &lt;-<span class="st"> &quot;Emma&quot;</span>
+sex &lt;-<span class="st"> &quot;F&quot;</span></code></pre>
 <p>Filter <code>babynames</code> to only include observations for the name “Emma” and sex “Emma”:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p_name_age &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">p_name_age &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(name <span class="op">==</span><span class="st"> </span><span class="op">!!</span>name, sex <span class="op">==</span><span class="st"> </span><span class="op">!!</span>sex) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>sex, <span class="op">-</span>name) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age =</span> YEAR <span class="op">-</span><span class="st"> </span>year)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(p_name_age, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> prop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age =</span> YEAR <span class="op">-</span><span class="st"> </span>year)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(p_name_age, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> prop)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion births&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion births&quot;</span>)</code></pre>
 <p><img src="example-names-and-ages_files/figure-html/plot_name_age-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>The popularity of the name Emma first declined, then increased. However, very few of those born when Emma was first popular are likely to still be alive.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">posterior &lt;-
+<p>The popularity of the name Emma first declined, then increased.
+However, very few of those born when Emma was first popular are likely to still be alive.</p>
+<pre class="sourceCode r"><code class="sourceCode r">posterior &lt;-
 <span class="st">  </span><span class="kw">left_join</span>(p_name_age,
             <span class="kw">select</span>(<span class="kw">filter</span>(age_distr, sex <span class="op">==</span><span class="st"> </span><span class="op">!!</span>sex), birthyear, <span class="dt">prior =</span> p_age),
             <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">year =</span> <span class="st">&quot;birthyear&quot;</span>)) <span class="op">%&gt;%</span>
@@ -662,9 +699,9 @@ sex &lt;-<span class="st"> &quot;F&quot;</span></code></pre></div>
          <span class="co"># postrior</span>
          <span class="dt">post =</span> likelihood <span class="op">*</span><span class="st"> </span>prior,
          <span class="co"># normalize posterior to sum to 1</span>
-         <span class="dt">post =</span> post <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(post))</code></pre></div>
+         <span class="dt">post =</span> post <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(post))</code></pre>
 <p>Let’s plot the prior (<span class="math inline">\(P(age)\)</span>), likelihood (<span class="math inline">\(P(name | age)\)</span>), and posterior (<span class="math inline">\(P(name | age)\)</span>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">posterior <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">posterior <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(age, post, likelihood, prior) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>age) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">recode</span>(variable, <span class="dt">post =</span> <span class="st">&quot;P(age | name)&quot;</span>,
@@ -674,12 +711,14 @@ sex &lt;-<span class="st"> &quot;F&quot;</span></code></pre></div>
                                       <span class="st">&quot;P(age | name)&quot;</span>))) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> value, <span class="dt">x =</span> age)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>variable, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>variable, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)</code></pre>
 <p><img src="example-names-and-ages_files/figure-html/plot_posterior-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>Alternatively, instead of calculating <span class="math inline">\(p(age | name, sex)\)</span> from Bayes’ Theorem, we can calculate it directly from the joint distribution of name, age, and sex. <span class="math display">\[
+<p>Alternatively, instead of calculating <span class="math inline">\(p(age | name, sex)\)</span> from Bayes’ Theorem,
+we can calculate it directly from the joint distribution of name, age, and sex.
+<span class="math display">\[
 p(age | name, sex) = p(age, name, sex) / p(name, sex)
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_names_joint &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r">baby_names_joint &lt;-<span class="st"> </span>baby_names <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># add probability that the person is alive</span>
 <span class="st">  </span><span class="kw">left_join</span>(<span class="kw">select</span>(age_distr, age, sex, birthyear, p_alive),
             <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="dt">year =</span> <span class="st">&quot;birthyear&quot;</span>)) <span class="op">%&gt;%</span>
@@ -688,15 +727,17 @@ p(age | name, sex) = p(age, name, sex) / p(name, sex)
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n_alive =</span> p_alive <span class="op">*</span><span class="st"> </span>n) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># calculate p(sex, age, name)</span>
 <span class="st">  </span><span class="co"># number alive with sex, age, name / total estimated to be alive</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n_alive <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n_alive))</code></pre></div>
-<p>Calculate <span class="math inline">\(p(name, sex)\)</span> by summing the probabilities of all combinations of age and sex.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p_name_sex &lt;-<span class="st"> </span>baby_names_joint <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n_alive <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n_alive))</code></pre>
+<p>Calculate <span class="math inline">\(p(name, sex)\)</span> by summing the probabilities of all
+combinations of age and sex.</p>
+<pre class="sourceCode r"><code class="sourceCode r">p_name_sex &lt;-<span class="st"> </span>baby_names_joint <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(name, sex) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">prop =</span> <span class="kw">sum</span>(prop))</code></pre></div>
-<p>Calculate, <span class="math display">\[
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">prop =</span> <span class="kw">sum</span>(prop))</code></pre>
+<p>Calculate,
+<span class="math display">\[
 p(\text{age} | \text{name}, \text{sex}) = \frac{p(\text{age}, \text{name}, \text{sex})}{p(\text{name}, \text{sex})}
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inner_join</span>(baby_names_joint,
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inner_join</span>(baby_names_joint,
            <span class="kw">select</span>(p_name_sex, name, sex, <span class="dt">p_name_sex =</span> prop),
            <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;sex&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_age =</span> prop <span class="op">/</span><span class="st"> </span>p_name_sex)
@@ -709,20 +750,20 @@ p(\text{age} | \text{name}, \text{sex}) = \frac{p(\text{age}, \text{name}, \text
 <span class="co">#&gt; 4  1900 F     Margaret   5304     0   115       0       0    0.00216     0</span>
 <span class="co">#&gt; 5  1900 F     Ruth       4765     0   115       0       0    0.00108     0</span>
 <span class="co">#&gt; 6  1900 F     Elizabeth  4096     0   115       0       0    0.00421     0</span>
-<span class="co">#&gt; # ... with 1.807e+06 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 1.807e+06 more rows</span></code></pre>
 <div id="questions-1" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Questions</h3>
 <ol style="list-style-type: decimal">
 <li><p>Which name provides the most information about a person’s age? Which provides the least?</p></li>
 <li><p>Consider a rare name - what is the probability in years in which there is no sample. How does that affect the analysis? What would you do about it?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(baby_names, sex <span class="op">==</span><span class="st"> &quot;M&quot;</span>) <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(baby_names, sex <span class="op">==</span><span class="st"> &quot;M&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">count</span>(name) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(nn <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">1</span>)
 <span class="co">#&gt; # A tibble: 1 x 2</span>
 <span class="co">#&gt;   name     nn</span>
 <span class="co">#&gt;   &lt;chr&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1 Jvier     1</span></code></pre></div></li>
+<span class="co">#&gt; 1 Jvier     1</span></code></pre></li>
 <li><p>How would you calculate <span class="math inline">\(p(age | name)\)</span> if you don’t know the sex of the individual?</p></li>
 </ol>
 </div>
@@ -768,6 +809,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/example-names-and-ages.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -781,8 +826,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Updating: A Set of Bayesian Notes</title>
-  <meta name="description" content="Updating: A Set of Bayesian Notes">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>5 Priors | Updating: A Set of Bayesian Notes</title>
+  <meta name="description" content="5 Priors | Updating: A Set of Bayesian Notes">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Updating: A Set of Bayesian Notes" />
+  <meta property="og:title" content="5 Priors | Updating: A Set of Bayesian Notes" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="http://jrnold.github.io/bayesian_notes" />
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="jrnold/bayesian_notes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Updating: A Set of Bayesian Notes" />
+  <meta name="twitter:title" content="5 Priors | Updating: A Set of Bayesian Notes" />
   <meta name="twitter:site" content="@jrnld" />
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="estimation-1.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -60,41 +61,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -146,7 +173,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2.2" data-path="naive-bayes.html"><a href="naive-bayes.html#extensions"><i class="fa fa-check"></i><b>4.2.2</b> Extensions</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="naive-bayes.html"><a href="naive-bayes.html#details"><i class="fa fa-check"></i><b>4.3</b> Details</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="naive-bayes.html"><a href="naive-bayes.html#generative-vs.-discriminative-models"><i class="fa fa-check"></i><b>4.3.1</b> Generative vs. Discriminative Models</a></li>
 <li class="chapter" data-level="4.3.2" data-path="naive-bayes.html"><a href="naive-bayes.html#estimation"><i class="fa fa-check"></i><b>4.3.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3.3" data-path="naive-bayes.html"><a href="naive-bayes.html#prediction"><i class="fa fa-check"></i><b>4.3.3</b> Prediction</a></li>
 </ul></li>
@@ -224,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.2" data-path="model-checking.html"><a href="model-checking.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2</b> Posterior Predictive Checks</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="model-checking.html"><a href="model-checking.html#bayesian-p-values"><i class="fa fa-check"></i><b>9.2.1</b> Bayesian p-values</a></li>
 <li class="chapter" data-level="9.2.2" data-path="model-checking.html"><a href="model-checking.html#test-quantities"><i class="fa fa-check"></i><b>9.2.2</b> Test quantities</a></li>
-<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
+<li class="chapter" data-level="9.2.3" data-path="model-checking.html"><a href="model-checking.html#p-values-vs.-u-values"><i class="fa fa-check"></i><b>9.2.3</b> p-values vs. u-values</a></li>
 <li class="chapter" data-level="9.2.4" data-path="model-checking.html"><a href="model-checking.html#marginal-predictive-checks"><i class="fa fa-check"></i><b>9.2.4</b> Marginal predictive checks</a></li>
 <li class="chapter" data-level="9.2.5" data-path="model-checking.html"><a href="model-checking.html#outliers"><i class="fa fa-check"></i><b>9.2.5</b> Outliers</a></li>
 <li class="chapter" data-level="9.2.6" data-path="model-checking.html"><a href="model-checking.html#graphical-posterior-predictive-checks"><i class="fa fa-check"></i><b>9.2.6</b> Graphical Posterior Predictive Checks</a></li>
@@ -357,7 +384,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="20.3" data-path="multilevel-models.html"><a href="multilevel-models.html#example-radon"><i class="fa fa-check"></i><b>20.3</b> Example: Radon</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multilevel-models.html"><a href="multilevel-models.html#data"><i class="fa fa-check"></i><b>20.3.1</b> Data</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#modeling"><i class="fa fa-check"></i><b>20.4</b> Modeling</a></li>
+<li class="chapter" data-level="20.4" data-path="multilevel-models.html"><a href="multilevel-models.html#radon-example"><i class="fa fa-check"></i><b>20.4</b> Radon Example</a></li>
 <li class="chapter" data-level="20.5" data-path="multilevel-models.html"><a href="multilevel-models.html#with-individual-covariates"><i class="fa fa-check"></i><b>20.5</b> With Individual Covariates</a></li>
 <li class="chapter" data-level="20.6" data-path="multilevel-models.html"><a href="multilevel-models.html#with-group-level-covariates"><i class="fa fa-check"></i><b>20.6</b> With Group-Level Covariates</a></li>
 <li class="chapter" data-level="20.7" data-path="multilevel-models.html"><a href="multilevel-models.html#pooling-of-hierarchical-parameters"><i class="fa fa-check"></i><b>20.7</b> Pooling of Hierarchical Parameters</a></li>
@@ -527,7 +554,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The levels of</p>
 <ol style="list-style-type: decimal">
 <li>Flat prior</li>
-<li>Vague but proper prior, e.g. <span class="math inline">\(\dnorm(. | 0, 1e6)\)</span></li>
+<li>Vague but proper prior, e.g. <span class="math inline">\(\dnorm(. | 0, 1e6)\)</span></li>
 <li>Weakly informative prior, but very weak <span class="math inline">\(\dnorm(0, 10)\)</span></li>
 <li>Generic weakly informative prior: <span class="math inline">\(\dnorm(0, 1)\)</span></li>
 <li>Specific informative prior</li>
@@ -535,42 +562,60 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="conjugate-priors" class="section level2">
 <h2><span class="header-section-number">5.2</span> Conjugate Priors</h2>
-<p>In a few cases, the posterior distribution, <span class="math display">\[
+<p>In a few cases, the posterior distribution,
+<span class="math display">\[
 p(\theta | y) = \frac{p(y | \theta) p(\theta)}{\int p(y | \theta&#39;) p(\theta&#39;) d\theta&#39;},
-\]</span> has a <a href="https://en.wikipedia.org/wiki/Closed-form_expression">closed-form solution</a> and can be calculated exactly. In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used. Unfortunately, these cases are few.</p>
-<p>Most of those cases involve <strong>conjugate priors</strong>. In the case of a conjugate prior, the posterior distribution is in the same family as the prior distribution.</p>
-<p>Here is a diagram of a few common conjugate priors.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+\]</span>
+has a <a href="https://en.wikipedia.org/wiki/Closed-form_expression">closed-form solution</a> and can be calculated exactly.
+In those cases, the posterior distribution is calculated exactly, and more costly numerical approximation methods do not need to be used.
+Unfortunately, these cases are few.</p>
+<p>Most of those cases involve <strong>conjugate priors</strong>.
+In the case of a conjugate prior, the posterior distribution is in the same family as the prior distribution.</p>
+<p>Here is a diagram of a few common conjugate priors.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p><div id="htmlwidget-7b9c6fa48fa4c8fa33d4" style="width:70%;height:355.968px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-7b9c6fa48fa4c8fa33d4">{"x":{"diagram":"digraph conjugate_gamma {\n  node[shape = box, fontname = Helvetica]\n  gamma[label = Gamma]\n  normal[label = Normal]\n  poisson[label = Poisson]\n  lognormal[label = lognormal]\n  exp[label = Exponential]\n\n  gamma -> gamma [label = \"β\"]\n  normal -> normal [label = \"μ\"]\n  normal -> gamma [label = \"τ\"]\n  lognormal -> gamma [label = \"τ\"]\n  lognormal -> normal [label = \"μ\"]\n  exp -> gamma [label = \"μ\"]\n  poisson -> gamma [label = \"𝛌\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><div id="htmlwidget-6b0c92872b7b9e9b3dd4" style="width:70%;height:355.968px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-6b0c92872b7b9e9b3dd4">{"x":{"diagram":"digraph conjugate_beta {\n  node[shape = box, fontname = Helvetica]\n  geometric[label = Geometric]\n  beta[label = Beta]\n  binomial[label = Binomial]\n  bernoulli[label = Bernoulli]\n  negbin[label = \"Negative Binomial\"]\n\n  geometric -> beta [label = \"p\"]\n  binomial -> beta [label = \"p\"]\n  negbin -> beta [label = \"p\"]\n  bernoulli -> beta [label = \"p\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script></p>
-<p>The table in the Wikipedia page for <a href="https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4">Conjugate priors</a> is as complete as any out there. <span class="citation">Fink (1997)</span> for a compendium of references. Also see <a href="distributions.html#distributions">Distributions</a> for more information about probability distributions.</p>
+<p>The table in the Wikipedia page for <a href="https://en.wikipedia.org/wiki/Conjugate_prior#cite_note-beta-interp-4">Conjugate priors</a> is as complete as any out there.
+<span class="citation">Fink (1997)</span> for a compendium of references.
+Also see <a href="distributions.html#distributions">Distributions</a> for more information about probability distributions.</p>
 <div id="binomial-beta" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Binomial-Beta</h3>
-<p>Binomial distribution: If <span class="math inline">\(N \in \Nats\)</span> (number of trials), <span class="math inline">\(\theta \in (0, 1)\)</span> (success probability in each trial), then for <span class="math inline">\(n \in \{0, \dots, N\}\)</span>, <span class="math display">\[
+<p>Binomial distribution: If <span class="math inline">\(N \in \Nats\)</span> (number of trials), <span class="math inline">\(\theta \in (0, 1)\)</span> (success probability in each trial),
+then for <span class="math inline">\(n \in \{0, \dots, N\}\)</span>,
+<span class="math display">\[
 \dBinom(n | N, \theta) = \binom{N}{n} \theta^{n} (1 - \theta)^{N - n} .
 \]</span></p>
-<p>Beta distribution: If <span class="math inline">\(\alpha \in \RealPos\)</span> (shape) and <span class="math inline">\(\beta \in \RealPos\)</span> (shape), then for <span class="math inline">\(\theta \in (0, 1)\)</span>, <span class="math display">\[
+<p>Beta distribution: If <span class="math inline">\(\alpha \in \RealPos\)</span> (shape) and <span class="math inline">\(\beta \in \RealPos\)</span> (shape), then for <span class="math inline">\(\theta \in (0, 1)\)</span>,
+<span class="math display">\[
 \dbeta(\theta | \alpha, \beta) = \frac{1}{\mathrm{B}(\alpha, \beta)} \theta^{\alpha - 1} (1 - \theta)^{\beta - 1},
-\]</span> where <span class="math inline">\(\mathrm{B}\)</span> is the beta function, <span class="math display">\[
+\]</span>
+where <span class="math inline">\(\mathrm{B}\)</span> is the beta function,
+<span class="math display">\[
 \mathrm{B}(\alpha, \beta) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha + \beta)} .
 \]</span></p>
-<p>Then, <span class="math display">\[
+<p>Then,
+<span class="math display">\[
 \begin{aligned}[t]
 p(\theta | \alpha, \beta) &amp;= \dbeta(\theta | \alpha, \beta) &amp;&amp; \text{Beta prior} \\
 p(y | \theta) &amp;= \dBinom(y | n, \theta)  &amp;&amp; \text{Binomial likelihood} \\
-p \theta | y, \alpha, \beta) &amp;= \dbeta(\theta | \alpha + y, \beta + n - y) &amp;&amp; \text{Beta posterior}
+p(\theta | y, \alpha, \beta) &amp;= \dbeta(\theta | \alpha + y, \beta + n - y) &amp;&amp; \text{Beta posterior}
 \end{aligned}
 \]</span></p>
 </div>
 <div id="categorical-dirichlet" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> Categorical-Dirichlet</h3>
-<p>The Dirichlet distribution is a multivariate generalization of the Beta, If <span class="math inline">\(K \in \N\)</span> and <span class="math inline">\(\alpha \in (\R^{+})^{K}\)</span>, then for the <span class="math inline">\(\theta \in K-\text{simplex}\)</span> and <span class="math inline">\(\theta_k &gt; 0\)</span> for all <span class="math inline">\(k\)</span>, <span class="math display">\[
+<p>The Dirichlet distribution is a multivariate generalization of the Beta,
+If <span class="math inline">\(K \in \N\)</span> and <span class="math inline">\(\alpha \in (\R^{+})^{K}\)</span>, then for the <span class="math inline">\(\theta \in K-\text{simplex}\)</span> and <span class="math inline">\(\theta_k &gt; 0\)</span> for all <span class="math inline">\(k\)</span>,
+<span class="math display">\[
 \ddirichlet(\theta | \alpha) = \frac{\Gamma(\sum_{k = 1}^K \alpha_k)}{\prod_{k = 1}^K \Gamma(\alpha_k)} \prod_{k = 1}^K \theta_{k}^{\alpha_k - 1}
 \]</span></p>
 <p>The multinomial distribution is a generalization of the binomial distribution with <span class="math inline">\(K\)</span> categories instead of 2.</p>
-<p>If <span class="math inline">\(K \in \n\)</span>, <span class="math inline">\(N \in \N\)</span>, and <span class="math inline">\(\theta \in K-\text{simplex}\)</span>, then for <span class="math inline">\(y \in \N^{K}\)</span> such that <span class="math inline">\(\sum_{k = 1}^K y_k = N\)</span>, <span class="math display">\[
+<p>If <span class="math inline">\(K \in \n\)</span>, <span class="math inline">\(N \in \N\)</span>, and <span class="math inline">\(\theta \in K-\text{simplex}\)</span>, then for <span class="math inline">\(y \in \N^{K}\)</span> such that <span class="math inline">\(\sum_{k = 1}^K y_k = N\)</span>,
+<span class="math display">\[
 \dmultinom(y | \theta) = \binom{N}{y_1, \dots, y_K} \prod_{k = 1}^{K} \theta_k^{y_k},
-\]</span> where the multinomial coefficient is defined as, <span class="math display">\[
+\]</span>
+where the multinomial coefficient is defined as,
+<span class="math display">\[
 \binom{N}{y_1, \dots, y_K} = \frac{N!}{\prod_{k = 1}^K y_k!}
 \]</span></p>
 <p><span class="math display">\[
@@ -584,12 +629,16 @@ p(\theta | y, \alpha) &amp;= \ddirichlet(\theta | \alpha + y) &amp;&amp; \text{D
 <div id="poisson-gamma" class="section level3">
 <h3><span class="header-section-number">5.2.3</span> Poisson-Gamma</h3>
 <p>Let <span class="math inline">\(\lambda\)</span> be the rate parameter of the Poisson distribution.</p>
-<p>If <span class="math inline">\(\lambda \in \R^+\)</span> (rate parameter), then for <span class="math inline">\(n \in \N\)</span>, <span class="math display">\[
+<p>If <span class="math inline">\(\lambda \in \R^+\)</span> (rate parameter), then for <span class="math inline">\(n \in \N\)</span>,
+<span class="math display">\[
 \dpois(n|\lambda) = \frac{1}{n!} \lambda^n \exp(-\lambda)
-\]</span> If <span class="math inline">\(\alpha \in \R^{+}\)</span> (shape parameter), <span class="math inline">\(\beta \in \R^{+}\)</span> (inverse scale parameter), then for <span class="math inline">\(y \in \R^{+}\)</span>, <span class="math display">\[
+\]</span>
+If <span class="math inline">\(\alpha \in \R^{+}\)</span> (shape parameter), <span class="math inline">\(\beta \in \R^{+}\)</span> (inverse scale parameter), then for <span class="math inline">\(y \in \R^{+}\)</span>,
+<span class="math display">\[
 \dgamma(y | \alpha, \beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} y^{\alpha - 1} \exp(- \beta y)
 \]</span></p>
-<p>Then, <span class="math display">\[
+<p>Then,
+<span class="math display">\[
 \begin{aligned}[t]
 p(\lambda) &amp;= \dgamma(\lambda | \alpha, \beta) \\
 p(n | \lambda) &amp;= \dpois(n | \lambda) \\
@@ -611,18 +660,20 @@ p(\mu | y, \mu, \sigma^2, \mu_0, \sigma_0^2) &amp;= \dbeta(\mu | \tilde{\mu}, \t
 </div>
 <div id="exponential-family" class="section level3">
 <h3><span class="header-section-number">5.2.5</span> Exponential Family</h3>
-<p>Likelihood functions in the <a href="https://en.wikipedia.org/wiki/Exponential_family">exponential family</a> have conjugate priors, often also in the exponential family.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Likelihood functions in the <a href="https://en.wikipedia.org/wiki/Exponential_family">exponential family</a> have conjugate priors, often also in the exponential family.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 </div>
 </div>
 <div id="improper-priors" class="section level2">
 <h2><span class="header-section-number">5.3</span> Improper Priors</h2>
-<p>If prior distributions are given an <a href="https://en.wikipedia.org/wiki/Prior_probability">improper uniform prior</a>, <span class="math inline">\(p(\theta) \propto 1\)</span>, then the posterior distribution is proportional to the likelihood, <span class="math display">\[
+<p>If prior distributions are given an <a href="https://en.wikipedia.org/wiki/Prior_probability">improper uniform prior</a>, <span class="math inline">\(p(\theta) \propto 1\)</span>, then the posterior distribution is proportional to the likelihood,
+<span class="math display">\[
 p(\theta | y) \propto p(y | \theta) p(\theta) \propto p(y | \theta)
 \]</span></p>
 </div>
 <div id="cromwells-rule" class="section level2">
 <h2><span class="header-section-number">5.4</span> Cromwell’s Rule</h2>
-<p>The use of priors should placing a probability of 0 or 1 on events be avoided except where those events are excluded by logical impossibility. If a prior places probabilities of 0 or 1 on an event, then no amount of data can update that prior.</p>
+<p>The use of priors should placing a probability of 0 or 1 on events be avoided except where those events are excluded by logical impossibility.
+If a prior places probabilities of 0 or 1 on an event, then no amount of data can update that prior.</p>
 <p>The name, Cromwell’s Rule, comes from a quote of Oliver Cromwell,</p>
 <blockquote>
 <p>I beseech you, in the bowels of Christ, think it possible that you may be mistaken.</p>
@@ -631,14 +682,16 @@ p(\theta | y) \propto p(y | \theta) p(\theta) \propto p(y | \theta)
 <blockquote>
 <p>Leave a little probability for the moon being made of green cheese; it can be as small as 1 in a million, but have it there since otherwise an army of astronauts returning with samples of the said cheese will leave you unmoved.</p>
 </blockquote>
-<p>If <span class="math inline">\(p(\theta = x) = 0\)</span>, then for a value of <span class="math inline">\(x\)</span>, then the posterior distribution is always zero. <span class="math display">\[
+<p>If <span class="math inline">\(p(\theta = x) = 0\)</span>, then for a value of <span class="math inline">\(x\)</span>, then the posterior distribution is always zero.
+<span class="math display">\[
 p(\theta = x | y) \propto p(y | \theta = x) p(\theta = x) = 0
 \]</span></p>
 </div>
 <div id="asymptotics" class="section level2">
 <h2><span class="header-section-number">5.5</span> Asymptotics</h2>
 <p>As the sample size increases, the Bayesian distribution converges to a normal distribution centered on the true value of the parameter.</p>
-<p>Suppose data <span class="math inline">\(y_1, \dots, y_n \sim\)</span> are an iid sample from the distribution <span class="math inline">\(f(y)\)</span>. Suppose that the data are modeled with a parametric family <span class="math inline">\(p(y | \theta)\)</span> and a prior distribution <span class="math inline">\(p(\theta)\)</span>.</p>
+<p>Suppose data <span class="math inline">\(y_1, \dots, y_n \sim\)</span> are an iid sample from the distribution <span class="math inline">\(f(y)\)</span>.
+Suppose that the data are modeled with a parametric family <span class="math inline">\(p(y | \theta)\)</span> and a prior distribution <span class="math inline">\(p(\theta)\)</span>.</p>
 <p>If the data distribution is included in the parametric family, meaning that there exists a <span class="math inline">\(\theta_0\)</span> such that <span class="math inline">\(p(y | \theta_0) = f(y)\)</span>, then the posterior distribution is <em>consistent</em> in that it converges to the true parameter value <span class="math inline">\(\theta_0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
 <p>Otherwise, the posterior convergences to the distribution <span class="math inline">\(p(y | \theta)\)</span> closes to the true distribution.</p>
 <p>As <span class="math inline">\(n \to infty\)</span>, the likelihood dominates the posterior distribution.</p>
@@ -656,11 +709,15 @@ p(\theta = x | y) \propto p(y | \theta = x) p(\theta = x) = 0
 </div>
 <div id="proper-and-improper-priors" class="section level2">
 <h2><span class="header-section-number">5.6</span> Proper and Improper Priors</h2>
-<p>A prior distribution <span class="math inline">\(p(\theta)\)</span> is an improper when it is not a probability distribution, meaning <span class="math display">\[
+<p>A prior distribution <span class="math inline">\(p(\theta)\)</span> is an improper when it is not a probability distribution, meaning
+<span class="math display">\[
 \int p(\theta) \,d\theta = \infty .
-\]</span> Perhaps the most common improper distribution is an unbounded uniform distribution, <span class="math display">\[
+\]</span>
+Perhaps the most common improper distribution is an unbounded uniform distribution,
+<span class="math display">\[
 p(\theta) \propto 1
-\]</span> for <span class="math inline">\(-\infty &lt; \theta &lt; \infty\)</span>.</p>
+\]</span>
+for <span class="math inline">\(-\infty &lt; \theta &lt; \infty\)</span>.</p>
 <p>Improper priors can be used, because in some cases, the posterior distribution can still be proper even if the prior is not.</p>
 <table>
 <thead>
@@ -680,43 +737,74 @@ p(\theta) \propto 1
 </tr>
 </tbody>
 </table>
-<p>One common case of this is a linear regression model with improper priors. <span class="math display">\[
+<p>One common case of this is a linear regression model with improper priors.
+<span class="math display">\[
 p(\beta, \sigma | y, X) =
 \begin{cases}
 y &amp;\sim \dnorm(X \beta, \sigma^{2} I)
 \end{cases}
-\]</span> If the number of observations (rows of <span class="math inline">\(X\)</span>) is less than the number of independent columns in <span class="math inline">\(X\)</span> (variables plus the constant), then the MLE of <span class="math inline">\(\beta\)</span> is undefined, and also the posterior distribution is improper. But if alter that model to include a proper prior, <span class="math display">\[
+\]</span>
+If the number of observations (rows of <span class="math inline">\(X\)</span>) is less than the number of
+independent columns in <span class="math inline">\(X\)</span> (variables plus the constant), then the MLE of
+<span class="math inline">\(\beta\)</span> is undefined, and also the posterior distribution is improper.
+But if alter that model to include a proper prior,
+<span class="math display">\[
 p(\beta, \sigma | y, X) =
 \begin{cases}
 y &amp;\sim \dnorm(X \beta, \sigma^{2} I) \\
 \beta &amp; \sim \dnorm(\mu_\beta, \Sigma_\beta) \\
 \gamma &amp;\sim p(\gamma)
 \end{cases}
-\]</span> then we can estimate <span class="math inline">\(p(\beta, \sigma | y, X)\)</span> even if the number of observations is less than the number of variables. Consider the case if we observe <em>no</em> data; then the posterior distribution is equal to the prior, and since the prior is a proper distribution, so is the posterior.</p>
-<p>However, because a proper posterior allows for estimating a posterior, does imply that the posterior distribution is any “good”. But that is the role of the evaluation step in Bayesian analysis. In the cases where an improper prior would lead to an improper posterior, the choice of the prior is important because the prior will dominate the shape of the posterior distribution.</p>
-<p>One way of thinking about many “identification” assumptions in MLE models is that they can loosely be considered “priors”. What is called the likelihood and what is called the the prior is not well-defined, and often the choice of of likelihood functions is both subjective and the most important part of the analysis.</p>
-<p>Regarding improper priors, also see the asymptotic results that the posterior distribution increasingly depends on the likelihood as sample size increases.</p>
-<p>Stan: If no prior distributions is specified for a parameter, it is given an improper prior distribution on <span class="math inline">\((-\infty, +\infty)\)</span> after transforming the parameter to its constrained scale.</p>
+\]</span>
+then we can estimate <span class="math inline">\(p(\beta, \sigma | y, X)\)</span> even if the number of
+observations is less than the number of variables. Consider the case if we
+observe <em>no</em> data; then the posterior distribution is equal to the prior, and
+since the prior is a proper distribution, so is the posterior.</p>
+<p>However, because a proper posterior allows for estimating a posterior, does
+imply that the posterior distribution is any “good”. But that is the role of
+the evaluation step in Bayesian analysis. In the cases where an improper prior
+would lead to an improper posterior, the choice of the prior is important
+because the prior will dominate the shape of the posterior distribution.</p>
+<p>One way of thinking about many “identification” assumptions in MLE models is
+that they can loosely be considered “priors”. What is called the likelihood and
+what is called the the prior is not well-defined, and often the choice of of
+likelihood functions is both subjective and the most important part of the
+analysis.</p>
+<p>Regarding improper priors, also see the asymptotic results that the posterior
+distribution increasingly depends on the likelihood as sample size increases.</p>
+<p>Stan: If no prior distributions is specified for a parameter, it is given an
+improper prior distribution on <span class="math inline">\((-\infty, +\infty)\)</span> after transforming the
+parameter to its constrained scale.</p>
 </div>
 <div id="hyperpriors-and-hyperparameters" class="section level2">
 <h2><span class="header-section-number">5.7</span> Hyperpriors and Hyperparameters</h2>
-<p>A hyperparameter is a parameter in a prior. A hyperprior is a term for a prior on</p>
-<p>Consider the case of a binomial likelihood with a beta prior on the proportion parameter <span class="math inline">\(\theta\)</span>. The observed value of <span class="math inline">\(n\)</span> and the <span class="math inline">\(N\)</span> <span class="math display">\[
+<p>A hyperparameter is a parameter in a prior.
+A hyperprior is a term for a prior on</p>
+<p>Consider the case of a binomial likelihood with a beta prior on the proportion parameter <span class="math inline">\(\theta\)</span>.
+The observed value of <span class="math inline">\(n\)</span> and the <span class="math inline">\(N\)</span>
+<span class="math display">\[
 \begin{aligned}[t]
 p(n | \theta) &amp;\sim \dBinom(N, \theta) &amp;&amp; \text{likelihood for } n \\
 p(\theta) &amp;\sim \dbeta(a, b)  &amp;&amp; \text{prior on } \theta \\
 \end{aligned}
-\]</span> This is a model of the posterior distribution of <span class="math inline">\(\theta\)</span> given the data, where the data consists of the <span class="math inline">\(n\)</span> successes, the total number of trails <span class="math inline">\(N\)</span>, <em>and</em> <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, the assumed shape parameters of the beta prior on <span class="math inline">\(\theta\)</span>. Thus our posterior distribution is, <span class="math display">\[
+\]</span>
+This is a model of the posterior distribution of <span class="math inline">\(\theta\)</span> given the data,
+where the data consists of the <span class="math inline">\(n\)</span> successes, the total number of trails <span class="math inline">\(N\)</span>, <em>and</em> <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, the assumed shape parameters of the beta prior on <span class="math inline">\(\theta\)</span>.
+Thus our posterior distribution is,
+<span class="math display">\[
 p(\theta | n, N, a, b) .
 \]</span></p>
-<p>However, suppose we decided that since we did not have a good reason to choose any particular values of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> for the prior distribution, we would treat the shape parameters of the beta distribution as parameters and assign them their own prior distributions, <span class="math display">\[
+<p>However, suppose we decided that since we did not have a good reason to choose any particular values of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> for the prior distribution, we would treat the shape parameters of the beta distribution as parameters and assign them their own prior distributions,
+<span class="math display">\[
 \begin{aligned}[t]
 p(n | \theta) &amp;\sim \dBinom(N, \theta) &amp;&amp; \text{likelihood for } n \\
 p(\theta) &amp;\sim \dbeta(\alpha, \beta)  &amp;&amp; \text{prior on } \theta \\
 p(\alpha) &amp;\sim \dexp(a^*)  &amp;&amp; \text{hyperprior} \\
 p(\beta) &amp;\sim \dexp(b^*)  &amp;&amp; \text{hyperprior}
 \end{aligned}
-\]</span> Now the parameters of the model are <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\beta\)</span>, and the data are <span class="math inline">\(n\)</span>, <span class="math inline">\(N\)</span>, <span class="math inline">\(a^{*}\)</span>, and <span class="math inline">\(b^{*}\)</span>. Since one parameter in the model (<span class="math inline">\(\theta\)</span>) is a function of other parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, we call <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> hyperparameters.</p>
+\]</span>
+Now the parameters of the model are <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\beta\)</span>, and the data are <span class="math inline">\(n\)</span>, <span class="math inline">\(N\)</span>, <span class="math inline">\(a^{*}\)</span>, and <span class="math inline">\(b^{*}\)</span>.
+Since one parameter in the model (<span class="math inline">\(\theta\)</span>) is a function of other parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, we call <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> hyperparameters.</p>
 </div>
 <div id="references-2" class="section level2">
 <h2><span class="header-section-number">5.8</span> References</h2>
@@ -735,8 +823,8 @@ p(\beta) &amp;\sim \dexp(b^*)  &amp;&amp; \text{hyperprior}
 <div class="footnotes">
 <hr />
 <ol start="4">
-<li id="fn4"><p>Based on John Cook’s a <a href="https://www.johndcook.com/blog/conjugate_prior_diagram/">Diagram of Conjugate Prior distributions</a>.<a href="priors.html#fnref4">↩</a></p></li>
-<li id="fn5"><p><a href="https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions" class="uri">https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions</a><a href="priors.html#fnref5">↩</a></p></li>
+<li id="fn4"><p>Based on John Cook’s a <a href="https://www.johndcook.com/blog/conjugate_prior_diagram/">Diagram of Conjugate Prior distributions</a>.<a href="priors.html#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><a href="https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions" class="uri">https://en.wikipedia.org/wiki/Exponential_family#Bayesian_estimation:_conjugate_distributions</a><a href="priors.html#fnref5" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -768,6 +856,10 @@ gitbook.start({
 "link": "https://github.com/jrnold/bayesian_notes/edit/master/priors.Rmd",
 "text": "Edit"
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section"
@@ -781,8 +873,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;
