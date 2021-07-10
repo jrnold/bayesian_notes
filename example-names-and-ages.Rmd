@@ -166,7 +166,7 @@ name <- "Emma"
 sex <- "F"
 ```
 
-Filter `babynames` to only include observations for the name "`r name`" and sex "`r name`":
+Filter `babynames` to only include observations for the name "`r name`" and sex "`r sex`":
 
 ```{r p_name_age}
 p_name_age <- baby_names %>%
